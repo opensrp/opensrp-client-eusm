@@ -1,0 +1,22 @@
+{
+  "case_classification_rules": [
+    {
+      "comment": "Spray: This rule checks whether a given case belongs to Sprayed Structures",
+      "rule": {
+        "type": "event",
+        "fields": [
+        ]
+      }
+    },
+    {
+      "comment": "ec_events: This rule maps to ec_events table used for filled forms",
+      "rule": {
+        "type": "event",
+        "fields": [
+          {
+          }
+        ]
+      }
+    }
+  ]
+}

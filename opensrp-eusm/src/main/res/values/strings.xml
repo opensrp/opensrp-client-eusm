@@ -1,0 +1,101 @@
+<resources>
+    <!-- Actions -->
+    <string name="action_logout">Logout</string>
+    <!-- General -->
+    <string name="eusm_app_name" translatable="false">End User Supply Monitoring</string>
+    <string name="app_name" translatable="false">@string/eusm_app_name</string>
+    <string name="app_version">App version: %1$s (built on %2$s)</string>
+    <string name="app_version_without_build_number">Version %1$s</string>
+
+    <!--Temp -->
+    <string name="unauthorized">Please check the credentials</string>
+    <string name="unauthorized_group">Your user group is not allowed to access this device</string>
+    <string name="unknown_response">login failed. Try later</string>
+    <string name="no_internet_connectivity">No internet connection. Please ensure data connectivity</string>
+    <string name="login_text">Log In</string>
+    <string name="show_password_text">Show password</string>
+    <string name="url_separator">/</string>
+
+    <string name="device_timezone_changed">"The device's timezone changed. Please login again."</string>
+    <string name="device_time_changed">"The device's time has changed. Please login again."</string>
+
+    <string name="prompt_password">Enter Password </string>
+    <string name="prompt_username">Enter Username</string>
+    <string name="reveal">Reveal</string>
+    <string name="sync">Sync</string>
+    <string name="campaign">Mission</string>
+    <string name="operational_area">District</string>
+    <string name="plan">Mission</string>
+
+
+    <string name="offline_maps">Offline maps</string>
+    <string name="app_updated">Updated %1$s</string>
+    <string name="district">District:</string>
+    <string name="facility">Location:</string>
+    <string name="canton">Canton:</string>
+    <string name="operator">User:</string>
+    <string name="operator_with_middle_dot">User : %s &#183;</string>
+
+
+    <string name="no_matching_record_found_on_this_device">no matching record found</string>
+    <string name="powered_by">Powered by</string>
+    <string name="download">Download</string>
+    <string name="hamburger_menu">menu</string>
+    <string name="menu">menu</string>
+    <string name="map">map</string>
+    <string name="downloading">Downloading</string>
+    <string name="list">List</string>
+    <string name="download_finished_successfuly">Download finished successfully</string>
+    <string name="select_offline_map_to_delete">Select Offline map to delete</string>
+    <string name="delete">delete</string>
+    <string name="select_offline_map_to_download">Select Offline map to download</string>
+    <string name="localhost_url">/%d</string>
+
+    <string name="operational_area_not_selected">District not selected</string>
+    <string name="plan_not_selected">Mission not selected</string>
+
+
+    <string name="device_data_synced">Device data synced</string>
+    <string name="device_data_not_synced">Device data not synced</string>
+
+    <string name="progressBarLabel">Syncing %s : %d%%</string>
+    <string name="search_hint">Search</string>
+
+    <string name="events">Events</string>
+    <string name="locations">Locations</string>
+    <string name="plans">Plans</string>
+    <string name="structures">Structures</string>
+    <string name="tasks_text">Tasks</string>
+    <string name="fetching_structures_title">Fetching Structures</string>
+    <string name="fetching_structures_message">Fetching Structures for Selected District and Mission</string>
+
+    <string name="plans_download_on_progress_title">Download in Progress</string>
+    <string name="plans_download_on_progress">Downloading of Plans In Progress. Please wait</string>
+
+    <string name="error_fetching_location_hierarchy_title">Error Processing Locations Hierarchy</string>
+    <string name="error_fetching_location_hierarchy">Error Processing Location Hierarchy. Log off to download location hierarchy again</string>
+
+    <string name="eusm_offline_map_download_style" translatable="false">map-download-style.json</string>
+
+    <string name="available">available</string>
+    <string name="downloaded">Downloaded</string>
+
+    <string name="reveal_satellite_style" translatable="false">asset://reveal-streets-satellite.json</string>
+    <string name="reveal_streets_style" translatable="false">reveal-streets-style.json</string>
+    <string name="reveal_offline_map_download_style" translatable="false">map-download-style.json</string>
+    <string name="reveal_datasource_name" translatable="false">reveal-data-set</string>
+    <string name="reveal_layer_polygons" translatable="false">reveal-data-polygons</string>
+    <string name="reveal_layer_points" translatable="false">reveal-data-points</string>
+    <string name="base_map_feature_json" translatable="false">base_map_feature.json</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="nearby_within_n_m">NEARBY (WITHIN %s M)</string>
+    <string name="other_service_points_a_to_z">OTHER SERVICE POINTS (A TO Z)</string>
+    <string name="language_s">Language: %s</string>
+    <string name="english_lang">English</string>
+    <string name="french_lang">French</string>
+
+    <string name="saving_title">Saving</string>
+    <string name="saving_message">Saving form in Progress. Please wait</string>
+
+</resources>

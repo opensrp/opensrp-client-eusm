@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingTop="10dp"
+        android:paddingBottom="10dp">
+
+        <LinearLayout
+            android:id="@+id/layout_img"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+
+            <ImageView
+                android:id="@+id/img_service_point_icon"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="20dp"
+                android:gravity="top"
+                android:src="@drawable/opensrp_logo" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/linear_layout"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="20dp"
+            android:layout_toEndOf="@+id/layout_img"
+            android:gravity="top|start"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/txt_service_point_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Ankorona"
+                android:textSize="25sp" />
+
+            <TextView
+                android:id="@+id/txt_service_point_info"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:text="CBS 2 . 5m away"
+                android:textSize="25sp" />
+
+            <TextView
+                android:id="@+id/txt_service_point_more"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Arlarobia Ambataomanga"
+                android:textSize="25sp" />
+        </LinearLayout>
+
+
+        <TextView
+            android:id="@+id/txt_service_point_status"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_centerVertical="true"
+            android:layout_toEndOf="@id/linear_layout"
+            android:gravity="top|center"
+            android:text="Completed"
+            android:textSize="25sp" />
+    </RelativeLayout>
+</LinearLayout>
