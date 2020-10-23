@@ -5,10 +5,7 @@ import android.content.Context;
 import androidx.annotation.NonNull;
 import androidx.annotation.VisibleForTesting;
 
-import com.mapbox.geojson.Feature;
-
 import org.apache.commons.lang3.StringUtils;
-import org.json.JSONArray;
 import org.json.JSONObject;
 import org.smartregister.domain.Event;
 import org.smartregister.domain.Task;
@@ -20,7 +17,7 @@ import org.smartregister.eusm.interactor.StructureTasksInteractor;
 import org.smartregister.eusm.model.StructureTaskDetails;
 import org.smartregister.eusm.util.AppConstants;
 import org.smartregister.eusm.util.PreferencesUtil;
-import org.smartregister.eusm.util.Utils;
+import org.smartregister.eusm.util.AppUtils;
 
 import java.lang.ref.WeakReference;
 import java.util.List;
@@ -65,7 +62,7 @@ public class StructureTasksPresenter extends BaseFormFragmentPresenter implement
     public void findTasks(String structureId) {
         this.structureId = structureId;
         interactor.findTasks(structureId, prefsUtil.getCurrentPlanId(),
-                Utils.getOperationalAreaLocation(prefsUtil.getCurrentOperationalArea()).getId());
+                AppUtils.getOperationalAreaLocation(prefsUtil.getCurrentOperationalArea()).getId());
     }
 
     @Override
@@ -178,9 +175,6 @@ public class StructureTasksPresenter extends BaseFormFragmentPresenter implement
         getView().updateTask(taskID, taskStatus, businessStatus);
     }
 
-    @Override
-    public void onStructureAdded(Feature feature, JSONArray featureCoordinates, double zoomlevel) {//not used
-    }
 
     @Override
     public void onFormSaveFailure(String eventType) {

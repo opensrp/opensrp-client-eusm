@@ -23,7 +23,7 @@ import static org.smartregister.eusm.util.AppConstants.Preferences.CURRENT_DISTR
 import static org.smartregister.eusm.util.AppConstants.Preferences.CURRENT_FACILITY;
 import static org.smartregister.eusm.util.AppConstants.Preferences.CURRENT_OPERATIONAL_AREA;
 import static org.smartregister.eusm.util.AppConstants.Preferences.CURRENT_OPERATIONAL_AREA_ID;
-import static org.smartregister.eusm.util.AppConstants.Preferences.CURRENT_PROVINCE;
+import static org.smartregister.eusm.util.AppConstants.Preferences.CURRENT_REGION;
 import static org.smartregister.eusm.util.AppConstants.Preferences.FACILITY_LEVEL;
 
 /**
@@ -87,23 +87,23 @@ public class PreferencesUtilTest extends BaseUnitTest {
 
     @Test
     public void testSetCurrentProvince() {
-        preferencesUtil.setCurrentProvince("Lusaka");
-        verify(allSharedPreferences).savePreference(CURRENT_PROVINCE, "Lusaka");
+        preferencesUtil.setCurrentRegion("Lusaka");
+        verify(allSharedPreferences).savePreference(CURRENT_REGION, "Lusaka");
     }
 
     @Test
     public void testGetCurrentProvince() {
-        when(allSharedPreferences.getPreference(CURRENT_PROVINCE)).thenReturn("Lusaka");
+        when(allSharedPreferences.getPreference(CURRENT_REGION)).thenReturn("Lusaka");
 
-        String actualCurrentProvince = preferencesUtil.getCurrentProvince();
+        String actualCurrentProvince = preferencesUtil.getCurrentRegion();
         assertEquals("Lusaka", actualCurrentProvince);
     }
 
     @Test
     public void testGetPreferenceValue() {
-        when(allSharedPreferences.getPreference(CURRENT_PROVINCE)).thenReturn("Lusaka");
+        when(allSharedPreferences.getPreference(CURRENT_REGION)).thenReturn("Lusaka");
 
-        String actualPreferenceValue = preferencesUtil.getPreferenceValue(CURRENT_PROVINCE);
+        String actualPreferenceValue = preferencesUtil.getPreferenceValue(CURRENT_REGION);
         assertEquals("Lusaka", actualPreferenceValue);
     }
 
@@ -125,7 +125,7 @@ public class PreferencesUtilTest extends BaseUnitTest {
     @Test
     public void testSetCurrentOperationalAreaShouldUpdatePreferences() {
         String operationalArea = "oa_1";
-        Whitebox.setInternalState(Utils.class, "cache", cache);
+        Whitebox.setInternalState(AppUtils.class, "cache", cache);
         when(cache.get(eq(operationalArea), any())).thenReturn(location);
         when(location.getId()).thenReturn("id_11121121");
         when(preferencesUtil.getCurrentOperationalArea()).thenReturn(operationalArea);

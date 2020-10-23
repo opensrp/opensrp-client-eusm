@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/register_nav_bar_container"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="60dp"
     android:background="@color/toolbar_background"
     android:focusableInTouchMode="true"
     android:orientation="horizontal"
@@ -39,16 +39,15 @@
         android:id="@+id/menu_label"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="@dimen/task_toolbar_margin"
         android:background="@android:color/transparent"
-        android:paddingStart="0dp"
+        android:paddingStart="2dp"
         android:paddingTop="0dp"
         android:paddingEnd="0dp"
         android:text="@string/menu"
         android:textAllCaps="true"
         android:textColor="@color/white"
         android:textSize="10sp"
-        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintStart_toStartOf="@+id/drawerMenu"
         app:layout_constraintTop_toBottomOf="@id/drawerMenu" />
 
 

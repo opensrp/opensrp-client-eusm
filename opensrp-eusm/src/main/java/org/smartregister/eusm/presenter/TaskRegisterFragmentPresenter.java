@@ -6,12 +6,10 @@ import androidx.annotation.NonNull;
 import androidx.core.util.Pair;
 
 import com.google.common.annotations.VisibleForTesting;
-import com.mapbox.geojson.Feature;
 
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
-import org.json.JSONArray;
 import org.json.JSONObject;
 import org.smartregister.configurableviews.ConfigurableViewsLibrary;
 import org.smartregister.configurableviews.helper.ConfigurableViewsHelper;
@@ -28,7 +26,7 @@ import org.smartregister.eusm.model.TaskDetails;
 import org.smartregister.eusm.model.TaskFilterParams;
 import org.smartregister.eusm.util.AppConstants;
 import org.smartregister.eusm.util.PreferencesUtil;
-import org.smartregister.eusm.util.Utils;
+import org.smartregister.eusm.util.AppUtils;
 
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
@@ -125,7 +123,7 @@ public class TaskRegisterFragmentPresenter extends BaseFormFragmentPresenter imp
     }
 
     private android.location.Location getOperationalAreaCenter() {
-        Location operationalAreaLocation = Utils.getOperationalAreaLocation(prefsUtil.getCurrentOperationalArea());
+        Location operationalAreaLocation = AppUtils.getOperationalAreaLocation(prefsUtil.getCurrentOperationalArea());
         if (operationalAreaLocation == null)
             return null;
         return mappingHelper.getCenter(gson.toJson(operationalAreaLocation.getGeometry()));
@@ -133,7 +131,7 @@ public class TaskRegisterFragmentPresenter extends BaseFormFragmentPresenter imp
 
     @Override
     public void startSync() {
-        Utils.startImmediateSync();
+        AppUtils.startImmediateSync();
     }
 
     @Override
@@ -146,7 +144,7 @@ public class TaskRegisterFragmentPresenter extends BaseFormFragmentPresenter imp
      * @return pair of filter clause and values for filter
      */
     private Pair<String, String[]> getMainCondition() {
-        Location operationalArea = Utils.getOperationalAreaLocation(prefsUtil.getCurrentOperationalArea());
+        Location operationalArea = AppUtils.getOperationalAreaLocation(prefsUtil.getCurrentOperationalArea());
         String whereClause = String.format("%s.%s = ? AND %s.%s = ? AND %s.%s NOT IN (%s)",
                 AppConstants.DatabaseKeys.TASK_TABLE, AppConstants.DatabaseKeys.GROUPID, AppConstants.DatabaseKeys.TASK_TABLE, AppConstants.DatabaseKeys.PLAN_ID,
                 AppConstants.DatabaseKeys.TASK_TABLE, AppConstants.DatabaseKeys.STATUS,
@@ -240,7 +238,7 @@ public class TaskRegisterFragmentPresenter extends BaseFormFragmentPresenter imp
 
     @Override
     public int getInterventionLabel() {
-        return Utils.getInterventionLabel();
+        return AppUtils.getInterventionLabel();
     }
 
     /**
@@ -443,10 +441,6 @@ public class TaskRegisterFragmentPresenter extends BaseFormFragmentPresenter imp
         getView().hideProgressDialog();
     }
 
-    @Override
-    public void onStructureAdded(Feature feature, JSONArray featureCoordinates, double zoomlevel) {
-        //not used
-    }
 
     @Override
     public void onFormSaveFailure(String eventType) {

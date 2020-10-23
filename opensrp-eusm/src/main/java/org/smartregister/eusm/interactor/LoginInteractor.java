@@ -4,7 +4,7 @@ import org.smartregister.CoreLibrary;
 import org.smartregister.eusm.BuildConfig;
 import org.smartregister.eusm.application.EusmApplication;
 import org.smartregister.eusm.job.LocationTaskServiceJob;
-import org.smartregister.eusm.util.Utils;
+import org.smartregister.eusm.util.AppUtils;
 import org.smartregister.job.DocumentConfigurationServiceJob;
 import org.smartregister.login.interactor.BaseLoginInteractor;
 import org.smartregister.view.contract.BaseLoginContract;
@@ -32,7 +32,7 @@ public class LoginInteractor extends BaseLoginInteractor implements BaseLoginCon
 
     @Override
     protected void scheduleJobsImmediately() {
-        Utils.startImmediateSync();
+        AppUtils.startImmediateSync();
     }
 
     @Override

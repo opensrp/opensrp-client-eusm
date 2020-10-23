@@ -31,7 +31,7 @@ import org.smartregister.eusm.contract.UserLocationContract.UserLocationCallback
 import org.smartregister.eusm.util.AppConstants;
 import org.smartregister.eusm.util.AppJsonFormUtils;
 import org.smartregister.eusm.util.LocationUtils;
-import org.smartregister.eusm.util.Utils;
+import org.smartregister.eusm.util.AppUtils;
 import org.smartregister.eusm.view.AppMapView;
 import org.smartregister.util.JsonFormUtils;
 
@@ -123,7 +123,7 @@ public class AppJsonFormFragmentPresenter extends JsonFormFragmentPresenter impl
 
     @VisibleForTesting
     protected boolean validateFarStructures() {
-        return Utils.validateFarStructures();
+        return AppUtils.validateFarStructures();
     }
 
 

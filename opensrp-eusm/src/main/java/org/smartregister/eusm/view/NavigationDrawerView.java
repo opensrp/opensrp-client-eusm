@@ -32,7 +32,7 @@ import org.smartregister.eusm.helper.GenericDrawerLayoutListener;
 import org.smartregister.eusm.interactor.BaseDrawerInteractor;
 import org.smartregister.eusm.presenter.BaseNavigationDrawerPresenter;
 import org.smartregister.eusm.util.AlertDialogUtils;
-import org.smartregister.eusm.util.Utils;
+import org.smartregister.eusm.util.AppUtils;
 import org.smartregister.util.LangUtils;
 import org.smartregister.util.NetworkUtils;
 
@@ -65,11 +65,6 @@ public class NavigationDrawerView implements View.OnClickListener, BaseDrawerCon
 
     @Override
     public void initializeDrawerLayout() {
-        setUpViews();
-        checkSynced();
-    }
-
-    protected void setUpViews() {
         mDrawerLayout = getContext().findViewById(R.id.drawer_layout);
 
         mDrawerLayout.addDrawerListener(new GenericDrawerLayoutListener() {
@@ -79,13 +74,18 @@ public class NavigationDrawerView implements View.OnClickListener, BaseDrawerCon
             }
         });
 
+        setUpViews();
+
+        checkSynced();
+    }
+
+    protected void setUpViews() {
         NavigationView navigationView = getContext().findViewById(R.id.nav_view);
 
         View headerView = navigationView.getHeaderView(0);
+
         try {
-//            String manifestVersion = getManifestVersion();
-            String appVersion = getContext().getString(R.string.app_version_without_build_number, Utils.getVersion(getContext()));
-//            String appVersionText = appVersion + (manifestVersion == null ? "" : getContext().getString(R.string.manifest_version_parenthesis_placeholder, manifestVersion));
+            String appVersion = getContext().getString(R.string.app_version_without_build_number, AppUtils.getVersion(getContext()));
             ((TextView) headerView.findViewById(R.id.application_version))
                     .setText(appVersion);
         } catch (PackageManager.NameNotFoundException e) {
@@ -127,6 +127,9 @@ public class NavigationDrawerView implements View.OnClickListener, BaseDrawerCon
         headerView.findViewById(R.id.sync_button).setOnClickListener(this);
 
         headerView.findViewById(R.id.btn_navMenu_offline_maps).setOnClickListener(this);
+
+        TextView poweredByTextView = getContext().findViewById(R.id.txt_powered_by);
+        poweredByTextView.setText(String.format("%s OpenSRP", getString(R.string.powered_by)));
     }
 
     private Map<String, String> getLanguageMap() {
@@ -264,10 +267,6 @@ public class NavigationDrawerView implements View.OnClickListener, BaseDrawerCon
         }
     }
 
-    public BaseDrawerContract.DrawerActivity getActivity() {
-        return activity;
-    }
-
     @Override
     public void onClick(View v) {
         if (v.getId() == R.id.operational_area_selector)
@@ -282,7 +281,7 @@ public class NavigationDrawerView implements View.OnClickListener, BaseDrawerCon
             showLanguageChooser();
         else if (v.getId() == R.id.sync_button) {
             toggleProgressBarView(true);
-            org.smartregister.eusm.util.Utils.startImmediateSync();
+            AppUtils.startImmediateSync();
             closeDrawerLayout();
         }
     }
@@ -351,5 +350,10 @@ public class NavigationDrawerView implements View.OnClickListener, BaseDrawerCon
     @Override
     public String getManifestVersion() {
         return CoreLibrary.getInstance().context().allSharedPreferences().fetchManifestVersion();
+    }
+
+    @Override
+    public BaseDrawerContract.DrawerActivity getActivity() {
+        return activity;
     }
 }

@@ -32,7 +32,7 @@ import static org.smartregister.eusm.util.AppConstants.CONFIGURATION.DEFAULT_IND
 import static org.smartregister.eusm.util.AppConstants.CONFIGURATION.INDEX_CASE_CIRCLE_RADIUS_IN_METRES;
 import static org.smartregister.eusm.util.AppConstants.CONFIGURATION.OUTSIDE_OPERATIONAL_AREA_MASK_OPACITY;
 import static org.smartregister.eusm.util.AppConstants.GeoJSON.IS_INDEX_CASE;
-import static org.smartregister.eusm.util.Utils.getGlobalConfig;
+import static org.smartregister.eusm.util.AppUtils.getGlobalConfig;
 
 public class AppMapHelper {
 

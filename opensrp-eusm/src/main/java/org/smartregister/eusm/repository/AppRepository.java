@@ -1,9 +1,13 @@
 package org.smartregister.eusm.repository;
 
 import net.sqlcipher.Cursor;
+import net.sqlcipher.database.SQLiteDatabase;
 
+import org.smartregister.eusm.model.StructureDetail;
 import org.smartregister.eusm.util.AppConstants;
 import org.smartregister.repository.BaseRepository;
+
+import java.util.List;
 
 import timber.log.Timber;
 

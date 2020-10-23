@@ -19,7 +19,7 @@ import org.smartregister.domain.jsonmapping.ClientClassification;
 import org.smartregister.eusm.application.EusmApplication;
 import org.smartregister.eusm.util.AppConstants;
 import org.smartregister.eusm.util.PreferencesUtil;
-import org.smartregister.eusm.util.Utils;
+import org.smartregister.eusm.util.AppUtils;
 import org.smartregister.repository.BaseRepository;
 import org.smartregister.repository.EventClientRepository;
 import org.smartregister.repository.StructureRepository;
@@ -73,7 +73,7 @@ public class AppClientProcessor extends ClientProcessorForJava {
         }
 
         ArrayList<Client> clients = new ArrayList<>();
-        Location operationalArea = Utils.getOperationalAreaLocation(PreferencesUtil.getInstance().getCurrentOperationalArea());
+        Location operationalArea = AppUtils.getOperationalAreaLocation(PreferencesUtil.getInstance().getCurrentOperationalArea());
         String operationalAreaLocationId = operationalArea == null ? null : operationalArea.getId();
         boolean hasSyncedEventsInTarget = false;
         if (!eventClients.isEmpty()) {

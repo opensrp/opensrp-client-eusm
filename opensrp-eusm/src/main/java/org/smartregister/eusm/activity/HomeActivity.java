@@ -25,6 +25,7 @@ import org.smartregister.domain.FetchStatus;
 import org.smartregister.domain.SyncProgress;
 import org.smartregister.domain.Task;
 import org.smartregister.eusm.R;
+import org.smartregister.eusm.application.EusmApplication;
 import org.smartregister.eusm.contract.BaseDrawerContract;
 import org.smartregister.eusm.contract.HomeActivityContract;
 import org.smartregister.eusm.helper.GenericTextWatcher;
@@ -33,7 +34,8 @@ import org.smartregister.eusm.model.TaskFilterParams;
 import org.smartregister.eusm.presenter.HomeActivityPresenter;
 import org.smartregister.eusm.util.AlertDialogUtils;
 import org.smartregister.eusm.util.AppConstants.Action;
-import org.smartregister.eusm.util.Utils;
+import org.smartregister.eusm.util.TestDataUtils;
+import org.smartregister.eusm.util.AppUtils;
 import org.smartregister.eusm.view.NavigationDrawerView;
 import org.smartregister.receiver.SyncProgressBroadcastReceiver;
 import org.smartregister.receiver.SyncStatusBroadcastReceiver;
@@ -52,22 +54,17 @@ import static org.smartregister.eusm.util.AppConstants.RequestCode.REQUEST_CODE_
 import static org.smartregister.eusm.util.AppConstants.RequestCode.REQUEST_CODE_FILTER_TASKS;
 import static org.smartregister.eusm.util.AppConstants.RequestCode.REQUEST_CODE_GET_JSON;
 import static org.smartregister.eusm.util.AppConstants.RequestCode.REQUEST_CODE_TASK_LISTS;
-import static org.smartregister.eusm.util.Utils.getPixelsPerDPI;
+import static org.smartregister.eusm.util.AppUtils.getPixelsPerDPI;
 
 public class HomeActivity extends BaseMapActivity implements HomeActivityContract.HomeActivityView,
         View.OnClickListener, SyncStatusBroadcastReceiver.SyncStatusListener,
         OnLocationComponentInitializedCallback, SyncProgressBroadcastReceiver.SyncProgressListener {
 
-    private HomeActivityPresenter homeActivityPresenter;
-
-    private View rootView;
-
-    private ProgressDialog progressDialog;
-
     private final RefreshGeoWidgetReceiver refreshGeowidgetReceiver = new RefreshGeoWidgetReceiver();
-
     private final SyncProgressBroadcastReceiver syncProgressBroadcastReceiver = new SyncProgressBroadcastReceiver(this);
-
+    private HomeActivityPresenter homeActivityPresenter;
+    private View rootView;
+    private ProgressDialog progressDialog;
     private boolean hasRequestedLocation;
 
     private Snackbar syncProgressSnackbar;
@@ -85,7 +82,7 @@ public class HomeActivity extends BaseMapActivity implements HomeActivityContrac
     @Override
     protected void setUpViews() {
         super.setUpViews();
-
+        new TestDataUtils().populateTestData();
         rootView = findViewById(R.id.content_frame);
 
         drawerView = new NavigationDrawerView(this);
@@ -97,11 +94,15 @@ public class HomeActivity extends BaseMapActivity implements HomeActivityContrac
         findViewById(R.id.drawerMenu)
                 .setOnClickListener(this);
 
-        findViewById(R.id.service_points_btn_register).setOnClickListener(this);
+        TextView servicePointBtnRegisterTextView = findViewById(R.id.service_points_btn_register);
+        servicePointBtnRegisterTextView.setText(getString(R.string.list));
+        servicePointBtnRegisterTextView.setOnClickListener(this);
 
         initializeToolbar();
 
         syncProgressSnackbar = Snackbar.make(rootView, getString(org.smartregister.R.string.syncing), Snackbar.LENGTH_INDEFINITE);
+
+        EusmApplication.getInstance().setUserLocation(getUserCurrentLocation());
     }
 
     private void initializeToolbar() {
@@ -118,7 +119,7 @@ public class HomeActivity extends BaseMapActivity implements HomeActivityContrac
     @Override
     public void onClick(View v) {
         if (v.getId() == R.id.service_points_btn_register) {
-            homeActivityPresenter.onOpenTaskRegisterClicked();
+            homeActivityPresenter.onOpenServicePointRegister();
         } else if (v.getId() == R.id.drawerMenu) {
             drawerView.openDrawerLayout();
         }
@@ -129,7 +130,9 @@ public class HomeActivity extends BaseMapActivity implements HomeActivityContrac
     }
 
     @Override
-    public void openTaskRegister(TaskFilterParams filterParams) {
+    public void openServicePointRegister(TaskFilterParams filterParams) {
+        Intent intent = new Intent(this, StructureRegisterActivity.class);
+        startActivity(intent);
     }
 
     @Override
@@ -345,7 +348,7 @@ public class HomeActivity extends BaseMapActivity implements HomeActivityContrac
     @Override
     public void onSyncProgress(SyncProgress syncProgress) {
         int progress = syncProgress.getPercentageSynced();
-        String entity = Utils.getSyncEntityString(syncProgress.getSyncEntity());
+        String entity = AppUtils.getSyncEntityString(syncProgress.getSyncEntity());
         ProgressBar syncProgressBar = findViewById(R.id.sync_progress_bar);
         TextView syncProgressBarLabel = findViewById(R.id.sync_progress_bar_label);
         String labelText = String.format(getResources().getString(R.string.progressBarLabel), entity, progress);

@@ -2,7 +2,7 @@
     <!-- Actions -->
     <string name="action_logout">Logout</string>
     <!-- General -->
-    <string name="eusm_app_name" translatable="false">End User Supply Monitoring</string>
+    <string name="eusm_app_name" translatable="false">eusm</string>
     <string name="app_name" translatable="false">@string/eusm_app_name</string>
     <string name="app_version">App version: %1$s (built on %2$s)</string>
     <string name="app_version_without_build_number">Version %1$s</string>
@@ -81,7 +81,6 @@
     <string name="downloaded">Downloaded</string>
 
     <string name="reveal_satellite_style" translatable="false">asset://reveal-streets-satellite.json</string>
-    <string name="reveal_streets_style" translatable="false">reveal-streets-style.json</string>
     <string name="reveal_offline_map_download_style" translatable="false">map-download-style.json</string>
     <string name="reveal_datasource_name" translatable="false">reveal-data-set</string>
     <string name="reveal_layer_polygons" translatable="false">reveal-data-polygons</string>
@@ -97,5 +96,8 @@
 
     <string name="saving_title">Saving</string>
     <string name="saving_message">Saving form in Progress. Please wait</string>
+
+    <string name="str_page_info">Page {0} of {1}</string>
+    <string name="distance_from_structure">%s &#183; %s m away</string>
 
 </resources>

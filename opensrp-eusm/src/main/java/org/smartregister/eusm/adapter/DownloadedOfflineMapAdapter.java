@@ -14,7 +14,7 @@ import com.mapbox.mapboxsdk.offline.OfflineRegionStatus;
 
 import org.smartregister.eusm.R;
 import org.smartregister.eusm.model.OfflineMapModel;
-import org.smartregister.eusm.util.Utils;
+import org.smartregister.eusm.util.AppUtils;
 import org.smartregister.eusm.viewholder.DownloadedOfflineMapViewHolder;
 
 import java.util.ArrayList;
@@ -74,7 +74,7 @@ public class DownloadedOfflineMapAdapter extends RecyclerView.Adapter<Downloaded
 
                 String mapDownloadSize = Formatter.formatFileSize(context, status.getCompletedResourceSize());
                 Date dateCreated = offlineMapModel.getDateCreated() != null ? offlineMapModel.getDateCreated() : new Date();
-                String downloadDate = Utils.formatDate(dateCreated);
+                String downloadDate = AppUtils.formatDate(dateCreated);
 
                 //viewHolder.setDownloadedMapSize(context.getString(R.string.offline_map_size, mapDownloadSize, downloadDate));
 

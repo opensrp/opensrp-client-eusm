@@ -28,7 +28,7 @@ import org.smartregister.eusm.processor.AppClientProcessor;
 import org.smartregister.eusm.util.AppConstants;
 import org.smartregister.eusm.util.PreferencesUtil;
 import org.smartregister.eusm.util.TaskUtils;
-import org.smartregister.eusm.util.Utils;
+import org.smartregister.eusm.util.AppUtils;
 import org.smartregister.repository.AllSharedPreferences;
 import org.smartregister.repository.BaseRepository;
 import org.smartregister.repository.EventClientRepository;
@@ -136,7 +136,7 @@ public class BaseInteractor implements BaseContract.BaseInteractor {
         String entityId = getString(jsonForm, ENTITY_ID);
         JSONArray fields = JsonFormUtils.fields(jsonForm);
         JSONObject metadata = JsonFormUtils.getJSONObject(jsonForm, AppConstants.METADATA);
-        Event event = JsonFormUtils.createEvent(fields, metadata, Utils.getFormTag(), entityId, encounterType, bindType);
+        Event event = JsonFormUtils.createEvent(fields, metadata, AppUtils.getFormTag(), entityId, encounterType, bindType);
         JSONObject eventJson = new JSONObject(gson.toJson(event));
         eventJson.put(AppConstants.DETAILS, JsonFormUtils.getJSONObject(jsonForm, AppConstants.DETAILS));
         eventClientRepository.addEvent(entityId, eventJson);
@@ -352,7 +352,7 @@ public class BaseInteractor implements BaseContract.BaseInteractor {
                 taskRepository.addOrUpdate(task);
                 Set<Task> removedTasks = new HashSet<>();
                 for (Task bloodScreeningTask : taskRepository.getTasksByEntityAndCode(prefsUtil.getCurrentPlanId(),
-                        Utils.getOperationalAreaLocation(prefsUtil.getCurrentOperationalArea()).getId(), baseEntityId, AppConstants.Intervention.BLOOD_SCREENING)) {
+                        AppUtils.getOperationalAreaLocation(prefsUtil.getCurrentOperationalArea()).getId(), baseEntityId, AppConstants.Intervention.BLOOD_SCREENING)) {
                     bloodScreeningTask.setStatus(Task.TaskStatus.CANCELLED);
                     bloodScreeningTask.setSyncStatus(BaseRepository.TYPE_Created);
                     taskRepository.addOrUpdate(bloodScreeningTask);

@@ -16,12 +16,12 @@ import org.json.JSONObject;
 import org.smartregister.cursoradapter.SmartRegisterQueryBuilder;
 import org.smartregister.domain.Event;
 import org.smartregister.eusm.application.EusmApplication;
-import org.smartregister.eusm.contract.ServicePointRegisterFragmentContract;
+import org.smartregister.eusm.contract.StructureRegisterFragmentContract;
 import org.smartregister.eusm.contract.TaskRegisterFragmentContract;
 import org.smartregister.eusm.model.TaskDetails;
 import org.smartregister.eusm.util.AppConstants;
 import org.smartregister.eusm.util.InteractorUtils;
-import org.smartregister.eusm.util.Utils;
+import org.smartregister.eusm.util.AppUtils;
 import org.smartregister.repository.EventClientRepository.event_column;
 import org.smartregister.repository.LocationRepository;
 
@@ -47,7 +47,7 @@ public class TaskRegisterFragmentInteractor extends BaseInteractor implements Ta
     private int structuresWithinBuffer = 0;
 
     public TaskRegisterFragmentInteractor(TaskRegisterFragmentContract.Presenter presenter) {
-        this(presenter, Utils.getLocationBuffer());
+        this(presenter, AppUtils.getLocationBuffer());
     }
 
     @VisibleForTesting
@@ -248,8 +248,8 @@ public class TaskRegisterFragmentInteractor extends BaseInteractor implements Ta
         });
     }
 
-    private ServicePointRegisterFragmentContract.Presenter getPresenter() {
-        return (ServicePointRegisterFragmentContract.Presenter) presenterCallBack;
+    private StructureRegisterFragmentContract.Presenter getPresenter() {
+        return (StructureRegisterFragmentContract.Presenter) presenterCallBack;
     }
 
     public void getIndexCaseDetails(String structureId, String operationalArea, String indexCaseEventId) {

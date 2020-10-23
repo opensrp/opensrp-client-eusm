@@ -13,10 +13,23 @@
 
         <include layout="@layout/toolbar_home_map_view" />
 
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/service_points_recyclerview"
+        <FrameLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent" />
+            android:layout_height="match_parent">
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/recycler_view"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" />
+
+            <ProgressBar
+                android:id="@+id/client_list_progress"
+                style="@android:style/Widget.Holo.Light.ProgressBar.Large.Inverse"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:visibility="visible" />
+        </FrameLayout>
     </LinearLayout>
 
     <com.google.android.material.navigation.NavigationView

@@ -21,7 +21,6 @@ import org.smartregister.repository.PlanDefinitionRepository;
 import org.smartregister.repository.PlanDefinitionSearchRepository;
 import org.smartregister.repository.Repository;
 import org.smartregister.repository.SettingsRepository;
-import org.smartregister.repository.StructureRepository;
 import org.smartregister.repository.TaskRepository;
 import org.smartregister.repository.UniqueIdRepository;
 import org.smartregister.util.DatabaseMigrationUtils;
@@ -55,7 +54,7 @@ public class EusmRepository extends Repository {
         CampaignRepository.createTable(database);
         TaskRepository.createTable(database);
         LocationRepository.createTable(database);
-        StructureRepository.createTable(database);
+        AppStructureRepository.createTable(database);
         PlanDefinitionRepository.createTable(database);
         PlanDefinitionSearchRepository.createTable(database);
         SettingsRepository.onUpgrade(database);

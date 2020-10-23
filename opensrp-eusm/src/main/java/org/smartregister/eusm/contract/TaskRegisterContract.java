@@ -13,8 +13,6 @@ public interface TaskRegisterContract {
 
     interface Presenter extends BaseContract.BasePresenter {
         void saveJsonForm(String json);
-
-        void onFamilyFound(CommonPersonObjectClient finalFamily);
     }
 
     interface Interactor {

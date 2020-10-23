@@ -26,7 +26,7 @@ import static org.junit.Assert.assertEquals;
 import static org.smartregister.eusm.util.AppConstants.STRUCTURE;
 import static org.smartregister.eusm.util.AppConstants.TASK_RESET_EVENT;
 
-public class AppJsonFormUtilsTest extends BaseUnitTest {
+public class AppJsonFormAppUtilsTest extends BaseUnitTest {
 
     private final Context context = RuntimeEnvironment.application;
     private AppJsonFormUtils appJsonFormUtils;

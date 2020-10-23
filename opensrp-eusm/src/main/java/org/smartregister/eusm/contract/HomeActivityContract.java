@@ -30,7 +30,7 @@ public interface HomeActivityContract {
 
         void openServicePointsActivity(TaskFilterParams filterParams);
 
-        void openTaskRegister(TaskFilterParams filterParams);
+        void openServicePointRegister(TaskFilterParams filterParams);
 
         void setGeoJsonSource(@NonNull FeatureCollection featureCollection, Feature operationalArea, boolean changeMapPosition);
 
@@ -79,7 +79,7 @@ public interface HomeActivityContract {
 
         void onStructureMarkedIneligible();
 
-        void onOpenTaskRegisterClicked();
+        void onOpenServicePointRegister();
 
         void setTaskFilterParams(TaskFilterParams filterParams);
 

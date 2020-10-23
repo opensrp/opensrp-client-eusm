@@ -22,7 +22,7 @@ import org.smartregister.eusm.processor.AppClientProcessor;
 import org.smartregister.eusm.util.AppConstants;
 import org.smartregister.eusm.util.AppConstants.JsonForm;
 import org.smartregister.eusm.util.PreferencesUtil;
-import org.smartregister.eusm.util.Utils;
+import org.smartregister.eusm.util.AppUtils;
 import org.smartregister.repository.BaseRepository;
 import org.smartregister.repository.EventClientRepository;
 import org.smartregister.repository.StructureRepository;
@@ -59,7 +59,7 @@ import static org.smartregister.eusm.util.AppConstants.TASK_RESET_EVENT;
  * @author Vincent Karuri
  */
 @RunWith(PowerMockRunner.class)
-@PrepareForTest({AppClientProcessor.class, Utils.class, PreferencesUtil.class, EusmApplication.class})
+@PrepareForTest({AppClientProcessor.class, AppUtils.class, PreferencesUtil.class, EusmApplication.class})
 public class AppClientProcessorPowerMockTest {
 
     private final String FORM_SUBMISSION_ID = "form_submission_id";
@@ -203,7 +203,7 @@ public class AppClientProcessorPowerMockTest {
     }
 
     private void mockStaticMethods() {
-        mockStatic(Utils.class);
+        mockStatic(AppUtils.class);
         mockStatic(PreferencesUtil.class);
         mockStatic(EusmApplication.class);
 
@@ -221,7 +221,7 @@ public class AppClientProcessorPowerMockTest {
         PowerMockito.when(preferencesUtil.getCurrentOperationalArea()).thenReturn("");
 
         PowerMockito.when(PreferencesUtil.getInstance()).thenReturn(preferencesUtil);
-        PowerMockito.when(Utils.getOperationalAreaLocation(anyString())).thenReturn(new Location());
+        PowerMockito.when(AppUtils.getOperationalAreaLocation(anyString())).thenReturn(new Location());
     }
 
     private void mockRepositories() {

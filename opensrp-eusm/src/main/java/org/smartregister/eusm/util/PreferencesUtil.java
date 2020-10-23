@@ -11,7 +11,7 @@ import static org.smartregister.eusm.util.AppConstants.Preferences.CURRENT_OPERA
 import static org.smartregister.eusm.util.AppConstants.Preferences.CURRENT_OPERATIONAL_AREA_ID;
 import static org.smartregister.eusm.util.AppConstants.Preferences.CURRENT_PLAN;
 import static org.smartregister.eusm.util.AppConstants.Preferences.CURRENT_PLAN_ID;
-import static org.smartregister.eusm.util.AppConstants.Preferences.CURRENT_PROVINCE;
+import static org.smartregister.eusm.util.AppConstants.Preferences.CURRENT_REGION;
 import static org.smartregister.eusm.util.AppConstants.Preferences.FACILITY_LEVEL;
 
 /**
@@ -49,7 +49,7 @@ public class PreferencesUtil {
     public void setCurrentOperationalArea(String operationalArea) {
         allSharedPreferences.savePreference(CURRENT_OPERATIONAL_AREA, operationalArea);
         if (StringUtils.isNotBlank(operationalArea)) {
-            allSharedPreferences.savePreference(CURRENT_OPERATIONAL_AREA_ID, Utils.getCurrentLocationId());
+            allSharedPreferences.savePreference(CURRENT_OPERATIONAL_AREA_ID, AppUtils.getCurrentLocationId());
         } else {
             allSharedPreferences.savePreference(CURRENT_OPERATIONAL_AREA_ID, null);
         }
@@ -67,12 +67,12 @@ public class PreferencesUtil {
         allSharedPreferences.savePreference(CURRENT_DISTRICT, district);
     }
 
-    public String getCurrentProvince() {
-        return allSharedPreferences.getPreference(CURRENT_PROVINCE);
+    public String getCurrentRegion() {
+        return allSharedPreferences.getPreference(CURRENT_REGION);
     }
 
-    public void setCurrentProvince(String province) {
-        allSharedPreferences.savePreference(CURRENT_PROVINCE, province);
+    public void setCurrentRegion(String currentRegion) {
+        allSharedPreferences.savePreference(CURRENT_REGION, currentRegion);
     }
 
     public String getCurrentPlan() {

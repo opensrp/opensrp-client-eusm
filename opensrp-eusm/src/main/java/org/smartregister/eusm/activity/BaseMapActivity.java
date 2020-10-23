@@ -16,7 +16,6 @@ import androidx.cardview.widget.CardView;
 import com.mapbox.android.gestures.MoveGestureDetector;
 import com.mapbox.geojson.Feature;
 import com.mapbox.geojson.FeatureCollection;
-import com.mapbox.mapboxsdk.camera.CameraPosition;
 import com.mapbox.mapboxsdk.geometry.LatLng;
 import com.mapbox.mapboxsdk.location.modes.RenderMode;
 import com.mapbox.mapboxsdk.maps.MapboxMap;
@@ -33,21 +32,17 @@ import org.smartregister.eusm.contract.BaseMapActivityContract;
 import org.smartregister.eusm.util.AppConstants;
 import org.smartregister.eusm.util.AppJsonFormUtils;
 import org.smartregister.eusm.util.AppMapHelper;
-import org.smartregister.eusm.util.Utils;
+import org.smartregister.eusm.util.AppUtils;
 import org.smartregister.eusm.view.AppMapView;
 import org.smartregister.view.activity.MultiLanguageActivity;
 
-import java.util.List;
-
 import io.ona.kujaku.callbacks.OnLocationComponentInitializedCallback;
 import io.ona.kujaku.layers.BoundaryLayer;
-import io.ona.kujaku.listeners.OnFeatureLongClickListener;
 import timber.log.Timber;
 
 import static org.smartregister.eusm.util.AppConstants.ANIMATE_TO_LOCATION_DURATION;
 import static org.smartregister.eusm.util.AppConstants.VERTICAL_OFFSET;
-import static org.smartregister.eusm.util.Utils.getDrawOperationalAreaBoundaryAndLabel;
-import static org.smartregister.eusm.util.Utils.getPixelsPerDPI;
+import static org.smartregister.eusm.util.AppUtils.getPixelsPerDPI;
 
 public abstract class BaseMapActivity extends MultiLanguageActivity implements
         OnLocationComponentInitializedCallback,
@@ -142,7 +137,7 @@ public abstract class BaseMapActivity extends MultiLanguageActivity implements
     }
 
     protected Float getLocationBuffer() {
-        return Utils.getLocationBuffer();
+        return AppUtils.getLocationBuffer();
     }
 
     protected void enableCompass(MapboxMap mapboxMap) {
@@ -199,7 +194,7 @@ public abstract class BaseMapActivity extends MultiLanguageActivity implements
     }
 
     protected boolean shouldDisplayDistanceScale() {
-        return Utils.displayDistanceScale();
+        return AppUtils.displayDistanceScale();
     }
 
     @Override
@@ -247,42 +242,42 @@ public abstract class BaseMapActivity extends MultiLanguageActivity implements
 
     @Override
     public Context getContext() {
-        return null;
+        return this;
     }
 
     @Override
     public void setGeoJsonSource(@NonNull FeatureCollection featureCollection, Feature operationalArea, boolean isChangeMapPosition) {
-        if (geoJsonSource != null) {
-            geoJsonSource.setGeoJson(featureCollection);
-            if (operationalArea != null) {
-                CameraPosition cameraPosition = getMapboxMap().getCameraForGeometry(operationalArea.geometry());
-
-                if (cameraPosition != null && (boundaryLayer == null || isChangeMapPosition)) {
-                    getMapboxMap().setCameraPosition(cameraPosition);
-                }
-
-                Boolean drawOperationalAreaBoundaryAndLabel = getDrawOperationalAreaBoundaryAndLabel();
-                if (drawOperationalAreaBoundaryAndLabel) {
-                    if (boundaryLayer == null) {
-                        boundaryLayer = createBoundaryLayer(operationalArea);
-                        getMapView().addLayer(boundaryLayer);
-
-                        getMapView().setOnFeatureLongClickListener(new OnFeatureLongClickListener() {
-                            @Override
-                            public void onFeatureLongClick(List<Feature> features) {
-//                                homeActivityPresenter.onFociBoundaryLongClicked();
-                            }
-                        }, boundaryLayer.getLayerIds());
-
-                    } else {
-                        boundaryLayer.updateFeatures(FeatureCollection.fromFeature(operationalArea));
-                    }
-                }
-
-                appMapHelper.updateIndexCaseLayers(getMapboxMap(), featureCollection, this);
-            }
-
-        }
+//        if (geoJsonSource != null) {
+//            geoJsonSource.setGeoJson(featureCollection);
+//            if (operationalArea != null) {
+//                CameraPosition cameraPosition = getMapboxMap().getCameraForGeometry(operationalArea.geometry());
+//
+//                if (cameraPosition != null && (boundaryLayer == null || isChangeMapPosition)) {
+//                    getMapboxMap().setCameraPosition(cameraPosition);
+//                }
+//
+//                Boolean drawOperationalAreaBoundaryAndLabel = getDrawOperationalAreaBoundaryAndLabel();
+//                if (drawOperationalAreaBoundaryAndLabel) {
+//                    if (boundaryLayer == null) {
+//                        boundaryLayer = createBoundaryLayer(operationalArea);
+//                        getMapView().addLayer(boundaryLayer);
+//
+//                        getMapView().setOnFeatureLongClickListener(new OnFeatureLongClickListener() {
+//                            @Override
+//                            public void onFeatureLongClick(List<Feature> features) {
+////                                homeActivityPresenter.onFociBoundaryLongClicked();
+//                            }
+//                        }, boundaryLayer.getLayerIds());
+//
+//                    } else {
+//                        boundaryLayer.updateFeatures(FeatureCollection.fromFeature(operationalArea));
+//                    }
+//                }
+//
+//                appMapHelper.updateIndexCaseLayers(getMapboxMap(), featureCollection, this);
+//            }
+//
+//        }
     }
 
     @Override

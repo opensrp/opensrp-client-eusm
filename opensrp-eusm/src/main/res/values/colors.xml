@@ -40,5 +40,6 @@
     <color name="background_alert_red">#FFBDBD</color>
     <color name="background_alert_green">#B3EDC3</color>
 
-
+    <color name="task_completed">#55bf26</color>
+    <color name="task_in_progress">#d0a933</color>
 </resources>

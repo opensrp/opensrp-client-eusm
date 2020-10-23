@@ -5,7 +5,7 @@ import android.location.Location;
 import androidx.annotation.NonNull;
 
 import org.apache.commons.lang3.StringUtils;
-import org.smartregister.eusm.util.Utils;
+import org.smartregister.eusm.util.AppUtils;
 
 import java.io.Serializable;
 import java.util.HashMap;
@@ -304,7 +304,7 @@ public class TaskDetails extends BaseTaskDetails implements Comparable<TaskDetai
      * Calculates the aggregate/overall business status
      */
     private String calculateAggregateBusinessStatus() {
-        if (Utils.isFocusInvestigation()) {
+        if (AppUtils.isFocusInvestigation()) {
             if (isFamilyRegisteredOrNoTaskExists() && isBednetDistributed() && isBloodScreeningDone()) {
                 return COMPLETE;
             } else if (isFamilyRegisteredOrNoTaskExists() && !isBednetDistributed() && !isBloodScreeningDone()) {

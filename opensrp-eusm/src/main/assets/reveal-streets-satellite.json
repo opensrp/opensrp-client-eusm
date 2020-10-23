@@ -44,92 +44,6 @@
       }
     },
     {
-      "id": "reveal-data-polygons",
-      "type": "fill",
-      "layout": {},
-      "source": "reveal-data-set",
-      "filter": [
-        "==",
-        "$type",
-        "Polygon"
-      ],
-      "paint": {
-        "fill-color": [
-          "match",
-          [
-            "get",
-            "taskBusinessStatus"
-          ],
-          [
-            "Not Visited"
-          ],
-          "hsl(46, 88%, 62%)",
-          [
-            "Not Sprayed",
-            "Incomplete",
-            "In Progress",
-            "None Received"
-          ],
-          "hsl(3, 71%, 54%)",
-          [
-            "Sprayed",
-            "Complete",
-            "Fully Received"
-          ],
-          "hsl(89, 52%, 48%)",
-          [
-            "Not Sprayable",
-            "Not Eligible"
-          ],
-          "hsl(0, 0%, 9%)",
-          [
-            "Family Registered"
-          ],
-          "hsl(335, 100%, 79%)",
-          [
-            "Bednet Distributed",
-            "Adherence Visit Done"
-          ],
-          "hsl(199, 68%, 55%)",
-          [
-            "Blood Screening Complete"
-          ],
-          "hsl(262, 100%, 68%)",
-          [
-            "Partially Sprayed",
-            "Partially Received"
-          ],
-          "hsl(26, 84%, 56%)",
-          "hsl(0, 0%, 78%)"
-        ],
-        "fill-opacity": [
-          "match",
-          [
-            "get",
-            "taskBusinessStatus"
-          ],
-          [
-            "Not Visited"
-          ],
-          0.7,
-          [
-            "Not Sprayed"
-          ],
-          0.7,
-          [
-            "Sprayed"
-          ],
-          0.7,
-          [
-            "Not Sprayable"
-          ],
-          1,
-          0.75
-        ],
-        "fill-outline-color": "rgb(0, 0, 0)"
-      }
-    },
-    {
       "id": "reveal-data-points",
       "type": "circle",
       "source": "reveal-data-set",
@@ -205,21 +119,6 @@
         ],
         "circle-stroke-width": 1,
         "circle-opacity": 0.5
-      }
-    },
-    {
-      "id": "select-layer-polygons",
-      "type": "line",
-      "source": "select-data",
-      "filter": [
-        "==",
-        "$type",
-        "Polygon"
-      ],
-      "layout": {},
-      "paint": {
-        "line-color": "hsl(146, 100%, 50%)",
-        "line-width": 4
       }
     },
     {

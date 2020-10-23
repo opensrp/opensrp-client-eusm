@@ -6,7 +6,7 @@ import org.smartregister.domain.PlanDefinition;
 import org.smartregister.eusm.application.EusmApplication;
 import org.smartregister.eusm.config.AppExecutors;
 import org.smartregister.eusm.contract.BaseDrawerContract;
-import org.smartregister.eusm.util.Utils;
+import org.smartregister.eusm.util.AppUtils;
 import org.smartregister.repository.PlanDefinitionRepository;
 import org.smartregister.repository.PlanDefinitionSearchRepository;
 
@@ -38,7 +38,7 @@ public class BaseDrawerInteractor implements BaseDrawerContract.Interactor {
         Runnable runnable = () -> {
             Set<PlanDefinition> planDefinitionSet;
             if (StringUtils.isNotBlank(jurisdictionName)) {
-                Location operationalArea = Utils.getOperationalAreaLocation(jurisdictionName);
+                Location operationalArea = AppUtils.getOperationalAreaLocation(jurisdictionName);
                 String jurisdictionIdentifier = operationalArea != null ? operationalArea.getId() : null;
                 planDefinitionSet = planDefinitionSearchRepository.findActivePlansByJurisdiction(jurisdictionIdentifier);
             } else {
@@ -52,7 +52,7 @@ public class BaseDrawerInteractor implements BaseDrawerContract.Interactor {
     @Override
     public void validateCurrentPlan(String selectedOperationalArea, String currentPlanId) {
         Runnable runnable = () -> {
-            Location operationalArea = Utils.getOperationalAreaLocation(selectedOperationalArea);
+            Location operationalArea = AppUtils.getOperationalAreaLocation(selectedOperationalArea);
             String jurisdictionIdentifier = operationalArea != null ? operationalArea.getId() : null;
             boolean isValid = planDefinitionSearchRepository.planExists(currentPlanId, jurisdictionIdentifier);
             appExecutors.mainThread().execute(() -> presenter.onPlanValidated(isValid));

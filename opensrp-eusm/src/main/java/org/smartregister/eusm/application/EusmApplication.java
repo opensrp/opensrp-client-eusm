@@ -1,6 +1,7 @@
 package org.smartregister.eusm.application;
 
 import android.content.Intent;
+import android.location.Location;
 
 import androidx.annotation.NonNull;
 
@@ -31,10 +32,11 @@ import org.smartregister.eusm.config.AppSyncConfiguration;
 import org.smartregister.eusm.job.AppJobCreator;
 import org.smartregister.eusm.processor.AppClientProcessor;
 import org.smartregister.eusm.repository.AppRepository;
+import org.smartregister.eusm.repository.AppStructureRepository;
 import org.smartregister.eusm.repository.EusmRepository;
 import org.smartregister.eusm.util.AppConstants;
 import org.smartregister.eusm.util.PreferencesUtil;
-import org.smartregister.eusm.util.Utils;
+import org.smartregister.eusm.util.AppUtils;
 import org.smartregister.location.helper.LocationHelper;
 import org.smartregister.receiver.SyncStatusBroadcastReceiver;
 import org.smartregister.receiver.ValidateAssignmentReceiver;
@@ -45,7 +47,6 @@ import org.smartregister.repository.LocationTagRepository;
 import org.smartregister.repository.PlanDefinitionRepository;
 import org.smartregister.repository.PlanDefinitionSearchRepository;
 import org.smartregister.repository.Repository;
-import org.smartregister.repository.StructureRepository;
 import org.smartregister.repository.TaskRepository;
 import org.smartregister.sync.ClientProcessorForJava;
 import org.smartregister.sync.DrishtiSyncScheduler;
@@ -81,6 +82,20 @@ public class EusmApplication extends DrishtiApplication implements TimeChangedBr
     private boolean synced;
 
     private AppRepository appRepository;
+
+    private AppStructureRepository appStructureRepository;
+
+    private Location userLocation =  new Location("ds"){
+        @Override
+        public double getLatitude() {
+            return -37.5656;
+        }
+
+        @Override
+        public double getLongitude() {
+            return -2.3242;
+        }
+    };
 
     public static synchronized EusmApplication getInstance() {
         return (EusmApplication) mInstance;
@@ -138,7 +153,7 @@ public class EusmApplication extends DrishtiApplication implements TimeChangedBr
 
         ConfigurableViewsLibrary.init(context);
 
-        LocationHelper.init(Utils.ALLOWED_LEVELS, Utils.DEFAULT_LOCATION_LEVEL);
+        LocationHelper.init(AppUtils.ALLOWED_LEVELS, AppUtils.DEFAULT_LOCATION_LEVEL);
 
         SyncStatusBroadcastReceiver.init(this);
 
@@ -239,10 +254,6 @@ public class EusmApplication extends DrishtiApplication implements TimeChangedBr
         return CoreLibrary.getInstance().context().getTaskRepository();
     }
 
-    public StructureRepository getStructureRepository() {
-        return CoreLibrary.getInstance().context().getStructureRepository();
-    }
-
     public LocationRepository getLocationRepository() {
         return CoreLibrary.getInstance().context().getLocationRepository();
     }
@@ -318,6 +329,14 @@ public class EusmApplication extends DrishtiApplication implements TimeChangedBr
         return appRepository;
     }
 
+
+    public AppStructureRepository getStructureRepository() {
+        if (appStructureRepository == null) {
+            appStructureRepository = new AppStructureRepository();
+        }
+        return appStructureRepository;
+    }
+
     @NonNull
     @Override
     public ClientProcessorForJava getClientProcessor() {
@@ -362,6 +381,14 @@ public class EusmApplication extends DrishtiApplication implements TimeChangedBr
 
     public void setSynced(boolean synced) {
         this.synced = synced;
+    }
+
+    public Location getUserLocation() {
+        return this.userLocation;
+    }
+
+    public void setUserLocation(Location userLocation) {
+        this.userLocation = userLocation;
     }
 
     @Override

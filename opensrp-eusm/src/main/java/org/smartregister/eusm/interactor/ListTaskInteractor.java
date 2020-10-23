@@ -17,14 +17,14 @@ import org.smartregister.eusm.BuildConfig;
 import org.smartregister.eusm.application.EusmApplication;
 import org.smartregister.eusm.contract.HomeActivityContract;
 import org.smartregister.eusm.model.CardDetails;
-import org.smartregister.eusm.model.StructureDetails;
+import org.smartregister.eusm.model.StructureDetail;
 import org.smartregister.eusm.model.StructureTaskDetails;
 import org.smartregister.eusm.model.TaskDetails;
 import org.smartregister.eusm.presenter.HomeActivityPresenter;
 import org.smartregister.eusm.util.AppConstants;
 import org.smartregister.eusm.util.GeoJsonUtils;
 import org.smartregister.eusm.util.InteractorUtils;
-import org.smartregister.eusm.util.Utils;
+import org.smartregister.eusm.util.AppUtils;
 import org.smartregister.repository.StructureRepository;
 import org.smartregister.repository.TaskRepository;
 
@@ -191,7 +191,7 @@ public class ListTaskInteractor extends BaseInteractor {
             public void run() {
                 JSONObject featureCollection = null;
 
-                Location operationalAreaLocation = Utils.getOperationalAreaLocation(operationalArea);
+                Location operationalAreaLocation = AppUtils.getOperationalAreaLocation(operationalArea);
                 List<TaskDetails> taskDetailsList = null;
 
                 try {
@@ -199,7 +199,7 @@ public class ListTaskInteractor extends BaseInteractor {
                     if (operationalAreaLocation != null) {
                         Map<String, Set<Task>> tasks = taskRepository.getTasksByPlanAndGroup(plan, operationalAreaLocation.getId());
                         List<Location> structures = structureRepository.getLocationsByParentId(operationalAreaLocation.getId());
-                        Map<String, StructureDetails> structureNames = new HashMap<>();//getStructureName(operationalAreaLocation.getId());
+                        Map<String, StructureDetail> structureNames = new HashMap<>();//getStructureName(operationalAreaLocation.getId());
                         taskDetailsList = processTaskDetails(tasks);
                         String indexCase = null;
 //                        if (Utils.getInterventionLabel() == R.string.focus_investigation)
@@ -305,8 +305,8 @@ public class ListTaskInteractor extends BaseInteractor {
 
     public void markStructureAsIneligible(Feature feature, String reasonUnligible) {
 
-        String taskIdentifier = Utils.getPropertyValue(feature, AppConstants.Properties.TASK_IDENTIFIER);
-        String code = Utils.getPropertyValue(feature, AppConstants.Properties.TASK_CODE);
+        String taskIdentifier = AppUtils.getPropertyValue(feature, AppConstants.Properties.TASK_IDENTIFIER);
+        String code = AppUtils.getPropertyValue(feature, AppConstants.Properties.TASK_CODE);
 
         if (AppConstants.Intervention.REGISTER_FAMILY.equals(code)) {
 

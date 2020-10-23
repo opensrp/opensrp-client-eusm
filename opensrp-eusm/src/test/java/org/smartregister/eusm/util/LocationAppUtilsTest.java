@@ -26,7 +26,7 @@ import static org.mockito.Mockito.when;
  */
 @RunWith(PowerMockRunner.class)
 @PrepareForTest({LocationSettingsHelper.class})
-public class LocationUtilsTest {
+public class LocationAppUtilsTest {
 
     private LocationUtils locationUtils;
 

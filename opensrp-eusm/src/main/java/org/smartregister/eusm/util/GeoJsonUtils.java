@@ -4,7 +4,7 @@ import androidx.annotation.NonNull;
 
 import org.smartregister.domain.Location;
 import org.smartregister.domain.Task;
-import org.smartregister.eusm.model.StructureDetails;
+import org.smartregister.eusm.model.StructureDetail;
 
 import java.util.HashMap;
 import java.util.List;
@@ -27,7 +27,6 @@ import static org.smartregister.eusm.util.AppConstants.Intervention.CASE_CONFIRM
 import static org.smartregister.eusm.util.AppConstants.Intervention.MDA_ADHERENCE;
 import static org.smartregister.eusm.util.AppConstants.Intervention.MDA_DISPENSE;
 import static org.smartregister.eusm.util.AppConstants.Intervention.REGISTER_FAMILY;
-import static org.smartregister.eusm.util.AppConstants.Properties.FAMILY_MEMBER_NAMES;
 import static org.smartregister.eusm.util.AppConstants.Properties.FEATURE_SELECT_TASK_BUSINESS_STATUS;
 import static org.smartregister.eusm.util.AppConstants.Properties.LOCATION_TYPE;
 import static org.smartregister.eusm.util.AppConstants.Properties.LOCATION_UUID;
@@ -46,7 +45,7 @@ public class GeoJsonUtils {
 
     private static final String MDA_DISPENSE_TASK_COUNT = "mda_dispense_task_count";
 
-    public static String getGeoJsonFromStructuresAndTasks(List<Location> structures, Map<String, Set<Task>> tasks, String indexCase, Map<String, StructureDetails> structureNames) {
+    public static String getGeoJsonFromStructuresAndTasks(List<Location> structures, Map<String, Set<Task>> tasks, String indexCase, Map<String, StructureDetail> structureNames) {
         for (Location structure : structures) {
             Set<Task> taskSet = tasks.get(structure.getId());
             HashMap<String, String> taskProperties = new HashMap<>();
@@ -92,7 +91,6 @@ public class GeoJsonUtils {
             taskProperties.put(TASK_CODE_LIST, interventionList.toString());
             if (structureNames.get(structure.getId()) != null) {
                 taskProperties.put(STRUCTURE_NAME, structureNames.get(structure.getId()).getStructureName());
-                taskProperties.put(FAMILY_MEMBER_NAMES, structureNames.get(structure.getId()).getFamilyMembersNames());
             }
             structure.getProperties().setCustomProperties(taskProperties);
 
@@ -101,7 +99,7 @@ public class GeoJsonUtils {
     }
 
     private static void calculateState(Task task, StateWrapper state, @NonNull Map<String, Integer> mdaStatusMap) {
-        if (Utils.isResidentialStructure(task.getCode())) {
+        if (AppUtils.isResidentialStructure(task.getCode())) {
             switch (task.getCode()) {
                 case REGISTER_FAMILY:
                     state.familyRegTaskExists = true;
@@ -151,11 +149,11 @@ public class GeoJsonUtils {
     private static void populateBusinessStatus(HashMap<String, String> taskProperties, Map<String, Integer> mdaStatusMap, StateWrapper state) {
         // The assumption is that a register structure task always exists if the structure has
         // atleast one bednet distribution or blood screening task
-        if (Utils.isResidentialStructure(taskProperties.get(TASK_CODE))) {
+        if (AppUtils.isResidentialStructure(taskProperties.get(TASK_CODE))) {
 
             boolean familyRegTaskMissingOrFamilyRegComplete = state.familyRegistered || !state.familyRegTaskExists;
 
-            if (Utils.isFocusInvestigation()) {
+            if (AppUtils.isFocusInvestigation()) {
 
                 if (familyRegTaskMissingOrFamilyRegComplete &&
                         state.bednetDistributed && state.bloodScreeningDone) {

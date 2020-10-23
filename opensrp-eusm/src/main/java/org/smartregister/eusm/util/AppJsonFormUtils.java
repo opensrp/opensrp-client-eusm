@@ -47,7 +47,7 @@ import static com.vijay.jsonwizard.constants.JsonFormConstants.VALUES;
 import static org.smartregister.AllConstants.JSON_FILE_EXTENSION;
 import static org.smartregister.AllConstants.OPTIONS;
 import static org.smartregister.AllConstants.TEXT;
-import static org.smartregister.eusm.util.Utils.getPropertyValue;
+import static org.smartregister.eusm.util.AppUtils.getPropertyValue;
 
 
 /**
@@ -310,8 +310,8 @@ public class AppJsonFormUtils {
 
     private void generateRepeatingGroupFields(JSONObject field, List<Obs> obs, JSONObject formJSON) {
         try {
-            LinkedHashMap<String, HashMap<String, String>> repeatingGroupMap = Utils.buildRepeatingGroup(field, obs);
-            List<HashMap<String, String>> repeatingGroupMapList = Utils.generateListMapOfRepeatingGrp(repeatingGroupMap);
+            LinkedHashMap<String, HashMap<String, String>> repeatingGroupMap = AppUtils.buildRepeatingGroup(field, obs);
+            List<HashMap<String, String>> repeatingGroupMapList = AppUtils.generateListMapOfRepeatingGrp(repeatingGroupMap);
             new RepeatingGroupGenerator(formJSON.optJSONObject(JsonFormConstants.STEP1),
                     JsonFormConstants.STEP1,
                     field.optString(KEY),

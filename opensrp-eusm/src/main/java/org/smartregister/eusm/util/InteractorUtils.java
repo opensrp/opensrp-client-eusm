@@ -151,7 +151,7 @@ public class InteractorUtils {
             eventClientRepository.batchInsertEvents(taskEvents, 0);
 
 
-            Event resetTaskEvent = AppJsonFormUtils.createTaskEvent(taskDetails.getTaskEntity(), Utils.getCurrentLocationId(),
+            Event resetTaskEvent = AppJsonFormUtils.createTaskEvent(taskDetails.getTaskEntity(), AppUtils.getCurrentLocationId(),
                     null, AppConstants.TASK_RESET_EVENT, AppConstants.STRUCTURE);
             JSONObject eventJson = new JSONObject(gson.toJson(resetTaskEvent));
             eventJson.put(EventClientRepository.event_column.syncStatus.name(), BaseRepository.TYPE_Unsynced);

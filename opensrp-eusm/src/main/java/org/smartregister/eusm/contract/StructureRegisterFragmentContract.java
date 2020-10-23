@@ -8,16 +8,16 @@ import androidx.annotation.StringRes;
 
 import org.json.JSONObject;
 import org.smartregister.domain.Event;
-import org.smartregister.eusm.adapter.ServicePointRegisterAdapter;
+import org.smartregister.eusm.adapter.StructureRegisterAdapter;
+import org.smartregister.eusm.model.StructureDetail;
 import org.smartregister.eusm.model.TaskDetails;
 import org.smartregister.eusm.model.TaskFilterParams;
 import org.smartregister.eusm.util.LocationUtils;
 import org.smartregister.view.contract.BaseRegisterFragmentContract;
 
 import java.util.List;
-import java.util.Set;
 
-public interface ServicePointRegisterFragmentContract {
+public interface StructureRegisterFragmentContract {
 
     interface Presenter extends BaseRegisterFragmentContract.Presenter, BaseContract.BasePresenter {
 
@@ -48,11 +48,11 @@ public interface ServicePointRegisterFragmentContract {
 
         Location getLastLocation();
 
-        void initializeAdapter(Set<org.smartregister.configurableviews.model.View> visibleColumns);
+        void initializeAdapter();
 
         void setTotalServicePoints(int structuresWithinBuffer);
 
-        void setServicePointDetails(List<TaskDetails> tasks);
+        void setStructureDetails(List<StructureDetail> structureDetails);
 
         void displayNotification(int title, @StringRes int message, Object... formatArgs);
 
@@ -68,13 +68,16 @@ public interface ServicePointRegisterFragmentContract {
 
         void clearFilter();
 
-        ServicePointRegisterAdapter getAdapter();
+        StructureRegisterAdapter getAdapter();
 
         void openFilterActivity(TaskFilterParams filterParams);
 
         void setSearchPhrase(String searchPhrase);
 
         void startMapActivity(TaskFilterParams taskFilterParams);
+
+        void updateSearchBarHint(String searchBarText);
+
     }
 
     interface Interactor {

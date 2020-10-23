@@ -1,7 +1,5 @@
 package org.smartregister.eusm.activity;
 
-import android.content.Context;
-
 import androidx.fragment.app.Fragment;
 
 import org.json.JSONObject;
@@ -28,9 +26,4 @@ public abstract class BaseAppRegisterActivity extends BaseRegisterActivity {
     public void startRegistration() {//not used
     }
 
-    @Override
-    protected void attachBaseContext(Context base) {
-//        LangUtils.saveLanguage(base.getApplicationContext(), "en");
-        super.attachBaseContext(base);
-    }
 }

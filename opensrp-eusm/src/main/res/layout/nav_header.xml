@@ -8,12 +8,12 @@
 
     <ImageView
         android:id="@+id/eusm_icon"
-        android:layout_width="200dp"
-        android:layout_height="wrap_content"
+        android:layout_width="213dp"
+        android:layout_height="77dp"
         android:layout_marginStart="@dimen/drawer_margin"
         android:layout_marginTop="@dimen/drawer_icon_margin"
-        android:scaleType="fitCenter"
-        android:src="@drawable/opensrp_rectangular_logo"
+        android:scaleType="fitStart"
+        android:src="@drawable/eusm_logo_v1"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 

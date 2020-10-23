@@ -8,8 +8,8 @@ import java.util.List;
 
 public class DefaultLocationUtils {
 
-    public static List<String> getDistrictLevels() {
-        return new ArrayList<>(Arrays.asList(BuildConfig.DISTRICT_LEVELS));
+    public static List<String> getFacilityLevels() {
+        return new ArrayList<>(Arrays.asList(BuildConfig.FACILITY_LEVELS));
     }
 
     public static List<String> getLocationLevels() {

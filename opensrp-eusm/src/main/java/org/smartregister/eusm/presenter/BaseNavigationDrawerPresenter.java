@@ -41,14 +41,10 @@ public class BaseNavigationDrawerPresenter implements BaseDrawerContract.Present
     private final PreferencesUtil prefsUtil;
 
     private final LocationHelper locationHelper;
-
-    private boolean changedCurrentSelection;
-
     private final BaseDrawerContract.Interactor interactor;
-
-    private boolean viewInitialized = false;
-
     private final EusmApplication eusmApplication;
+    private boolean changedCurrentSelection;
+    private boolean viewInitialized = false;
 
     public BaseNavigationDrawerPresenter(BaseDrawerContract.View view) {
         this.view = view;
@@ -66,21 +62,10 @@ public class BaseNavigationDrawerPresenter implements BaseDrawerContract.Present
 
         if (StringUtils.isBlank(prefsUtil.getCurrentOperationalArea())) {
 
-            List<String> defaultLocation = locationHelper.generateDefaultLocationHierarchy(DefaultLocationUtils.getDistrictLevels());
+            List<String> defaultLocation = locationHelper.generateDefaultLocationHierarchy(DefaultLocationUtils.getLocationLevels());
 
             if (defaultLocation != null) {
-                getView().setDistrict(defaultLocation.get(0));
-                prefsUtil.setCurrentDistrict(defaultLocation.get(0));
-                ArrayList<String> levels = new ArrayList<>();
-                levels.add(AppConstants.Tags.CANTON);
-                String level;
-                if (locationHelper.generateLocationHierarchyTree(false, levels).isEmpty()) {
-                    level = AppConstants.Tags.HEALTH_CENTER;
-                } else {
-                    level = AppConstants.Tags.CANTON;
-                }
-                if (defaultLocation.size() > 1)
-                    getView().setFacility(defaultLocation.get(1), level);
+                prefsUtil.setCurrentDistrict(defaultLocation.get(2));
             }
         } else {
             populateLocationsFromPreferences();
@@ -139,6 +124,9 @@ public class BaseNavigationDrawerPresenter implements BaseDrawerContract.Present
             eusmApplication.getContext().anmLocationController().evict();
             locationHierarchy = extractLocationHierarchy();
         }
+
+        getView().showOperationalAreaSelector(extractLocationHierarchy());
+
         if (StringUtils.isNotBlank(prefsUtil.getCurrentPlan())
                 && Utils.getProperties(getView().getContext()).getPropertyBoolean(AppConstants.AppProperties.CHOOSE_OPERATIONAL_AREA_FIRST)) {
             if (locationHierarchy != null) {
@@ -164,10 +152,10 @@ public class BaseNavigationDrawerPresenter implements BaseDrawerContract.Present
     }
 
     private Pair<String, ArrayList<String>> extractLocationHierarchy() {
-        List<String> defaultLocation = locationHelper.generateDefaultLocationHierarchy(DefaultLocationUtils.getLocationLevels());
+        List<String> defaultLocation = locationHelper.generateDefaultLocationHierarchy(DefaultLocationUtils.getFacilityLevels());
 
         if (defaultLocation != null) {
-            List<FormLocation> entireTree = locationHelper.generateLocationHierarchyTree(false, DefaultLocationUtils.getLocationLevels());
+            List<FormLocation> entireTree = locationHelper.generateLocationHierarchyTree(false, DefaultLocationUtils.getFacilityLevels());
 
             String entireTreeString = AssetHandler.javaToJsonString(entireTree,
                     new TypeToken<List<FormLocation>>() {
@@ -181,22 +169,14 @@ public class BaseNavigationDrawerPresenter implements BaseDrawerContract.Present
 
 
     public void onOperationalAreaSelectorClicked(ArrayList<String> name) {
-
         Timber.d("Selected Location Hierarchy: %s", TextUtils.join(",", name));
         if (name.size() <= 2)//no operational area was selected, dialog was dismissed
             return;
-        List<FormLocation> entireTree = locationHelper.generateLocationHierarchyTree(false, DefaultLocationUtils.getDistrictLevels());
-        int districtOffset = 2;
         try {
-            prefsUtil.setCurrentProvince(name.get(1));
-            prefsUtil.setCurrentDistrict(name.get(name.size() - districtOffset));
+            prefsUtil.setCurrentRegion(name.get(1));
             String operationalArea = name.get(name.size() - 1);
+            prefsUtil.setCurrentDistrict(operationalArea);
             prefsUtil.setCurrentOperationalArea(operationalArea);
-            Pair<String, String> facility = getFacilityFromOperationalArea(name.get(name.size() - districtOffset), name.get(name.size() - 1), entireTree);
-            if (facility != null) {
-                prefsUtil.setCurrentFacility(facility.second);
-                prefsUtil.setCurrentFacilityLevel(facility.first);
-            }
             validateSelectedPlan(operationalArea);
         } catch (NullPointerException e) {
             Timber.e(e);

@@ -5,9 +5,9 @@ import android.view.View;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-public class ServicePointItemViewHolder extends RecyclerView.ViewHolder {
+public class StructureRegisterViewHolder extends RecyclerView.ViewHolder {
 
-    public ServicePointItemViewHolder(@NonNull View itemView) {
+    public StructureRegisterViewHolder(@NonNull View itemView) {
         super(itemView);
     }
 }

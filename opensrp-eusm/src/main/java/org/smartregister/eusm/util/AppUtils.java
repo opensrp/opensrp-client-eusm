@@ -61,7 +61,7 @@ import java.util.Set;
 
 import timber.log.Timber;
 
-public class Utils extends org.smartregister.util.Utils {
+public class AppUtils extends org.smartregister.util.Utils {
 
     public static final ArrayList<String> ALLOWED_LEVELS;
     public static final String DEFAULT_LOCATION_LEVEL = AppConstants.Tags.HEALTH_CENTER;
@@ -506,5 +506,12 @@ public class Utils extends org.smartregister.util.Utils {
         }
     }
 
-
+    public static Float distanceFromUserLocation(@NonNull android.location.Location location) {
+        android.location.Location userLocation = EusmApplication.getInstance().getUserLocation();
+        if (userLocation != null && location != null) {
+            return userLocation.distanceTo(location);
+        }
+        Timber.e("UserLocation is null");
+        return null;
+    }
 }

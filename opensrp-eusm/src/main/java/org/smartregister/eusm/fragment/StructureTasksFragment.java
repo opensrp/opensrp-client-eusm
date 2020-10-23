@@ -31,7 +31,7 @@ import org.smartregister.eusm.util.AlertDialogUtils;
 import org.smartregister.eusm.util.AppConstants;
 import org.smartregister.eusm.util.AppJsonFormUtils;
 import org.smartregister.eusm.util.LocationUtils;
-import org.smartregister.eusm.util.Utils;
+import org.smartregister.eusm.util.AppUtils;
 
 import java.util.List;
 import java.util.Set;
@@ -121,7 +121,7 @@ public class StructureTasksFragment extends Fragment implements StructureTasksCo
 
     private void setUpViews(View view) {
         TextView interventionType = view.findViewById(R.id.intervention_type);
-        interventionType.setText(getString(Utils.getInterventionLabel()));
+        interventionType.setText(getString(AppUtils.getInterventionLabel()));
         taskRecyclerView = view.findViewById(R.id.task_recyclerView);
 
         progressDialog = new ProgressDialog(getContext());

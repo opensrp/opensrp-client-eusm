@@ -28,6 +28,7 @@ import org.smartregister.eusm.model.TaskFilterParams;
 import org.smartregister.eusm.repository.AppMappingHelper;
 import org.smartregister.eusm.util.AppConstants;
 import org.smartregister.eusm.util.AppJsonFormUtils;
+import org.smartregister.eusm.util.AppUtils;
 import org.smartregister.eusm.util.PreferencesUtil;
 import org.smartregister.util.Utils;
 
@@ -256,9 +257,9 @@ public class HomeActivityPresenter implements HomeActivityContract.Presenter,
     }
 
     private void onFeatureSelectedByLongClick(Feature feature) {
-        String businessStatus = org.smartregister.eusm.util.Utils.getPropertyValue(feature, AppConstants.Properties.TASK_BUSINESS_STATUS);
-        String code = org.smartregister.eusm.util.Utils.getPropertyValue(feature, AppConstants.Properties.TASK_CODE);
-        String status = org.smartregister.eusm.util.Utils.getPropertyValue(feature, AppConstants.Properties.LOCATION_STATUS);
+        String businessStatus = AppUtils.getPropertyValue(feature, AppConstants.Properties.TASK_BUSINESS_STATUS);
+        String code = AppUtils.getPropertyValue(feature, AppConstants.Properties.TASK_CODE);
+        String status = AppUtils.getPropertyValue(feature, AppConstants.Properties.LOCATION_STATUS);
 
         selectedFeatureInterventionType = code;
         if (INACTIVE.name().equals(status)) {
@@ -276,8 +277,8 @@ public class HomeActivityPresenter implements HomeActivityContract.Presenter,
 //    }
 
     @Override
-    public void onOpenTaskRegisterClicked() {
-        homeActivityView.openTaskRegister(filterParams);
+    public void onOpenServicePointRegister() {
+        homeActivityView.openServicePointRegister(filterParams);
     }
 
     @Override
@@ -345,7 +346,7 @@ public class HomeActivityPresenter implements HomeActivityContract.Presenter,
         if (AppConstants.JsonForm.SPRAY_FORM_ZAMBIA.equals(formName)) {
             try {
                 jsonFormUtils.populateField(formJson, AppConstants.JsonForm.DISTRICT_NAME, prefsUtil.getCurrentDistrict().trim(), VALUE);
-                jsonFormUtils.populateField(formJson, AppConstants.JsonForm.PROVINCE_NAME, prefsUtil.getCurrentProvince().trim(), VALUE);
+                jsonFormUtils.populateField(formJson, AppConstants.JsonForm.PROVINCE_NAME, prefsUtil.getCurrentRegion().trim(), VALUE);
             } catch (JSONException e) {
                 Timber.e(e);
             }
@@ -648,8 +649,8 @@ public class HomeActivityPresenter implements HomeActivityContract.Presenter,
                 for (Feature feature : !Utils.isEmptyCollection(searchFeatureCollection) && searchPhrase.length() > this.searchPhrase.length() ? searchFeatureCollection : Utils.isEmptyCollection(filterFeatureCollection) ? getFeatureCollection().features() : filterFeatureCollection) {
                     String structureName = feature.getStringProperty(AppConstants.Properties.STRUCTURE_NAME);
                     String familyMemberNames = feature.getStringProperty(AppConstants.Properties.FAMILY_MEMBER_NAMES);
-                    if (org.smartregister.eusm.util.Utils.matchesSearchPhrase(structureName, searchPhrase) ||
-                            org.smartregister.eusm.util.Utils.matchesSearchPhrase(familyMemberNames, searchPhrase))
+                    if (AppUtils.matchesSearchPhrase(structureName, searchPhrase) ||
+                            AppUtils.matchesSearchPhrase(familyMemberNames, searchPhrase))
                         features.add(feature);
                 }
                 searchFeatureCollection = features;

@@ -45,6 +45,8 @@ public interface AppConstants {
 
     int ANIMATE_TO_LOCATION_DURATION = 1000;
 
+    Integer NEARBY_DISTANCE_IN_METRES = 100;
+
     String DIGITAL_GLOBE_CONNECT_ID = "DG_CONNECT_ID";
 
     String HYPHEN = "-";
@@ -55,10 +57,7 @@ public interface AppConstants {
 
     String NULL_KEY = "NULL";
 
-    int IRS_VERIFICATION_PERIOD = 30;
-
     String DBNAME = "drishti.db";
-    String COPYDBNAME = "reveal";
 
     String DG_ID_PLACEHOLDER = "DIGITAL_GLOBE_ID";
 
@@ -112,7 +111,7 @@ public interface AppConstants {
     interface Preferences {
         String CURRENT_FACILITY = "CURRENT_FACILITY";
         String CURRENT_DISTRICT = "CURRENT_DISTRICT";
-        String CURRENT_PROVINCE = "CURRENT_PROVINCE";
+        String CURRENT_REGION = "CURRENT_PROVINCE";
         String CURRENT_PLAN = "CURRENT_PLAN";
         String CURRENT_PLAN_ID = "CURRENT_PLAN_ID";
         String FACILITY_LEVEL = "FACILITY_LEVEL";
@@ -165,9 +164,6 @@ public interface AppConstants {
 
     interface Intervention {
         String IRS = "IRS";
-
-        String DYNAMIC_IRS = "Dynamic-IRS";
-
         String MOSQUITO_COLLECTION = "Mosquito Collection";
 
         String LARVAL_DIPPING = "Larval Dipping";
@@ -183,8 +179,6 @@ public interface AppConstants {
         String REGISTER_FAMILY = "RACD Register Family";
 
         String FI = "FI";
-
-        String DYNAMIC_FI = "Dynamic-FI";
 
         String PAOT = "PAOT";
 
@@ -294,14 +288,6 @@ public interface AppConstants {
                 ADHERENCE_VISIT_DONE, PARTIALLY_RECEIVED, COMPLETE, NOT_ELIGIBLE);
     }
 
-    interface BusinessStatusWrapper {
-
-        List<String> SPRAYED = Arrays.asList(BusinessStatus.SPRAYED, BusinessStatus.COMPLETE, BusinessStatus.PARTIALLY_SPRAYED);
-        List<String> NOT_SPRAYED = Arrays.asList(BusinessStatus.NOT_SPRAYED, BusinessStatus.IN_PROGRESS, BusinessStatus.INCOMPLETE);
-        List<String> NOT_ELIGIBLE = Arrays.asList(BusinessStatus.NOT_SPRAYABLE, BusinessStatus.NOT_ELIGIBLE);
-        List<String> NOT_VISITED = Arrays.asList(BusinessStatus.NOT_VISITED);
-    }
-
     interface Map {
         int MAX_SELECT_ZOOM_LEVEL = 16;
         int CLICK_SELECT_RADIUS = 24;
@@ -330,13 +316,9 @@ public interface AppConstants {
 
         String STRUCTURE_PROPERTIES_TYPE = "[structure_type]";
 
-        String NUMBER_OF_FAMILY_MEMBERS = "[num_fam_members]";
-
-        String NUMBER_OF_FAMILY_MEMBERS_SLEEPING_OUTDOORS = "[num_sleeps_outdoors]";
 
         String SPRAY_FORM = "json.form/spray_form.json";
 
-        String MOSQUITO_COLLECTION_FORM = "json.form/mosquito_collection_form.json";
 
         String SPRAY_FORM_NAMIBIA = "json.form/namibia_spray_form.json";
 
@@ -353,60 +335,6 @@ public interface AppConstants {
         String BEDNET_DISTRIBUTION_FORM = "json.form/bednet_distribution.json";
 
         String BLOOD_SCREENING_FORM = "json.form/blood_screening.json";
-
-        String CASE_CONFIRMATION_FORM = "json.form/case_confirmation.json";
-
-        String BEHAVIOUR_CHANGE_COMMUNICATION_FORM = "json.form/behaviour_change_communication.json";
-
-        String PAOT_FORM = "json.form/paot.json";
-
-        String THAILAND_LARVAL_DIPPING_FORM = "json.form/thailand_larval_dipping_form.json";
-
-        String THAILAND_EN_LARVAL_DIPPING_FORM = "json.form/thailand_en_larval_dipping_form.json";
-
-        String THAILAND_MOSQUITO_COLLECTION_FORM = "json.form/thailand_mosquito_collection_form.json";
-
-        String THAILAND_EN_MOSQUITO_COLLECTION_FORM = "json.form/thailand_en_mosquito_collection_form.json";
-
-        String THAILAND_SPRAY_FORM = "json.form/thailand_spray_form.json";
-
-        String THAILAND_ADD_STRUCTURE_FORM = "json.form/thailand_add_structure.json";
-
-        String THAILAND_BEDNET_DISTRIBUTION_FORM = "json.form/thailand_bednet_distribution.json";
-
-        String THAILAND_EN_BEDNET_DISTRIBUTION_FORM = "json.form/thailand_en_bednet_distribution.json";
-
-        String THAILAND_BLOOD_SCREENING_FORM = "json.form/thailand_blood_screening.json";
-
-        String THAILAND_EN_BLOOD_SCREENING_FORM = "json.form/thailand_en_blood_screening.json";
-
-        String THAILAND_CASE_CONFIRMATION_FORM = "json.form/thailand_case_confirmation.json";
-
-        String THAILAND_BEHAVIOUR_CHANGE_COMMUNICATION_FORM = "json.form/thailand_behaviour_change_communication.json";
-
-        String THAILAND_PAOT_FORM = "json.form/thailand_paot.json";
-
-        String ZAMBIA_MDA_DISPENSE_FORM = "json.form/zambia_mda_dispense.json";
-
-        String ZAMBIA_MDA_ADHERENCE_FORM = "json.form/zambia_mda_adherence.json";
-
-        String ZAMBIA_IRS_VERIFICATION_FORM = "json.form/zambia_irs_verification.json";
-
-        String REFAPP_MDA_DISPENSE_FORM = "json.form/refapp_mda_dispense.json";
-
-        String REFAPP_MDA_ADHERENCE_FORM = "json.form/refapp_mda_adherence.json";
-
-        String REFAPP_BEDNET_DISTRIBUTION_FORM = "json.form/refapp_bednet_distribution.json";
-
-        String REFAPP_PAOT_FORM = "json.form/refapp_paot.json";
-
-        String REFAPP_LARVAL_DIPPING_FORM = "json.form/refapp_larval_dipping_form.json";
-
-        String REFAPP_MOSQUITO_COLLECTION_FORM = "json.form/refapp_mosquito_collection_form.json";
-
-        String REFAPP_BLOOD_SCREENING_FORM = "json.form/refapp_blood_screening.json";
-
-        String REFAPP_CASE_CONFIRMATION_FORM = "json.form/refapp_case_confirmation.json";
 
         String JSON_FORM_FOLDER = "json.form/";
 
@@ -686,24 +614,17 @@ public interface AppConstants {
         String INTERVENTION_TYPE = "interventionType";
     }
 
-    interface IRSVerificationStatus {
-        String SPRAYED = "sprayed";
-        String NOT_SPRAYED = "notSprayed";
-        String NOT_FOUND_OR_VISITED = "notFoundOrVisited";
+    interface TaskStatus {
+        String COMPLETED = "completed";
+        String IN_PROGRESS = "in_progress";
+        String NOT_FINISHED = "not_finished";
         String OTHER = "other";
     }
 
-    interface SyncInfo {
-        String SYNCED_EVENTS = "syncedEvents";
-        String SYNCED_CLIENTS = "syncedClients";
-        String UNSYNCED_EVENTS = "unsyncedEvents";
-        String UNSYNCED_CLIENTS = "unsyncedClients";
-        String VALID_EVENTS = "validEvents";
-        String INVALID_EVENTS = "invalidEvents";
-        String VALID_CLIENTS = "validClients";
-        String INVALID_CLIENTS = "INValidClients";
-        String TASK_UNPROCESSED_EVENTS = "taskUnprocessedEvents";
-        String NULL_EVENT_SYNC_STATUS = "nullEventSyncStatus";
+    interface ServicePointType {
+        String EPP = "epp";
+        String CEG = "ceg";
+        String CHRD_1 = "chrd 1";
     }
 
     interface RequestCode {
@@ -740,5 +661,9 @@ public interface AppConstants {
 
     interface AppProperties {
         String CHOOSE_OPERATIONAL_AREA_FIRST = "CHOOSE_OPERATIONAL_AREA_FIRST";
+    }
+
+    interface ColumnConstants {
+        String IS_HEADER = "is_header";
     }
 }

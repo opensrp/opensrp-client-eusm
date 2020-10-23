@@ -18,7 +18,7 @@ import org.smartregister.eusm.repository.AppMappingHelper;
 import org.smartregister.eusm.util.AppConstants;
 import org.smartregister.eusm.util.AppJsonFormUtils;
 import org.smartregister.eusm.util.PreferencesUtil;
-import org.smartregister.eusm.util.Utils;
+import org.smartregister.eusm.util.AppUtils;
 import org.smartregister.util.DateTimeTypeConverter;
 
 import java.lang.ref.WeakReference;
@@ -51,7 +51,7 @@ public class BaseFormFragmentPresenter extends BaseLocationListener implements B
     }
 
     protected boolean validateFarStructures() {
-        return Utils.validateFarStructures();
+        return AppUtils.validateFarStructures();
     }
 
     private void validateUserLocation() {

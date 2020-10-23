@@ -16,7 +16,7 @@ import org.smartregister.eusm.job.AppSyncSettingsServiceJob;
 import org.smartregister.eusm.processor.AppClientProcessor;
 import org.smartregister.eusm.util.AppConstants;
 import org.smartregister.eusm.util.PreferencesUtil;
-import org.smartregister.eusm.util.Utils;
+import org.smartregister.eusm.util.AppUtils;
 import org.smartregister.job.SyncServiceJob;
 import org.smartregister.receiver.SyncStatusBroadcastReceiver;
 import org.smartregister.repository.BaseRepository;
@@ -137,7 +137,7 @@ public class LocationTaskIntentService extends IntentService {
      * @return true if there is a synced structure or task on the currently opened operational area; otherwise returns false
      */
     private boolean hasChangesInCurrentOperationalArea(List<Location> syncedStructures, List<Task> syncedTasks) {
-        Location operationalAreaLocation = Utils.getOperationalAreaLocation(PreferencesUtil.getInstance().getCurrentOperationalArea());
+        Location operationalAreaLocation = AppUtils.getOperationalAreaLocation(PreferencesUtil.getInstance().getCurrentOperationalArea());
         String operationalAreaLocationId;
         if (operationalAreaLocation == null) {
             return false;

@@ -44,7 +44,7 @@ import static org.smartregister.eusm.util.AppConstants.Intervention.IRS;
  * Created by Richard Kareko on 2/18/20.
  */
 
-public class InteractorUtilsTest extends BaseUnitTest {
+public class InteractorAppUtilsTest extends BaseUnitTest {
 
     @Rule
     public MockitoRule rule = MockitoJUnit.rule();

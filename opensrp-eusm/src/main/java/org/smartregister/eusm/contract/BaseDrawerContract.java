@@ -5,6 +5,7 @@ import android.app.Activity;
 import androidx.annotation.Nullable;
 import androidx.annotation.StringRes;
 import androidx.core.util.Pair;
+import androidx.drawerlayout.widget.DrawerLayout;
 
 import org.smartregister.domain.PlanDefinition;
 
