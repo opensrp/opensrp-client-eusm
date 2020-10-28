@@ -98,6 +98,17 @@
     <string name="saving_message">Saving form in Progress. Please wait</string>
 
     <string name="str_page_info">Page {0} of {1}</string>
-    <string name="distance_from_structure">%s &#183; %s m away</string>
+    <string name="distance_from_structure">%s &#183; %s away</string>
+    <string name="unlisted_distance_from_structure">%s &#183; </string>
+
+    <string name="next_page"><![CDATA[NEXT >>]]></string>
+    <string name="previous_page"><![CDATA[<< Previous]]></string>
+    <string name="product_serial_n_quantity">Qty: %s  . Serial # %s</string>
+    <string name="product_serial">Serial # %s</string>
+    <string name="product_serial_n_date_checked">Serial # %s</string>
+    <string name="task_item_text">ITEMS</string>
+    <string name="task_checked_text">CHECKED</string>
+    <string name="no_items_to_check">No items to check</string>
+    <string name="no_items_checked_yet">No items checked yet</string>
 
 </resources>

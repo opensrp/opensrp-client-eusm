@@ -19,7 +19,6 @@ import org.json.JSONException;
 import org.json.JSONObject;
 import org.smartregister.Context;
 import org.smartregister.CoreLibrary;
-import org.smartregister.P2POptions;
 import org.smartregister.commonregistry.CommonFtsObject;
 import org.smartregister.configurableviews.ConfigurableViewsLibrary;
 import org.smartregister.configurableviews.helper.JsonSpecHelper;
@@ -29,14 +28,15 @@ import org.smartregister.eusm.BuildConfig;
 import org.smartregister.eusm.activity.LoginActivity;
 import org.smartregister.eusm.config.AppExecutors;
 import org.smartregister.eusm.config.AppSyncConfiguration;
+import org.smartregister.eusm.config.ServicePointType;
 import org.smartregister.eusm.job.AppJobCreator;
 import org.smartregister.eusm.processor.AppClientProcessor;
 import org.smartregister.eusm.repository.AppRepository;
 import org.smartregister.eusm.repository.AppStructureRepository;
 import org.smartregister.eusm.repository.EusmRepository;
 import org.smartregister.eusm.util.AppConstants;
-import org.smartregister.eusm.util.PreferencesUtil;
 import org.smartregister.eusm.util.AppUtils;
+import org.smartregister.eusm.util.PreferencesUtil;
 import org.smartregister.location.helper.LocationHelper;
 import org.smartregister.receiver.SyncStatusBroadcastReceiver;
 import org.smartregister.receiver.ValidateAssignmentReceiver;
@@ -85,17 +85,9 @@ public class EusmApplication extends DrishtiApplication implements TimeChangedBr
 
     private AppStructureRepository appStructureRepository;
 
-    private Location userLocation =  new Location("ds"){
-        @Override
-        public double getLatitude() {
-            return -37.5656;
-        }
+    private Map<String, ServicePointType> servicePointKeyToTypeMap;
 
-        @Override
-        public double getLongitude() {
-            return -2.3242;
-        }
-    };
+    private Location userLocation;
 
     public static synchronized EusmApplication getInstance() {
         return (EusmApplication) mInstance;
@@ -117,7 +109,7 @@ public class EusmApplication extends DrishtiApplication implements TimeChangedBr
     }
 
     private static String[] getFtsTables() {
-        return new String[]{AppConstants.EventsRegister.TABLE_NAME};
+        return new String[]{AppConstants.EventsRegister.TABLE_NAME, AppStructureRepository.STRUCTURE_TABLE, "ec_structure"};
     }
 
     private static String[] getFtsSearchFields(String tableName) {
@@ -146,10 +138,8 @@ public class EusmApplication extends DrishtiApplication implements TimeChangedBr
         forceRemoteLoginForInConsistentUsername();
         // Initialize Modules
         Fabric.with(this, new Crashlytics.Builder().core(new CrashlyticsCore.Builder().disabled(BuildConfig.DEBUG).build()).build());
-        P2POptions p2POptions = new P2POptions(true);
-        CoreLibrary.init(context, new AppSyncConfiguration(), BuildConfig.BUILD_TIMESTAMP, p2POptions);
 
-        CoreLibrary.getInstance().setEcClientFieldsFile(AppConstants.ECClientConfig.ZAMBIA_EC_CLIENT_FIELDS);
+        CoreLibrary.init(context, new AppSyncConfiguration(), BuildConfig.BUILD_TIMESTAMP);
 
         ConfigurableViewsLibrary.init(context);
 
@@ -168,15 +158,15 @@ public class EusmApplication extends DrishtiApplication implements TimeChangedBr
         //init Job Manager
         JobManager.create(this).addJobCreator(new AppJobCreator());
 
-
-//        LangUtils.saveLanguage(getApplicationContext(), "en");
-
         NativeFormLibrary.getInstance().setClientFormDao(CoreLibrary.getInstance().context().getClientFormRepository());
 
         ValidateAssignmentReceiver.init(this);
 
         ValidateAssignmentReceiver.getInstance().addListener(this);
-
+        Location location = new Location("dest");
+        location.setLongitude(32.6454013);
+        location.setLatitude(-14.1580617);
+        setUserLocation(location);
     }
 
     /**
@@ -384,7 +374,7 @@ public class EusmApplication extends DrishtiApplication implements TimeChangedBr
     }
 
     public Location getUserLocation() {
-        return this.userLocation;
+        return userLocation;
     }
 
     public void setUserLocation(Location userLocation) {
@@ -402,5 +392,36 @@ public class EusmApplication extends DrishtiApplication implements TimeChangedBr
             preferencesUtil.setCurrentPlanId(null);
         }
         getContext().anmLocationController().evict();
+    }
+
+    public Map<String, ServicePointType> getServicePointKeyToType() {
+        if (servicePointKeyToTypeMap == null) {
+            Map<String, ServicePointType> map = new HashMap<>();
+            map.put(AppConstants.ServicePointType.EPP, ServicePointType.EPP);
+            map.put(AppConstants.ServicePointType.CEG, ServicePointType.CEG);
+            map.put(AppConstants.ServicePointType.CHRD1, ServicePointType.CHRD1);
+            map.put(AppConstants.ServicePointType.CHRD2, ServicePointType.CHRD2);
+            map.put(AppConstants.ServicePointType.DRSP, ServicePointType.DRSP);
+            map.put(AppConstants.ServicePointType.MSP, ServicePointType.MSP);
+            map.put(AppConstants.ServicePointType.SDSP, ServicePointType.SDSP);
+            map.put(AppConstants.ServicePointType.CSB1, ServicePointType.CSB1);
+            map.put(AppConstants.ServicePointType.CSB2, ServicePointType.CSB2);
+            map.put(AppConstants.ServicePointType.CHRR, ServicePointType.CHRR);
+            map.put(AppConstants.ServicePointType.WAREHOUSE, ServicePointType.WAREHOUSE);
+            map.put(AppConstants.ServicePointType.WATERPOINT, ServicePointType.WATERPOINT);
+            map.put(AppConstants.ServicePointType.PRESCO, ServicePointType.PRESCO);
+            map.put(AppConstants.ServicePointType.MEAH, ServicePointType.MEAH);
+            map.put(AppConstants.ServicePointType.DREAH, ServicePointType.DREAH);
+            map.put(AppConstants.ServicePointType.MPPSPF, ServicePointType.MPPSPF);
+            map.put(AppConstants.ServicePointType.DRPPSPF, ServicePointType.DRPPSPF);
+            map.put(AppConstants.ServicePointType.NGO_PARTNER, ServicePointType.NGOPARTNER);
+            map.put(AppConstants.ServicePointType.SITE_COMMUNAUTAIRE, ServicePointType.SITECOMMUNAUTAIRE);
+            map.put(AppConstants.ServicePointType.DRJS, ServicePointType.DRJS);
+            map.put(AppConstants.ServicePointType.INSTAT, ServicePointType.INSTAT);
+            map.put(AppConstants.ServicePointType.BSD, ServicePointType.BSD);
+            servicePointKeyToTypeMap = map;
+        }
+
+        return servicePointKeyToTypeMap;
     }
 }

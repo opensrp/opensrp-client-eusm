@@ -54,37 +54,21 @@ public class HomeActivityPresenter implements HomeActivityContract.Presenter,
     private final ListTaskInteractor listTaskInteractor;
 
     private final PreferencesUtil prefsUtil;
-
-    private FeatureCollection featureCollection;
-
-    private List<Feature> filterFeatureCollection;
-
-    private List<Feature> searchFeatureCollection;
-
-    private Feature operationalArea;
-
-    private Feature selectedFeature;
-
-    private String selectedFeatureInterventionType;
-
-    private LatLng clickedPoint;
-
-    private AlertDialog passwordDialog;
-
-    private CardDetails cardDetails;
-
-    private boolean changeInterventionStatus;
-
     private final BaseDrawerContract.Presenter drawerPresenter;
-
     private final AppJsonFormUtils jsonFormUtils;
-
-    private boolean changeMapPosition;
-
     private final EusmApplication eusmApplication;
-
     private final AppMappingHelper mappingHelper;
-
+    private FeatureCollection featureCollection;
+    private List<Feature> filterFeatureCollection;
+    private List<Feature> searchFeatureCollection;
+    private Feature operationalArea;
+    private Feature selectedFeature;
+    private String selectedFeatureInterventionType;
+    private LatLng clickedPoint;
+    private AlertDialog passwordDialog;
+    private CardDetails cardDetails;
+    private boolean changeInterventionStatus;
+    private boolean changeMapPosition;
     private boolean markStructureIneligibleConfirmed;
 
     private String reasonUnEligible;

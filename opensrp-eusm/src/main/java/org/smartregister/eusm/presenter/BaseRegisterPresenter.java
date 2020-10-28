@@ -1,6 +1,5 @@
 package org.smartregister.eusm.presenter;
 
-import org.smartregister.eusm.interactor.TaskRegisterInteractor;
 import org.smartregister.view.contract.BaseRegisterContract;
 
 import java.util.List;

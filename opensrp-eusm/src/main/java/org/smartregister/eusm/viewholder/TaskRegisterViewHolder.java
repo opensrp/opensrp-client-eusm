@@ -5,192 +5,88 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import androidx.annotation.DrawableRes;
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.core.content.res.ResourcesCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
+import org.apache.commons.lang3.StringUtils;
 import org.smartregister.eusm.R;
-import org.smartregister.eusm.model.CardDetails;
-import org.smartregister.eusm.model.TaskDetails;
-import org.smartregister.eusm.util.PreferencesUtil;
+import org.smartregister.eusm.model.StructureTaskDetail;
 
+import java.text.SimpleDateFormat;
+import java.util.Locale;
 
-/**
- * Created by samuelgithengi on 3/12/19.
- */
 public class TaskRegisterViewHolder extends RecyclerView.ViewHolder {
+
+    private static final SimpleDateFormat dateFormat = new SimpleDateFormat("M/dd", Locale.getDefault());
 
     private final Context context;
 
-    private final ImageView iconView;
+    private TextView productNameView;
 
-    private final TextView nameView;
+    private ImageView productImageView;
 
-    private final TextView distanceView;
+    private ImageView rectangleOverlayImageView;
 
-    private final TextView actionView;
+    private ImageView checkedOverlayImageView;
 
-    private final TextView taskDetailsView;
 
-    private final TextView houseNumberView;
-
-    private final PreferencesUtil prefsUtil = PreferencesUtil.getInstance();
+    private TextView productSerialView;
 
     public TaskRegisterViewHolder(@NonNull View itemView) {
         super(itemView);
         context = itemView.getContext();
-        iconView = itemView.findViewById(R.id.task_icon);
-        nameView = itemView.findViewById(R.id.task_name);
-        distanceView = itemView.findViewById(R.id.distance_from_structure);
-        taskDetailsView = itemView.findViewById(R.id.task_details);
-        actionView = itemView.findViewById(R.id.task_action);
-        houseNumberView = itemView.findViewById(R.id.house_number);
+        productNameView = itemView.findViewById(R.id.txt_product_name);
+        productImageView = itemView.findViewById(R.id.img_product_image);
+        productSerialView = itemView.findViewById(R.id.txt_product_serial);
+        rectangleOverlayImageView = itemView.findViewById(R.id.img_rectangle_overlay);
+        checkedOverlayImageView = itemView.findViewById(R.id.img_checked_overlay);
     }
 
-
-    public void setIcon(@DrawableRes int iconResource) {
-        iconView.setVisibility(View.VISIBLE);
-        iconView.setImageDrawable(context.getResources().getDrawable(iconResource));
+    public void setProductImage(@Nullable StructureTaskDetail structureTaskDetail) {
+        this.productImageView.setImageDrawable(ResourcesCompat.getDrawable(context.getResources(), R.drawable.login_logo, context.getTheme()));
+        if (structureTaskDetail.isChecked()) {
+            checkedOverlayImageView.setVisibility(View.VISIBLE);
+            rectangleOverlayImageView.setVisibility(View.VISIBLE);
+        }
     }
-
-    public void setTaskName(String taskName) {
-        nameView.setText(taskName);
-    }
-
-    public void setDistanceFromStructure(float distance, boolean distanceFromCenter) {
-//        if (distanceFromCenter) {
-//            distanceView.setText(context.getString(
-//                    R.string.distance_from_center, distance, prefsUtil.getCurrentOperationalArea()));
-//        } else {
-//            distanceView.setText(context.getString(R.string.distance_from_structure, distance));
-//        }
-    }
-
-    public void hideDistanceFromStructure() {
-        distanceView.setVisibility(View.GONE);
-    }
-
 
     /**
-     * Method that handles the populating of action view information on each row of the
-     * task register.
-     * <p>
-     * It handles the text and color displayed on an Action View. Also attaches a clickListener
-     * which handles clicks on the action view.
+     * holds text for serial, and quantity if available and date checked
      *
-     * @param actionLabel     Text that shows what action to take when action view is clicked
-     * @param task            TaskDetails object used to populate info in a particular row
-     * @param cardDetails     Object that contains status, status message and status color
-     * @param onClickListener Click listener that handles clicks events on the Task Action
+     * @param structureTaskDetail
      */
-    public void setTaskAction(String actionLabel, TaskDetails task, CardDetails cardDetails, View.OnClickListener onClickListener) {
-//        actionView.setText(actionLabel);
-//
-//        // registered family with multiple tasks
-//        if (cardDetails != null && task.getTaskCount() != null) { // task grouping only for FI
-//            if (task.getTaskCount() > 1) {
-//                if (task.getTaskCount() != task.getCompleteTaskCount()) {
-//
-//
-//                    Pair<Drawable, String> actionViewPair = getActionDrawable(task);
-//                    actionView.setTextColor(context.getResources().getColor(R.color.text_black));
-//                    actionView.setBackground(actionViewPair.first);
-//                    actionView.setText(actionViewPair.second);
-//                } else if (task.getTaskCount() == task.getCompleteTaskCount()) {
-//                    showTasksCompleteActionView();
-//                }
-//            }
-//
-//        } else if (cardDetails != null && cardDetails.getStatusColor() != null) {
-//            actionView.setBackground(null);
-//            actionView.setTextColor(context.getResources().getColor(cardDetails.getStatusColor()));
-//        } else {
-//            actionView.setBackground(context.getResources().getDrawable(R.drawable.task_action_bg));
-//            actionView.setTextColor(context.getResources().getColor(R.color.text_black));
-//        }
-//        actionView.setOnClickListener(onClickListener);
-//        actionView.setTag(R.id.task_details, task);
+    public void setProductSerial(@NonNull StructureTaskDetail structureTaskDetail) {
+
+        if (StringUtils.isNotBlank(structureTaskDetail.getProductSerial()) && !structureTaskDetail.isNonProductTask()) {
+            String stringTemplate;
+            String result = "";
+            if (StringUtils.isNotBlank(structureTaskDetail.getQuantity())) {
+                stringTemplate = context.getString(R.string.product_serial_n_quantity);
+                result = String.format(stringTemplate, structureTaskDetail.getQuantity(), structureTaskDetail.getProductSerial());
+            }
+
+            if (structureTaskDetail.getDateChecked() != null) {
+                stringTemplate = context.getString(R.string.product_serial_n_date_checked);
+                result = String.format(stringTemplate, structureTaskDetail.getProductSerial(), "date checked");
+            }
+            if (StringUtils.isBlank(result)) {
+                stringTemplate = context.getString(R.string.product_serial);
+                result = String.format(stringTemplate, structureTaskDetail.getProductSerial());
+            }
+            this.productSerialView.setText(result);
+        } else {
+            this.productSerialView.setVisibility(View.GONE);
+        }
     }
 
-    public void setItemViewListener(TaskDetails task, View.OnClickListener onClickListener) {
-        itemView.setOnClickListener(onClickListener);
-        itemView.setTag(R.id.task_details, task);
+    /**
+     * holds text fot name and some description
+     *
+     * @param productName
+     */
+    public void setProductName(@NonNull String productName) {
+        this.productNameView.setText(productName);
     }
-
-    public void setTaskDetails(String businessStatus, String taskDetails) {
-//        if (AppConstants.BusinessStatus.NOT_SPRAYED.equals(businessStatus)) {
-//            taskDetailsView.setVisibility(View.VISIBLE);
-//            taskDetailsView.setText(context.getString(R.string.task_reason, taskDetails));
-//        } else {
-//            taskDetailsView.setVisibility(View.GONE);
-//        }
-    }
-
-    public void setHouseNumber(String houseNumber) {
-        houseNumberView.setText(houseNumber);
-    }
-
-    public void showHouseNumber() {
-        houseNumberView.setVisibility(View.VISIBLE);
-    }
-
-    public void hideHouseNumber() {
-        houseNumberView.setVisibility(View.GONE);
-    }
-
-    public void hideIcon() {
-        iconView.setVisibility(View.GONE);
-    }
-
-    private void showTasksCompleteActionView() {
-//        if (Utils.isFocusInvestigation()) {
-//            actionView.setBackground(context.getResources().getDrawable(R.drawable.tasks_complete_bg));
-//        } else if (Utils.isMDA()) {
-//            actionView.setBackground(context.getResources().getDrawable(R.drawable.mda_adhered_bg));
-//        }
-//        actionView.setTextColor(context.getResources().getColor(R.color.text_black));
-//        actionView.setText(context.getText(R.string.tasks_complete));
-    }
-
-//    private Pair<Drawable, String> getActionDrawable(TaskDetails task) {
-////        // The assumption is that a register structure task always exists if the structure has
-////        // atleast one bednet distribution or blood screening task
-////        boolean familyRegTaskMissingOrFamilyRegComplete = task.isFamilyRegistered() || !task.isFamilyRegTaskExists();
-////        Drawable actionBg = null;
-////        String actionText = context.getText(R.string.view_tasks).toString();
-////
-////        if (Utils.isFocusInvestigation()) {
-////            if (familyRegTaskMissingOrFamilyRegComplete && task.isBednetDistributed() && task.isBloodScreeningDone()) {
-////                actionBg = context.getResources().getDrawable(R.drawable.tasks_complete_bg);
-////                actionText = context.getText(R.string.tasks_complete).toString();
-////            } else if (familyRegTaskMissingOrFamilyRegComplete && !task.isBednetDistributed() && !task.isBloodScreeningDone()) {
-////                actionBg = context.getResources().getDrawable(R.drawable.family_registered_bg);
-////            } else if (familyRegTaskMissingOrFamilyRegComplete && task.isBednetDistributed()) {
-////                actionBg = context.getResources().getDrawable(R.drawable.bednet_distributed_bg);
-////            } else if (task.isBloodScreeningDone()) {
-////                actionBg = context.getResources().getDrawable(R.drawable.blood_screening_complete_bg);
-////            } else {
-////                actionBg = context.getResources().getDrawable(R.drawable.no_task_complete_bg);
-////            }
-////        } else if (Utils.isMDA()) {
-////            if (familyRegTaskMissingOrFamilyRegComplete && task.isMdaAdhered()) {
-////                actionBg = context.getResources().getDrawable(R.drawable.mda_adhered_bg);
-////                actionText = context.getText(R.string.tasks_complete).toString();
-////            } else if (familyRegTaskMissingOrFamilyRegComplete && task.isFullyReceived()) {
-////                actionBg = context.getResources().getDrawable(R.drawable.mda_dispensed_bg);
-////            } else if (familyRegTaskMissingOrFamilyRegComplete && task.isPartiallyReceived()) {
-////                actionBg = context.getResources().getDrawable(R.drawable.mda_partially_received_bg);
-////            } else if (familyRegTaskMissingOrFamilyRegComplete && task.isNoneReceived()) {
-////                actionBg = context.getResources().getDrawable(R.drawable.mda_none_received_bg);
-////            } else if (familyRegTaskMissingOrFamilyRegComplete && task.isNotEligible()) {
-////                actionBg = context.getResources().getDrawable(R.drawable.mda_not_eligible_bg);
-////            } else if (familyRegTaskMissingOrFamilyRegComplete) {
-////                actionBg = context.getResources().getDrawable(R.drawable.family_registered_bg);
-////            } else {
-////                actionBg = context.getResources().getDrawable(R.drawable.no_task_complete_bg);
-////            }
-////        }
-//
-//        return new Pair<>();
-
 }

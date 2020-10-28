@@ -24,7 +24,8 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:replace="android:label,android:theme">
-        <activity android:name=".activity.StructureRegisterActivity"></activity>
+        <activity android:name=".activity.TaskRegisterActivity"></activity>
+        <activity android:name=".activity.StructureRegisterActivity" />
 
         <uses-library
             android:name="org.apache.http.legacy"

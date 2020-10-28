@@ -13,6 +13,7 @@ public class OfflineMapModel {
     private OfflineRegion offlineRegion;
 
     private Date dateCreated;
+
     private OfflineMapStatus offlineMapStatus;
 
     public OfflineMapModel() {

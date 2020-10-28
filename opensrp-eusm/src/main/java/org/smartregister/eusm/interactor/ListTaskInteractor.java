@@ -10,7 +10,6 @@ import org.json.JSONException;
 import org.json.JSONObject;
 import org.smartregister.commonregistry.CommonPersonObject;
 import org.smartregister.commonregistry.CommonRepository;
-import org.smartregister.cursoradapter.SmartRegisterQueryBuilder;
 import org.smartregister.domain.Location;
 import org.smartregister.domain.Task;
 import org.smartregister.eusm.BuildConfig;
@@ -18,13 +17,12 @@ import org.smartregister.eusm.application.EusmApplication;
 import org.smartregister.eusm.contract.HomeActivityContract;
 import org.smartregister.eusm.model.CardDetails;
 import org.smartregister.eusm.model.StructureDetail;
-import org.smartregister.eusm.model.StructureTaskDetails;
 import org.smartregister.eusm.model.TaskDetails;
 import org.smartregister.eusm.presenter.HomeActivityPresenter;
 import org.smartregister.eusm.util.AppConstants;
+import org.smartregister.eusm.util.AppUtils;
 import org.smartregister.eusm.util.GeoJsonUtils;
 import org.smartregister.eusm.util.InteractorUtils;
-import org.smartregister.eusm.util.AppUtils;
 import org.smartregister.repository.StructureRepository;
 import org.smartregister.repository.TaskRepository;
 
@@ -350,59 +348,6 @@ public class ListTaskInteractor extends BaseInteractor {
                 AppConstants.DatabaseKeys.TASK_TABLE + "." + AppConstants.DatabaseKeys.STATUS,
                 AppConstants.DatabaseKeys.TASK_TABLE + "." + AppConstants.DatabaseKeys.STRUCTURE_ID
         };
-    }
-
-    public String getTaskSelect(String mainCondition) {
-        SmartRegisterQueryBuilder queryBuilder = new SmartRegisterQueryBuilder();
-        queryBuilder.selectInitiateMainTable(AppConstants.DatabaseKeys.TASK_TABLE, getStructureColumns(), AppConstants.DatabaseKeys.ID);
-        return queryBuilder.mainCondition(mainCondition);
-    }
-
-    public void resetInterventionTaskInfo(String interventionType, String featureId) {
-        String sql = String.format(getTaskSelect("%s = ? and %s = ?"),
-                AppConstants.DatabaseKeys.FOR, AppConstants.DatabaseKeys.CODE);
-
-        final String SQL = sql;
-
-        appExecutors.diskIO().execute(() -> {
-            StructureTaskDetails taskDetails = null;
-            Cursor cursor = null;
-            boolean taskInfoResetSuccessful = false;
-            try {
-                cursor = getDatabase().rawQuery(SQL, new String[]{featureId, interventionType});
-                if (cursor.moveToNext()) {
-                    taskDetails = readTaskDetails(cursor);
-                }
-
-            } catch (Exception e) {
-                Timber.e(e, "Error querying tasks details for %s", featureId);
-            } finally {
-                if (cursor != null) {
-                    cursor.close();
-                }
-            }
-
-            // Reset task info
-            taskInfoResetSuccessful = interactorUtils.resetTaskInfo(getDatabase(), taskDetails);
-
-
-            boolean finalTaskInfoResetSuccessful = taskInfoResetSuccessful;
-//            appExecutors.mainThread().execute(() -> {
-//                getPresenter().onInterventionTaskInfoReset(finalTaskInfoResetSuccessful);
-//            });
-        });
-
-
-    }
-
-    public StructureTaskDetails readTaskDetails(Cursor cursor) {
-        StructureTaskDetails task = new StructureTaskDetails(cursor.getString(cursor.getColumnIndex(AppConstants.DatabaseKeys.ID)));
-        task.setTaskCode(cursor.getString(cursor.getColumnIndex(AppConstants.DatabaseKeys.CODE)));
-        task.setTaskEntity(cursor.getString(cursor.getColumnIndex(AppConstants.DatabaseKeys.FOR)));
-        task.setBusinessStatus(cursor.getString(cursor.getColumnIndex(AppConstants.DatabaseKeys.BUSINESS_STATUS)));
-        task.setTaskStatus(cursor.getString(cursor.getColumnIndex(AppConstants.DatabaseKeys.STATUS)));
-        task.setStructureId(cursor.getString(cursor.getColumnIndex(AppConstants.DatabaseKeys.STRUCTURE_ID)));
-        return task;
     }
 
     @Override

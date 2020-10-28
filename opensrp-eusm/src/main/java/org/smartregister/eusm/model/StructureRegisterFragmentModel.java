@@ -14,8 +14,11 @@ public class StructureRegisterFragmentModel {
         appStructureRepository = EusmApplication.getInstance().getStructureRepository();
     }
 
-    public List<StructureDetail> fetchStructures() {
-        //join structure and task filtered by
-        return appStructureRepository.fetchStructureDetails(PreferencesUtil.getInstance().getCurrentOperationalAreaId());
+    public int countOfStructures(String nameFilter) {
+        return appStructureRepository.countOfStructures(nameFilter);
+    }
+
+    public List<StructureDetail> fetchStructures(int pageNo, String nameFilter) {
+        return appStructureRepository.fetchStructureDetails(pageNo, PreferencesUtil.getInstance().getCurrentOperationalAreaId(), nameFilter);
     }
 }

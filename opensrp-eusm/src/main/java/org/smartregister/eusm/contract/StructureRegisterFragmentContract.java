@@ -1,7 +1,6 @@
 package org.smartregister.eusm.contract;
 
 
-import android.content.Context;
 import android.location.Location;
 
 import androidx.annotation.StringRes;
@@ -10,8 +9,6 @@ import org.json.JSONObject;
 import org.smartregister.domain.Event;
 import org.smartregister.eusm.adapter.StructureRegisterAdapter;
 import org.smartregister.eusm.model.StructureDetail;
-import org.smartregister.eusm.model.TaskDetails;
-import org.smartregister.eusm.model.TaskFilterParams;
 import org.smartregister.eusm.util.LocationUtils;
 import org.smartregister.view.contract.BaseRegisterFragmentContract;
 
@@ -19,29 +16,15 @@ import java.util.List;
 
 public interface StructureRegisterFragmentContract {
 
-    interface Presenter extends BaseRegisterFragmentContract.Presenter, BaseContract.BasePresenter {
+    interface Presenter extends BaseRegisterFragmentContract.Presenter {
 
         void onDestroy();
 
         void onDrawerClosed();
 
-        void onTaskSelected(TaskDetails details, boolean isActionClicked);
+        void onNextButtonClick();
 
-        void onIndexCaseFound(JSONObject indexCase, boolean isLinkedToJurisdiction);
-
-        void searchServicePoints(String searchText);
-
-        void filterServicePoints(TaskFilterParams filterParams);
-
-        void onFilterTasksClicked();
-
-        void setTaskFilterParams(TaskFilterParams filterParams);
-
-        void onOpenMapClicked();
-
-        void resetTaskInfo(TaskDetails taskDetails);
-
-        void onEventFound(Event event);
+        void onPreviousButtonClick();
     }
 
     interface View extends BaseRegisterFragmentContract.View {
@@ -70,21 +53,26 @@ public interface StructureRegisterFragmentContract {
 
         StructureRegisterAdapter getAdapter();
 
-        void openFilterActivity(TaskFilterParams filterParams);
 
         void setSearchPhrase(String searchPhrase);
 
-        void startMapActivity(TaskFilterParams taskFilterParams);
+        void startMapActivity();
 
         void updateSearchBarHint(String searchBarText);
 
     }
 
     interface Interactor {
-        void resetTaskInfo(Context context, TaskDetails taskDetails);
 
-        void findLastEvent(String eventBaseEntityId, String eventType);
+        void fetchStructures(InteractorCallback callback, int currentPageNo, String nameFilter);
+
+        void countOfStructures(InteractorCallback callback, String nameFilter);
     }
 
+    interface InteractorCallback {
 
+        void onFetchedStructures(List<StructureDetail> structureDetails);
+
+        void onCountOfStructuresFetched(int count);
+    }
 }

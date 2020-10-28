@@ -61,6 +61,8 @@ public interface AppConstants {
 
     String DG_ID_PLACEHOLDER = "DIGITAL_GLOBE_ID";
 
+    int STRUCTURE_REGISTER_PAGE_SIZE = 10;
+
     interface CONFIGURATION {
         String LOGIN = "login";
         String GLOBAL_CONFIGS = "global_configs";
@@ -624,7 +626,28 @@ public interface AppConstants {
     interface ServicePointType {
         String EPP = "epp";
         String CEG = "ceg";
-        String CHRD_1 = "chrd 1";
+        String CHRD1 = "chrd1";
+        String CHRD2 = "chrd2";
+        String CHRR = "chrr";
+        String SDSP = "sdsp";
+        String DRSP = "drsp";
+        String MSP = "msp";
+        String CSB1 = "csb1";
+        String CSB2 = "csb2";
+        String BSD = "bsd";
+        String WAREHOUSE = "warehouse";
+        String WATERPOINT = "waterpoint";
+        String PRESCO = "presco";
+        String MEAH = "meah";
+        String DREAH = "dreah";
+        String MEN = "men";
+        String DREN = "dren";
+        String MPPSPF = "mppspf";
+        String DRPPSPF = "drpppspf";
+        String NGO_PARTNER = "ngo_partner";
+        String SITE_COMMUNAUTAIRE = "site_communautaire";
+        String DRJS = "drjs";
+        String INSTAT = "instat";
     }
 
     interface RequestCode {

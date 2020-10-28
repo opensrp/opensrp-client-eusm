@@ -1,112 +1,62 @@
 package org.smartregister.eusm.presenter;
 
-import androidx.annotation.NonNull;
+import android.view.View;
 
-import org.smartregister.domain.Task;
-import org.smartregister.eusm.R;
-import org.smartregister.eusm.comparator.StructureDetailDistanceComparator;
-import org.smartregister.eusm.comparator.StructureDetailNameComparator;
-import org.smartregister.eusm.config.AppExecutors;
-import org.smartregister.eusm.contract.BaseContract;
+import androidx.annotation.StringRes;
+
+import org.json.JSONObject;
+import org.smartregister.domain.Event;
 import org.smartregister.eusm.contract.StructureRegisterFragmentContract;
+import org.smartregister.eusm.fragment.StructureRegisterFragment;
+import org.smartregister.eusm.interactor.StructureRegisterInteractor;
 import org.smartregister.eusm.model.StructureDetail;
-import org.smartregister.eusm.model.StructureRegisterFragmentModel;
 import org.smartregister.eusm.util.AppConstants;
 
 import java.lang.ref.WeakReference;
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
-public class StructureRegisterFragmentPresenter extends BaseRegisterFragmentPresenter implements BaseContract.BasePresenter {
+public class StructureRegisterFragmentPresenter extends BaseRegisterFragmentPresenter implements StructureRegisterFragmentContract.Presenter, StructureRegisterFragmentContract.InteractorCallback {
 
     private WeakReference<StructureRegisterFragmentContract.View> viewWeakReference;
 
-    private StructureRegisterFragmentModel model;
+    private int currentPageNo = 0;
 
-    private AppExecutors appExecutors;
+    private int totalCount = 0;
+
+    private int totalPageCount = 0;
+
+    private int pageSize = AppConstants.STRUCTURE_REGISTER_PAGE_SIZE;
+
+    private String nameFilter;
+
+    private StructureRegisterInteractor structureRegisterInteractor;
 
     public StructureRegisterFragmentPresenter(StructureRegisterFragmentContract.View view) {
         this.viewWeakReference = new WeakReference<>(view);
-        this.model = new StructureRegisterFragmentModel();
-        appExecutors = new AppExecutors();
+        structureRegisterInteractor = new StructureRegisterInteractor();
+    }
+
+    public String getString(@StringRes int resId) {
+        return getView().getContext().getString(resId);
     }
 
     @Override
     public void initializeQueries(String s) {
         if (getView().getAdapter() == null) {
             getView().initializeAdapter();
-
-            appExecutors.diskIO().execute(() -> {
-                List<StructureDetail> structureDetails = fetchStructures();
-                appExecutors.mainThread().execute(() -> getView().setStructureDetails(structureDetails));
-            });
+            countOfStructures();
+            fetchStructures();
         }
     }
 
-    public List<StructureDetail> fetchStructures() {
-        List<StructureDetail> structureDetails = model.fetchStructures();
-        return sortStructures(structureDetails);
+    public void countOfStructures() {
+        structureRegisterInteractor.countOfStructures(this, nameFilter);
     }
 
-    private List<StructureDetail> sortStructures(@NonNull List<StructureDetail> structureDetails) {
-        //gets nearby sorts by distance then
-        //after nearby false sort alphabetically then splice then append to list
-        StructureDetail structureDetailNearby = new StructureDetail();
-        structureDetailNearby.setHeader(true);
-        structureDetailNearby.setStructureName(
-                String.format(getView().getContext().getString(R.string.nearby_within_n_m), AppConstants.NEARBY_DISTANCE_IN_METRES.toString()));
-
-        StructureDetail structureDetailOther = new StructureDetail();
-        structureDetailOther.setHeader(true);
-        structureDetailOther.setStructureName(getView().getContext().getString(R.string.other_service_points_a_to_z));
-
-        //sort by distance
-        Collections.sort(structureDetails, new StructureDetailDistanceComparator());
-
-        boolean hasOtherPoints = false;
-        for (int i = 0; i < structureDetails.size(); i++) {
-            StructureDetail structureDetail = structureDetails.get(i);
-            if (!structureDetail.isNearby()) {
-                hasOtherPoints = true;
-                List<StructureDetail> detailListNearBy = structureDetails.subList(0, i);
-                detailListNearBy.add(0, structureDetailNearby);
-
-                List<StructureDetail> detailListFar = structureDetails.subList(i, structureDetails.size() - 1);
-
-                //sort by names
-                Collections.sort(detailListFar, new StructureDetailNameComparator());
-                detailListFar.add(0, structureDetailOther);
-                List<StructureDetail> resultList = new ArrayList<>();//detailListNearBy.addAll(detailListFar);
-                resultList.addAll(detailListNearBy);
-                resultList.addAll(detailListFar);
-                return resultList;
-            }
-        }
-
-        if (!hasOtherPoints) {
-            structureDetails.add(0, structureDetailNearby);
-            structureDetails.add(structureDetailOther);
-            StructureDetail s = structureDetails.get(1);
-            StructureDetail s2 = structureDetails.get(2);
-            s2.setTaskStatus("Completed");
-            structureDetails.get(3).setTaskStatus("in progress");
-            s.setTaskStatus("10 items");
-            structureDetails.add(s);
-        }
-
-        return structureDetails;
+    public void fetchStructures() {
+        structureRegisterInteractor.fetchStructures(this, currentPageNo, nameFilter);
     }
 
-    @Override
-    public void onFormSaved(@NonNull String structureId, String taskID, @NonNull Task.TaskStatus taskStatus, @NonNull String businessStatus, String interventionType) {
-
-    }
-
-    @Override
-    public void onFormSaveFailure(String eventType) {
-
-    }
 
     public StructureRegisterFragmentContract.View getView() {
         if (viewWeakReference != null) {
@@ -114,5 +64,97 @@ public class StructureRegisterFragmentPresenter extends BaseRegisterFragmentPres
         } else {
             return null;
         }
+    }
+
+    @Override
+    public void onDestroy() {
+
+    }
+
+    @Override
+    public void onDrawerClosed() {
+
+    }
+
+    public void filterByName(String nameFilter) {
+        this.nameFilter = nameFilter;
+        currentPageNo = 0;
+
+        getView().getAdapter().clearData();
+
+        countOfStructures();
+        fetchStructures();
+    }
+
+    @Override
+    public void onNextButtonClick() {
+        getView().getAdapter().clearData();
+
+        ++currentPageNo;
+
+        fetchStructures();
+
+        getFragment().getPreviousButton().setVisibility(View.VISIBLE);
+
+        if ((totalCount % ((currentPageNo) * pageSize)) == 0) {
+            getFragment().getNextButton().setVisibility(View.VISIBLE);
+        } else {
+            getFragment().getNextButton().setVisibility(View.INVISIBLE);
+        }
+    }
+
+    private StructureRegisterFragment getFragment() {
+        return (StructureRegisterFragment) getView();
+    }
+
+    @Override
+    public void onPreviousButtonClick() {
+        getView().getAdapter().clearData();
+
+        getFragment().getNextButton().setVisibility(View.VISIBLE);
+
+        --currentPageNo;
+
+        fetchStructures();
+
+        int pageNo = currentPageNo - 1;
+
+        if (pageNo < 0)
+            getFragment().getPreviousButton().setVisibility(View.INVISIBLE);
+
+    }
+
+    public int getCurrentPageNo() {
+        return currentPageNo;
+    }
+
+    public int getTotalCount() {
+        return totalCount;
+    }
+
+    public int getTotalPageCount() {
+        return totalPageCount;
+    }
+
+    public String getNameFilter() {
+        return nameFilter;
+    }
+
+    public void setNameFilter(String nameFilter) {
+        this.nameFilter = nameFilter;
+    }
+
+    @Override
+    public void onFetchedStructures(List<StructureDetail> structureDetails) {
+        getFragment().updatePageInfo();
+        getView().setStructureDetails(structureDetails);
+    }
+
+    @Override
+    public void onCountOfStructuresFetched(int count) {
+        totalCount = count;
+        totalPageCount = (int) Math.ceil((double) totalCount / (double) pageSize);
+        getFragment().getNextButton().setVisibility((totalPageCount >= 0) ? View.VISIBLE : View.INVISIBLE);
+        getFragment().updatePageInfo();
     }
 }

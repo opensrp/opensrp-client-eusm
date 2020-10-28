@@ -1,13 +1,24 @@
 package org.smartregister.eusm.model;
 
-public class StructureDetail {
+import java.io.Serializable;
+
+public class StructureDetail implements Serializable {
     private boolean nearby;
     private Float distance;
+    private String distanceMeta;
     private boolean isHeader;
     private String taskStatus;
     private String structureName;
     private String structureType;
     private String commune;
+
+    public String getDistanceMeta() {
+        return distanceMeta;
+    }
+
+    public void setDistanceMeta(String distanceMeta) {
+        this.distanceMeta = distanceMeta;
+    }
 
     public boolean isNearby() {
         return nearby;
@@ -63,5 +74,19 @@ public class StructureDetail {
 
     public void setCommune(String commune) {
         this.commune = commune;
+    }
+
+    @Override
+    public String toString() {
+        return "StructureDetail{" +
+                "nearby=" + nearby +
+                ", distance=" + distance +
+                ", distanceMeta='" + distanceMeta + '\'' +
+                ", isHeader=" + isHeader +
+                ", taskStatus='" + taskStatus + '\'' +
+                ", structureName='" + structureName + '\'' +
+                ", structureType='" + structureType + '\'' +
+                ", commune='" + commune + '\'' +
+                '}';
     }
 }

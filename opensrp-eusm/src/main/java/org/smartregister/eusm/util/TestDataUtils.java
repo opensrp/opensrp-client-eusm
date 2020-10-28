@@ -13,6 +13,7 @@ import org.smartregister.domain.LocationProperty;
 import org.smartregister.domain.PlanDefinition;
 import org.smartregister.domain.Task;
 import org.smartregister.eusm.application.EusmApplication;
+import org.smartregister.eusm.model.StructureTaskDetail;
 import org.smartregister.repository.LocationRepository;
 import org.smartregister.repository.PlanDefinitionRepository;
 import org.smartregister.repository.StructureRepository;
@@ -20,6 +21,7 @@ import org.smartregister.repository.TaskRepository;
 import org.smartregister.util.DateTimeTypeConverter;
 import org.smartregister.util.PropertiesConverter;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -41,6 +43,47 @@ public class TestDataUtils {
         taskRepository = EusmApplication.getInstance().getTaskRepository();
         locationRepository = EusmApplication.getInstance().getLocationRepository();
         structureRepository = EusmApplication.getInstance().getStructureRepository();
+    }
+
+    public static List<StructureTaskDetail> getStructureDetail() {
+
+        StructureTaskDetail s = new StructureTaskDetail();
+        s.setChecked(true);
+        s.setProductName("Solar Fridge");
+        s.setHeader(false);
+        s.setNonProductTask(false);
+        s.setQuantity("3");
+        s.setProductSerial("3424");
+
+        StructureTaskDetail s1 = new StructureTaskDetail();
+        s1.setChecked(true);
+        s1.setProductName("Scale,infant,springtype,25 kg x 100g");
+        s1.setHeader(false);
+        s1.setNonProductTask(false);
+        s1.setQuantity("3");
+        s1.setProductSerial("3424");
+
+        StructureTaskDetail s11 = new StructureTaskDetail();
+        s11.setChecked(true);
+        s11.setProductName("Service Point Check");
+        s11.setHeader(false);
+        s11.setNonProductTask(true);
+
+        StructureTaskDetail s3 = new StructureTaskDetail();
+        s3.setChecked(true);
+        s3.setProductName("Timer");
+        s3.setHeader(false);
+        s3.setNonProductTask(false);
+        s3.setQuantity("3");
+        s3.setProductSerial("3424");
+
+        List<StructureTaskDetail> structureTaskDetails = new ArrayList<>();
+        structureTaskDetails.add(s);
+        structureTaskDetails.add(s1);
+        structureTaskDetails.add(s11);
+        structureTaskDetails.add(s3);
+
+        return structureTaskDetails;
     }
 
     public void populateTestData() {
@@ -73,10 +116,8 @@ public class TestDataUtils {
         }
     }
 
-
     private void createLocations() {
         try {
-
 
             Location location = gson.fromJson(locationJSon, Location.class);
             locationRepository.addOrUpdate(location);
@@ -88,7 +129,6 @@ public class TestDataUtils {
             e.printStackTrace();
         }
     }
-
 
     private void createStructures() {
         try {

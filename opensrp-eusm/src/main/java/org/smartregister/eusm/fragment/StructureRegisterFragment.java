@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.location.Location;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.Button;
 import android.widget.TextView;
 
 import androidx.annotation.UiThread;
@@ -11,20 +12,27 @@ import androidx.annotation.UiThread;
 import org.json.JSONObject;
 import org.smartregister.eusm.R;
 import org.smartregister.eusm.activity.HomeActivity;
+import org.smartregister.eusm.activity.TaskRegisterActivity;
 import org.smartregister.eusm.adapter.StructureRegisterAdapter;
 import org.smartregister.eusm.contract.BaseDrawerContract;
 import org.smartregister.eusm.contract.StructureRegisterFragmentContract;
 import org.smartregister.eusm.model.StructureDetail;
-import org.smartregister.eusm.model.TaskFilterParams;
 import org.smartregister.eusm.presenter.StructureRegisterFragmentPresenter;
 import org.smartregister.eusm.util.LocationUtils;
 import org.smartregister.eusm.view.NavigationDrawerView;
 
+import java.text.MessageFormat;
 import java.util.List;
 
 public class StructureRegisterFragment extends BaseDrawerRegisterFragment implements StructureRegisterFragmentContract.View, BaseDrawerContract.DrawerActivity, View.OnClickListener {
 
     private StructureRegisterAdapter structureRegisterAdapter;
+
+    private Button nextButton;
+
+    private Button previousButton;
+
+    private TextView strPageInfoView;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -41,15 +49,28 @@ public class StructureRegisterFragment extends BaseDrawerRegisterFragment implem
     protected void onViewClicked(View view) {
         int id = view.getId();
         if (id == R.id.service_points_btn_register) {
-            startMapActivity(null);
+            startMapActivity();
         } else if (id == R.id.drawerMenu) {
             drawerView.openDrawerLayout();
+        } else if (id == R.id.next_button) {
+            presenter().onNextButtonClick();
+        } else if (id == R.id.previous_button) {
+            presenter().onPreviousButtonClick();
+        } else if (id == R.id.table_layout) {
+            StructureDetail structureDetail = (StructureDetail) view.getTag(R.id.structure_detail);
+            Intent intent = new Intent(getActivity(), TaskRegisterActivity.class);
+            intent.putExtra("data", structureDetail);
+            getActivity().startActivity(intent);
         }
+    }
+
+    public StructureRegisterFragmentPresenter presenter() {
+        return (StructureRegisterFragmentPresenter) presenter;
     }
 
     @Override
     public void onDrawerClosed() {
-
+        presenter().onDrawerClosed();
     }
 
     @Override
@@ -59,7 +80,7 @@ public class StructureRegisterFragment extends BaseDrawerRegisterFragment implem
 
     @Override
     public void initializeAdapter() {
-        structureRegisterAdapter = new StructureRegisterAdapter(getContext());
+        structureRegisterAdapter = new StructureRegisterAdapter(getContext(), registerActionHandler);
         clientsView.setAdapter(structureRegisterAdapter);
     }
 
@@ -114,10 +135,6 @@ public class StructureRegisterFragment extends BaseDrawerRegisterFragment implem
         return structureRegisterAdapter;
     }
 
-    @Override
-    public void openFilterActivity(TaskFilterParams filterParams) {
-
-    }
 
     @Override
     public void setSearchPhrase(String searchPhrase) {
@@ -125,21 +142,18 @@ public class StructureRegisterFragment extends BaseDrawerRegisterFragment implem
     }
 
     @Override
-    public void startMapActivity(TaskFilterParams taskFilterParams) {
-        Intent intent = new Intent(getContext(), HomeActivity.class);
-        startActivity(intent);
+    public void startMapActivity() {
+
     }
 
     @Override
     protected int getLayout() {
-        return R.layout.fragment_service_point_register;
+        return R.layout.fragment_structure_register;
     }
 
     @Override
     public void filter(String filterString, String joinTableString, String mainConditionString, boolean qrCode) {
-        if (getAdapter() != null) {
-            getAdapter().getFilter().filter(filterString);
-        }
+        presenter().filterByName(filterString);
     }
 
     @Override
@@ -150,12 +164,32 @@ public class StructureRegisterFragment extends BaseDrawerRegisterFragment implem
         servicePointBtnRegisterTextView.setText(getString(R.string.map));
         servicePointBtnRegisterTextView.setOnClickListener(this);
 
+        strPageInfoView = view.findViewById(R.id.page_info_textView);
+
+        nextButton = view.findViewById(R.id.next_button);
+        nextButton.setOnClickListener(this);
+
+        previousButton = view.findViewById(R.id.previous_button);
+        previousButton.setOnClickListener(this);
+
         drawerView.initializeDrawerLayout();
 
         drawerView.onResume();
 
         view.findViewById(R.id.drawerMenu)
                 .setOnClickListener(this);
+    }
+
+    public void updatePageInfo() {
+        strPageInfoView.setText(MessageFormat.format(getString(R.string.str_page_info), (presenter().getCurrentPageNo() + 1), presenter().getTotalPageCount()));
+    }
+
+    public Button getNextButton() {
+        return nextButton;
+    }
+
+    public Button getPreviousButton() {
+        return previousButton;
     }
 
     @Override

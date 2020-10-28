@@ -25,7 +25,6 @@ import org.smartregister.domain.FetchStatus;
 import org.smartregister.domain.SyncProgress;
 import org.smartregister.domain.Task;
 import org.smartregister.eusm.R;
-import org.smartregister.eusm.application.EusmApplication;
 import org.smartregister.eusm.contract.BaseDrawerContract;
 import org.smartregister.eusm.contract.HomeActivityContract;
 import org.smartregister.eusm.helper.GenericTextWatcher;
@@ -102,7 +101,7 @@ public class HomeActivity extends BaseMapActivity implements HomeActivityContrac
 
         syncProgressSnackbar = Snackbar.make(rootView, getString(org.smartregister.R.string.syncing), Snackbar.LENGTH_INDEFINITE);
 
-        EusmApplication.getInstance().setUserLocation(getUserCurrentLocation());
+        //EusmApplication.getInstance().setUserLocation(getUserCurrentLocation());
     }
 
     private void initializeToolbar() {

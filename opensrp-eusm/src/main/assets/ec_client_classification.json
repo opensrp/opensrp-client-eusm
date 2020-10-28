@@ -7,16 +7,6 @@
         "fields": [
         ]
       }
-    },
-    {
-      "comment": "ec_events: This rule maps to ec_events table used for filled forms",
-      "rule": {
-        "type": "event",
-        "fields": [
-          {
-          }
-        ]
-      }
     }
   ]
 }

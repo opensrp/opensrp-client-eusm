@@ -12,7 +12,7 @@ import org.smartregister.domain.Geometry;
 import org.smartregister.domain.Location;
 import org.smartregister.domain.LocationProperty;
 import org.smartregister.eusm.BaseUnitTest;
-import org.smartregister.eusm.model.StructureTaskDetails;
+import org.smartregister.eusm.model.StructureTaskDetail;
 import org.smartregister.eusm.util.AppConstants.JsonForm;
 import org.smartregister.util.AssetHandler;
 import org.smartregister.util.JsonFormUtils;
@@ -47,7 +47,7 @@ public class AppJsonFormAppUtilsTest extends BaseUnitTest {
 
     @Test
     public void testGetFormJSON() throws JSONException {
-        StructureTaskDetails task = new StructureTaskDetails("d12202fb-d347-4d7a-8859-fb370304c34c");
+        StructureTaskDetail task = new StructureTaskDetail("d12202fb-d347-4d7a-8859-fb370304c34c");
         task.setBusinessStatus("Not Visited");
         task.setTaskEntity("c72310fd-9c60-403e-a6f8-e38bf5d6359b");
         task.setStructureId("e5246812-f66c-41d9-8739-464f913b112d");
