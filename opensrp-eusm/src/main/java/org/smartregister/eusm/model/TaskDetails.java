@@ -155,26 +155,6 @@ public class TaskDetails extends BaseTaskDetails implements Comparable<TaskDetai
         return familyRegistered;
     }
 
-    public void setFamilyRegistered(boolean familyRegistered) {
-        this.familyRegistered = familyRegistered;
-    }
-
-    public boolean isBednetDistributed() {
-        return bednetDistributed;
-    }
-
-    public void setBednetDistributed(boolean bednetDistributed) {
-        this.bednetDistributed = bednetDistributed;
-    }
-
-    public boolean isBloodScreeningDone() {
-        return bloodScreeningDone;
-    }
-
-    public void setBloodScreeningDone(boolean bloodScreeningDone) {
-        this.bloodScreeningDone = bloodScreeningDone;
-    }
-
     public boolean isFamilyRegTaskExists() {
         return familyRegTaskExists;
     }
@@ -183,142 +163,12 @@ public class TaskDetails extends BaseTaskDetails implements Comparable<TaskDetai
         this.familyRegTaskExists = familyRegTaskExists;
     }
 
-    public boolean isMdaAdhered() {
-        return mdaAdhered;
-    }
-
-    public void setMdaAdhered(boolean mdaAdhered) {
-        this.mdaAdhered = mdaAdhered;
-    }
-
-    public boolean isFullyReceived() {
-        return fullyReceived;
-    }
-
-    public void setFullyReceived(boolean fullyReceived) {
-        this.fullyReceived = fullyReceived;
-    }
-
-    public boolean isPartiallyReceived() {
-        return partiallyReceived;
-    }
-
-    public void setPartiallyReceived(boolean partiallyReceived) {
-        this.partiallyReceived = partiallyReceived;
-    }
-
-    public boolean isNoneReceived() {
-        return noneReceived;
-    }
-
-    public void setNoneReceived(boolean noneReceived) {
-        this.noneReceived = noneReceived;
-    }
 
     public boolean isNotEligible() {
         return notEligible;
     }
 
-    public void setNotEligible(boolean notEligible) {
-        this.notEligible = notEligible;
-    }
 
-    public void setGroupedTaskCodeStatus(String groupedTaskCodeStatusString) {
-        setFamilyRegistered(false);
-        setBednetDistributed(false);
-        setBloodScreeningDone(false);
-        setFamilyRegTaskExists(false);
-        if (StringUtils.isEmpty(groupedTaskCodeStatusString)) {
-            return;
-        }
-        String[] groupedTaskCodeStatusArray = groupedTaskCodeStatusString.split(COMMA);
-        String MDA_DISPENSE_TASK_COUNT = "mda_dispense_task_count";
-
-        Map<String, Integer> mdaStatusMap = new HashMap<>();
-        mdaStatusMap.put(FULLY_RECEIVED, 0);
-        mdaStatusMap.put(NONE_RECEIVED, 0);
-        mdaStatusMap.put(NOT_ELIGIBLE, 0);
-        mdaStatusMap.put(MDA_DISPENSE_TASK_COUNT, 0);
-
-        boolean bloodScreeningExists = false;
-        boolean caseConfirmed = false;
-        for (int i = 0; i < groupedTaskCodeStatusArray.length; i++) {
-            String[] taskCodeStatusArray = groupedTaskCodeStatusArray[i].split(HYPHEN);
-
-            if (taskCodeStatusArray == null || taskCodeStatusArray.length != 2) {
-                continue;
-            }
-
-            switch (taskCodeStatusArray[0]) {
-                case REGISTER_FAMILY:
-                    setFamilyRegTaskExists(true);
-                    this.familyRegistered = COMPLETE.equals(taskCodeStatusArray[1]);
-                    break;
-                case BEDNET_DISTRIBUTION:
-                    this.bednetDistributed = COMPLETE.equals(taskCodeStatusArray[1]);
-                    break;
-                case BLOOD_SCREENING:
-                    if (!this.bloodScreeningDone) {
-                        this.bloodScreeningDone = COMPLETE.equals(taskCodeStatusArray[1]);
-                    }
-                    bloodScreeningExists = true;
-                    break;
-                case CASE_CONFIRMATION:
-                    caseConfirmed = COMPLETE.equals(taskCodeStatusArray[1]);
-                    break;
-                case MDA_ADHERENCE:
-                    this.mdaAdhered = COMPLETE.equals(taskCodeStatusArray[1]);
-                    break;
-                case MDA_DISPENSE:
-                    mdaStatusMap.put(MDA_DISPENSE_TASK_COUNT, mdaStatusMap.get(MDA_DISPENSE_TASK_COUNT) + 1);
-                    switch (taskCodeStatusArray[1]) {
-                        case FULLY_RECEIVED:
-                            mdaStatusMap.put(FULLY_RECEIVED, mdaStatusMap.get(FULLY_RECEIVED) + 1);
-                            break;
-                        case NONE_RECEIVED:
-                            mdaStatusMap.put(NONE_RECEIVED, mdaStatusMap.get(NONE_RECEIVED) + 1);
-                            break;
-                        case NOT_ELIGIBLE:
-                            mdaStatusMap.put(NOT_ELIGIBLE, mdaStatusMap.get(NOT_ELIGIBLE) + 1);
-                            break;
-                    }
-                default:
-                    break;
-            }
-        }
-
-        if (!bloodScreeningExists && caseConfirmed && !isBloodScreeningDone()) {
-            setBloodScreeningDone(true);
-        }
-
-        setFullyReceived(mdaStatusMap.get(FULLY_RECEIVED) == mdaStatusMap.get(MDA_DISPENSE_TASK_COUNT));
-        setNoneReceived(mdaStatusMap.get(NONE_RECEIVED) == mdaStatusMap.get(MDA_DISPENSE_TASK_COUNT));
-        setNotEligible(mdaStatusMap.get(NOT_ELIGIBLE) == mdaStatusMap.get(MDA_DISPENSE_TASK_COUNT));
-        setPartiallyReceived(!isFullyReceived() && (mdaStatusMap.get(FULLY_RECEIVED) > 0));
-
-        setAggregateBusinessStatus(calculateAggregateBusinessStatus());
-    }
-
-    /**
-     * @return the aggregate business status
-     * Calculates the aggregate/overall business status
-     */
-    private String calculateAggregateBusinessStatus() {
-        if (AppUtils.isFocusInvestigation()) {
-            if (isFamilyRegisteredOrNoTaskExists() && isBednetDistributed() && isBloodScreeningDone()) {
-                return COMPLETE;
-            } else if (isFamilyRegisteredOrNoTaskExists() && !isBednetDistributed() && !isBloodScreeningDone()) {
-                return FAMILY_REGISTERED;
-            } else if (isFamilyRegisteredOrNoTaskExists() && isBednetDistributed()) {
-                return BEDNET_DISTRIBUTED;
-            } else if (isBloodScreeningDone()) {
-                return BLOOD_SCREENING_COMPLETE;
-            }
-        } else if (isNotEligible()) {
-            return NOT_ELIGIBLE;
-        }
-        return NOT_VISITED;
-    }
 
     private boolean isFamilyRegisteredOrNoTaskExists() {
         return isFamilyRegistered() || !isFamilyRegTaskExists();
@@ -328,29 +178,5 @@ public class TaskDetails extends BaseTaskDetails implements Comparable<TaskDetai
     @Override
     public int compareTo(@NonNull TaskDetails other) {
         return Double.compare(distanceFromUser, other.getDistanceFromUser());
-    }
-
-    public String getReasonReference() {
-        return reasonReference;
-    }
-
-    public void setReasonReference(String reasonReference) {
-        this.reasonReference = reasonReference;
-    }
-
-    public String getHouseNumber() {
-        return houseNumber;
-    }
-
-    public void setHouseNumber(String houseNumber) {
-        this.houseNumber = houseNumber;
-    }
-
-    public String getAggregateBusinessStatus() {
-        return aggregateBusinessStatus;
-    }
-
-    public void setAggregateBusinessStatus(String aggregateBusinessStatus) {
-        this.aggregateBusinessStatus = aggregateBusinessStatus;
     }
 }

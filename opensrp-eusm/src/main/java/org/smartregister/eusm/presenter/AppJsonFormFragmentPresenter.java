@@ -26,12 +26,11 @@ import org.json.JSONObject;
 import org.smartregister.eusm.R;
 import org.smartregister.eusm.activity.AppJsonFormActivity;
 import org.smartregister.eusm.application.EusmApplication;
-import org.smartregister.eusm.contract.PasswordRequestCallback;
 import org.smartregister.eusm.contract.UserLocationContract.UserLocationCallback;
 import org.smartregister.eusm.util.AppConstants;
 import org.smartregister.eusm.util.AppJsonFormUtils;
-import org.smartregister.eusm.util.LocationUtils;
 import org.smartregister.eusm.util.AppUtils;
+import org.smartregister.eusm.util.LocationUtils;
 import org.smartregister.eusm.view.AppMapView;
 import org.smartregister.util.JsonFormUtils;
 
@@ -43,7 +42,7 @@ import io.ona.kujaku.listeners.BaseLocationListener;
 /**
  * Created by samuelgithengi on 1/30/19.
  */
-public class AppJsonFormFragmentPresenter extends JsonFormFragmentPresenter implements PasswordRequestCallback, UserLocationCallback {
+public class AppJsonFormFragmentPresenter extends JsonFormFragmentPresenter implements UserLocationCallback {
 
     private final JsonFormFragment formFragment;
 
@@ -165,16 +164,6 @@ public class AppJsonFormFragmentPresenter extends JsonFormFragmentPresenter impl
             passwordDialog.show();
         }
     }
-
-    @Override
-    public void onPasswordVerified() {
-        onLocationValidated();
-    }
-//
-//    @Override
-//    public ValidateUserLocationPresenter getLocationPresenter() {
-//        return locationPresenter;
-//    }
 
     public LocationUtils getLocationUtils() {
         return locationUtils;

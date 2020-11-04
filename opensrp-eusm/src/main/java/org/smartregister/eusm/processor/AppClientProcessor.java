@@ -6,7 +6,6 @@ import android.content.Intent;
 import androidx.annotation.NonNull;
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 
-import org.apache.commons.lang3.StringUtils;
 import org.joda.time.DateTime;
 import org.smartregister.domain.Client;
 import org.smartregister.domain.Event;
@@ -18,8 +17,8 @@ import org.smartregister.domain.db.EventClient;
 import org.smartregister.domain.jsonmapping.ClientClassification;
 import org.smartregister.eusm.application.EusmApplication;
 import org.smartregister.eusm.util.AppConstants;
-import org.smartregister.eusm.util.PreferencesUtil;
 import org.smartregister.eusm.util.AppUtils;
+import org.smartregister.eusm.util.PreferencesUtil;
 import org.smartregister.repository.BaseRepository;
 import org.smartregister.repository.EventClientRepository;
 import org.smartregister.repository.StructureRepository;
@@ -85,19 +84,8 @@ public class AppClientProcessor extends ClientProcessorForJava {
                 }
 
                 String eventType = event.getEventType();
-                if (eventType.equals(AppConstants.SPRAY_EVENT)) {
-                    operationalAreaId = processEvent(event, clientClassification, localEvents, AppConstants.JsonForm.STRUCTURE_TYPE);
-                } else if (eventType.equals(AppConstants.MOSQUITO_COLLECTION_EVENT) || eventType.equals(AppConstants.LARVAL_DIPPING_EVENT)
-                        || eventType.equals(AppConstants.BEDNET_DISTRIBUTION_EVENT) ||
-                        eventType.equals(AppConstants.BEHAVIOUR_CHANGE_COMMUNICATION) ||
-                        eventType.equals(AppConstants.EventType.IRS_VERIFICATION)) {
-                    operationalAreaId = processEvent(event, clientClassification, localEvents);
-                } else if (eventType.equals(AppConstants.REGISTER_STRUCTURE_EVENT)) {
+                if (eventType.equals(AppConstants.REGISTER_STRUCTURE_EVENT)) {
                     operationalAreaId = processRegisterStructureEvent(event, clientClassification);
-                } else if (eventType.equals(AppConstants.EventType.PAOT_EVENT)) {
-                    operationalAreaId = processEvent(event, clientClassification, localEvents, AppConstants.JsonForm.PAOT_STATUS);
-                } else if (eventType.equals(AppConstants.TASK_RESET_EVENT)) {
-                    continue;
                 } else if (AppConstants.EventType.SUMMARY_EVENT_TYPES.contains(event.getEventType())) {
                     processSummaryFormEvent(event, clientClassification);
                 } else {
@@ -146,35 +134,6 @@ public class AppClientProcessor extends ClientProcessorForJava {
         return null;
     }
 
-    private void processUpdateFamilyRegistrationEvent(Event event, Client client, ClientClassification clientClassification, boolean localEvents) {
-        try {
-            if (localEvents) {
-                Location structure = null;
-                if (event.getDetails() != null) {
-                    structure = structureRepository.getLocationById(event.getDetails().get(AppConstants.Properties.LOCATION_UUID));
-                }
-
-                if (structure != null && client.getAddresses() != null && !client.getAddresses().isEmpty()) {
-                    String houseNumber = client.getAddresses().get(0).getAddressField("address2");
-                    if (StringUtils.isEmpty(houseNumber)) {
-                        structure.getProperties().getCustomProperties().put(AppConstants.Properties.STRUCTURE_NAME, client.getFirstName());
-                        structureRepository.addOrUpdate(structure);
-                    } else if (structure.getProperties() != null
-                            && !houseNumber.equalsIgnoreCase(structure.getProperties().getName())) {
-                        structure.getProperties().setName(houseNumber);
-                        structure.setSyncStatus(BaseRepository.TYPE_Created);
-                        structureRepository.addOrUpdate(structure);
-                    }
-                    eusmApplication.setSynced(false);
-                }
-            }
-            processEvent(event, client, clientClassification);
-        } catch (Exception e) {
-            Timber.e(e, "Error processing update family registration event");
-        }
-
-    }
-
     private String processEvent(Event event, ClientClassification clientClassification, boolean localEvents, @NonNull String formField) {
         String operationalAreaId = null;
         if (event.getDetails() != null && event.getDetails().get(AppConstants.Properties.TASK_IDENTIFIER) != null) {
@@ -196,12 +155,8 @@ public class AppClientProcessor extends ClientProcessorForJava {
             }
 
             try {
-                if (AppConstants.SPRAY_EVENT.equals(event.getEventType())) {
-//                    sprayEventProcessor.processSprayEvent(this, clientClassification, event, localEvents);
-                } else {
-                    Client client = new Client(event.getBaseEntityId());
-                    processEvent(event, client, clientClassification);
-                }
+                Client client = new Client(event.getBaseEntityId());
+                processEvent(event, client, clientClassification);
             } catch (Exception e) {
                 Timber.e(e, "Error processing %s event", event.getEventType());
             }

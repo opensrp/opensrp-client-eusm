@@ -4,4 +4,5 @@
     <item name="filter_category" type="id" />
     <item name="structure_detail" type="id" />
     <item name="structure_task_detail" type="id" />
+    <item name="task_detail" type="id" />
 </resources>

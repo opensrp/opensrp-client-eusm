@@ -93,7 +93,7 @@ public class HomeActivity extends BaseMapActivity implements HomeActivityContrac
         findViewById(R.id.drawerMenu)
                 .setOnClickListener(this);
 
-        TextView servicePointBtnRegisterTextView = findViewById(R.id.service_points_btn_register);
+        TextView servicePointBtnRegisterTextView = findViewById(R.id.btn_structure_register);
         servicePointBtnRegisterTextView.setText(getString(R.string.list));
         servicePointBtnRegisterTextView.setOnClickListener(this);
 
@@ -117,7 +117,7 @@ public class HomeActivity extends BaseMapActivity implements HomeActivityContrac
 
     @Override
     public void onClick(View v) {
-        if (v.getId() == R.id.service_points_btn_register) {
+        if (v.getId() == R.id.btn_structure_register) {
             homeActivityPresenter.onOpenServicePointRegister();
         } else if (v.getId() == R.id.drawerMenu) {
             drawerView.openDrawerLayout();

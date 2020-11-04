@@ -8,6 +8,8 @@ import androidx.core.content.ContextCompat;
 import androidx.core.content.res.ResourcesCompat;
 import androidx.viewpager.widget.ViewPager;
 
+import com.google.android.material.appbar.AppBarLayout;
+
 import org.apache.commons.lang3.StringUtils;
 import org.smartregister.eusm.R;
 import org.smartregister.eusm.adapter.ViewPagerAdapter;
@@ -17,12 +19,15 @@ import org.smartregister.eusm.contract.TaskRegisterActivityContract;
 import org.smartregister.eusm.fragment.TasksRegisterFragment;
 import org.smartregister.eusm.model.StructureDetail;
 import org.smartregister.eusm.presenter.TaskRegisterActivityPresenter;
+import org.smartregister.eusm.util.AppConstants;
 
 public class TaskRegisterActivity extends BaseAppProfileActivity implements TaskRegisterActivityContract.View {
 
     private StructureDetail structureDetail = new StructureDetail();
 
     private View gpsUnknownView;
+
+    private TextView txtProfileBack;
 
     @Override
     protected int getLayoutId() {
@@ -51,6 +56,12 @@ public class TaskRegisterActivity extends BaseAppProfileActivity implements Task
         TextView txtStructureCommune = findViewById(R.id.txt_service_point_commune);
         txtStructureCommune.setText(getCommune());
 
+        ImageView imgProfileBack = findViewById(R.id.img_profile_back);
+        imgProfileBack.setOnClickListener(this);
+
+        txtProfileBack = findViewById(R.id.txt_profile_back);
+        txtProfileBack.setOnClickListener(this);
+
         ImageView imgServicePointType = findViewById(R.id.img_service_point_type);
 
         setServicePointIcon(imgServicePointType);
@@ -76,6 +87,27 @@ public class TaskRegisterActivity extends BaseAppProfileActivity implements Task
         return viewPager;
     }
 
+    @Override
+    public void onClick(View view) {
+        super.onClick(view);
+        int id = view.getId();
+        if (id == R.id.img_profile_back) {
+            finish();
+        } else if (id == R.id.txt_profile_back) {
+            finish();
+        }
+    }
+
+    @Override
+    public void onOffsetChanged(AppBarLayout appBarLayout, int verticalOffset) {
+        super.onOffsetChanged(appBarLayout, verticalOffset);
+        if (appBarTitleIsShown) {
+            txtProfileBack.setVisibility(View.GONE);
+        } else {
+            txtProfileBack.setVisibility(View.VISIBLE);
+        }
+    }
+
     public TasksRegisterFragment getStructureTasksRegisterFragment() {
         return TasksRegisterFragment.newInstance(getIntent().getExtras());
     }
@@ -87,12 +119,12 @@ public class TaskRegisterActivity extends BaseAppProfileActivity implements Task
 
     @Override
     protected void fetchProfileData() {
-        structureDetail = (StructureDetail) getIntent().getSerializableExtra("data");
+        structureDetail = (StructureDetail) getIntent().getSerializableExtra(AppConstants.IntentData.STRUCTURE_DETAIL);
     }
 
     @Override
     public String getStructureIcon() {
-        //condition for image
+        // TODO: condition for image
         return structureDetail.getStructureType();
     }
 
@@ -103,7 +135,7 @@ public class TaskRegisterActivity extends BaseAppProfileActivity implements Task
 
     @Override
     public String getStructureType() {
-        if (StringUtils.isBlank(getDistance())) {
+        if (StringUtils.isNotBlank(getDistance())) {
             gpsUnknownView.setVisibility(View.GONE);
             return String.format(getString(R.string.distance_from_structure), structureDetail.getStructureType(), getDistance());
         } else {
@@ -119,11 +151,22 @@ public class TaskRegisterActivity extends BaseAppProfileActivity implements Task
 
     @Override
     public String getCommune() {
+        // TODO: update commune
         return "Alarobia Ambatomanga";
     }
 
     @Override
     public TaskRegisterActivityContract.Presenter presenter() {
         return (TaskRegisterActivityContract.Presenter) presenter;
+    }
+
+    @Override
+    protected String getToolBarLayoutTitleAfterCollapse() {
+        return getStructureName();
+    }
+
+    @Override
+    protected boolean shouldEnableDisplayHomeAsUpEnabled() {
+        return false;
     }
 }

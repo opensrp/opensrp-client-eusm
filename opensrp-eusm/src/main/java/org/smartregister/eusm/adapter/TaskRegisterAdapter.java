@@ -56,7 +56,7 @@ public class TaskRegisterAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
             taskRegisterViewHolder.setProductSerial(structureTaskDetail);
             taskRegisterViewHolder.setProductImage(structureTaskDetail);
             taskRegisterViewHolder.itemView.setOnClickListener(onClickListener);
-            taskRegisterViewHolder.itemView.setTag(R.id.structure_task_detail, structureTaskDetail);
+            taskRegisterViewHolder.itemView.setTag(R.id.task_detail, structureTaskDetail);
         }
     }
 

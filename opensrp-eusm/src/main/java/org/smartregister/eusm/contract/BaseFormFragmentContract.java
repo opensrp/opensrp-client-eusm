@@ -10,7 +10,7 @@ import org.smartregister.eusm.util.AppJsonFormUtils;
  */
 public interface BaseFormFragmentContract {
 
-    interface Presenter extends UserLocationContract.UserLocationCallback, PasswordRequestCallback {
+    interface Presenter extends UserLocationContract.UserLocationCallback {
 
         void onStructureFound(Location structure, BaseTaskDetails details);
     }
@@ -27,10 +27,5 @@ public interface BaseFormFragmentContract {
 
     interface Interactor {
 
-        void findNumberOfMembers(String structureId, JSONObject formJSON);
-
-//        void findMemberDetails(String structureId, JSONObject formJSON);
-//
-//        void findSprayDetails(String interventionType, String structureId, JSONObject formJSON);
     }
 }

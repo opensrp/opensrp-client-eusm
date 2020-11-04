@@ -12,6 +12,7 @@ import org.smartregister.eusm.model.StructureTaskDetail;
 import org.smartregister.eusm.util.TestDataUtils;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -47,6 +48,9 @@ public class TaskRegisterFragmentInteractor implements TaskRegisterFragmentContr
     }
 
     private List<StructureTaskDetail> sortTaskDetails(List<StructureTaskDetail> structureTaskDetails) {
+
+        structureTaskDetails= structureTaskDetails.stream().sorted(Comparator.comparing(StructureTaskDetail::isNonProductTask)).collect(Collectors.toList());
+
         StructureTaskDetail sItemHeader = new StructureTaskDetail();
         sItemHeader.setChecked(true);
         sItemHeader.setProductName(context.getString(R.string.task_item_text));
@@ -66,6 +70,7 @@ public class TaskRegisterFragmentInteractor implements TaskRegisterFragmentContr
         sEmpty.setEmptyView(true);
         sChecked.setNonProductTask(false);
         List<StructureTaskDetail> checkedStructureTaskDetails = new ArrayList<>();
+
 
         if (!structureTaskDetails.isEmpty()) {
             checkedStructureTaskDetails = structureTaskDetails.stream().filter(structureTaskDetail -> structureTaskDetail.isChecked()).collect(Collectors.toList());

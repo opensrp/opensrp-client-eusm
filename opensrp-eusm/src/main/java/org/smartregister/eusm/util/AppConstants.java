@@ -446,33 +446,8 @@ public interface AppConstants {
         String STRUCTURE_TASK_SYNCED = "reveal.STRUCTURE_TASK_SYNCED";
     }
 
-    interface ECClientConfig {
-        String NAMIBIA_EC_CLIENT_FIELDS = "ec_client_fields_namibia.json";
-        String BOTSWANA_EC_CLIENT_FIELDS = "ec_client_fields_botswana.json";
-        String ZAMBIA_EC_CLIENT_FIELDS = "ec_client_fields_zambia.json";
-        String REFAPP_EC_CLIENT_FIELDS = "ec_client_fields_refapp.json";
-    }
-
-
     interface StructureType {
-        String RESIDENTIAL = "Residential Structure";
-
         String NON_RESIDENTIAL = "Non-Residential Structure";
-
-        String MOSQUITO_COLLECTION_POINT = "Mosquito Collection Point";
-
-        String LARVAL_BREEDING_SITE = "Larval Breeding Site";
-
-        String POTENTIAL_AREA_OF_TRANSMISSION = "Potential Area of Transmission";
-    }
-
-    interface TaskRegister {
-        String VIEW_IDENTIFIER = "task_register";
-
-        String INTERVENTION_TYPE = "intervention_type";
-
-        String LAST_USER_LOCATION = "last_location";
-
     }
 
     interface EventsRegister {
@@ -688,5 +663,10 @@ public interface AppConstants {
 
     interface ColumnConstants {
         String IS_HEADER = "is_header";
+    }
+
+    interface IntentData {
+        String STRUCTURE_DETAIL = "structure_detail";
+        String STRUCTURE_TASK_DETAIL = "structure_task_detail";
     }
 }

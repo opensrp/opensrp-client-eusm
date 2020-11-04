@@ -18,6 +18,7 @@ import org.smartregister.eusm.contract.BaseDrawerContract;
 import org.smartregister.eusm.contract.StructureRegisterFragmentContract;
 import org.smartregister.eusm.model.StructureDetail;
 import org.smartregister.eusm.presenter.StructureRegisterFragmentPresenter;
+import org.smartregister.eusm.util.AppConstants;
 import org.smartregister.eusm.util.LocationUtils;
 import org.smartregister.eusm.view.NavigationDrawerView;
 
@@ -48,7 +49,7 @@ public class StructureRegisterFragment extends BaseDrawerRegisterFragment implem
     @Override
     protected void onViewClicked(View view) {
         int id = view.getId();
-        if (id == R.id.service_points_btn_register) {
+        if (id == R.id.btn_structure_register) {
             startMapActivity();
         } else if (id == R.id.drawerMenu) {
             drawerView.openDrawerLayout();
@@ -59,7 +60,7 @@ public class StructureRegisterFragment extends BaseDrawerRegisterFragment implem
         } else if (id == R.id.table_layout) {
             StructureDetail structureDetail = (StructureDetail) view.getTag(R.id.structure_detail);
             Intent intent = new Intent(getActivity(), TaskRegisterActivity.class);
-            intent.putExtra("data", structureDetail);
+            intent.putExtra(AppConstants.IntentData.STRUCTURE_DETAIL, structureDetail);
             getActivity().startActivity(intent);
         }
     }
@@ -143,7 +144,8 @@ public class StructureRegisterFragment extends BaseDrawerRegisterFragment implem
 
     @Override
     public void startMapActivity() {
-
+        Intent intent = new Intent(getActivity(), HomeActivity.class);
+        getActivity().startActivity(intent);
     }
 
     @Override
@@ -160,7 +162,7 @@ public class StructureRegisterFragment extends BaseDrawerRegisterFragment implem
     public void setupViews(View view) {
         super.setupViews(view);
 
-        TextView servicePointBtnRegisterTextView = view.findViewById(R.id.service_points_btn_register);
+        TextView servicePointBtnRegisterTextView = view.findViewById(R.id.btn_structure_register);
         servicePointBtnRegisterTextView.setText(getString(R.string.map));
         servicePointBtnRegisterTextView.setOnClickListener(this);
 

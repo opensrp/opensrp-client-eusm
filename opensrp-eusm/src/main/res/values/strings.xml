@@ -110,5 +110,14 @@
     <string name="task_checked_text">CHECKED</string>
     <string name="no_items_to_check">No items to check</string>
     <string name="no_items_checked_yet">No items checked yet</string>
+    <string name="back">Back</string>
+    <string name="mark_as_looks_good_title">Mark as \"looks good\"?</string>
+    <string name="looks_good_dialog_message">The item is there, it\'s in good condition, and it\'s being used appropriately.</string>
+    <string name="undo_looks_good_title">Undo \"looks good\" on %s</string>
+    <string name="undo_flag_problem_title">Undo \"flag problem\" on %s</string>
+
+    <string name="undo_dialog_message">This will undo your assessment on this item.</string>
+    <string name="undo">Undo</string>
+    <string name="cancel">Cancel</string>
 
 </resources>

@@ -20,7 +20,7 @@ public abstract class BaseAppProfileActivity extends BaseProfileActivity {
 
     private int appBarLayoutScrollRange = -1;
 
-    private boolean appBarTitleIsShown = true;
+    protected boolean appBarTitleIsShown = true;
 
     @Override
     protected void onCreation() {
@@ -31,11 +31,11 @@ public abstract class BaseAppProfileActivity extends BaseProfileActivity {
 
         ActionBar actionBar = getSupportActionBar();
         if (actionBar != null) {
-            actionBar.setDisplayHomeAsUpEnabled(true);
+            actionBar.setDisplayHomeAsUpEnabled(shouldEnableDisplayHomeAsUpEnabled());
         }
 
         appBarLayout = findViewById(R.id.collapsing_toolbar_appbarlayout);
-        // Set collapsing tool bar title.
+
         collapsingToolbarLayout = appBarLayout.findViewById(R.id.collapsing_toolbar_layout);
 
         appBarLayout.addOnOffsetChangedListener(this);
@@ -47,14 +47,17 @@ public abstract class BaseAppProfileActivity extends BaseProfileActivity {
         setupViews();
     }
 
+    protected boolean shouldEnableDisplayHomeAsUpEnabled() {
+        return true;
+    }
+
     @Override
     public void onOffsetChanged(AppBarLayout appBarLayout, int verticalOffset) {
         if (appBarLayoutScrollRange == -1) {
             appBarLayoutScrollRange = appBarLayout.getTotalScrollRange();
         }
         if (appBarLayoutScrollRange + verticalOffset == 0) {
-
-            collapsingToolbarLayout.setTitle("sdf");
+            collapsingToolbarLayout.setTitle(getToolBarLayoutTitleAfterCollapse());
             appBarTitleIsShown = true;
         } else if (appBarTitleIsShown) {
             collapsingToolbarLayout.setTitle(" ");
@@ -94,4 +97,7 @@ public abstract class BaseAppProfileActivity extends BaseProfileActivity {
         return R.layout.activity_base_profile;
     }
 
+    protected String getToolBarLayoutTitleAfterCollapse() {
+        return " ";
+    }
 }

@@ -1,8 +1,9 @@
 package org.smartregister.eusm.model;
 
+import java.io.Serializable;
 import java.util.Date;
 
-public class StructureTaskDetail {
+public class StructureTaskDetail implements Serializable {
 
     private String taskId;
 

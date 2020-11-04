@@ -13,6 +13,7 @@ import org.smartregister.domain.LocationProperty;
 import org.smartregister.domain.PlanDefinition;
 import org.smartregister.domain.Task;
 import org.smartregister.eusm.application.EusmApplication;
+import org.smartregister.eusm.model.ProductInfoQuestion;
 import org.smartregister.eusm.model.StructureTaskDetail;
 import org.smartregister.repository.LocationRepository;
 import org.smartregister.repository.PlanDefinitionRepository;
@@ -22,6 +23,7 @@ import org.smartregister.util.DateTimeTypeConverter;
 import org.smartregister.util.PropertiesConverter;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -48,7 +50,7 @@ public class TestDataUtils {
     public static List<StructureTaskDetail> getStructureDetail() {
 
         StructureTaskDetail s = new StructureTaskDetail();
-        s.setChecked(true);
+        s.setChecked(false);
         s.setProductName("Solar Fridge");
         s.setHeader(false);
         s.setNonProductTask(false);
@@ -84,6 +86,23 @@ public class TestDataUtils {
         structureTaskDetails.add(s3);
 
         return structureTaskDetails;
+    }
+
+    public static List<ProductInfoQuestion> getProductInfoQuestionLIst() {
+        ProductInfoQuestion p1 = new ProductInfoQuestion();
+        p1.setAnswer("Solar Direct Drive Refrigerator for storage vaccines");
+        p1.setQuestion("Is it there?");
+
+        ProductInfoQuestion p2 = new ProductInfoQuestion();
+        p2.setAnswer("Supplied with temperature monitoring device, 10 fuses of each type, lid with loc, plus 2 keys and 6 baskets." +
+                " Compass");
+        p2.setQuestion("Is it in good condition?");
+
+        ProductInfoQuestion p3 = new ProductInfoQuestion();
+        p3.setAnswer("Ambient operating temperatire: Min. +5 C , Max +43 ");
+        p3.setQuestion("Is it being used appropriately?");
+
+        return new ArrayList<>(Arrays.asList(p1, p2, p3));
     }
 
     public void populateTestData() {

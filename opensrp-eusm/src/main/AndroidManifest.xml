@@ -24,7 +24,8 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:replace="android:label,android:theme">
-        <activity android:name=".activity.TaskRegisterActivity"></activity>
+        <activity android:name=".activity.ProductInfoActivity"></activity>
+        <activity android:name=".activity.TaskRegisterActivity" />
         <activity android:name=".activity.StructureRegisterActivity" />
 
         <uses-library
@@ -70,6 +71,13 @@
         <service android:name="org.smartregister.sync.intent.ValidateIntentService" />
         <service android:name="org.smartregister.sync.intent.ExtendedSyncIntentService" />
         <service android:name="org.smartregister.sync.intent.DocumentConfigurationIntentService" />
+
+        <activity
+            android:name="com.vijay.jsonwizard.activities.JsonFormActivity"
+            android:launchMode="singleTask"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar"
+            android:windowSoftInputMode="stateAlwaysHidden|adjustResize" />
 
         <provider
             android:name="androidx.core.content.FileProvider"
