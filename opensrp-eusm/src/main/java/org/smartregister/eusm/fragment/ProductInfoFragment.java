@@ -13,8 +13,9 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.vijay.jsonwizard.activities.JsonFormActivity;
+import com.vijay.jsonwizard.activities.JsonWizardFormActivity;
 import com.vijay.jsonwizard.constants.JsonFormConstants;
+import com.vijay.jsonwizard.domain.Form;
 
 import org.json.JSONObject;
 import org.smartregister.eusm.R;
@@ -90,9 +91,18 @@ public class ProductInfoFragment extends Fragment implements ProductInfoFragment
     }
 
     @Override
-    public void startFlagProblemForm(JSONObject form) {
-        Intent intent = new Intent(getActivity(), JsonFormActivity.class);
-        intent.putExtra(JsonFormConstants.JSON_FORM_KEY.JSON, form.toString());
+    public void startFlagProblemForm(JSONObject jsonForm) {
+        Form form = new Form();
+        form.setWizard(false);
+        form.setName("");
+        form.setBackIcon(R.drawable.ic_action_close);
+        form.setSaveLabel(getString(R.string.save));
+        form.setActionBarBackground(R.color.primaryDark);
+        form.setNavigationBackground(R.color.primaryDark);
+
+        Intent intent = new Intent(getActivity(), JsonWizardFormActivity.class);
+        intent.putExtra(JsonFormConstants.JSON_FORM_KEY.JSON, jsonForm.toString());
+        intent.putExtra(JsonFormConstants.JSON_FORM_KEY.FORM, form);
         startActivityForResult(intent, 20);
     }
 
@@ -107,7 +117,7 @@ public class ProductInfoFragment extends Fragment implements ProductInfoFragment
     }
 
     protected void startFlagProblemForm(StructureTaskDetail structureTaskDetail) {
-        presenter.startFlagProblemForm("add_structure");
+        presenter.startFlagProblemForm(AppConstants.JsonForm.FLAG_PROBLEM);
     }
 
     protected void openLooksGoodConfirmationDialog() {
@@ -117,7 +127,7 @@ public class ProductInfoFragment extends Fragment implements ProductInfoFragment
         builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-
+                presenter.markProductAsGood(structureTaskDetail);
             }
         });
 

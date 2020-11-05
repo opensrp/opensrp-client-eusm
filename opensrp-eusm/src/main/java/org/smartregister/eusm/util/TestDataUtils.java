@@ -53,6 +53,7 @@ public class TestDataUtils {
         s.setChecked(false);
         s.setProductName("Solar Fridge");
         s.setHeader(false);
+        s.setHasProblem(true);
         s.setNonProductTask(false);
         s.setQuantity("3");
         s.setProductSerial("3424");
@@ -73,6 +74,7 @@ public class TestDataUtils {
 
         StructureTaskDetail s3 = new StructureTaskDetail();
         s3.setChecked(true);
+        s3.setHasProblem(true);
         s3.setProductName("Timer");
         s3.setHeader(false);
         s3.setNonProductTask(false);

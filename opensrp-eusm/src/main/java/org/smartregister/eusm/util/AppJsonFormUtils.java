@@ -59,6 +59,8 @@ public class AppJsonFormUtils {
 
     private final LocationHelper locationHelper = LocationHelper.getInstance();
 
+    public static final int REQUEST_CODE_GET_JSON = 2244;
+
     public AppJsonFormUtils() {
         nonEditableFields = new HashSet<>(Arrays.asList(AppConstants.JsonForm.HOUSEHOLD_ACCESSIBLE,
                 AppConstants.JsonForm.ABLE_TO_SPRAY_FIRST, AppConstants.JsonForm.MOP_UP_VISIT));

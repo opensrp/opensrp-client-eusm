@@ -302,6 +302,10 @@ public interface AppConstants {
 
         String ENCOUNTER_TYPE = "encounter_type";
 
+        String FLAG_PROBLEM = "flag_problem";
+
+        String FIX_PROBLEM = "fix_problem";
+
         String SPRAY_STATUS = "sprayStatus";
 
         String TRAP_SET_DATE = "trap_start";

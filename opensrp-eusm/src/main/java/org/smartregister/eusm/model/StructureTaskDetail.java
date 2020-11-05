@@ -25,6 +25,16 @@ public class StructureTaskDetail implements Serializable {
 
     private boolean emptyView;
 
+    private boolean hasProblem;
+
+    public boolean hasProblem() {
+        return hasProblem;
+    }
+
+    public void setHasProblem(boolean hasProblem) {
+        this.hasProblem = hasProblem;
+    }
+
     public boolean isEmptyView() {
         return emptyView;
     }

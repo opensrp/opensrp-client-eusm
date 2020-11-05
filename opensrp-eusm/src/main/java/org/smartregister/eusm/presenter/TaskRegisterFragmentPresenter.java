@@ -1,5 +1,6 @@
 package org.smartregister.eusm.presenter;
 
+import org.json.JSONObject;
 import org.smartregister.eusm.contract.TaskRegisterFragmentContract;
 import org.smartregister.eusm.interactor.TaskRegisterFragmentInteractor;
 import org.smartregister.eusm.model.StructureTaskDetail;
@@ -32,9 +33,19 @@ public class TaskRegisterFragmentPresenter implements TaskRegisterFragmentContra
     }
 
     @Override
+    public void startFixProblemForm(StructureTaskDetail structureTaskDetail) {
+        taskRegisterFragmentInteractor.startFixProblemForm(structureTaskDetail, getView().getActivity(), this);
+    }
+
+    @Override
     public void onFetchedData(List<StructureTaskDetail> structureTaskDetailList) {
         if (getView().getAdapter() != null) {
             getView().getAdapter().setData(structureTaskDetailList);
         }
+    }
+
+    @Override
+    public void onFixProblemFormFetched(JSONObject jsonForm) {
+        getView().startFixProblemForm(jsonForm);
     }
 }

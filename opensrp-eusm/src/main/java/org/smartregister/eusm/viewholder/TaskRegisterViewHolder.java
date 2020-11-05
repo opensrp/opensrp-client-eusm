@@ -1,8 +1,12 @@
 package org.smartregister.eusm.viewholder;
 
 import android.content.Context;
+import android.view.Gravity;
 import android.view.View;
+import android.view.ViewGroup;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -31,6 +35,7 @@ public class TaskRegisterViewHolder extends RecyclerView.ViewHolder {
 
     private ImageView checkedOverlayImageView;
 
+    private ImageView statusOverlayImageView;
 
     private TextView productSerialView;
 
@@ -42,6 +47,7 @@ public class TaskRegisterViewHolder extends RecyclerView.ViewHolder {
         productSerialView = itemView.findViewById(R.id.txt_product_serial);
         rectangleOverlayImageView = itemView.findViewById(R.id.img_rectangle_overlay);
         checkedOverlayImageView = itemView.findViewById(R.id.img_checked_overlay);
+        statusOverlayImageView = itemView.findViewById(R.id.img_status_overlay);
     }
 
     public void setProductImage(@Nullable StructureTaskDetail structureTaskDetail) {
@@ -49,6 +55,18 @@ public class TaskRegisterViewHolder extends RecyclerView.ViewHolder {
         if (structureTaskDetail.isChecked()) {
             checkedOverlayImageView.setVisibility(View.VISIBLE);
             rectangleOverlayImageView.setVisibility(View.VISIBLE);
+        }
+
+        if (structureTaskDetail.hasProblem()) {
+            statusOverlayImageView.setVisibility(View.VISIBLE);
+            if (structureTaskDetail.isChecked()) {
+                FrameLayout.LayoutParams layoutParams = new FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, 75);
+                layoutParams.gravity = Gravity.END | Gravity.BOTTOM;
+                layoutParams.bottomMargin = 100;
+                layoutParams.rightMargin = 30;
+                statusOverlayImageView.setScaleType(ImageView.ScaleType.FIT_END);
+                statusOverlayImageView.setLayoutParams(layoutParams);
+            }
         }
     }
 

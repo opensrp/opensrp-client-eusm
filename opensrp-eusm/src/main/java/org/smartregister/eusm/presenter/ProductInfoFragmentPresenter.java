@@ -6,11 +6,10 @@ import org.json.JSONObject;
 import org.smartregister.eusm.contract.ProductInfoFragmentContract;
 import org.smartregister.eusm.interactor.ProductInfoFragmentInteractor;
 import org.smartregister.eusm.model.ProductInfoQuestion;
+import org.smartregister.eusm.model.StructureTaskDetail;
 
 import java.lang.ref.WeakReference;
 import java.util.List;
-
-import timber.log.Timber;
 
 public class ProductInfoFragmentPresenter implements ProductInfoFragmentContract.Presenter, ProductInfoFragmentContract.InteractorCallBack {
 
@@ -40,8 +39,12 @@ public class ProductInfoFragmentPresenter implements ProductInfoFragmentContract
 
     @Override
     public void startFlagProblemForm(String formName) {
-        JSONObject form = getFormUtils().getFormJson(getView().getActivity(), formName);
-        getView().startFlagProblemForm(form);
+        interactor.startFlagProblemForm(formName, getView().getActivity(), this);
+    }
+
+    @Override
+    public void markProductAsGood(StructureTaskDetail structureTaskDetail) {
+        interactor.markProductAsGood(structureTaskDetail, this);
     }
 
     @Override
@@ -51,13 +54,13 @@ public class ProductInfoFragmentPresenter implements ProductInfoFragmentContract
         }
     }
 
-    private FormUtils getFormUtils() {
-        try {
-            formUtils = new FormUtils();
-        } catch (Exception e) {
-            Timber.e(e);
-        }
-
-        return formUtils;
+    @Override
+    public void onProductMarkedAsGood(boolean isMarked) {
     }
+
+    @Override
+    public void onFlagProblemFormFetched(JSONObject jsonForm) {
+        getView().startFlagProblemForm(jsonForm);
+    }
+
 }

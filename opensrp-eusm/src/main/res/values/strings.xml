@@ -103,7 +103,7 @@
 
     <string name="next_page"><![CDATA[NEXT >>]]></string>
     <string name="previous_page"><![CDATA[<< Previous]]></string>
-    <string name="product_serial_n_quantity">Qty: %s  . Serial # %s</string>
+    <string name="product_serial_n_quantity">Qty: %s  &#183; Serial # %s</string>
     <string name="product_serial">Serial # %s</string>
     <string name="product_serial_n_date_checked">Serial # %s</string>
     <string name="task_item_text">ITEMS</string>

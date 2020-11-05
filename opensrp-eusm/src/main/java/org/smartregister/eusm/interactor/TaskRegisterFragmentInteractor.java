@@ -1,14 +1,19 @@
 package org.smartregister.eusm.interactor;
 
+import android.app.Activity;
 import android.content.Context;
 
 import androidx.annotation.NonNull;
 
+import com.vijay.jsonwizard.utils.FormUtils;
+
+import org.json.JSONObject;
 import org.smartregister.eusm.R;
 import org.smartregister.eusm.application.EusmApplication;
 import org.smartregister.eusm.config.AppExecutors;
 import org.smartregister.eusm.contract.TaskRegisterFragmentContract;
 import org.smartregister.eusm.model.StructureTaskDetail;
+import org.smartregister.eusm.util.AppConstants;
 import org.smartregister.eusm.util.TestDataUtils;
 
 import java.util.ArrayList;
@@ -16,11 +21,15 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import timber.log.Timber;
+
 public class TaskRegisterFragmentInteractor implements TaskRegisterFragmentContract.Interactor {
 
     private AppExecutors appExecutors;
 
     private Context context = EusmApplication.getInstance().getBaseContext();
+
+    private FormUtils formUtils;
 
     public TaskRegisterFragmentInteractor() {
         appExecutors = EusmApplication.getInstance().getAppExecutors();
@@ -47,9 +56,31 @@ public class TaskRegisterFragmentInteractor implements TaskRegisterFragmentContr
         });
     }
 
+    @Override
+    public String getFixProblemForm() {
+        return AppConstants.JsonForm.FIX_PROBLEM;
+    }
+
+    @Override
+    public void startFixProblemForm(StructureTaskDetail structureTaskDetail, Activity activity, TaskRegisterFragmentContract.InteractorCallBack callBack) {
+        appExecutors.diskIO().execute(new Runnable() {
+            @Override
+            public void run() {
+                JSONObject form = getFormUtils().getFormJson(activity, getFixProblemForm());
+                appExecutors.mainThread().execute(new Runnable() {
+                    @Override
+                    public void run() {
+                        callBack.onFixProblemFormFetched(form);
+                    }
+                });
+            }
+        });
+
+    }
+
     private List<StructureTaskDetail> sortTaskDetails(List<StructureTaskDetail> structureTaskDetails) {
 
-        structureTaskDetails= structureTaskDetails.stream().sorted(Comparator.comparing(StructureTaskDetail::isNonProductTask)).collect(Collectors.toList());
+        structureTaskDetails = structureTaskDetails.stream().sorted(Comparator.comparing(StructureTaskDetail::isNonProductTask)).collect(Collectors.toList());
 
         StructureTaskDetail sItemHeader = new StructureTaskDetail();
         sItemHeader.setChecked(true);
@@ -93,5 +124,15 @@ public class TaskRegisterFragmentInteractor implements TaskRegisterFragmentContr
             structureTaskDetailList.addAll(checkedStructureTaskDetails);
         }
         return structureTaskDetailList;
+    }
+
+    private FormUtils getFormUtils() {
+        try {
+            formUtils = new FormUtils();
+        } catch (Exception e) {
+            Timber.e(e);
+        }
+
+        return formUtils;
     }
 }

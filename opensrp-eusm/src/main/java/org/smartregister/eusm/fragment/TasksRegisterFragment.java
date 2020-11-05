@@ -14,6 +14,11 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.vijay.jsonwizard.activities.JsonWizardFormActivity;
+import com.vijay.jsonwizard.constants.JsonFormConstants;
+import com.vijay.jsonwizard.domain.Form;
+
+import org.json.JSONObject;
 import org.smartregister.eusm.R;
 import org.smartregister.eusm.activity.ProductInfoActivity;
 import org.smartregister.eusm.adapter.TaskRegisterAdapter;
@@ -79,10 +84,14 @@ public class TasksRegisterFragment extends Fragment implements TaskRegisterFragm
                 openUndoDialog(structureTaskDetail);
             } else {
                 if (!structureTaskDetail.isNonProductTask()) {
-                    Intent intent = new Intent(getActivity(), ProductInfoActivity.class);
-                    intent.putExtra(AppConstants.IntentData.STRUCTURE_TASK_DETAIL, structureTaskDetail);
-                    getActivity().startActivity(intent);
-                } else {
+                    if (structureTaskDetail.hasProblem())
+                        presenter.startFixProblemForm(structureTaskDetail);
+                    else {
+                        Intent intent = new Intent(getActivity(), ProductInfoActivity.class);
+                        intent.putExtra(AppConstants.IntentData.STRUCTURE_TASK_DETAIL, structureTaskDetail);
+                        getActivity().startActivity(intent);
+                    }
+                } else if (structureTaskDetail.hasProblem()) {
                     //TODO open form
                 }
 
@@ -121,6 +130,22 @@ public class TasksRegisterFragment extends Fragment implements TaskRegisterFragm
     @Override
     public TaskRegisterAdapter getAdapter() {
         return taskRegisterAdapter;
+    }
+
+    @Override
+    public void startFixProblemForm(JSONObject jsonForm) {
+        Form form = new Form();
+        form.setWizard(false);
+        form.setName("");
+        form.setBackIcon(R.drawable.ic_action_close);
+        form.setSaveLabel(getString(R.string.save));
+        form.setActionBarBackground(R.color.primaryDark);
+        form.setNavigationBackground(R.color.primaryDark);
+
+        Intent intent = new Intent(getActivity(), JsonWizardFormActivity.class);
+        intent.putExtra(JsonFormConstants.JSON_FORM_KEY.JSON, jsonForm.toString());
+        intent.putExtra(JsonFormConstants.JSON_FORM_KEY.FORM, form);
+        startActivityForResult(intent, 20);
     }
 
     @Override
