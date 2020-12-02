@@ -10,7 +10,7 @@ import org.smartregister.eusm.R;
 
 public class GenericTitleViewHolder extends RecyclerView.ViewHolder {
 
-    private TextView titleView;
+    private final TextView titleView;
 
     public GenericTitleViewHolder(@NonNull View itemView) {
         super(itemView);

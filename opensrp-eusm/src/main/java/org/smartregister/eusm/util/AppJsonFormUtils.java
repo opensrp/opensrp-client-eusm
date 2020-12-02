@@ -3,10 +3,11 @@ package org.smartregister.eusm.util;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
 
+import androidx.annotation.NonNull;
 import androidx.core.util.Pair;
 
-import com.mapbox.geojson.Feature;
 import com.vijay.jsonwizard.constants.JsonFormConstants;
 import com.vijay.jsonwizard.utils.FormUtils;
 
@@ -14,24 +15,28 @@ import org.apache.commons.lang3.StringUtils;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-import org.smartregister.commonregistry.CommonPersonObject;
 import org.smartregister.domain.Event;
-import org.smartregister.domain.Location;
 import org.smartregister.domain.Obs;
+import org.smartregister.domain.ProfileImage;
 import org.smartregister.eusm.BuildConfig;
 import org.smartregister.eusm.activity.AppJsonFormActivity;
 import org.smartregister.eusm.application.EusmApplication;
-import org.smartregister.eusm.model.BaseTaskDetails;
-import org.smartregister.eusm.model.TaskDetails;
+import org.smartregister.eusm.model.StructureDetail;
+import org.smartregister.eusm.model.TaskDetail;
 import org.smartregister.location.helper.LocationHelper;
+import org.smartregister.repository.ImageRepository;
+import org.smartregister.stock.util.Constants;
+import org.smartregister.tasking.util.PreferencesUtil;
 import org.smartregister.util.JsonFormUtils;
+import org.smartregister.view.activity.DrishtiApplication;
 
-import java.util.Arrays;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.OutputStream;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.LinkedHashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
@@ -44,10 +49,13 @@ import static com.vijay.jsonwizard.constants.JsonFormConstants.KEYS;
 import static com.vijay.jsonwizard.constants.JsonFormConstants.TYPE;
 import static com.vijay.jsonwizard.constants.JsonFormConstants.VALUE;
 import static com.vijay.jsonwizard.constants.JsonFormConstants.VALUES;
-import static org.smartregister.AllConstants.JSON_FILE_EXTENSION;
 import static org.smartregister.AllConstants.OPTIONS;
 import static org.smartregister.AllConstants.TEXT;
-import static org.smartregister.eusm.util.AppUtils.getPropertyValue;
+import static org.smartregister.client.utils.constants.JsonFormConstants.Properties.DETAILS;
+import static org.smartregister.tasking.util.Constants.METADATA;
+import static org.smartregister.util.JsonFormUtils.ENCOUNTER_LOCATION;
+import static org.smartregister.util.JsonFormUtils.ENTITY_ID;
+import static org.smartregister.util.JsonFormUtils.getString;
 
 
 /**
@@ -55,15 +63,12 @@ import static org.smartregister.eusm.util.AppUtils.getPropertyValue;
  */
 public class AppJsonFormUtils {
 
+    public static final int REQUEST_CODE_GET_JSON = 2244;
     private final Set<String> nonEditableFields;
-
     private final LocationHelper locationHelper = LocationHelper.getInstance();
 
-    public static final int REQUEST_CODE_GET_JSON = 2244;
-
     public AppJsonFormUtils() {
-        nonEditableFields = new HashSet<>(Arrays.asList(AppConstants.JsonForm.HOUSEHOLD_ACCESSIBLE,
-                AppConstants.JsonForm.ABLE_TO_SPRAY_FIRST, AppConstants.JsonForm.MOP_UP_VISIT));
+        nonEditableFields = new HashSet<>();
     }
 
     public static org.smartregister.clientandeventmodel.Event createTaskEvent(String baseEntityId, String locationId, Map<String, String> details, String eventType, String entityType) {
@@ -72,120 +77,132 @@ public class AppJsonFormUtils {
         return taskEvent;
     }
 
-    public JSONObject getFormJSON(Context context, String formName, Feature feature, String sprayStatus, String familyHead) {
+//    public JSONObject getFormJSON(Context context, String formName, Feature feature, String sprayStatus, String familyHead) {
+//
+//        String taskBusinessStatus = getPropertyValue(feature, AppConstants.Properties.TASK_BUSINESS_STATUS);
+//        String taskIdentifier = getPropertyValue(feature, AppConstants.Properties.TASK_IDENTIFIER);
+//        String taskStatus = getPropertyValue(feature, AppConstants.Properties.TASK_STATUS);
+//
+//        String structureId = feature.id();
+//        String structureUUID = getPropertyValue(feature, AppConstants.Properties.LOCATION_UUID);
+//        String structureVersion = getPropertyValue(feature, AppConstants.Properties.LOCATION_VERSION);
+//        String structureType = getPropertyValue(feature, AppConstants.Properties.LOCATION_TYPE);
+//
+//        String formString = getFormObject(context, formName, structureType);
+//        try {
+//            JSONObject formJson = populateFormDetails(formString, structureId, structureId, taskIdentifier,
+//                    taskBusinessStatus, taskStatus, structureUUID,
+//                    structureVersion == null ? null : Integer.valueOf(structureVersion));
+//
+//            populateFormFields(formJson, structureType, sprayStatus, familyHead);
+//            return formJson;
+//        } catch (Exception e) {
+//            Timber.e(e, "error launching form%s", formName);
+//        }
+//        return null;
+//    }
 
-        String taskBusinessStatus = getPropertyValue(feature, AppConstants.Properties.TASK_BUSINESS_STATUS);
-        String taskIdentifier = getPropertyValue(feature, AppConstants.Properties.TASK_IDENTIFIER);
-        String taskStatus = getPropertyValue(feature, AppConstants.Properties.TASK_STATUS);
+//    public JSONObject getFormJSON(Context context, String formName, BaseTaskDetails task, Location structure) {
+//
+//        String taskBusinessStatus = "";
+//        String taskIdentifier = "";
+//        String taskStatus = "";
+//        String entityId = "";
+//        if (task != null) {
+//            taskBusinessStatus = task.getBusinessStatus();
+//            taskIdentifier = task.getTaskId();
+//            taskStatus = task.getTaskStatus();
+//
+//            entityId = task.getTaskEntity();
+//        }
+//
+//        String structureId = "";
+//        String structureUUID = "";
+//        int structureVersion = 0;
+//        String structureType = "";
+//        if (structure != null) {
+//            structureId = structure.getId();
+//            structureUUID = structure.getProperties().getUid();
+//            structureVersion = structure.getProperties().getVersion();
+//            structureType = structure.getProperties().getType();
+//        }
+//
+//        String sprayStatus = null;
+//        String familyHead = null;
+//
+//        if (task instanceof TaskDetails) {
+//            sprayStatus = ((TaskDetails) task).getSprayStatus();
+//            familyHead = ((TaskDetails) task).getFamilyName();
+//        }
+//
+//        String formString = getFormObject(context, formName, structureType);
+//        try {
+//            JSONObject formJson = populateFormDetails(formString, entityId, structureId, taskIdentifier,
+//                    taskBusinessStatus, taskStatus, structureUUID, structureVersion);
+//            populateFormFields(formJson, structureType, sprayStatus, familyHead);
+//            return formJson;
+//        } catch (JSONException e) {
+//            Timber.e(e, "error launching form%s", formName);
+//        }
+//        return null;
+//    }
 
-        String structureId = feature.id();
-        String structureUUID = getPropertyValue(feature, AppConstants.Properties.LOCATION_UUID);
-        String structureVersion = getPropertyValue(feature, AppConstants.Properties.LOCATION_VERSION);
-        String structureType = getPropertyValue(feature, AppConstants.Properties.LOCATION_TYPE);
-
-        String formString = getFormString(context, formName, structureType);
-        try {
-            JSONObject formJson = populateFormDetails(formString, structureId, structureId, taskIdentifier,
-                    taskBusinessStatus, taskStatus, structureUUID,
-                    structureVersion == null ? null : Integer.valueOf(structureVersion));
-
-            populateFormFields(formJson, structureType, sprayStatus, familyHead);
-            return formJson;
-        } catch (Exception e) {
-            Timber.e(e, "error launching form%s", formName);
-        }
-        return null;
-    }
-
-    public JSONObject getFormJSON(Context context, String formName, BaseTaskDetails task, Location structure) {
-
-        String taskBusinessStatus = "";
-        String taskIdentifier = "";
-        String taskStatus = "";
-        String entityId = "";
-        if (task != null) {
-            taskBusinessStatus = task.getBusinessStatus();
-            taskIdentifier = task.getTaskId();
-            taskStatus = task.getTaskStatus();
-
-            entityId = task.getTaskEntity();
-        }
-
-        String structureId = "";
-        String structureUUID = "";
-        int structureVersion = 0;
-        String structureType = "";
-        if (structure != null) {
-            structureId = structure.getId();
-            structureUUID = structure.getProperties().getUid();
-            structureVersion = structure.getProperties().getVersion();
-            structureType = structure.getProperties().getType();
-        }
-
-        String sprayStatus = null;
-        String familyHead = null;
-
-        if (task instanceof TaskDetails) {
-            sprayStatus = ((TaskDetails) task).getSprayStatus();
-            familyHead = ((TaskDetails) task).getFamilyName();
-        }
-
-        String formString = getFormString(context, formName, structureType);
-        try {
-            JSONObject formJson = populateFormDetails(formString, entityId, structureId, taskIdentifier,
-                    taskBusinessStatus, taskStatus, structureUUID, structureVersion);
-            populateFormFields(formJson, structureType, sprayStatus, familyHead);
-            return formJson;
-        } catch (JSONException e) {
-            Timber.e(e, "error launching form%s", formName);
-        }
-        return null;
-    }
-
-    public String getFormString(Context context, String formName, String structureType) {
-        String formString = null;
+    public JSONObject getFormObject(Context context, String formName) {
         try {
             FormUtils formUtils = new FormUtils();
-            String formattedFormName = formName.replace(AppConstants.JsonForm.JSON_FORM_FOLDER, "").replace(JSON_FILE_EXTENSION, "");
-            JSONObject formStringObj = formUtils.getFormJsonFromRepositoryOrAssets(context, formattedFormName);
-            if (formStringObj == null) {
-                return null;
-            }
-            formString = formStringObj.toString();
-            if ((AppConstants.JsonForm.SPRAY_FORM.equals(formName) || AppConstants.JsonForm.SPRAY_FORM_BOTSWANA.equals(formName)
-                    || AppConstants.JsonForm.SPRAY_FORM_NAMIBIA.equals(formName))) {
-                String structType = structureType;
-                if (StringUtils.isBlank(structureType)) {
-                    structType = AppConstants.StructureType.NON_RESIDENTIAL;
-                }
-                formString = formString.replace(AppConstants.JsonForm.STRUCTURE_PROPERTIES_TYPE, structType);
-            }
-
-        } catch (Exception e) {
+            return formUtils.getFormJsonFromRepositoryOrAssets(context, formName);
+        } catch (JSONException e) {
             Timber.e(e);
         }
-        return formString;
+        return null;
     }
 
-    public JSONObject populateFormDetails(String formString, String entityId, String structureId, String taskIdentifier,
-                                          String taskBusinessStatus, String taskStatus, String structureUUID,
-                                          Integer structureVersion) throws JSONException {
+    public JSONObject getFormObjectWithDetails(Context context, String formName, StructureDetail structureDetail, TaskDetail taskDetail) {
+        try {
+            JSONObject jsonObject = getFormObject(context, formName);
 
-        JSONObject formJson = new JSONObject(formString);
+            updateFormEncounterLocation(jsonObject, structureDetail.getStructureId());
+
+            Map<String, String> map = new HashMap<>();
+            map.put(AppConstants.EventDetailKey.LOCATION_NAME, structureDetail.getStructureName());
+            map.put(AppConstants.EventDetailKey.LOCATION_ID, structureDetail.getStructureId());
+            map.put(AppConstants.EventDetailKey.TASK_ID, taskDetail.getTaskId());
+            map.put(AppConstants.EventDetailKey.PLAN_IDENTIFIER, AppConstants.PLAN_IDENTIFIER);
+            map.put(AppConstants.EventDetailKey.MISSION, AppConstants.PLAN_NAME);
+            String entityId;
+            if (AppConstants.JsonForm.RECORD_GPS_FORM.equals(formName) || AppConstants.JsonForm.SERVICE_POINT_CHECK_FORM.equals(formName)) {
+                entityId = structureDetail.getStructureId();
+            } else {
+                map.put(AppConstants.EventDetailKey.PRODUCT_NAME, taskDetail.getEntityName());
+                map.put(AppConstants.EventDetailKey.PRODUCT_ID, taskDetail.getProductId());
+                entityId = taskDetail.getStockId();
+            }
+            populateFormDetails(jsonObject, entityId, map);
+            return jsonObject;
+        } catch (JSONException e) {
+            Timber.e(e);
+        }
+        return null;
+    }
+
+    public void updateFormEncounterLocation(JSONObject jsonForm, String locationId) {
+        JSONObject metadata = JsonFormUtils.getJSONObject(jsonForm, METADATA);
+        try {
+            metadata.put(ENCOUNTER_LOCATION, locationId);
+        } catch (JSONException e) {
+            Timber.e(e);
+        }
+    }
+
+    public void populateFormDetails(JSONObject formJson, String entityId, Map<String, String> detailsMap) throws JSONException {
         formJson.put(AppConstants.ENTITY_ID, entityId);
         JSONObject formData = new JSONObject();
-        formData.put(AppConstants.Properties.TASK_IDENTIFIER, taskIdentifier);
-        formData.put(AppConstants.Properties.TASK_BUSINESS_STATUS, taskBusinessStatus);
-        formData.put(AppConstants.Properties.TASK_STATUS, taskStatus);
-        formData.put(AppConstants.Properties.LOCATION_ID, structureId);
-        formData.put(AppConstants.Properties.LOCATION_UUID, structureUUID);
-        formData.put(AppConstants.Properties.LOCATION_VERSION, structureVersion);
-        formData.put(AppConstants.Properties.APP_VERSION_NAME, BuildConfig.VERSION_NAME);
-        formData.put(AppConstants.Properties.FORM_VERSION, formJson.optString("form_version"));
-        String planIdentifier = PreferencesUtil.getInstance().getCurrentPlanId();
+        for (Map.Entry<String, String> entry : detailsMap.entrySet()) {
+            formData.put(entry.getKey(), entry.getValue());
+        }
+        String planIdentifier = AppConstants.PLAN_IDENTIFIER;//PreferencesUtil.getInstance().getCurrentPlanId();
         formData.put(AppConstants.Properties.PLAN_IDENTIFIER, planIdentifier);
         formJson.put(AppConstants.DETAILS, formData);
-        return formJson;
     }
 
     private void populateFormFields(JSONObject formJson, String structureType, String sprayStatus, String familyHead) throws JSONException {
@@ -195,12 +212,12 @@ public class AppJsonFormUtils {
             for (int i = 0; i < fields.length(); i++) {
                 JSONObject field = fields.getJSONObject(i);
                 String key = field.getString(KEY);
-                if (key.equalsIgnoreCase(AppConstants.JsonForm.STRUCTURE_TYPE))
-                    field.put(org.smartregister.util.JsonFormUtils.VALUE, structureType);
-                else if (key.equalsIgnoreCase(AppConstants.JsonForm.SPRAY_STATUS))
-                    field.put(org.smartregister.util.JsonFormUtils.VALUE, sprayStatus);
-                else if (key.equalsIgnoreCase(AppConstants.JsonForm.HEAD_OF_HOUSEHOLD))
-                    field.put(org.smartregister.util.JsonFormUtils.VALUE, familyHead);
+//                if (key.equalsIgnoreCase(AppConstants.JsonForm.STRUCTURE_TYPE))
+//                    field.put(org.smartregister.util.JsonFormUtils.VALUE, structureType);
+//                else if (key.equalsIgnoreCase(AppConstants.JsonForm.SPRAY_STATUS))
+//                    field.put(org.smartregister.util.JsonFormUtils.VALUE, sprayStatus);
+//                else if (key.equalsIgnoreCase(AppConstants.JsonForm.HEAD_OF_HOUSEHOLD))
+//                    field.put(org.smartregister.util.JsonFormUtils.VALUE, familyHead);
             }
         }
 
@@ -225,18 +242,6 @@ public class AppJsonFormUtils {
         return formName;
     }
 
-//    public void populatePAOTForm(MosquitoHarvestCardDetails cardDetails, JSONObject formJson) {
-//        if (formJson == null)
-//            return;
-//        try {
-//            populateField(formJson, Constants.JsonForm.PAOT_STATUS, cardDetails.getStatus(), VALUE);
-//            populateField(formJson, Constants.JsonForm.PAOT_COMMENTS, cardDetails.getComments(), VALUE);
-//            populateField(formJson, Constants.JsonForm.LAST_UPDATED_DATE, cardDetails.getStartDate(), VALUE);
-//        } catch (JSONException e) {
-//            Timber.e(e);
-//        }
-//    }
-
     public String getFormName(String encounterType) {
         return getFormName(encounterType, null);
     }
@@ -245,30 +250,6 @@ public class AppJsonFormUtils {
         JSONObject field = JsonFormUtils.getFieldJSONObject(JsonFormUtils.getMultiStepFormFields(formJson), key);
         if (field != null) {
             field.put(fieldToPopulate, value);
-        }
-    }
-
-    public void populateSprayForm(CommonPersonObject commonPersonObject, JSONObject formJson) {
-        if (commonPersonObject == null || commonPersonObject.getDetails() == null)
-            return;
-        JSONArray fields = JsonFormUtils.fields(formJson);
-        for (int i = 0; i < fields.length(); i++) {
-            try {
-                JSONObject field = fields.getJSONObject(i);
-                String key = field.getString(KEY);
-                if (commonPersonObject.getDetails().containsKey(key)) {
-                    String value = commonPersonObject.getDetails().get(key);
-                    if (StringUtils.isNotBlank(value))
-                        field.put(VALUE, value);
-                    if (nonEditableFields.contains(key) && "Yes".equalsIgnoreCase(value)) {
-                        field.put(JsonFormConstants.READ_ONLY, true);
-                        field.remove(JsonFormConstants.RELEVANCE);
-                    }
-                }
-            } catch (JSONException e) {
-                Timber.e(e);
-            }
-
         }
     }
 
@@ -301,29 +282,12 @@ public class AppJsonFormUtils {
                     }
                 }
 
-                if (JsonFormConstants.REPEATING_GROUP.equals(field.optString(TYPE))) {
-                    generateRepeatingGroupFields(field, event.getObs(), formJSON);
-                }
             } catch (JSONException e) {
                 Timber.e(e);
             }
         }
     }
 
-    private void generateRepeatingGroupFields(JSONObject field, List<Obs> obs, JSONObject formJSON) {
-        try {
-            LinkedHashMap<String, HashMap<String, String>> repeatingGroupMap = AppUtils.buildRepeatingGroup(field, obs);
-            List<HashMap<String, String>> repeatingGroupMapList = AppUtils.generateListMapOfRepeatingGrp(repeatingGroupMap);
-            new RepeatingGroupGenerator(formJSON.optJSONObject(JsonFormConstants.STEP1),
-                    JsonFormConstants.STEP1,
-                    field.optString(KEY),
-                    new HashMap<>(),
-                    AppConstants.JsonForm.REPEATING_GROUP_UNIQUE_ID,
-                    repeatingGroupMapList).init();
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-    }
 
     public Pair<JSONArray, JSONArray> populateServerOptions(Map<String, Object> serverConfigs, String settingsConfigKey, JSONObject field, String filterKey) {
         if (serverConfigs == null || field == null)
@@ -370,95 +334,74 @@ public class AppJsonFormUtils {
         return fieldsMap;
     }
 
-    public void populateFormWithServerOptions(String formName, JSONObject formJSON) {
+    public void saveImage(JSONObject jsonForm, String entityType) {
+        String imageLocation = JsonFormUtils.getFieldValue(jsonForm.toString(), AppConstants.JsonFormKey.PRODUCT_PICTURE);
+        if (StringUtils.isNotBlank(imageLocation)) {
+            JSONObject detailsObject = JsonFormUtils.getJSONObject(jsonForm, DETAILS);
+            String provider = EusmApplication.getInstance().context().allSharedPreferences().fetchRegisteredANM();
+            String entityId;
+            if (AppConstants.EventEntityType.PRODUCT.equals(entityType))
+                entityId = String.format("%s_%s", getString(jsonForm, ENTITY_ID), detailsObject.optString(AppConstants.EventDetailKey.PLAN_IDENTIFIER));
+            else
+                entityId = getString(jsonForm, ENTITY_ID);
 
-        Map<String, JSONObject> fieldsMap = getFields(formJSON);
-        switch (formName) {
-
-            case AppConstants.JsonForm.IRS_SA_DECISION_ZAMBIA:
-            case AppConstants.JsonForm.CB_SPRAY_AREA_ZAMBIA:
-            case AppConstants.JsonForm.MOBILIZATION_FORM_ZAMBIA:
-                populateServerOptions(EusmApplication.getInstance().getServerConfigs(),
-                        AppConstants.CONFIGURATION.SUPERVISORS, fieldsMap.get(AppConstants.JsonForm.SUPERVISOR),
-                        PreferencesUtil.getInstance().getCurrentDistrict());
-                break;
-
-            case AppConstants.JsonForm.IRS_FIELD_OFFICER_ZAMBIA:
-                populateServerOptions(EusmApplication.getInstance().getServerConfigs(),
-                        AppConstants.CONFIGURATION.FIELD_OFFICERS, fieldsMap.get(AppConstants.JsonForm.FIELD_OFFICER),
-                        PreferencesUtil.getInstance().getCurrentDistrict());
-                populateServerOptions(EusmApplication.getInstance().getServerConfigs(),
-                        AppConstants.CONFIGURATION.HEALTH_FACILITIES, fieldsMap.get(AppConstants.JsonForm.HEALTH_FACILITY),
-                        PreferencesUtil.getInstance().getCurrentDistrict());
-                break;
-
-            case AppConstants.JsonForm.DAILY_SUMMARY_ZAMBIA:
-                populateServerOptions(EusmApplication.getInstance().getServerConfigs(),
-                        AppConstants.CONFIGURATION.TEAM_LEADERS, fieldsMap.get(AppConstants.JsonForm.TEAM_LEADER),
-                        PreferencesUtil.getInstance().getCurrentDistrict());
-                String dataCollector = EusmApplication.getInstance().getContext().allSharedPreferences().fetchRegisteredANM();
-                if (StringUtils.isNotBlank(dataCollector)) {
-                    populateServerOptions(EusmApplication.getInstance().getServerConfigs(),
-                            AppConstants.CONFIGURATION.SPRAY_OPERATORS, fieldsMap.get(AppConstants.JsonForm.SPRAY_OPERATOR_CODE),
-                            dataCollector);
-                }
-
-                populateUserAssignedLocations(formJSON, AppConstants.JsonForm.ZONE, Arrays.asList(AppConstants.Tags.OPERATIONAL_AREA, AppConstants.Tags.ZONE));
-                break;
-
-            case AppConstants.JsonForm.TEAM_LEADER_DOS_ZAMBIA:
-
-                populateServerOptions(EusmApplication.getInstance().getServerConfigs(),
-                        AppConstants.CONFIGURATION.DATA_COLLECTORS, fieldsMap.get(AppConstants.JsonForm.DATA_COLLECTOR),
-                        PreferencesUtil.getInstance().getCurrentDistrict());
-
-                dataCollector = JsonFormUtils.getString(fieldsMap.get(AppConstants.JsonForm.DATA_COLLECTOR), VALUE);
-                if (StringUtils.isNotBlank(dataCollector)) {
-                    populateServerOptions(EusmApplication.getInstance().getServerConfigs(),
-                            AppConstants.CONFIGURATION.SPRAY_OPERATORS, fieldsMap.get(AppConstants.JsonForm.SPRAY_OPERATOR_CODE),
-                            dataCollector.split(":")[0]);
-                }
-
-                populateUserAssignedLocations(formJSON, AppConstants.JsonForm.ZONE, Arrays.asList(AppConstants.Tags.OPERATIONAL_AREA, AppConstants.Tags.ZONE));
-
-                break;
-
-            case AppConstants.JsonForm.VERIFICATION_FORM_ZAMBIA:
-                populateServerOptions(EusmApplication.getInstance().getServerConfigs(),
-                        AppConstants.CONFIGURATION.FIELD_OFFICERS, fieldsMap.get(AppConstants.JsonForm.FIELD_OFFICER),
-                        PreferencesUtil.getInstance().getCurrentDistrict());
-
-            case AppConstants.JsonForm.SPRAY_FORM_ZAMBIA:
-                populateServerOptions(EusmApplication.getInstance().getServerConfigs(),
-                        AppConstants.CONFIGURATION.DATA_COLLECTORS, fieldsMap.get(AppConstants.JsonForm.DATA_COLLECTOR),
-                        PreferencesUtil.getInstance().getCurrentDistrict());
-
-                dataCollector = EusmApplication.getInstance().getContext().allSharedPreferences().fetchRegisteredANM();
-                if (StringUtils.isNotBlank(dataCollector)) {
-                    populateServerOptions(EusmApplication.getInstance().getServerConfigs(),
-                            AppConstants.CONFIGURATION.SPRAY_OPERATORS, fieldsMap.get(AppConstants.JsonForm.SPRAY_OPERATOR_CODE),
-                            dataCollector);
-                }
-                break;
-            default:
-                break;
+            saveImage(provider, entityId, imageLocation);
         }
     }
 
-    private void populateUserAssignedLocations(JSONObject formJSON, String fieldKey, List<String> allowedTags) {
-        JSONArray options = new JSONArray();
-        List<String> defaultLocationHierarchy = locationHelper.generateDefaultLocationHierarchy(allowedTags);
-        if (defaultLocationHierarchy == null) {
+    public void saveImage(@NonNull String providerId, @NonNull String entityId,
+                          @NonNull String imageLocation) {
+        File file = new File(imageLocation);
+        if (!file.exists()) {
             return;
         }
-        defaultLocationHierarchy.stream().forEach(options::put);
-        JSONObject field = JsonFormUtils.getFieldJSONObject(JsonFormUtils.fields(formJSON), fieldKey);
-
+        Bitmap compressedImageFile = null;
         try {
-            field.put(KEYS, options);
-            field.put(VALUES, options);
-        } catch (JSONException e) {
+            compressedImageFile = EusmApplication.getInstance().getCompressor().compressToBitmap(file);
+        } catch (IOException e) {
             Timber.e(e);
         }
+
+        saveStaticImageToDisk(compressedImageFile, providerId, entityId);
     }
+
+    private void saveStaticImageToDisk(Bitmap image, String providerId, String entityId) {
+        if (image == null || StringUtils.isBlank(providerId) || StringUtils.isBlank(entityId)) {
+            return;
+        }
+        OutputStream os = null;
+        try {
+
+            if (!entityId.isEmpty()) {
+                String absoluteFileName = DrishtiApplication.getAppDir() + File.separator + entityId + ".JPEG";
+
+                File outputFile = new File(absoluteFileName);
+                AppUtils.saveImageAndCloseOutputStream(image, outputFile);
+
+                // insert into the db
+                ProfileImage profileImage = new ProfileImage();
+                profileImage.setImageid(UUID.randomUUID().toString());
+                profileImage.setAnmId(providerId);
+                profileImage.setEntityID(entityId);
+                profileImage.setFilepath(absoluteFileName);
+                profileImage.setFilecategory(Constants.PRODUCT_IMAGE);
+                profileImage.setSyncStatus(ImageRepository.TYPE_Unsynced);
+                ImageRepository imageRepo = EusmApplication.getInstance().context().imageRepository();
+                imageRepo.add(profileImage);
+            }
+
+        } catch (FileNotFoundException e) {
+            Timber.e(e);
+        } finally {
+            if (os != null) {
+                try {
+                    os.close();
+                } catch (IOException e) {
+                    Timber.e(e);
+                }
+            }
+        }
+
+    }
+
 }

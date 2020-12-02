@@ -1,19 +1,25 @@
 package org.smartregister.eusm.presenter;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+
+import org.json.JSONObject;
+import org.smartregister.eusm.R;
 import org.smartregister.eusm.contract.TaskRegisterActivityContract;
-import org.smartregister.eusm.interactor.TaskRegisterFragmentInteractor;
-import org.smartregister.view.contract.BaseProfileContract;
+import org.smartregister.eusm.interactor.TaskRegisterActivityInteractor;
+import org.smartregister.eusm.model.StructureDetail;
 
 import java.lang.ref.WeakReference;
+import java.util.List;
 
-public class TaskRegisterActivityPresenter implements TaskRegisterActivityContract.Presenter, BaseProfileContract.Presenter {
+public class TaskRegisterActivityPresenter implements TaskRegisterActivityContract.Presenter, TaskRegisterActivityContract.InteractorCallBack {
 
-    private TaskRegisterFragmentInteractor taskRegisterFragmentInteractor;
+    private TaskRegisterActivityInteractor taskRegisterActivityInteractor;
 
     private WeakReference<TaskRegisterActivityContract.View> viewWeakReference;
 
     public TaskRegisterActivityPresenter(TaskRegisterActivityContract.View view) {
-        taskRegisterFragmentInteractor = new TaskRegisterFragmentInteractor();
+        taskRegisterActivityInteractor = new TaskRegisterActivityInteractor();
         viewWeakReference = new WeakReference<>(view);
     }
 
@@ -26,7 +32,38 @@ public class TaskRegisterActivityPresenter implements TaskRegisterActivityContra
     }
 
     @Override
-    public void onDestroy(boolean isChangingConfiguration) {
+    public void saveForm(@NonNull String encounterType, @Nullable JSONObject form,
+                         @NonNull StructureDetail structureDetail) {
+        taskRegisterActivityInteractor.saveForm(encounterType, form, structureDetail, this);
+    }
 
+    @Override
+    public void registerViewConfigurations(List<String> viewIdentifiers) {
+        //DO NOTHING
+    }
+
+    @Override
+    public void unregisterViewConfiguration(List<String> viewIdentifiers) {
+        //DO NOTHING
+    }
+
+    @Override
+    public void onDestroy(boolean isChangingConfiguration) {
+        //DO NOTHING
+    }
+
+    @Override
+    public void updateInitials() {
+        //DO NOTHING
+    }
+
+    @Override
+    public void onFormSaved(String encounterType, boolean isSuccessful) {
+        if (getView() != null) {
+            getView().hideProgressDialog();
+            if (!isSuccessful) {
+                getView().displayToast(R.string.error_occurred_saving_form);
+            }
+        }
     }
 }

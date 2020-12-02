@@ -9,7 +9,6 @@ import org.smartregister.Context;
 import org.smartregister.CoreLibrary;
 import org.smartregister.configurableviews.ConfigurableViewsLibrary;
 import org.smartregister.eusm.application.EusmApplication;
-import org.smartregister.eusm.config.AppExecutors;
 import org.smartregister.receiver.ValidateAssignmentReceiver;
 import org.smartregister.repository.Repository;
 

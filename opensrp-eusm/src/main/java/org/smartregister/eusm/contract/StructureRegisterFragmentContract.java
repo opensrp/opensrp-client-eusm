@@ -6,10 +6,9 @@ import android.location.Location;
 import androidx.annotation.StringRes;
 
 import org.json.JSONObject;
-import org.smartregister.domain.Event;
 import org.smartregister.eusm.adapter.StructureRegisterAdapter;
 import org.smartregister.eusm.model.StructureDetail;
-import org.smartregister.eusm.util.LocationUtils;
+import org.smartregister.tasking.util.LocationUtils;
 import org.smartregister.view.contract.BaseRegisterFragmentContract;
 
 import java.util.List;

@@ -10,7 +10,6 @@ import org.joda.time.DateTime;
 import org.smartregister.domain.Client;
 import org.smartregister.domain.Event;
 import org.smartregister.domain.Location;
-import org.smartregister.domain.LocationProperty.PropertyStatus;
 import org.smartregister.domain.Obs;
 import org.smartregister.domain.Task;
 import org.smartregister.domain.db.EventClient;
@@ -18,12 +17,12 @@ import org.smartregister.domain.jsonmapping.ClientClassification;
 import org.smartregister.eusm.application.EusmApplication;
 import org.smartregister.eusm.util.AppConstants;
 import org.smartregister.eusm.util.AppUtils;
-import org.smartregister.eusm.util.PreferencesUtil;
 import org.smartregister.repository.BaseRepository;
 import org.smartregister.repository.EventClientRepository;
 import org.smartregister.repository.StructureRepository;
 import org.smartregister.repository.TaskRepository;
 import org.smartregister.sync.ClientProcessorForJava;
+import org.smartregister.tasking.util.PreferencesUtil;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -43,6 +42,8 @@ public class AppClientProcessor extends ClientProcessorForJava {
 
     private final EusmApplication eusmApplication;
 
+    private static AppClientProcessor instance;
+
     public AppClientProcessor(Context context) {
         super(context);
         eusmApplication = EusmApplication.getInstance();
@@ -56,8 +57,7 @@ public class AppClientProcessor extends ClientProcessorForJava {
         if (instance == null) {
             instance = new AppClientProcessor(context);
         }
-
-        return (AppClientProcessor) instance;
+        return instance;
     }
 
     @Override
@@ -84,36 +84,12 @@ public class AppClientProcessor extends ClientProcessorForJava {
                 }
 
                 String eventType = event.getEventType();
-                if (eventType.equals(AppConstants.REGISTER_STRUCTURE_EVENT)) {
-                    operationalAreaId = processRegisterStructureEvent(event, clientClassification);
-                } else if (AppConstants.EventType.SUMMARY_EVENT_TYPES.contains(event.getEventType())) {
-                    processSummaryFormEvent(event, clientClassification);
-                } else {
-                    Client client = eventClient.getClient();
-
-                    if (client != null) {
-                        clients.add(client);
-                        try {
-                            if (event.getDetails() != null && event.getDetails().get(AppConstants.Properties.TASK_IDENTIFIER) != null) {
-                                updateTask(event, localEvents);
-                            }
-                            processEvent(event, client, clientClassification);
-                        } catch (Exception e) {
-                            Timber.e(e);
-                        }
-
-                    }
-                }
                 if (!hasSyncedEventsInTarget && operationalAreaLocationId != null &&
                         operationalAreaLocationId.equals(operationalAreaId)) {
                     hasSyncedEventsInTarget = true;
                 }
             }
         }
-
-//        taskRepository.updateTaskStructureIdFromClient(clients, FamilyConstants.RELATIONSHIP.RESIDENCE);
-//        taskRepository.updateTaskStructureIdsFromExistingStructures();
-//        taskRepository.updateTaskStructureIdsFromExistingClients(FamilyConstants.TABLE_NAME.FAMILY_MEMBER);
 
         if (hasSyncedEventsInTarget) {
             Intent intent = new Intent(AppConstants.Action.STRUCTURE_TASK_SYNCED);
@@ -142,13 +118,13 @@ public class AppClientProcessor extends ClientProcessorForJava {
             Location structure = structureRepository.getLocationById(event.getBaseEntityId());
             if (structure != null) {
                 Obs eventObs = event.findObs(null, false, formField);
-                if (eventObs != null && AppConstants.JsonForm.PAOT_STATUS.equals(formField)) {
-                    structure.getProperties().setStatus(PropertyStatus.valueOf(eventObs.getValue().toString().toUpperCase()));
-                    structureRepository.addOrUpdate(structure);
-                } else if (eventObs != null && AppConstants.JsonForm.STRUCTURE_TYPE.equals(formField)) {
-                    structure.getProperties().setType(eventObs.getValue().toString());
-                    structureRepository.addOrUpdate(structure);
-                }
+//                if (eventObs != null && AppConstants.JsonForm.PAOT_STATUS.equals(formField)) {
+//                    structure.getProperties().setStatus(PropertyStatus.valueOf(eventObs.getValue().toString().toUpperCase()));
+//                    structureRepository.addOrUpdate(structure);
+//                } else if (eventObs != null && AppConstants.JsonForm.STRUCTURE_TYPE.equals(formField)) {
+//                    structure.getProperties().setType(eventObs.getValue().toString());
+//                    structureRepository.addOrUpdate(structure);
+//                }
                 if (operationalAreaId == null) {
                     operationalAreaId = structure.getProperties().getParentId();
                 }

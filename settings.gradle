@@ -1,1 +1,3 @@
 include ':opensrp-eusm'
+//, ':opensrp-tasking'
+//project(":opensrp-tasking").projectDir = new File("../opensrp-client-tasking/opensrp-tasking")

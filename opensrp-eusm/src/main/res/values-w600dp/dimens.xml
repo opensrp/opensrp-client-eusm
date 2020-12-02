@@ -41,5 +41,6 @@
     <dimen name="detect_case_padding">40dp</dimen>
 
     <dimen name="event_register_row_title_size">16sp</dimen>
+    <dimen name="product_info_image_width">300dp</dimen>
 
 </resources>

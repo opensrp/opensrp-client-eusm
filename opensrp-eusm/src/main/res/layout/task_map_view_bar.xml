@@ -67,7 +67,7 @@
         android:textColorHint="@color/light_grey"
         android:textSize="@dimen/default_font_size_search_bar"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@id/btn_structure_register"
+        app:layout_constraintEnd_toStartOf="@id/task_register"
         app:layout_constraintStart_toEndOf="@id/menu_label"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -86,7 +86,7 @@
 
 
     <TextView
-        android:id="@+id/btn_structure_register"
+        android:id="@+id/task_register"
         style="@style/CustomFontTextViewStyle.NavBar.Black"
         android:layout_width="wrap_content"
         android:layout_height="match_parent"

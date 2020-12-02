@@ -3,8 +3,8 @@ package org.smartregister.eusm.fragment;
 import android.view.View;
 
 import org.smartregister.dto.UserAssignmentDTO;
-import org.smartregister.eusm.contract.BaseDrawerContract;
 import org.smartregister.receiver.ValidateAssignmentReceiver;
+import org.smartregister.tasking.contract.BaseDrawerContract;
 import org.smartregister.view.fragment.BaseRegisterFragment;
 
 import java.util.HashMap;

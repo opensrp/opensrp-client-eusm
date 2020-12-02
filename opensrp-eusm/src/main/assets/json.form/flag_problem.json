@@ -48,8 +48,7 @@
     "encounter_location": ""
   },
   "step1": {
-    "title": "Flag problem",
-    "display_back_button": true,
+    "title": "Problem",
     "next": "step2",
     "fields": [
       {
@@ -94,9 +93,28 @@
     ]
   },
   "step2": {
-    "title": "Flag problem",
-    "display_back_button": true,
+    "title": "Reason",
     "fields": [
+      {
+        "key": "product_picture",
+        "openmrs_entity_parent": "",
+        "openmrs_entity": "",
+        "openmrs_entity_id": "",
+        "type": "choose_image",
+        "uploadButtonText": "Take a photo of the product",
+        "relevance": {
+          "step1:flag_problem": {
+            "ex-checkbox": [
+              {
+                "or": [
+                  "not_good",
+                  "misuse"
+                ]
+              }
+            ]
+          }
+        }
+      },
       {
         "key": "not_good",
         "openmrs_entity_parent": "",
@@ -279,6 +297,14 @@
             ]
           }
         }
+      },
+      {
+        "key": "issue_details",
+        "openmrs_entity_parent": "",
+        "openmrs_entity": "",
+        "openmrs_entity_id": "",
+        "type": "edit_text",
+        "hint": "Provide some details on the specific issue, including any advice you were able to give."
       }
     ]
   }

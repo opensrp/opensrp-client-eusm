@@ -2,14 +2,22 @@ package org.smartregister.eusm.presenter;
 
 import com.vijay.jsonwizard.utils.FormUtils;
 
+import org.apache.commons.lang3.StringUtils;
 import org.json.JSONObject;
+import org.smartregister.domain.Event;
+import org.smartregister.domain.Task;
+import org.smartregister.eusm.application.EusmApplication;
 import org.smartregister.eusm.contract.ProductInfoFragmentContract;
 import org.smartregister.eusm.interactor.ProductInfoFragmentInteractor;
 import org.smartregister.eusm.model.ProductInfoQuestion;
-import org.smartregister.eusm.model.StructureTaskDetail;
+import org.smartregister.eusm.model.StructureDetail;
+import org.smartregister.eusm.model.TaskDetail;
+import org.smartregister.eusm.repository.AppTaskRepository;
+import org.smartregister.eusm.util.AppConstants;
 
 import java.lang.ref.WeakReference;
 import java.util.List;
+import java.util.Map;
 
 public class ProductInfoFragmentPresenter implements ProductInfoFragmentContract.Presenter, ProductInfoFragmentContract.InteractorCallBack {
 
@@ -33,18 +41,18 @@ public class ProductInfoFragmentPresenter implements ProductInfoFragmentContract
     }
 
     @Override
-    public void fetchProductQuestions() {
-        interactor.fetchQuestions(this);
+    public void fetchProductQuestions(TaskDetail taskDetail) {
+        interactor.fetchQuestions(taskDetail, this);
     }
 
     @Override
-    public void startFlagProblemForm(String formName) {
-        interactor.startFlagProblemForm(formName, getView().getActivity(), this);
+    public void startFlagProblemForm(StructureDetail structureDetail, TaskDetail taskDetail, String formName) {
+        interactor.startFlagProblemForm(structureDetail, taskDetail, formName, getView().getActivity(), this);
     }
 
     @Override
-    public void markProductAsGood(StructureTaskDetail structureTaskDetail) {
-        interactor.markProductAsGood(structureTaskDetail, this);
+    public void markProductAsGood(StructureDetail structureDetail, TaskDetail taskDetail) {
+        interactor.markProductAsGood(structureDetail, taskDetail, this, getView().getActivity());
     }
 
     @Override
@@ -55,7 +63,21 @@ public class ProductInfoFragmentPresenter implements ProductInfoFragmentContract
     }
 
     @Override
-    public void onProductMarkedAsGood(boolean isMarked) {
+    public void onProductMarkedAsGood(boolean isMarked, Event event) {
+        if (getView() != null) {
+            getView().getActivity().finish();
+            if (isMarked && event != null) {
+                Map<String, String> map = event.getDetails();
+                if (map != null) {
+                    String taskId = map.get(AppConstants.EventDetailKey.TASK_ID);
+                    if (StringUtils.isNotBlank(taskId)) {
+                        //TODO to be replaced by event submission
+                        AppTaskRepository taskRepository = EusmApplication.getInstance().getAppTaskRepository();
+                        taskRepository.updateTaskStatus(taskId, Task.TaskStatus.COMPLETED, "VISITED");
+                    }
+                }
+            }
+        }
     }
 
     @Override

@@ -20,10 +20,6 @@ import org.robolectric.Robolectric;
 import org.robolectric.RuntimeEnvironment;
 import org.smartregister.eusm.BaseUnitTest;
 import org.smartregister.eusm.R;
-import org.smartregister.eusm.adapter.DownloadedOfflineMapAdapter;
-import org.smartregister.eusm.contract.OfflineMapDownloadCallback;
-import org.smartregister.eusm.model.OfflineMapModel;
-import org.smartregister.eusm.presenter.DownloadedOfflineMapsPresenter;
 
 import java.util.ArrayList;
 import java.util.Collections;

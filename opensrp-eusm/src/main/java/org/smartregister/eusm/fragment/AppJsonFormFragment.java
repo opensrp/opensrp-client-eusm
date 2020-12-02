@@ -12,7 +12,8 @@ import com.vijay.jsonwizard.presenters.JsonFormFragmentPresenter;
 import org.smartregister.eusm.R;
 import org.smartregister.eusm.interactor.AppJsonFormInteractor;
 import org.smartregister.eusm.presenter.AppJsonFormFragmentPresenter;
-import org.smartregister.eusm.util.AppConstants;
+
+import static org.smartregister.tasking.util.TaskingConstants.JsonForm.NO_PADDING;
 
 /**
  * Created by samuelgithengi on 12/13/18.
@@ -44,7 +45,7 @@ public class AppJsonFormFragment extends JsonFormFragment {
     private void setupMargins(View view) {
         if (getArguments() != null) {
             String stepName = getArguments().getString(JsonFormConstants.STEPNAME);
-            if (getStep(stepName).optBoolean(AppConstants.JsonForm.NO_PADDING)) {
+            if (getStep(stepName).optBoolean(NO_PADDING)) {
                 view.findViewById(R.id.main_layout).setPadding(0, 0, 0, 0);
             }
         }

@@ -2,8 +2,9 @@ package org.smartregister.eusm.contract;
 
 import org.json.JSONObject;
 import org.smartregister.domain.Location;
-import org.smartregister.eusm.model.BaseTaskDetails;
 import org.smartregister.eusm.util.AppJsonFormUtils;
+import org.smartregister.tasking.contract.UserLocationContract;
+import org.smartregister.tasking.model.BaseTaskDetails;
 
 /**
  * Created by samuelgithengi on 4/18/19.

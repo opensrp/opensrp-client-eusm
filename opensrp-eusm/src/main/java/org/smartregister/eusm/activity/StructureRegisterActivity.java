@@ -7,7 +7,7 @@ import android.view.View;
 
 import org.smartregister.eusm.R;
 import org.smartregister.eusm.fragment.StructureRegisterFragment;
-import org.smartregister.eusm.presenter.StructureRegisterPresenter;
+import org.smartregister.eusm.presenter.StructureRegisterActivityPresenter;
 import org.smartregister.view.fragment.BaseRegisterFragment;
 
 import java.util.List;
@@ -17,7 +17,7 @@ public class StructureRegisterActivity extends BaseAppRegisterActivity {
 
     @Override
     protected void initializePresenter() {
-        presenter = new StructureRegisterPresenter(this);
+        presenter = new StructureRegisterActivityPresenter(this);
     }
 
     @Override
@@ -42,5 +42,4 @@ public class StructureRegisterActivity extends BaseAppRegisterActivity {
     protected void registerBottomNavigation() {
         findViewById(R.id.bottom_navigation).setVisibility(View.GONE);
     }
-
 }

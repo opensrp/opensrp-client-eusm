@@ -12,8 +12,8 @@ import com.vijay.jsonwizard.activities.FormConfigurationJsonFormActivity;
 import com.vijay.jsonwizard.constants.JsonFormConstants;
 
 import org.smartregister.eusm.R;
-import org.smartregister.eusm.contract.UserLocationContract;
 import org.smartregister.eusm.fragment.AppJsonFormFragment;
+import org.smartregister.tasking.contract.UserLocationContract;
 
 public class AppJsonFormActivity extends FormConfigurationJsonFormActivity implements UserLocationContract.UserLocationView {
 
@@ -37,20 +37,20 @@ public class AppJsonFormActivity extends FormConfigurationJsonFormActivity imple
                 .add(R.id.container, appJsonFormFragment).commit();
     }
 
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-//        if (requestCode == Constants.RequestCode.LOCATION_SETTINGS && requestedLocation) {
-//            if (resultCode == RESULT_OK) {
-//                formFragment.getPresenter().getLocationUtils().requestLocationUpdates(formFragment.getPresenter().getLocationListener());
-//                formFragment.getPresenter().getLocationPresenter().waitForUserLocation();
-//            } else if (resultCode == RESULT_CANCELED) {
-//                formFragment.getPresenter().getLocationPresenter().onGetUserLocationFailed();
-//            }
-//            requestedLocation = false;
-//        } else {
-//            super.onActivityResult(requestCode, resultCode, data);
-//        }
-    }
+//    @Override
+//    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+////        if (requestCode == Constants.RequestCode.LOCATION_SETTINGS && requestedLocation) {
+////            if (resultCode == RESULT_OK) {
+////                formFragment.getPresenter().getLocationUtils().requestLocationUpdates(formFragment.getPresenter().getLocationListener());
+////                formFragment.getPresenter().getLocationPresenter().waitForUserLocation();
+////            } else if (resultCode == RESULT_CANCELED) {
+////                formFragment.getPresenter().getLocationPresenter().onGetUserLocationFailed();
+////            }
+////            requestedLocation = false;
+////        } else {
+////            super.onActivityResult(requestCode, resultCode, data);
+////        }
+//    }
 
     @Override
     public void onAttachFragment(Fragment fragment) {

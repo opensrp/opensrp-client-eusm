@@ -21,13 +21,13 @@ import org.smartregister.eusm.util.AppConstants;
 
 public class StructureRegisterViewHolder extends RecyclerView.ViewHolder {
 
-    private TextView servicePointNameView;
-    private TextView taskStatusView;
-    private TextView servicePointTypeView;
-    private TextView communeView;
-    private ImageView servicePointIconView;
-    private Context context;
-    private View gpsUnknownView;
+    private final TextView servicePointNameView;
+    private final TextView taskStatusView;
+    private final TextView servicePointTypeView;
+    private final TextView communeView;
+    private final ImageView servicePointIconView;
+    private final Context context;
+    private final View gpsUnknownView;
 
     public StructureRegisterViewHolder(@NonNull View itemView) {
         super(itemView);
@@ -53,7 +53,7 @@ public class StructureRegisterViewHolder extends RecyclerView.ViewHolder {
     }
 
     private Integer getDrawableByTaskType(@NonNull String serviceType) {
-        ServicePointType servicePointType = EusmApplication.getInstance().getServicePointKeyToType().get(serviceType.toLowerCase().replaceAll(" ", "_"));
+        ServicePointType servicePointType = EusmApplication.getInstance().getServicePointKeyToType().get(serviceType.toLowerCase().replaceAll(" ", ""));
         if (servicePointType == null) {
             return R.drawable.ic_health_sp;
         } else {
@@ -71,8 +71,18 @@ public class StructureRegisterViewHolder extends RecyclerView.ViewHolder {
         return colorId;
     }
 
-    public void setTaskStatus(String taskStatus) {
+    public void setTaskStatus(StructureDetail structureDetail) {
+        String taskStatus = "";
+        if (AppConstants.TaskStatus.IN_PROGRESS.equals(structureDetail.getTaskStatus())) {
+            taskStatus = AppConstants.TaskStatus.IN_PROGRESS;
+        } else if (AppConstants.TaskStatus.COMPLETED.equals(structureDetail.getTaskStatus())) {
+            taskStatus = AppConstants.TaskStatus.COMPLETED;
+        } else {
+            taskStatus = String.format(context.getString(R.string.no_of_items), structureDetail.getNumOfTasks());
+        }
+        int colorId = getColorByTaskStatus(taskStatus);
         this.taskStatusView.setText(taskStatus);
+        this.taskStatusView.setTextColor(ContextCompat.getColor(context, colorId));
     }
 
     public void setCommune(String commune) {
@@ -85,13 +95,10 @@ public class StructureRegisterViewHolder extends RecyclerView.ViewHolder {
             this.servicePointTypeView.setText(String.format(context.getString(R.string.distance_from_structure), structureTasksBody.getStructureType(), structureTasksBody.getDistanceMeta()));
         } else {
             gpsUnknownView.setVisibility(View.VISIBLE);
-
             ImageView imageViewUnlistedLocation = gpsUnknownView.findViewById(R.id.img_service_point_gps_unknown);
             imageViewUnlistedLocation.setColorFilter(ContextCompat.getColor(context, R.color.task_in_progress));
-
             TextView txtUnlistedLocation = gpsUnknownView.findViewById(R.id.txt_service_point_gps_unknown);
             txtUnlistedLocation.setTextColor(Color.BLACK);
-
             this.servicePointTypeView.setText(String.format(context.getString(R.string.unlisted_distance_from_structure), structureTasksBody.getStructureType()));
         }
     }

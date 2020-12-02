@@ -10,9 +10,6 @@ import org.mockito.junit.MockitoJUnit;
 import org.mockito.junit.MockitoRule;
 import org.powermock.reflect.Whitebox;
 import org.smartregister.eusm.BaseUnitTest;
-import org.smartregister.eusm.contract.AvailableOfflineMapsContract;
-import org.smartregister.eusm.interactor.AvailableOfflineMapsInteractor;
-import org.smartregister.eusm.model.OfflineMapModel;
 
 import java.util.Collections;
 import java.util.List;

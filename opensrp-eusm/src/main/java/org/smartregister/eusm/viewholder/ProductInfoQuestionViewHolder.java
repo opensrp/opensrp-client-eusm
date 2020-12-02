@@ -12,13 +12,13 @@ import org.smartregister.eusm.R;
 
 public class ProductInfoQuestionViewHolder extends RecyclerView.ViewHolder {
 
-    private ImageView imageProductInfoQuestionView;
+    private final ImageView imageProductInfoQuestionView;
 
-    private TextView productInfoQuestionView;
+    private final TextView productInfoQuestionView;
 
-    private TextView productInfoAnswerView;
+    private final TextView productInfoAnswerView;
 
-    private Context context;
+    private final Context context;
 
     public ProductInfoQuestionViewHolder(@NonNull View itemView) {
         super(itemView);

@@ -21,7 +21,6 @@ import org.smartregister.eusm.application.EusmApplication;
 import org.smartregister.eusm.processor.AppClientProcessor;
 import org.smartregister.eusm.util.AppConstants;
 import org.smartregister.eusm.util.AppConstants.JsonForm;
-import org.smartregister.eusm.util.PreferencesUtil;
 import org.smartregister.eusm.util.AppUtils;
 import org.smartregister.repository.BaseRepository;
 import org.smartregister.repository.EventClientRepository;

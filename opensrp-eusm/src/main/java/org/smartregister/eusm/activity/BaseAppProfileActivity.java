@@ -16,11 +16,9 @@ import org.smartregister.view.activity.BaseProfileActivity;
 
 public abstract class BaseAppProfileActivity extends BaseProfileActivity {
 
-    private CollapsingToolbarLayout collapsingToolbarLayout;
-
-    private int appBarLayoutScrollRange = -1;
-
     protected boolean appBarTitleIsShown = true;
+    private CollapsingToolbarLayout collapsingToolbarLayout;
+    private int appBarLayoutScrollRange = -1;
 
     @Override
     protected void onCreation() {

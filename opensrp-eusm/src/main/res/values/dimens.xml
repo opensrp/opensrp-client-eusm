@@ -66,6 +66,7 @@
 
     <dimen name="compass_top_margin">35dp</dimen>
     <dimen name="compass_left_margin">8dp</dimen>
+    <dimen name="product_info_image_width">200dp</dimen>
 
 </resources>
 

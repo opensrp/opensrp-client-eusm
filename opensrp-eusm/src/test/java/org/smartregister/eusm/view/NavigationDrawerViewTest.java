@@ -21,7 +21,6 @@ import org.powermock.reflect.Whitebox;
 import org.robolectric.RuntimeEnvironment;
 import org.smartregister.eusm.BaseUnitTest;
 import org.smartregister.eusm.R;
-import org.smartregister.eusm.contract.BaseDrawerContract;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;

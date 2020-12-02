@@ -15,9 +15,10 @@ import org.mockito.junit.MockitoRule;
 import org.powermock.reflect.Whitebox;
 import org.robolectric.RuntimeEnvironment;
 import org.smartregister.eusm.BaseUnitTest;
-import org.smartregister.eusm.contract.DownloadedOfflineMapsContract;
-import org.smartregister.eusm.interactor.DownloadedOfflineMapsInteractor;
-import org.smartregister.eusm.model.OfflineMapModel;
+import org.smartregister.tasking.contract.DownloadedOfflineMapsContract;
+import org.smartregister.tasking.interactor.DownloadedOfflineMapsInteractor;
+import org.smartregister.tasking.model.OfflineMapModel;
+import org.smartregister.tasking.presenter.DownloadedOfflineMapsPresenter;
 
 import java.util.HashMap;
 import java.util.List;

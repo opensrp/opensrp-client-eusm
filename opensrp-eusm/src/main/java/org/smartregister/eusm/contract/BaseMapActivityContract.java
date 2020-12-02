@@ -9,6 +9,7 @@ import com.mapbox.geojson.FeatureCollection;
 import com.mapbox.mapboxsdk.geometry.LatLng;
 
 import org.smartregister.eusm.util.AppJsonFormUtils;
+import org.smartregister.tasking.contract.BaseContract;
 
 public interface BaseMapActivityContract {
 

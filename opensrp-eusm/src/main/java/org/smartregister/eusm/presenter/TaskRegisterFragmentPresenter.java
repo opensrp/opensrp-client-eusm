@@ -1,14 +1,17 @@
 package org.smartregister.eusm.presenter;
 
 import org.json.JSONObject;
+import org.smartregister.eusm.adapter.EusmTaskRegisterAdapter;
 import org.smartregister.eusm.contract.TaskRegisterFragmentContract;
 import org.smartregister.eusm.interactor.TaskRegisterFragmentInteractor;
-import org.smartregister.eusm.model.StructureTaskDetail;
+import org.smartregister.eusm.model.StructureDetail;
+import org.smartregister.eusm.model.TaskDetail;
 
 import java.lang.ref.WeakReference;
 import java.util.List;
 
-public class TaskRegisterFragmentPresenter implements TaskRegisterFragmentContract.Presenter, TaskRegisterFragmentContract.InteractorCallBack {
+public class TaskRegisterFragmentPresenter implements TaskRegisterFragmentContract.Presenter,
+        TaskRegisterFragmentContract.InteractorCallBack {
 
     private TaskRegisterFragmentInteractor taskRegisterFragmentInteractor;
 
@@ -21,7 +24,10 @@ public class TaskRegisterFragmentPresenter implements TaskRegisterFragmentContra
 
     @Override
     public void fetchData() {
-        taskRegisterFragmentInteractor.fetchData(this);
+        if (getView() != null) {
+            getView().showProgressView();
+            taskRegisterFragmentInteractor.fetchData(getView().getStructureDetail(), this);
+        }
     }
 
     @Override
@@ -33,19 +39,25 @@ public class TaskRegisterFragmentPresenter implements TaskRegisterFragmentContra
     }
 
     @Override
-    public void startFixProblemForm(StructureTaskDetail structureTaskDetail) {
-        taskRegisterFragmentInteractor.startFixProblemForm(structureTaskDetail, getView().getActivity(), this);
+    public void startForm(StructureDetail structureDetail, TaskDetail taskDetail, String formName) {
+        taskRegisterFragmentInteractor.startForm(structureDetail, taskDetail,
+                getView().getActivity(),
+                this,
+                formName);
     }
 
     @Override
-    public void onFetchedData(List<StructureTaskDetail> structureTaskDetailList) {
-        if (getView().getAdapter() != null) {
-            getView().getAdapter().setData(structureTaskDetailList);
+    public void onFetchedData(List<TaskDetail> taskDetailList) {
+        if (getView() != null) {
+            getView().hideProgressView();
+            if (getView().getAdapter() != null) {
+                ((EusmTaskRegisterAdapter) getView().getAdapter()).setData(taskDetailList);
+            }
         }
     }
 
     @Override
-    public void onFixProblemFormFetched(JSONObject jsonForm) {
-        getView().startFixProblemForm(jsonForm);
+    public void onFormFetched(JSONObject jsonForm) {
+        getView().startFormActivity(jsonForm);
     }
 }

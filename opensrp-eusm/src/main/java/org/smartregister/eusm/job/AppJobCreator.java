@@ -6,12 +6,15 @@ import androidx.annotation.Nullable;
 import com.evernote.android.job.Job;
 import com.evernote.android.job.JobCreator;
 
-import org.smartregister.eusm.service.AppSyncIntentService;
+import org.smartregister.eusm.service.AppLocationTaskIntentService;
 import org.smartregister.job.DocumentConfigurationServiceJob;
 import org.smartregister.job.ExtendedSyncServiceJob;
 import org.smartregister.job.SyncServiceJob;
 import org.smartregister.job.ValidateSyncDataServiceJob;
+import org.smartregister.stock.job.SyncStockServiceJob;
+import org.smartregister.stock.job.SyncStockTypeServiceJob;
 import org.smartregister.sync.intent.DocumentConfigurationIntentService;
+import org.smartregister.sync.intent.SyncIntentService;
 
 import timber.log.Timber;
 
@@ -24,9 +27,9 @@ public class AppJobCreator implements JobCreator {
     public Job create(@NonNull String tag) {
         switch (tag) {
             case SyncServiceJob.TAG:
-                return new SyncServiceJob(AppSyncIntentService.class);
+                return new SyncServiceJob(SyncIntentService.class);
             case LocationTaskServiceJob.TAG:
-                return new LocationTaskServiceJob();
+                return new LocationTaskServiceJob(AppLocationTaskIntentService.class);
             case AppSyncSettingsServiceJob.TAG:
                 return new AppSyncSettingsServiceJob();
             case ExtendedSyncServiceJob.TAG:
@@ -35,6 +38,10 @@ public class AppJobCreator implements JobCreator {
                 return new ValidateSyncDataServiceJob();
             case DocumentConfigurationServiceJob.TAG:
                 return new DocumentConfigurationServiceJob(DocumentConfigurationIntentService.class);
+            case SyncStockTypeServiceJob.TAG:
+                return new SyncStockTypeServiceJob();
+            case SyncStockServiceJob.TAG:
+                return new SyncStockServiceJob();
             default:
                 Timber.w("%s is not declared in RevealJobCreator Job Creator", tag);
                 return null;

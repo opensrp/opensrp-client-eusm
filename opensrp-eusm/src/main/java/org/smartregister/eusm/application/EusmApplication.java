@@ -26,17 +26,18 @@ import org.smartregister.domain.Setting;
 import org.smartregister.dto.UserAssignmentDTO;
 import org.smartregister.eusm.BuildConfig;
 import org.smartregister.eusm.activity.LoginActivity;
-import org.smartregister.eusm.config.AppExecutors;
 import org.smartregister.eusm.config.AppSyncConfiguration;
+import org.smartregister.eusm.config.AppTaskingLibraryConfiguration;
 import org.smartregister.eusm.config.ServicePointType;
+import org.smartregister.eusm.configuration.EusmStockSyncConfiguration;
 import org.smartregister.eusm.job.AppJobCreator;
 import org.smartregister.eusm.processor.AppClientProcessor;
 import org.smartregister.eusm.repository.AppRepository;
 import org.smartregister.eusm.repository.AppStructureRepository;
+import org.smartregister.eusm.repository.AppTaskRepository;
 import org.smartregister.eusm.repository.EusmRepository;
 import org.smartregister.eusm.util.AppConstants;
 import org.smartregister.eusm.util.AppUtils;
-import org.smartregister.eusm.util.PreferencesUtil;
 import org.smartregister.location.helper.LocationHelper;
 import org.smartregister.receiver.SyncStatusBroadcastReceiver;
 import org.smartregister.receiver.ValidateAssignmentReceiver;
@@ -47,15 +48,22 @@ import org.smartregister.repository.LocationTagRepository;
 import org.smartregister.repository.PlanDefinitionRepository;
 import org.smartregister.repository.PlanDefinitionSearchRepository;
 import org.smartregister.repository.Repository;
+import org.smartregister.repository.TaskNotesRepository;
 import org.smartregister.repository.TaskRepository;
+import org.smartregister.stock.StockLibrary;
 import org.smartregister.sync.ClientProcessorForJava;
 import org.smartregister.sync.DrishtiSyncScheduler;
+import org.smartregister.sync.helper.ECSyncHelper;
+import org.smartregister.tasking.TaskingLibrary;
+import org.smartregister.tasking.util.PreferencesUtil;
+import org.smartregister.util.AppExecutors;
 import org.smartregister.view.activity.DrishtiApplication;
 import org.smartregister.view.receiver.TimeChangedBroadcastReceiver;
 
 import java.util.HashMap;
 import java.util.Map;
 
+import id.zelory.compressor.Compressor;
 import io.fabric.sdk.android.Fabric;
 import io.ona.kujaku.KujakuLibrary;
 import io.ona.kujaku.data.realm.RealmDatabase;
@@ -85,9 +93,15 @@ public class EusmApplication extends DrishtiApplication implements TimeChangedBr
 
     private AppStructureRepository appStructureRepository;
 
+    private AppTaskRepository appTaskRepository;
+
     private Map<String, ServicePointType> servicePointKeyToTypeMap;
 
     private Location userLocation;
+
+    private ECSyncHelper ecSyncHelper;
+
+    private Compressor compressor;
 
     public static synchronized EusmApplication getInstance() {
         return (EusmApplication) mInstance;
@@ -109,22 +123,14 @@ public class EusmApplication extends DrishtiApplication implements TimeChangedBr
     }
 
     private static String[] getFtsTables() {
-        return new String[]{AppConstants.EventsRegister.TABLE_NAME, AppStructureRepository.STRUCTURE_TABLE, "ec_structure"};
+        return new String[]{AppStructureRepository.STRUCTURE_TABLE, "ec_structure"};
     }
 
     private static String[] getFtsSearchFields(String tableName) {
-        if (tableName.equals(AppConstants.EventsRegister.TABLE_NAME)) {
-            return new String[]{AppConstants.DatabaseKeys.EVENT_DATE, AppConstants.DatabaseKeys.EVENT_TYPE, AppConstants.DatabaseKeys.SOP,
-                    AppConstants.DatabaseKeys.ENTITY, AppConstants.DatabaseKeys.STATUS};
-        }
         return null;
     }
 
     private static String[] getFtsSortFields(String tableName) {
-        if (tableName.equals(AppConstants.EventsRegister.TABLE_NAME)) {
-            return new String[]{AppConstants.DatabaseKeys.PROVIDER_ID, AppConstants.DatabaseKeys.EVENT_DATE,
-                    AppConstants.DatabaseKeys.EVENT_TYPE, AppConstants.DatabaseKeys.STATUS, AppConstants.DatabaseKeys.SOP};
-        }
         return null;
     }
 
@@ -138,6 +144,10 @@ public class EusmApplication extends DrishtiApplication implements TimeChangedBr
         forceRemoteLoginForInConsistentUsername();
         // Initialize Modules
         Fabric.with(this, new Crashlytics.Builder().core(new CrashlyticsCore.Builder().disabled(BuildConfig.DEBUG).build()).build());
+
+        TaskingLibrary.init(new AppTaskingLibraryConfiguration());
+
+        TaskingLibrary.getInstance().setDigitalGlobeConnectId(BuildConfig.DG_CONNECT_ID);
 
         CoreLibrary.init(context, new AppSyncConfiguration(), BuildConfig.BUILD_TIMESTAMP);
 
@@ -155,6 +165,8 @@ public class EusmApplication extends DrishtiApplication implements TimeChangedBr
 
         KujakuLibrary.init(getApplicationContext());
 
+        StockLibrary.init(context, getRepository(), null, getAppExecutors(), new EusmStockSyncConfiguration());
+
         //init Job Manager
         JobManager.create(this).addJobCreator(new AppJobCreator());
 
@@ -164,8 +176,8 @@ public class EusmApplication extends DrishtiApplication implements TimeChangedBr
 
         ValidateAssignmentReceiver.getInstance().addListener(this);
         Location location = new Location("dest");
-        location.setLongitude(32.6454013);
-        location.setLatitude(-14.1580617);
+        location.setLongitude(46.3777);
+        location.setLatitude(-15.654);
         setUserLocation(location);
     }
 
@@ -423,5 +435,33 @@ public class EusmApplication extends DrishtiApplication implements TimeChangedBr
         }
 
         return servicePointKeyToTypeMap;
+    }
+
+    public ECSyncHelper getEcSyncHelper() {
+        if (ecSyncHelper == null) {
+            ecSyncHelper = ECSyncHelper.getInstance(getApplicationContext());
+        }
+        return ecSyncHelper;
+    }
+
+    public AppTaskRepository getAppTaskRepository() {
+        if (appTaskRepository == null) {
+            appTaskRepository = new AppTaskRepository(new TaskNotesRepository());
+        }
+        return appTaskRepository;
+    }
+
+    @NonNull
+    public Context context() {
+        return context;
+    }
+
+    @NonNull
+    public Compressor getCompressor() {
+        if (compressor == null) {
+            compressor = new Compressor(context.applicationContext());
+        }
+
+        return compressor;
     }
 }

@@ -10,8 +10,8 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import org.smartregister.eusm.R;
 import org.smartregister.eusm.model.StructureDetail;
-import org.smartregister.eusm.viewholder.StructureRegisterViewHolder;
 import org.smartregister.eusm.viewholder.GenericTitleViewHolder;
+import org.smartregister.eusm.viewholder.StructureRegisterViewHolder;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -20,9 +20,9 @@ public class StructureRegisterAdapter extends RecyclerView.Adapter<RecyclerView.
 
     private final Context context;
 
-    private List<StructureDetail> structureDetailList = new ArrayList<>();
+    private final List<StructureDetail> structureDetailList = new ArrayList<>();
 
-    private View.OnClickListener registerActionHandler;
+    private final View.OnClickListener registerActionHandler;
 
     public StructureRegisterAdapter(Context context, View.OnClickListener registerActionHandler) {
         this.context = context;
@@ -43,21 +43,21 @@ public class StructureRegisterAdapter extends RecyclerView.Adapter<RecyclerView.
 
     @Override
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
-        StructureDetail structureTasksBody = structureDetailList.get(position);
-        if (!structureTasksBody.isHeader()) {
+        StructureDetail structureDetail = structureDetailList.get(position);
+        if (!structureDetail.isHeader()) {
 
             holder.itemView.setOnClickListener(registerActionHandler);
-            holder.itemView.setTag(R.id.structure_detail, structureTasksBody);
+            holder.itemView.setTag(R.id.structure_detail, structureDetail);
 
             StructureRegisterViewHolder viewHolder = (StructureRegisterViewHolder) holder;
-            viewHolder.setServicePointName(structureTasksBody.getStructureName());
-            viewHolder.setServicePointIcon(structureTasksBody.getTaskStatus(), structureTasksBody.getStructureType());
-            viewHolder.setServicePointType(structureTasksBody);
+            viewHolder.setServicePointName(structureDetail.getStructureName());
+            viewHolder.setServicePointIcon(structureDetail.getTaskStatus(), structureDetail.getStructureType());
+            viewHolder.setServicePointType(structureDetail);
 //            viewHolder.setCommune("commune");
-            viewHolder.setTaskStatus(structureTasksBody.getTaskStatus());
+            viewHolder.setTaskStatus(structureDetail);
         } else {
             GenericTitleViewHolder viewHolder = (GenericTitleViewHolder) holder;
-            viewHolder.setTitle(structureTasksBody.getStructureName());
+            viewHolder.setTitle(structureDetail.getStructureName());
         }
     }
 

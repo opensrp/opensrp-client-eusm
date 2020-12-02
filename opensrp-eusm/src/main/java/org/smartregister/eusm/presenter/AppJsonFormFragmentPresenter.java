@@ -20,18 +20,19 @@ import com.vijay.jsonwizard.customviews.MaterialSpinner;
 import com.vijay.jsonwizard.fragments.JsonFormFragment;
 import com.vijay.jsonwizard.interactors.JsonFormInteractor;
 import com.vijay.jsonwizard.presenters.JsonFormFragmentPresenter;
+import com.vijay.jsonwizard.utils.Utils;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.smartregister.eusm.R;
 import org.smartregister.eusm.activity.AppJsonFormActivity;
 import org.smartregister.eusm.application.EusmApplication;
-import org.smartregister.eusm.contract.UserLocationContract.UserLocationCallback;
-import org.smartregister.eusm.util.AppConstants;
 import org.smartregister.eusm.util.AppJsonFormUtils;
 import org.smartregister.eusm.util.AppUtils;
-import org.smartregister.eusm.util.LocationUtils;
-import org.smartregister.eusm.view.AppMapView;
+import org.smartregister.tasking.contract.UserLocationContract;
+import org.smartregister.tasking.presenter.ValidateUserLocationPresenter;
+import org.smartregister.tasking.util.LocationUtils;
+import org.smartregister.tasking.view.TaskingMapView;
 import org.smartregister.util.JsonFormUtils;
 
 import java.util.List;
@@ -42,7 +43,7 @@ import io.ona.kujaku.listeners.BaseLocationListener;
 /**
  * Created by samuelgithengi on 1/30/19.
  */
-public class AppJsonFormFragmentPresenter extends JsonFormFragmentPresenter implements UserLocationCallback {
+public class AppJsonFormFragmentPresenter extends JsonFormFragmentPresenter implements UserLocationContract.UserLocationCallback {
 
     private final JsonFormFragment formFragment;
 
@@ -50,7 +51,7 @@ public class AppJsonFormFragmentPresenter extends JsonFormFragmentPresenter impl
 
     private final AppJsonFormActivity jsonFormView;
 
-    private AppMapView mapView;
+    private TaskingMapView mapView;
 
 
     private final LocationUtils locationUtils;
@@ -139,6 +140,26 @@ public class AppJsonFormFragmentPresenter extends JsonFormFragmentPresenter impl
     @Override
     public void onSaveClick(LinearLayout mainView) {
         validateAndWriteValues();
+        boolean isFormValid = isFormValid();
+        if (isFormValid || Boolean.valueOf(mainView.getTag(com.vijay.jsonwizard.R.id.skip_validation).toString())) {
+            Utils.removeGeneratedDynamicRules(formFragment);
+            Intent returnIntent = new Intent();
+            getView().onFormFinish();
+            returnIntent.putExtra("json", getView().getCurrentJsonState());
+            returnIntent.putExtra(JsonFormConstants.SKIP_VALIDATION,
+                    Boolean.valueOf(mainView.getTag(com.vijay.jsonwizard.R.id.skip_validation).toString()));
+            getView().finishWithResult(returnIntent);
+        } else {
+            if (showErrorsOnSubmit()) {
+                launchErrorDialog();
+                getView().showToast(getView().getContext().getResources()
+                        .getString(com.vijay.jsonwizard.R.string.json_form_error_msg, getInvalidFields().size()));
+            } else {
+                getView().showSnackBar(getView().getContext().getResources()
+                        .getString(com.vijay.jsonwizard.R.string.json_form_error_msg, getInvalidFields().size()));
+
+            }
+        }
     }
 
     @Override
@@ -165,6 +186,11 @@ public class AppJsonFormFragmentPresenter extends JsonFormFragmentPresenter impl
         }
     }
 
+    @Override
+    public ValidateUserLocationPresenter getLocationPresenter() {
+        return null;
+    }
+
     public LocationUtils getLocationUtils() {
         return locationUtils;
     }
@@ -183,12 +209,12 @@ public class AppJsonFormFragmentPresenter extends JsonFormFragmentPresenter impl
         super.onItemSelected(parent, view, position, id);
         String key = (String) parent.getTag(R.id.key);
         Map<String, JSONObject> fields = jsonFormUtils.getFields(jsonFormView.getmJSONObject());
-        cascadeSelect(key, AppConstants.JsonForm.DATA_COLLECTOR, AppConstants.CONFIGURATION.SPRAY_OPERATORS, fields.get(AppConstants.JsonForm.SPRAY_OPERATOR_CODE));
-        cascadeSelect(key, AppConstants.JsonForm.HFC_BELONG, AppConstants.CONFIGURATION.COMMUNITY_HEALTH_WORKERS, fields.get(AppConstants.JsonForm.CHW_NAME));
-        cascadeSelect(key, AppConstants.JsonForm.CATCHMENT_AREA, AppConstants.CONFIGURATION.MDA_CORDINATORS, fields.get(AppConstants.JsonForm.COORDINATOR_NAME));
-        cascadeSelect(key, AppConstants.JsonForm.CATCHMENT_AREA, AppConstants.CONFIGURATION.MDA_ENUMERATORS, fields.get(AppConstants.JsonForm.DATA_COLLECTOR));
-        cascadeSelect(key, AppConstants.JsonForm.CATCHMENT_AREA, AppConstants.CONFIGURATION.MDA_COMMUNITY_HEALTH_WORKERS, fields.get(AppConstants.JsonForm.CHW_NAME));
-        cascadeSelect(key, AppConstants.JsonForm.CATCHMENT_AREA, AppConstants.CONFIGURATION.MDA_ADHERENCE_OFFICERS, fields.get(AppConstants.JsonForm.ADHERENCE_NAME));
+//        cascadeSelect(key, AppConstants.JsonForm.DATA_COLLECTOR, AppConstants.CONFIGURATION.SPRAY_OPERATORS, fields.get(AppConstants.JsonForm.SPRAY_OPERATOR_CODE));
+//        cascadeSelect(key, AppConstants.JsonForm.HFC_BELONG, AppConstants.CONFIGURATION.COMMUNITY_HEALTH_WORKERS, fields.get(AppConstants.JsonForm.CHW_NAME));
+//        cascadeSelect(key, AppConstants.JsonForm.CATCHMENT_AREA, AppConstants.CONFIGURATION.MDA_CORDINATORS, fields.get(AppConstants.JsonForm.COORDINATOR_NAME));
+//        cascadeSelect(key, AppConstants.JsonForm.CATCHMENT_AREA, AppConstants.CONFIGURATION.MDA_ENUMERATORS, fields.get(AppConstants.JsonForm.DATA_COLLECTOR));
+//        cascadeSelect(key, AppConstants.JsonForm.CATCHMENT_AREA, AppConstants.CONFIGURATION.MDA_COMMUNITY_HEALTH_WORKERS, fields.get(AppConstants.JsonForm.CHW_NAME));
+//        cascadeSelect(key, AppConstants.JsonForm.CATCHMENT_AREA, AppConstants.CONFIGURATION.MDA_ADHERENCE_OFFICERS, fields.get(AppConstants.JsonForm.ADHERENCE_NAME));
     }
 
     private void cascadeSelect(String key, String parentWidget, String configurationKey, JSONObject childWidget) {

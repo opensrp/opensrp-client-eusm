@@ -9,7 +9,6 @@ import org.smartregister.AllConstants;
 import org.smartregister.configurableviews.repository.ConfigurableViewsRepository;
 import org.smartregister.eusm.BuildConfig;
 import org.smartregister.eusm.application.EusmApplication;
-import org.smartregister.eusm.util.AppConstants;
 import org.smartregister.repository.BaseRepository;
 import org.smartregister.repository.CampaignRepository;
 import org.smartregister.repository.ClientFormRepository;
@@ -23,9 +22,13 @@ import org.smartregister.repository.Repository;
 import org.smartregister.repository.SettingsRepository;
 import org.smartregister.repository.TaskRepository;
 import org.smartregister.repository.UniqueIdRepository;
+import org.smartregister.stock.repository.StockRepository;
+import org.smartregister.stock.repository.StockTypeRepository;
+import org.smartregister.tasking.util.TaskingConstants;
 import org.smartregister.util.DatabaseMigrationUtils;
 
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashSet;
 
 import timber.log.Timber;
@@ -51,6 +54,8 @@ public class EusmRepository extends Repository {
         EventClientRepository.createTable(database, EventClientRepository.Table.client, EventClientRepository.client_column.values());
         EventClientRepository.createTable(database, event, EventClientRepository.event_column.values());
 
+        StockTypeRepository.createTable(database);
+        StockRepository.createTable(database);
         CampaignRepository.createTable(database);
         TaskRepository.createTable(database);
         LocationRepository.createTable(database);
@@ -72,7 +77,7 @@ public class EusmRepository extends Repository {
         EventClientRepository.addEventLocationId(database);
 
         DatabaseMigrationUtils.createAddedECTables(database,
-                new HashSet<>(Arrays.asList(AppConstants.EventsRegister.TABLE_NAME)),
+                new HashSet<>(Collections.singletonList(TaskingConstants.Tables.EC_EVENT)),
                 EusmApplication.createCommonFtsObject());
 
         EventClientRepository.createTable(database,
@@ -85,8 +90,9 @@ public class EusmRepository extends Repository {
 
         UniqueIdRepository.createTable(database);
 
-        if (!isColumnExists(database, AppConstants.DatabaseKeys.LOCATION_TABLE, AppConstants.DatabaseKeys.LOCATION_SYNC_STATUS)) {
-            database.execSQL(String.format("ALTER TABLE %s ADD COLUMN %s VARCHAR DEFAULT %s ", AppConstants.DatabaseKeys.LOCATION_TABLE, AppConstants.DatabaseKeys.LOCATION_SYNC_STATUS, BaseRepository.TYPE_Synced));
+        if (!isColumnExists(database, TaskingConstants.Tables.LOCATION_TABLE, TaskingConstants.Columns.Location.SYNC_STATUS)) {
+            database.execSQL(String.format("ALTER TABLE %s ADD COLUMN %s VARCHAR DEFAULT %s ", TaskingConstants.Tables.LOCATION_TABLE,
+                    TaskingConstants.Columns.Location.SYNC_STATUS, BaseRepository.TYPE_Synced));
         }
 
         onUpgrade(database, 1, BuildConfig.DATABASE_VERSION);

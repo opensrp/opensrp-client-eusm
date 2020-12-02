@@ -8,7 +8,6 @@ import androidx.annotation.Nullable;
 
 import org.robolectric.annotation.Implementation;
 import org.robolectric.annotation.Implements;
-import org.smartregister.eusm.view.AppMapView;
 
 /**
  * Created by samuelgithengi on 1/23/20.

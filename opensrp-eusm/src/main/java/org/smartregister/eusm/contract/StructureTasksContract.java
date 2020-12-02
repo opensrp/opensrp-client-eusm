@@ -4,7 +4,9 @@ import android.content.Context;
 
 import org.smartregister.domain.Event;
 import org.smartregister.domain.Task;
-import org.smartregister.eusm.model.StructureTaskDetail;
+import org.smartregister.eusm.model.TaskDetail;
+import org.smartregister.tasking.contract.BaseContract;
+import org.smartregister.tasking.contract.UserLocationContract;
 
 import java.util.List;
 import java.util.Set;
@@ -20,9 +22,9 @@ public interface StructureTasksContract {
 
         void refreshTasks();
 
-        void onTasksFound(List<StructureTaskDetail> taskDetailsList, StructureTaskDetail incompleteIndexCase);
+        void onTasksFound(List<TaskDetail> taskDetailsList, TaskDetail incompleteIndexCase);
 
-        void onTaskSelected(StructureTaskDetail details, boolean isEdit, boolean isUndo);
+        void onTaskSelected(TaskDetail details, boolean isEdit, boolean isUndo);
 
         void saveJsonForm(String json);
 
@@ -32,7 +34,7 @@ public interface StructureTasksContract {
 
         void onEventFound(Event event);
 
-        void resetTaskInfo(StructureTaskDetail taskDetails);
+        void resetTaskInfo(TaskDetail taskDetails);
 
         void onTaskInfoReset(String structureId);
     }
@@ -41,11 +43,11 @@ public interface StructureTasksContract {
 
         void findTasks(String structureId, String currentPlanId, String operationalAreaId);
 
-        void getStructure(StructureTaskDetail details);
+        void getStructure(TaskDetail details);
 
-        void findLastEvent(StructureTaskDetail taskDetails);
+        void findLastEvent(TaskDetail taskDetails);
 
-        void resetTaskInfo(Context context, StructureTaskDetail taskDetails);
+        void resetTaskInfo(Context context, TaskDetail taskDetails);
     }
 
     interface View extends UserLocationContract.UserLocationView, BaseFormFragmentContract.View {
@@ -60,7 +62,7 @@ public interface StructureTasksContract {
 
         Context getContext();
 
-        void setTaskDetailsList(List<StructureTaskDetail> taskDetailsList);
+        void setTaskDetailsList(List<TaskDetail> taskDetailsList);
 
         void updateTask(String taskID, Task.TaskStatus taskStatus, String businessStatus);
 
@@ -72,6 +74,6 @@ public interface StructureTasksContract {
 
         void updateTasks(String taskID, Task.TaskStatus taskStatus, String businessStatus, Set<Task> removedTasks);
 
-        void displayResetTaskInfoDialog(StructureTaskDetail taskDetails);
+        void displayResetTaskInfoDialog(TaskDetail taskDetails);
     }
 }

@@ -5,6 +5,7 @@ import android.content.Intent;
 import org.smartregister.eusm.R;
 import org.smartregister.eusm.application.EusmApplication;
 import org.smartregister.eusm.presenter.LoginPresenter;
+import org.smartregister.eusm.util.TestDataUtils;
 import org.smartregister.task.SaveTeamLocationsTask;
 import org.smartregister.util.Utils;
 import org.smartregister.view.activity.BaseLoginActivity;
@@ -27,8 +28,11 @@ public class LoginActivity extends BaseLoginActivity implements BaseLoginContrac
         if (remote) {
             Utils.startAsyncTask(new SaveTeamLocationsTask(), null);
         }
+
+        TestDataUtils testDataUtils = new TestDataUtils();
+        testDataUtils.populateTestData();
         EusmApplication.getInstance().getContext().anmLocationController().evict();
-        Intent intent = new Intent(this, HomeActivity.class);
+        Intent intent = new Intent(this, EusmHomeActivity.class);
         startActivity(intent);
 
         finish();

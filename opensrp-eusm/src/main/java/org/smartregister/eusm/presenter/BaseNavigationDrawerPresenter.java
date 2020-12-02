@@ -17,12 +17,12 @@ import org.smartregister.domain.PlanDefinition.PlanStatus;
 import org.smartregister.domain.form.FormLocation;
 import org.smartregister.eusm.R;
 import org.smartregister.eusm.application.EusmApplication;
-import org.smartregister.eusm.contract.BaseDrawerContract;
-import org.smartregister.eusm.interactor.BaseDrawerInteractor;
 import org.smartregister.eusm.util.AppConstants;
 import org.smartregister.eusm.util.DefaultLocationUtils;
-import org.smartregister.eusm.util.PreferencesUtil;
 import org.smartregister.location.helper.LocationHelper;
+import org.smartregister.tasking.contract.BaseDrawerContract;
+import org.smartregister.tasking.interactor.BaseDrawerInteractor;
+import org.smartregister.tasking.util.PreferencesUtil;
 import org.smartregister.util.AssetHandler;
 import org.smartregister.util.Utils;
 
@@ -65,7 +65,11 @@ public class BaseNavigationDrawerPresenter implements BaseDrawerContract.Present
             List<String> defaultLocation = locationHelper.generateDefaultLocationHierarchy(DefaultLocationUtils.getLocationLevels());
 
             if (defaultLocation != null) {
-                prefsUtil.setCurrentDistrict(defaultLocation.get(2));
+                try {
+                    prefsUtil.setCurrentDistrict(defaultLocation.get(2));
+                }catch (IndexOutOfBoundsException w){
+                    Timber.e(w);
+                }
             }
         } else {
             populateLocationsFromPreferences();
@@ -173,7 +177,7 @@ public class BaseNavigationDrawerPresenter implements BaseDrawerContract.Present
         if (name.size() <= 2)//no operational area was selected, dialog was dismissed
             return;
         try {
-            prefsUtil.setCurrentRegion(name.get(1));
+            //prefsUtil.setCurrentRegion(name.get(1));
             String operationalArea = name.get(name.size() - 1);
             prefsUtil.setCurrentDistrict(operationalArea);
             prefsUtil.setCurrentOperationalArea(operationalArea);
@@ -222,11 +226,11 @@ public class BaseNavigationDrawerPresenter implements BaseDrawerContract.Present
         drawerActivity.onDrawerClosed();
     }
 
-    private void unlockDrawerLayout() {
+    @Override
+    public void unlockDrawerLayout() {
         if (isPlanAndOperationalAreaSelected()) {
             getView().unlockNavigationDrawer();
         }
-
     }
 
     @Override
@@ -326,5 +330,15 @@ public class BaseNavigationDrawerPresenter implements BaseDrawerContract.Present
                 syncLabel.setBackground(ContextCompat.getDrawable(activity, R.drawable.rounded_border_alert_red));
             }
         }
+    }
+
+    @Override
+    public void startOtherFormsActivity() {
+
+    }
+
+    @Override
+    public void onShowFilledForms() {
+
     }
 }

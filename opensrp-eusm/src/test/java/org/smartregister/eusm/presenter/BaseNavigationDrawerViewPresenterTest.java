@@ -13,9 +13,6 @@ import org.mockito.junit.MockitoRule;
 import org.powermock.reflect.Whitebox;
 import org.smartregister.eusm.BaseUnitTest;
 import org.smartregister.eusm.application.EusmApplication;
-import org.smartregister.eusm.contract.BaseDrawerContract;
-import org.smartregister.eusm.interactor.BaseDrawerInteractor;
-import org.smartregister.eusm.util.PreferencesUtil;
 import org.smartregister.location.helper.LocationHelper;
 
 import java.util.ArrayList;

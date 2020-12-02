@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".activity.TaskRegisterActivity">
+    tools:context=".activity.EusmTaskRegisterActivity">
 
     <com.google.android.material.appbar.AppBarLayout
         android:id="@+id/collapsing_toolbar_appbarlayout"
@@ -130,20 +130,6 @@
             </LinearLayout>
 
         </com.google.android.material.appbar.CollapsingToolbarLayout>
-
-
-        <com.google.android.material.tabs.TabLayout
-            android:id="@+id/tabs"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:visibility="gone"
-            app:tabGravity="fill"
-            app:tabIndicatorColor="#E2E363"
-            app:tabIndicatorHeight="4dp"
-            app:tabMaxWidth="0dp"
-            app:tabMode="fixed"
-            app:tabSelectedTextColor="@color/white"
-            app:tabTextAppearance="@style/CustomFontTextViewStyle.tabIndicator.sub.white" />
 
     </com.google.android.material.appbar.AppBarLayout>
 

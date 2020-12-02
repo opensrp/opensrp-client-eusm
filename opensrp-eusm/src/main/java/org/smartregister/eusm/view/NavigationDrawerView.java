@@ -1,16 +1,13 @@
 package org.smartregister.eusm.view;
 
-import android.app.Activity;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.view.Gravity;
 import android.view.View;
-import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.appcompat.widget.PopupMenu;
 import androidx.core.util.Pair;
 import androidx.core.view.GravityCompat;
@@ -22,19 +19,14 @@ import com.vijay.jsonwizard.customviews.TreeViewDialog;
 import org.apache.commons.lang3.StringUtils;
 import org.json.JSONArray;
 import org.json.JSONException;
-import org.smartregister.CoreLibrary;
 import org.smartregister.eusm.BuildConfig;
 import org.smartregister.eusm.R;
-import org.smartregister.eusm.activity.OfflineMapsActivity;
 import org.smartregister.eusm.application.EusmApplication;
-import org.smartregister.eusm.contract.BaseDrawerContract;
 import org.smartregister.eusm.helper.GenericDrawerLayoutListener;
-import org.smartregister.eusm.interactor.BaseDrawerInteractor;
-import org.smartregister.eusm.presenter.BaseNavigationDrawerPresenter;
-import org.smartregister.eusm.util.AlertDialogUtils;
 import org.smartregister.eusm.util.AppUtils;
+import org.smartregister.tasking.contract.BaseDrawerContract;
+import org.smartregister.tasking.view.DrawerMenuView;
 import org.smartregister.util.LangUtils;
-import org.smartregister.util.NetworkUtils;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -46,65 +38,23 @@ import java.util.Map;
 
 import timber.log.Timber;
 
-public class NavigationDrawerView implements View.OnClickListener, BaseDrawerContract.View {
+public class NavigationDrawerView extends DrawerMenuView {
 
-    private final BaseDrawerContract.Presenter presenter;
-    private final BaseDrawerContract.DrawerActivity activity;
-    private final BaseDrawerContract.Interactor interactor;
-    private TextView planTextView;
-    private TextView operationalAreaTextView;
-    private TextView operatorTextView;
     private TextView languageChooserTextView;
-    private DrawerLayout mDrawerLayout;
 
     public NavigationDrawerView(BaseDrawerContract.DrawerActivity activity) {
-        this.activity = activity;
-        presenter = new BaseNavigationDrawerPresenter(this);
-        interactor = new BaseDrawerInteractor(presenter);
+        super(activity);
     }
 
     @Override
-    public void initializeDrawerLayout() {
-        mDrawerLayout = getContext().findViewById(R.id.drawer_layout);
-
-        mDrawerLayout.addDrawerListener(new GenericDrawerLayoutListener() {
-            @Override
-            public void onDrawerClosed(@NonNull View drawerView) {
-                presenter.onDrawerClosed();
-            }
-        });
-
-        setUpViews();
-
-        checkSynced();
-    }
-
-    protected void setUpViews() {
-        NavigationView navigationView = getContext().findViewById(R.id.nav_view);
-
+    public void setUpViews(NavigationView navigationView) {
+        super.setUpViews(navigationView);
         View headerView = navigationView.getHeaderView(0);
-
-        try {
-            String appVersion = getContext().getString(R.string.app_version_without_build_number, AppUtils.getVersion(getContext()));
-            ((TextView) headerView.findViewById(R.id.application_version))
-                    .setText(appVersion);
-        } catch (PackageManager.NameNotFoundException e) {
-            Timber.e(e);
-        }
-
 
         String buildDate = new SimpleDateFormat("dd/MM/yyyy", Locale.getDefault())
                 .format(new Date(BuildConfig.BUILD_TIMESTAMP));
 
         ((TextView) headerView.findViewById(R.id.application_updated)).setText(getContext().getString(R.string.app_updated, buildDate));
-
-        planTextView = headerView.findViewById(R.id.plan_selector);
-
-        operationalAreaTextView = headerView.findViewById(R.id.operational_area_selector);
-
-        operatorTextView = getContext().findViewById(R.id.operator_label);
-
-        TextView offlineMapTextView = headerView.findViewById(R.id.btn_navMenu_offline_maps);
 
         languageChooserTextView = headerView.findViewById(R.id.btn_navMenu_language_chooser);
 
@@ -114,19 +64,7 @@ public class NavigationDrawerView implements View.OnClickListener, BaseDrawerCon
 
         languageChooserTextView.setOnClickListener(this);
 
-        operationalAreaTextView.setOnClickListener(this);
-
-        planTextView.setOnClickListener(this);
-
-        offlineMapTextView.setVisibility(View.VISIBLE);
-
-        offlineMapTextView.setOnClickListener(this);
-
         getContext().findViewById(R.id.logout_button).setOnClickListener(this);
-
-        headerView.findViewById(R.id.sync_button).setOnClickListener(this);
-
-        headerView.findViewById(R.id.btn_navMenu_offline_maps).setOnClickListener(this);
 
         TextView poweredByTextView = getContext().findViewById(R.id.txt_powered_by);
         poweredByTextView.setText(String.format("%s OpenSRP", getString(R.string.powered_by)));
@@ -137,26 +75,6 @@ public class NavigationDrawerView implements View.OnClickListener, BaseDrawerCon
         langMap.put("en", getString(R.string.english_lang));
         langMap.put("fr", getString(R.string.french_lang));
         return langMap;
-    }
-
-    @Override
-    public String getPlan() {
-        return planTextView.getText().toString();
-    }
-
-    @Override
-    public void setPlan(String campaign) {
-        planTextView.setText(campaign);
-    }
-
-    @Override
-    public String getOperationalArea() {
-        return operationalAreaTextView.getText().toString();
-    }
-
-    @Override
-    public void setOperationalArea(String operationalArea) {
-        operationalAreaTextView.setText(operationalArea);
     }
 
     private String getString(int resId) {
@@ -181,27 +99,6 @@ public class NavigationDrawerView implements View.OnClickListener, BaseDrawerCon
     }
 
     @Override
-    public void lockNavigationDrawerForSelection() {
-        mDrawerLayout.openDrawer(GravityCompat.START);
-        mDrawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_OPEN);
-    }
-
-    @Override
-    public void lockNavigationDrawerForSelection(int title, int message) {
-        AlertDialogUtils.displayNotification(getContext(), title, message);
-        mDrawerLayout.openDrawer(GravityCompat.START);
-        mDrawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_OPEN);
-    }
-
-    @Override
-    public void unlockNavigationDrawer() {
-        if (mDrawerLayout.getDrawerLockMode(GravityCompat.START) == DrawerLayout.LOCK_MODE_LOCKED_OPEN) {
-            mDrawerLayout.closeDrawer(GravityCompat.START);
-            mDrawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED);
-        }
-    }
-
-    @Override
     public void showOperationalAreaSelector(Pair<String, ArrayList<String>> locationHierarchy) {
         try {
             TreeViewDialog treeViewDialog = new TreeViewDialog(getContext(),
@@ -212,7 +109,7 @@ public class NavigationDrawerView implements View.OnClickListener, BaseDrawerCon
             treeViewDialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
                 @Override
                 public void onDismiss(DialogInterface dialog) {
-                    presenter.onOperationalAreaSelectorClicked(treeViewDialog.getName());
+                    getPresenter().onOperationalAreaSelectorClicked(treeViewDialog.getName());
                 }
             });
             treeViewDialog.show();
@@ -237,7 +134,7 @@ public class NavigationDrawerView implements View.OnClickListener, BaseDrawerCon
             treeViewDialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
                 @Override
                 public void onDismiss(DialogInterface dialog) {
-                    presenter.onPlanSelectorClicked(treeViewDialog.getValue(), treeViewDialog.getName());
+                    getPresenter().onPlanSelectorClicked(treeViewDialog.getValue(), treeViewDialog.getName());
                 }
             });
             treeViewDialog.show();
@@ -246,23 +143,8 @@ public class NavigationDrawerView implements View.OnClickListener, BaseDrawerCon
         }
     }
 
-    @Override
-    public void displayNotification(int title, int message, Object... formatArgs) {
-        AlertDialogUtils.displayNotification(getContext(), title, message, formatArgs);
-    }
-
-    @Override
-    public Activity getContext() {
-        return activity.getActivity();
-    }
-
-    @Override
-    public void openDrawerLayout() {
-        mDrawerLayout.openDrawer(GravityCompat.START);
-    }
-
     public void closeDrawerLayout() {
-        if (presenter.isPlanAndOperationalAreaSelected()) {
+        if (getPresenter().isPlanAndOperationalAreaSelected()) {
             mDrawerLayout.closeDrawer(GravityCompat.START);
         }
     }
@@ -270,13 +152,13 @@ public class NavigationDrawerView implements View.OnClickListener, BaseDrawerCon
     @Override
     public void onClick(View v) {
         if (v.getId() == R.id.operational_area_selector)
-            presenter.onShowOperationalAreaSelector();
+            getPresenter().onShowOperationalAreaSelector();
         else if (v.getId() == R.id.plan_selector)
-            presenter.onShowPlanSelector();
+            getPresenter().onShowPlanSelector();
         else if (v.getId() == R.id.logout_button)
             EusmApplication.getInstance().logoutCurrentUser();
         else if (v.getId() == R.id.btn_navMenu_offline_maps)
-            presenter.onShowOfflineMaps();
+            getPresenter().onShowOfflineMaps();
         else if (v.getId() == R.id.btn_navMenu_language_chooser)
             showLanguageChooser();
         else if (v.getId() == R.id.sync_button) {
@@ -301,59 +183,5 @@ public class NavigationDrawerView implements View.OnClickListener, BaseDrawerCon
             getContext().startActivity(intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK));
             return false;
         });
-    }
-
-    @Override
-    public BaseDrawerContract.Presenter getPresenter() {
-        return presenter;
-    }
-
-    @Override
-    public void onResume() {
-        presenter.onViewResumed();
-    }
-
-    @Override
-    public void openOfflineMapsView() {
-        Intent intent = new Intent(getContext(), OfflineMapsActivity.class);
-        getContext().startActivity(intent);
-    }
-
-    @Override
-    public void checkSynced() {
-        interactor.checkSynced();
-    }
-
-    @Override
-    public void toggleProgressBarView(boolean syncing) {
-        ProgressBar progressBar = getContext().findViewById(R.id.sync_progress_bar);
-        TextView progressLabel = this.activity.getActivity().findViewById(R.id.sync_progress_bar_label);
-        TextView syncButton = this.activity.getActivity().findViewById(R.id.sync_button);
-        TextView syncBadge = this.activity.getActivity().findViewById(R.id.sync_label);
-        if (progressBar == null || syncBadge == null)
-            return;
-        //only hide the sync button when there is internet connection
-        if (syncing && NetworkUtils.isNetworkAvailable()) {
-            progressBar.setVisibility(View.VISIBLE);
-            progressLabel.setVisibility(View.VISIBLE);
-            syncButton.setVisibility(View.INVISIBLE);
-            syncBadge.setVisibility(View.INVISIBLE);
-        } else {
-            progressBar.setVisibility(View.INVISIBLE);
-            progressLabel.setVisibility(View.INVISIBLE);
-            syncButton.setVisibility(View.VISIBLE);
-            syncBadge.setVisibility(View.VISIBLE);
-        }
-    }
-
-    @Nullable
-    @Override
-    public String getManifestVersion() {
-        return CoreLibrary.getInstance().context().allSharedPreferences().fetchManifestVersion();
-    }
-
-    @Override
-    public BaseDrawerContract.DrawerActivity getActivity() {
-        return activity;
     }
 }

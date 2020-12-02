@@ -11,16 +11,17 @@ import androidx.annotation.UiThread;
 
 import org.json.JSONObject;
 import org.smartregister.eusm.R;
-import org.smartregister.eusm.activity.HomeActivity;
-import org.smartregister.eusm.activity.TaskRegisterActivity;
+import org.smartregister.eusm.activity.EusmHomeActivity;
+import org.smartregister.eusm.activity.EusmTaskRegisterActivity;
 import org.smartregister.eusm.adapter.StructureRegisterAdapter;
-import org.smartregister.eusm.contract.BaseDrawerContract;
 import org.smartregister.eusm.contract.StructureRegisterFragmentContract;
 import org.smartregister.eusm.model.StructureDetail;
 import org.smartregister.eusm.presenter.StructureRegisterFragmentPresenter;
 import org.smartregister.eusm.util.AppConstants;
-import org.smartregister.eusm.util.LocationUtils;
-import org.smartregister.eusm.view.NavigationDrawerView;
+import org.smartregister.tasking.TaskingLibrary;
+import org.smartregister.tasking.contract.BaseDrawerContract;
+import org.smartregister.tasking.util.LocationUtils;
+import org.smartregister.tasking.util.TaskingLibraryConfiguration;
 
 import java.text.MessageFormat;
 import java.util.List;
@@ -35,10 +36,13 @@ public class StructureRegisterFragment extends BaseDrawerRegisterFragment implem
 
     private TextView strPageInfoView;
 
+    private TaskingLibraryConfiguration taskingLibraryConfiguration;
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        drawerView = new NavigationDrawerView(this);
+        taskingLibraryConfiguration = TaskingLibrary.getInstance().getTaskingLibraryConfiguration();
+        drawerView = taskingLibraryConfiguration.getDrawerMenuView(this);
     }
 
     @Override
@@ -49,7 +53,7 @@ public class StructureRegisterFragment extends BaseDrawerRegisterFragment implem
     @Override
     protected void onViewClicked(View view) {
         int id = view.getId();
-        if (id == R.id.btn_structure_register) {
+        if (id == R.id.task_register) {
             startMapActivity();
         } else if (id == R.id.drawerMenu) {
             drawerView.openDrawerLayout();
@@ -59,7 +63,7 @@ public class StructureRegisterFragment extends BaseDrawerRegisterFragment implem
             presenter().onPreviousButtonClick();
         } else if (id == R.id.table_layout) {
             StructureDetail structureDetail = (StructureDetail) view.getTag(R.id.structure_detail);
-            Intent intent = new Intent(getActivity(), TaskRegisterActivity.class);
+            Intent intent = new Intent(getActivity(), EusmTaskRegisterActivity.class);
             intent.putExtra(AppConstants.IntentData.STRUCTURE_DETAIL, structureDetail);
             getActivity().startActivity(intent);
         }
@@ -144,7 +148,7 @@ public class StructureRegisterFragment extends BaseDrawerRegisterFragment implem
 
     @Override
     public void startMapActivity() {
-        Intent intent = new Intent(getActivity(), HomeActivity.class);
+        Intent intent = new Intent(getActivity(), EusmHomeActivity.class);
         getActivity().startActivity(intent);
     }
 
@@ -162,7 +166,7 @@ public class StructureRegisterFragment extends BaseDrawerRegisterFragment implem
     public void setupViews(View view) {
         super.setupViews(view);
 
-        TextView servicePointBtnRegisterTextView = view.findViewById(R.id.btn_structure_register);
+        TextView servicePointBtnRegisterTextView = view.findViewById(R.id.task_register);
         servicePointBtnRegisterTextView.setText(getString(R.string.map));
         servicePointBtnRegisterTextView.setOnClickListener(this);
 

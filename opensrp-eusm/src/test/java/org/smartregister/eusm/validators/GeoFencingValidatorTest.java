@@ -11,7 +11,6 @@ import org.mockito.junit.MockitoJUnit;
 import org.mockito.junit.MockitoRule;
 import org.powermock.reflect.Whitebox;
 import org.smartregister.eusm.BaseUnitTest;
-import org.smartregister.eusm.view.AppMapView;
 
 import static org.junit.Assert.assertNotNull;
 

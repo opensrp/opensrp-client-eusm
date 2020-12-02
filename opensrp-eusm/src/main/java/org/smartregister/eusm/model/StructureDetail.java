@@ -3,6 +3,7 @@ package org.smartregister.eusm.model;
 import java.io.Serializable;
 
 public class StructureDetail implements Serializable {
+    private String structureId;
     private boolean nearby;
     private Float distance;
     private String distanceMeta;
@@ -11,6 +12,7 @@ public class StructureDetail implements Serializable {
     private String structureName;
     private String structureType;
     private String commune;
+    private String numOfTasks;
 
     public String getDistanceMeta() {
         return distanceMeta;
@@ -74,6 +76,22 @@ public class StructureDetail implements Serializable {
 
     public void setCommune(String commune) {
         this.commune = commune;
+    }
+
+    public String getNumOfTasks() {
+        return numOfTasks;
+    }
+
+    public void setNumOfTasks(String numOfTasks) {
+        this.numOfTasks = numOfTasks;
+    }
+
+    public String getStructureId() {
+        return structureId;
+    }
+
+    public void setStructureId(String structureId) {
+        this.structureId = structureId;
     }
 
     @Override

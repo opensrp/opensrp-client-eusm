@@ -13,9 +13,9 @@ import org.robolectric.RuntimeEnvironment;
 import org.robolectric.util.ReflectionHelpers;
 import org.smartregister.dto.UserAssignmentDTO;
 import org.smartregister.eusm.BaseUnitTest;
-import org.smartregister.eusm.util.PreferencesUtil;
 import org.smartregister.repository.AllSharedPreferences;
 import org.smartregister.service.UserService;
+import org.smartregister.tasking.util.PreferencesUtil;
 
 import java.util.Collections;
 import java.util.UUID;

@@ -19,15 +19,19 @@ import com.vijay.jsonwizard.domain.Form;
 
 import org.json.JSONObject;
 import org.smartregister.eusm.R;
+import org.smartregister.eusm.activity.AppJsonFormActivity;
 import org.smartregister.eusm.adapter.ProductInfoQuestionsAdapter;
 import org.smartregister.eusm.contract.ProductInfoFragmentContract;
-import org.smartregister.eusm.model.StructureTaskDetail;
+import org.smartregister.eusm.model.StructureDetail;
+import org.smartregister.eusm.model.TaskDetail;
 import org.smartregister.eusm.presenter.ProductInfoFragmentPresenter;
 import org.smartregister.eusm.util.AppConstants;
 
 public class ProductInfoFragment extends Fragment implements ProductInfoFragmentContract.View, View.OnClickListener {
 
-    private StructureTaskDetail structureTaskDetail;
+    private TaskDetail taskDetail;
+
+    private StructureDetail structureDetail;
 
     private ProductInfoQuestionsAdapter productInfoQuestionsAdapter;
 
@@ -42,7 +46,8 @@ public class ProductInfoFragment extends Fragment implements ProductInfoFragment
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        structureTaskDetail = (StructureTaskDetail) getArguments().getSerializable(AppConstants.IntentData.STRUCTURE_TASK_DETAIL);
+        taskDetail = (TaskDetail) getArguments().getSerializable(AppConstants.IntentData.TASK_DETAIL);
+        structureDetail = (StructureDetail) getArguments().getSerializable(AppConstants.IntentData.STRUCTURE_DETAIL);
         initializeAdapter();
         initializePresenter();
     }
@@ -68,7 +73,7 @@ public class ProductInfoFragment extends Fragment implements ProductInfoFragment
     @Override
     public void onResume() {
         super.onResume();
-        presenter.fetchProductQuestions();
+        presenter.fetchProductQuestions(taskDetail);
     }
 
     protected int getLayoutId() {
@@ -93,8 +98,8 @@ public class ProductInfoFragment extends Fragment implements ProductInfoFragment
     @Override
     public void startFlagProblemForm(JSONObject jsonForm) {
         Form form = new Form();
-        form.setWizard(false);
-        form.setName("");
+        form.setWizard(true);
+        form.setName("Flag Problem Form");
         form.setBackIcon(R.drawable.ic_action_close);
         form.setSaveLabel(getString(R.string.save));
         form.setActionBarBackground(R.color.primaryDark);
@@ -103,7 +108,7 @@ public class ProductInfoFragment extends Fragment implements ProductInfoFragment
         Intent intent = new Intent(getActivity(), JsonWizardFormActivity.class);
         intent.putExtra(JsonFormConstants.JSON_FORM_KEY.JSON, jsonForm.toString());
         intent.putExtra(JsonFormConstants.JSON_FORM_KEY.FORM, form);
-        startActivityForResult(intent, 20);
+        getActivity().startActivityForResult(intent, AppConstants.RequestCode.REQUEST_CODE_GET_JSON);
     }
 
     @Override
@@ -112,12 +117,14 @@ public class ProductInfoFragment extends Fragment implements ProductInfoFragment
         if (id == R.id.btn_product_looks_good) {
             openLooksGoodConfirmationDialog();
         } else if (id == R.id.layout_flag_problem) {
-            startFlagProblemForm(structureTaskDetail);
+            startFlagProblemForm();
         }
     }
 
-    protected void startFlagProblemForm(StructureTaskDetail structureTaskDetail) {
-        presenter.startFlagProblemForm(AppConstants.JsonForm.FLAG_PROBLEM);
+    protected void startFlagProblemForm() {
+        presenter.startFlagProblemForm(structureDetail,
+                taskDetail,
+                AppConstants.JsonForm.FLAG_PROBLEM_FORM);
     }
 
     protected void openLooksGoodConfirmationDialog() {
@@ -127,7 +134,7 @@ public class ProductInfoFragment extends Fragment implements ProductInfoFragment
         builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                presenter.markProductAsGood(structureTaskDetail);
+                //Do nothing
             }
         });
 
@@ -135,6 +142,8 @@ public class ProductInfoFragment extends Fragment implements ProductInfoFragment
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 //TODO add logic to update
+                presenter.markProductAsGood(structureDetail, taskDetail);
+
             }
         });
 

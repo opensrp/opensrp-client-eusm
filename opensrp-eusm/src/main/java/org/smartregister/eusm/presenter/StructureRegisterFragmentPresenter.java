@@ -4,8 +4,6 @@ import android.view.View;
 
 import androidx.annotation.StringRes;
 
-import org.json.JSONObject;
-import org.smartregister.domain.Event;
 import org.smartregister.eusm.contract.StructureRegisterFragmentContract;
 import org.smartregister.eusm.fragment.StructureRegisterFragment;
 import org.smartregister.eusm.interactor.StructureRegisterInteractor;
@@ -54,6 +52,9 @@ public class StructureRegisterFragmentPresenter extends BaseRegisterFragmentPres
     }
 
     public void fetchStructures() {
+        if (getView() != null) {
+            getView().showProgressView();
+        }
         structureRegisterInteractor.fetchStructures(this, currentPageNo, nameFilter);
     }
 
@@ -94,9 +95,8 @@ public class StructureRegisterFragmentPresenter extends BaseRegisterFragmentPres
 
         fetchStructures();
 
-        getFragment().getPreviousButton().setVisibility(View.VISIBLE);
-
-        if ((totalCount % ((currentPageNo) * pageSize)) == 0) {
+        if ((totalCount - ((currentPageNo) * pageSize)) > pageSize) {
+            getFragment().clientsView.scrollToPosition(0);
             getFragment().getNextButton().setVisibility(View.VISIBLE);
         } else {
             getFragment().getNextButton().setVisibility(View.INVISIBLE);
@@ -118,9 +118,9 @@ public class StructureRegisterFragmentPresenter extends BaseRegisterFragmentPres
         fetchStructures();
 
         int pageNo = currentPageNo - 1;
+        getFragment().clientsView.scrollToPosition(0);
 
-        if (pageNo < 0)
-            getFragment().getPreviousButton().setVisibility(View.INVISIBLE);
+        if (pageNo < 0) getFragment().getPreviousButton().setVisibility(View.INVISIBLE);
 
     }
 
@@ -146,6 +146,10 @@ public class StructureRegisterFragmentPresenter extends BaseRegisterFragmentPres
 
     @Override
     public void onFetchedStructures(List<StructureDetail> structureDetails) {
+        if (getView() != null) {
+            getView().hideProgressView();
+        }
+
         getFragment().updatePageInfo();
         getView().setStructureDetails(structureDetails);
     }
@@ -153,8 +157,8 @@ public class StructureRegisterFragmentPresenter extends BaseRegisterFragmentPres
     @Override
     public void onCountOfStructuresFetched(int count) {
         totalCount = count;
-        totalPageCount = (int) Math.ceil((double) totalCount / (double) pageSize);
-        getFragment().getNextButton().setVisibility((totalPageCount >= 0) ? View.VISIBLE : View.INVISIBLE);
+        totalPageCount = (int) Math.ceil((double) totalCount == 0 ? 1 : totalCount / (double) pageSize);
+        getFragment().getNextButton().setVisibility((totalPageCount > 1) ? View.VISIBLE : View.INVISIBLE);
         getFragment().updatePageInfo();
     }
 }

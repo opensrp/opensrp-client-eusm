@@ -11,9 +11,11 @@ import net.sqlcipher.database.SQLiteDatabase;
 
 import org.apache.commons.lang3.StringUtils;
 import org.smartregister.domain.Geometry;
+import org.smartregister.eusm.application.EusmApplication;
 import org.smartregister.eusm.model.StructureDetail;
 import org.smartregister.eusm.util.AppConstants;
 import org.smartregister.eusm.util.AppUtils;
+import org.smartregister.eusm.util.TestDataUtils;
 import org.smartregister.repository.BaseRepository;
 import org.smartregister.repository.StructureRepository;
 import org.smartregister.repository.helper.MappingHelper;
@@ -26,6 +28,7 @@ import java.util.Locale;
 import timber.log.Timber;
 
 import static org.smartregister.AllConstants.ROWID;
+import static org.smartregister.AllConstants.TYPE;
 
 public class AppStructureRepository extends StructureRepository {
 
@@ -35,18 +38,18 @@ public class AppStructureRepository extends StructureRepository {
                     UUID + " VARCHAR , " +
                     PARENT_ID + " VARCHAR , " +
                     NAME + " VARCHAR , " +
-                    "type VARCHAR , " +
+                    AppConstants.Column.Structure.TYPE + " VARCHAR , " +
                     SYNC_STATUS + " VARCHAR DEFAULT " + BaseRepository.TYPE_Synced + ", " +
                     LATITUDE + " FLOAT , " +
                     LONGITUDE + " FLOAT , " +
-                    GEOJSON + " VARCHAR NOT NULL ) ";
+                    GEOJSON + " VARCHAR ) ";
 
     private static final String CREATE_STRUCTURE_PARENT_INDEX = "CREATE INDEX "
             + STRUCTURE_TABLE + "_" + PARENT_ID + "_ind ON " + STRUCTURE_TABLE + "(" + PARENT_ID + ")";
 
     private MappingHelper helper;
 
-    private int CURRENT_LIMIT = AppConstants.STRUCTURE_REGISTER_PAGE_SIZE;
+    private final int CURRENT_LIMIT = AppConstants.STRUCTURE_REGISTER_PAGE_SIZE;
 
     public static void createTable(SQLiteDatabase database) {
         database.execSQL(CREATE_STRUCTURE_TABLE);
@@ -76,26 +79,30 @@ public class AppStructureRepository extends StructureRepository {
         contentValues.put(UUID, location.getProperties().getUid());
         contentValues.put(PARENT_ID, location.getProperties().getParentId());
         contentValues.put(NAME, location.getProperties().getName());
-        contentValues.put("type", location.getProperties().getType());
+        contentValues.put(AppConstants.Column.Structure.TYPE, location.getProperties().getType());
         contentValues.put(SYNC_STATUS, location.getSyncStatus());
         contentValues.put(GEOJSON, gson.toJson(location));
-        if (location.getGeometry().getType().equals(Geometry.GeometryType.POINT)) {
-            contentValues.put(LONGITUDE, location.getGeometry().getCoordinates().get(0).getAsFloat());
-            contentValues.put(LATITUDE, location.getGeometry().getCoordinates().get(1).getAsFloat());
-        } else if (getHelper() != null) {
-            android.location.Location center = getHelper().getCenter(gson.toJson(location.getGeometry()));
-            contentValues.put(LATITUDE, center.getLatitude());
-            contentValues.put(LONGITUDE, center.getLongitude());
+        if (location.getGeometry() != null) {
+            if (Geometry.GeometryType.POINT.equals(location.getGeometry().getType())) {
+                contentValues.put(LONGITUDE, location.getGeometry().getCoordinates().get(0).getAsFloat());
+                contentValues.put(LATITUDE, location.getGeometry().getCoordinates().get(1).getAsFloat());
+            } else if (getHelper() != null) {
+                android.location.Location center = getHelper().getCenter(gson.toJson(location.getGeometry()));
+                contentValues.put(LATITUDE, center.getLatitude());
+                contentValues.put(LONGITUDE, center.getLongitude());
+            }
         }
         getWritableDatabase().replace(getLocationTableName(), null, contentValues);
     }
 
     public int countOfStructures(String nameFilter) {
         SQLiteDatabase sqLiteDatabase = getReadableDatabase();
-        String query = "SELECT count(_id), name from " + STRUCTURE_TABLE;
+        String query = "SELECT count(" + STRUCTURE_TABLE + "._id" + ") from " + STRUCTURE_TABLE;
         if (StringUtils.isNotBlank(nameFilter)) {
-            query += " where name like '%" + nameFilter + "%'";
+            query += " where " + STRUCTURE_TABLE + "." + NAME + " like '%" + nameFilter + "%'";
         }
+        query += " join task on task.for = " + StructureRepository.STRUCTURE_TABLE + "._id ";
+
         int count = 0;
         try (Cursor cursor = sqLiteDatabase.rawQuery(query, null)) {
             if (cursor != null && cursor.moveToNext()) {
@@ -110,67 +117,70 @@ public class AppStructureRepository extends StructureRepository {
     public List<StructureDetail> fetchStructureDetails(int pageNo, String locationId, String nameFilter) {
         List<StructureDetail> structureDetails = new ArrayList<>();
         SQLiteDatabase sqLiteDatabase = getReadableDatabase();
-        String columns[] = new String[]{
+        String[] columns = new String[]{
                 STRUCTURE_TABLE + "." + "_id",
-                "task" + "." + "business_status",
-                "task" + "." + "status",
-                "task" + "." + "sync_status",
-                "task" + "." + "focus",
-                STRUCTURE_TABLE + "." + "name as name",
+                STRUCTURE_TABLE + "." + "name",
                 STRUCTURE_TABLE + "." + "type",
                 STRUCTURE_TABLE + "." + "latitude",
                 STRUCTURE_TABLE + "." + "longitude",
-                STRUCTURE_TABLE + "." + "geojson"
+                STRUCTURE_TABLE + "." + "geojson",
+                "(((?  - longitude)*(?  - longitude)) + ((?  - latitude)*(?  - latitude))) as dist",
+                "case \n" +
+                        "when (sum(task.business_status != 'Not Visited')*1.0/sum(task.business_status= 'Not Visited')*1.0) = 0.0 then count(task._id) \n" +
+                        "when (sum(task.business_status != 'Not Visited')*1.0/sum(task.business_status= 'Not Visited')*1.0) > 0.0 and (sum(task.business_status != 'Not Visited')*1.0/sum(task.business_status= 'Not Visited')*1.0) < 1.0 then 'in_progress'\n" +
+                        "else 'completed' end as taskStatus",
+                "count(task._id) as numOfTasks"
         };
 
         int offset = pageNo * CURRENT_LIMIT;
 
-        String query = "SELECT " + StringUtils.join(columns, ",") + " from " + org.smartregister.repository.StructureRepository.STRUCTURE_TABLE +
-                " structure join task on structure._id = task.for";
+        String query = "SELECT " + StringUtils.join(columns, ",") + " from " + StructureRepository.STRUCTURE_TABLE
+                + " join task on task.location = " + StructureRepository.STRUCTURE_TABLE + "._id ";
+
+        Location location = EusmApplication.getInstance().getUserLocation();
+        String[] args = new String[]{String.valueOf(location.getLongitude()), String.valueOf(location.getLongitude()), String.valueOf(location.getLatitude()), String.valueOf(location.getLatitude())};
         if (StringUtils.isNotBlank(nameFilter)) {
             query += " where name like '%" + nameFilter + "%'";
         }
 
-        query += " LIMIT " + CURRENT_LIMIT + " OFFSET " + offset;
+        query += " group by " + STRUCTURE_TABLE + "." + "_id" + " order by case when dist is null then 1 else 0 end, dist LIMIT " + CURRENT_LIMIT + " OFFSET " + offset;
 
-        Cursor cursor = sqLiteDatabase.rawQuery(query, null);
-
-        if (cursor != null) {
-            while (cursor.moveToNext()) {
-                structureDetails.add(createStructureDetail(cursor));
+        try (Cursor cursor = sqLiteDatabase.rawQuery(query, args)) {
+            if (cursor != null) {
+                while (cursor.moveToNext()) {
+                    structureDetails.add(createStructureDetail(cursor));
+                }
             }
+        } catch (SQLException e) {
+            Timber.e(e);
         }
-
         return structureDetails;
     }
 
     private StructureDetail createStructureDetail(@NonNull Cursor cursor) {
-        String id = cursor.getString(0);
-        String businessStatus = cursor.getString(1);
-        String status = cursor.getString(2);
-        String syncStatus = cursor.getString(3);
-        String focus = cursor.getString(4);
-        String name = cursor.getString(5);
-        String type = cursor.getString(6);
-        Float latitude = cursor.getFloat(7);
-        Float longitude = cursor.getFloat(8);
-        String geojson = cursor.getString(9);
+        String id = cursor.getString(cursor.getColumnIndex(ID));
+        String name = cursor.getString(cursor.getColumnIndex(NAME));
+        String type = cursor.getString(cursor.getColumnIndex(TYPE));
+        String latitude = cursor.getString(cursor.getColumnIndex(LATITUDE));
+        String longitude = cursor.getString(cursor.getColumnIndex(LONGITUDE));
+        String taskStatus = cursor.getString(cursor.getColumnIndex("taskStatus"));
 
         StructureDetail structureDetail = new StructureDetail();
+        structureDetail.setStructureId(id);
         structureDetail.setStructureName(name);
         structureDetail.setStructureType(type);
-        structureDetail.setTaskStatus(status);
+        structureDetail.setTaskStatus(taskStatus);
+        structureDetail.setNumOfTasks(cursor.getString(cursor.getColumnIndex("numOfTasks")));
 
-        if (latitude != null && longitude != null) {
+        if (StringUtils.isNotBlank(latitude) && StringUtils.isNotBlank(longitude)) {
             Location location = new Location("b");
-            location.setLatitude(latitude);
-            location.setLongitude(longitude);
+            location.setLatitude(Double.parseDouble(latitude));
+            location.setLongitude(Double.parseDouble(longitude));
 
             Float distanceInMetres = AppUtils.distanceFromUserLocation(location);
             if (distanceInMetres != null) {
                 structureDetail.setDistance(distanceInMetres);
                 structureDetail.setDistanceMeta(formatDistance(distanceInMetres));
-
                 structureDetail.setNearby(distanceInMetres <= AppConstants.NEARBY_DISTANCE_IN_METRES);
             }
         }

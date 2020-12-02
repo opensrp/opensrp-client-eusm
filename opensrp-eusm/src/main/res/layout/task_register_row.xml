@@ -8,23 +8,25 @@
 
     <FrameLayout
         android:id="@+id/layout_product_image"
-        android:layout_width="90dp"
-        android:layout_height="90dp"
-        android:paddingTop="0dp"
+        android:layout_width="110dp"
+        android:layout_height="110dp"
+        android:paddingTop="1dp"
+        android:paddingEnd="2dp"
+        android:paddingStart="1dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
         <ImageView
             android:id="@+id/img_product_image"
-            android:layout_width="90dp"
-            android:layout_height="90dp"
-            android:src="@drawable/login_logo" />
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:src="@drawable/default_product_photo_thumbnail" />
 
         <ImageView
             android:id="@+id/img_rectangle_overlay"
-            android:layout_width="90dp"
-            android:layout_height="90dp"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
             android:src="@drawable/ic_rectangle"
             android:visibility="gone" />
 

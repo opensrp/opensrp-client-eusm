@@ -5,51 +5,51 @@ import android.content.Context;
 
 import androidx.annotation.NonNull;
 
-import com.vijay.jsonwizard.utils.FormUtils;
+import com.vijay.jsonwizard.constants.JsonFormConstants;
 
+import org.json.JSONArray;
 import org.json.JSONObject;
 import org.smartregister.eusm.R;
 import org.smartregister.eusm.application.EusmApplication;
-import org.smartregister.eusm.config.AppExecutors;
 import org.smartregister.eusm.contract.TaskRegisterFragmentContract;
-import org.smartregister.eusm.model.StructureTaskDetail;
-import org.smartregister.eusm.util.AppConstants;
-import org.smartregister.eusm.util.TestDataUtils;
+import org.smartregister.eusm.model.StructureDetail;
+import org.smartregister.eusm.model.TaskDetail;
+import org.smartregister.eusm.util.AppJsonFormUtils;
+import org.smartregister.eusm.util.AppUtils;
+import org.smartregister.util.AppExecutors;
 
-import java.util.ArrayList;
 import java.util.Comparator;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
-
-import timber.log.Timber;
 
 public class TaskRegisterFragmentInteractor implements TaskRegisterFragmentContract.Interactor {
 
-    private AppExecutors appExecutors;
+    private final AppExecutors appExecutors;
 
-    private Context context = EusmApplication.getInstance().getBaseContext();
+    private Context context;
 
-    private FormUtils formUtils;
+    private AppJsonFormUtils jsonFormUtils;
 
     public TaskRegisterFragmentInteractor() {
         appExecutors = EusmApplication.getInstance().getAppExecutors();
     }
 
     @Override
-    public void fetchData(@NonNull TaskRegisterFragmentContract.InteractorCallBack callBack) {
+    public void fetchData(@NonNull StructureDetail structureDetail, @NonNull TaskRegisterFragmentContract.InteractorCallBack callBack) {
         appExecutors.diskIO().execute(new Runnable() {
             @Override
             public void run() {
-                //fetchData
+                List<TaskDetail> taskDetails = EusmApplication.getInstance().getAppTaskRepository()
+                        .getTasksByStructureId(structureDetail.getStructureId());
 
-                List<StructureTaskDetail> structureTaskDetails = TestDataUtils.getStructureDetail();
-
-                List<StructureTaskDetail> sortStructureTaskDetails = sortTaskDetails(structureTaskDetails);
+                List<TaskDetail> sortTaskDetails = sortTaskDetails(taskDetails);
 
                 appExecutors.mainThread().execute(new Runnable() {
                     @Override
                     public void run() {
-                        callBack.onFetchedData(sortStructureTaskDetails);
+                        callBack.onFetchedData(sortTaskDetails);
                     }
                 });
             }
@@ -57,82 +57,90 @@ public class TaskRegisterFragmentInteractor implements TaskRegisterFragmentContr
     }
 
     @Override
-    public String getFixProblemForm() {
-        return AppConstants.JsonForm.FIX_PROBLEM;
-    }
-
-    @Override
-    public void startFixProblemForm(StructureTaskDetail structureTaskDetail, Activity activity, TaskRegisterFragmentContract.InteractorCallBack callBack) {
-        appExecutors.diskIO().execute(new Runnable() {
-            @Override
-            public void run() {
-                JSONObject form = getFormUtils().getFormJson(activity, getFixProblemForm());
-                appExecutors.mainThread().execute(new Runnable() {
-                    @Override
-                    public void run() {
-                        callBack.onFixProblemFormFetched(form);
-                    }
-                });
+    public void startForm(StructureDetail structureDetail, TaskDetail taskDetail, Activity activity,
+                          TaskRegisterFragmentContract.InteractorCallBack callBack, String formName) {
+        appExecutors.diskIO().execute(() -> {
+            JSONObject form = getJsonFormUtils().getFormObjectWithDetails(activity, formName, structureDetail, taskDetail);
+            if (form != null) {
+                injectAdditionalFields(form, formName, structureDetail, taskDetail);
             }
+            appExecutors.mainThread().execute(() -> callBack.onFormFetched(form));
         });
 
     }
 
-    private List<StructureTaskDetail> sortTaskDetails(List<StructureTaskDetail> structureTaskDetails) {
+    @Override
+    public void injectAdditionalFields(@NonNull JSONObject jsonForm,
+                                       @NonNull String formName,
+                                       @NonNull StructureDetail structureDetail,
+                                       @NonNull TaskDetail taskDetail) {
+        Map<String, String> injectedFields = new HashMap<>();
+        JSONObject step = jsonForm.optJSONObject(JsonFormConstants.STEP1);
+        JSONArray jsonArray = step.optJSONArray(JsonFormConstants.FIELDS);
+        for (Map.Entry<String, String> entry : injectedFields.entrySet()) {
+            JSONObject jsonObject1 = AppUtils.getHiddenFieldTemplate(entry.getKey(), entry.getValue());
+            jsonArray.put(jsonObject1);
+        }
+    }
 
-        structureTaskDetails = structureTaskDetails.stream().sorted(Comparator.comparing(StructureTaskDetail::isNonProductTask)).collect(Collectors.toList());
+    private List<TaskDetail> sortTaskDetails(List<TaskDetail> taskDetails_) {
 
-        StructureTaskDetail sItemHeader = new StructureTaskDetail();
-        sItemHeader.setChecked(true);
-        sItemHeader.setProductName(context.getString(R.string.task_item_text));
+        List<TaskDetail> taskDetails = taskDetails_.stream()
+                .sorted(Comparator
+                        .comparing(TaskDetail::isChecked).thenComparing(TaskDetail::isNonProductTask))
+                .collect(Collectors.toList());
+
+        TaskDetail sItemHeader = new TaskDetail();
+        sItemHeader.setEntityName(getContext().getString(R.string.task_item_text));
         sItemHeader.setHeader(true);
-        sItemHeader.setNonProductTask(false);
 
-        StructureTaskDetail sChecked = new StructureTaskDetail();
-        sChecked.setChecked(true);
-        sChecked.setProductName(context.getString(R.string.task_checked_text));
+        taskDetails.add(0, sItemHeader);
+
+        TaskDetail sChecked = new TaskDetail();
+        sChecked.setEntityName(getContext().getString(R.string.task_checked_text));
         sChecked.setHeader(true);
-        sChecked.setNonProductTask(false);
 
-        StructureTaskDetail sEmpty = new StructureTaskDetail();
-        sEmpty.setChecked(false);
-        sEmpty.setProductName(context.getString(R.string.no_items_to_check));
-        sEmpty.setHeader(false);
+        TaskDetail sEmpty = new TaskDetail();
+        sEmpty.setEntityName(getContext().getString(R.string.no_items_to_check));
         sEmpty.setEmptyView(true);
-        sChecked.setNonProductTask(false);
-        List<StructureTaskDetail> checkedStructureTaskDetails = new ArrayList<>();
 
-
-        if (!structureTaskDetails.isEmpty()) {
-            checkedStructureTaskDetails = structureTaskDetails.stream().filter(structureTaskDetail -> structureTaskDetail.isChecked()).collect(Collectors.toList());
+        boolean hasUnCheckedItems = false;
+        boolean hasCheckedItems = false;
+        for (int i = 0; i < taskDetails.size(); i++) {
+            TaskDetail taskDetail = taskDetails.get(i);
+            if (!taskDetail.isHeader()) {
+                if (!hasUnCheckedItems && !taskDetail.isChecked()) {
+                    hasUnCheckedItems = true;
+                } else if (taskDetail.isChecked() && !hasCheckedItems) {
+                    taskDetails.add(i, sChecked);
+                    hasCheckedItems = true;
+                }
+            }
         }
 
-        List<StructureTaskDetail> structureTaskDetailList = new ArrayList<>();
-        structureTaskDetailList.add(sItemHeader);
-        structureTaskDetails.removeAll(checkedStructureTaskDetails);
+        if (!hasUnCheckedItems) {
+            taskDetails.add(1, sEmpty);
+        }
 
-        if (structureTaskDetails.isEmpty()) {
-            structureTaskDetailList.add(sEmpty);
-        } else {
-            structureTaskDetailList.addAll(structureTaskDetails);
+        if (!hasCheckedItems) {
+            taskDetails.add(sChecked);
+            taskDetails.add(sEmpty);
         }
-        structureTaskDetailList.add(sChecked);
-        if (checkedStructureTaskDetails.isEmpty()) {
-            sEmpty.setProductName(context.getString(R.string.no_items_checked_yet));
-            structureTaskDetailList.add(sEmpty);
-        } else {
-            structureTaskDetailList.addAll(checkedStructureTaskDetails);
-        }
-        return structureTaskDetailList;
+
+        return taskDetails;
     }
 
-    private FormUtils getFormUtils() {
-        try {
-            formUtils = new FormUtils();
-        } catch (Exception e) {
-            Timber.e(e);
+    public AppJsonFormUtils getJsonFormUtils() {
+        if (jsonFormUtils == null) {
+            jsonFormUtils = new AppJsonFormUtils();
         }
+        return jsonFormUtils;
+    }
 
-        return formUtils;
+    public Context getContext() {
+        if (context == null) {
+            context = EusmApplication.getInstance().getBaseContext();
+        }
+        return context;
     }
 }

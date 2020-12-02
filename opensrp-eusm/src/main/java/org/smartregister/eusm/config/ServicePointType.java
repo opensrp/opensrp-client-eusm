@@ -23,7 +23,7 @@ public enum ServicePointType {
     MPPSPF("mppspf", R.drawable.ic_hq_sp, "mppspf"),
     DRPPSPF("drppspf", R.drawable.ic_gov_sp, "drppspf"),
     NGOPARTNER("ngopartner", R.drawable.ic_map_sp, "NGO Partner"),
-    SITECOMMUNAUTAIRE("site_communautaire", R.drawable.ic_distribution_site_sp, "Site Communautaire"),
+    SITECOMMUNAUTAIRE("sitecommunautaire", R.drawable.ic_distribution_site_sp, "Site Communautaire"),
     DRJS("drjs", R.drawable.ic_gov_sp, "drjs"),
     INSTAT("instat", R.drawable.ic_gov_sp, "instat"),
     BSD("bsd", R.drawable.ic_gov_sp, "bsd");

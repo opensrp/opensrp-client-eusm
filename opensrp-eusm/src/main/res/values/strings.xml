@@ -119,5 +119,9 @@
     <string name="undo_dialog_message">This will undo your assessment on this item.</string>
     <string name="undo">Undo</string>
     <string name="cancel">Cancel</string>
+    <string name="no_of_items">%s items</string>
+    <string name="is_it_there">Is it there?</string>
+    <string name="is_it_good_condition">Is it in good condition?</string>
+    <string name="is_it_being_used_appropriately">Is it being used appropriately?</string>
 
 </resources>

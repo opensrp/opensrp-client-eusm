@@ -1,7 +1,15 @@
 package org.smartregister.eusm.contract;
 
+import android.app.Activity;
 import android.app.ProgressDialog;
-import android.content.Intent;
+
+import androidx.annotation.StringRes;
+
+import org.json.JSONObject;
+import org.smartregister.eusm.model.StructureDetail;
+import org.smartregister.eusm.model.TaskDetail;
+
+import java.util.Map;
 
 public interface ProductInfoActivityContract {
     interface View {
@@ -17,23 +25,35 @@ public interface ProductInfoActivityContract {
 
         ProductInfoActivityContract.Presenter presenter();
 
-        void showDialog(String message);
+        void showProgressDialog(@StringRes int message);
 
         void hideDialog();
 
         void initializeDialog();
 
         ProgressDialog getDialog();
+
+        TaskDetail getTaskDetail();
+
+        StructureDetail getStructureDetail();
+
+        Activity getActivity();
     }
 
     interface Presenter {
-        void saveFlagProblemTask(String encounterType, Intent data);
+        void saveFlagProblemForm(TaskDetail taskDetail, String encounterType,
+                                 JSONObject jsonForm, StructureDetail structureDetail);
 
         View getView();
     }
 
     interface Interactor {
-        void saveFlagProblemTask(String encounterType, Intent data, InteractorCallback interactorCallback);
+        void saveFlagProblemForm(TaskDetail taskDetail, String encounterType, JSONObject jsonForm,
+                                 StructureDetail structureDetail, InteractorCallback interactorCallback);
+
+        void saveEventAndInitiateProcessing(String encounterType, JSONObject form,
+                                            String bindType, InteractorCallback interactorCallback,
+                                            String entityId);
     }
 
     interface InteractorCallback {

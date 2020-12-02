@@ -1,13 +1,16 @@
 package org.smartregister.eusm.activity;
 
+import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.Nullable;
+import androidx.annotation.StringRes;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
@@ -20,17 +23,20 @@ import org.json.JSONObject;
 import org.smartregister.eusm.R;
 import org.smartregister.eusm.contract.ProductInfoActivityContract;
 import org.smartregister.eusm.fragment.ProductInfoFragment;
-import org.smartregister.eusm.model.StructureTaskDetail;
+import org.smartregister.eusm.model.StructureDetail;
+import org.smartregister.eusm.model.TaskDetail;
 import org.smartregister.eusm.presenter.ProductInfoActivityPresenter;
 import org.smartregister.eusm.util.AppConstants;
-import org.smartregister.eusm.util.AppJsonFormUtils;
+import org.smartregister.util.FileUtilities;
 import org.smartregister.view.activity.MultiLanguageActivity;
 
 import timber.log.Timber;
 
 public class ProductInfoActivity extends MultiLanguageActivity implements ProductInfoActivityContract.View, View.OnClickListener {
 
-    private StructureTaskDetail structureTaskDetail;
+    private TaskDetail taskDetail;
+
+    private StructureDetail structureDetail;
 
     private ProductInfoActivityPresenter presenter;
 
@@ -40,7 +46,8 @@ public class ProductInfoActivity extends MultiLanguageActivity implements Produc
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(getLayoutId());
-        structureTaskDetail = (StructureTaskDetail) getIntent().getSerializableExtra(AppConstants.IntentData.STRUCTURE_TASK_DETAIL);
+        taskDetail = (TaskDetail) getIntent().getSerializableExtra(AppConstants.IntentData.TASK_DETAIL);
+        structureDetail = (StructureDetail) getIntent().getSerializableExtra(AppConstants.IntentData.STRUCTURE_DETAIL);
         presenter = new ProductInfoActivityPresenter(this);
         initializeFragment();
         setUpViews();
@@ -52,13 +59,13 @@ public class ProductInfoActivity extends MultiLanguageActivity implements Produc
 
     @Override
     public String getProductName() {
-        return structureTaskDetail.getProductName();
+        return taskDetail.getEntityName();
     }
 
     @Override
     public String getProductSerial() {
-        if (StringUtils.isNotBlank(structureTaskDetail.getProductSerial())) {
-            return String.format(getString(R.string.product_serial), structureTaskDetail.getProductSerial());
+        if (StringUtils.isNotBlank(taskDetail.getProductSerial())) {
+            return String.format(getString(R.string.product_serial), taskDetail.getProductSerial());
         } else {
             return " ";
         }
@@ -66,7 +73,7 @@ public class ProductInfoActivity extends MultiLanguageActivity implements Produc
 
     @Override
     public String getProductImage() {
-        return "";
+        return taskDetail.getProductImage();
     }
 
     @Override
@@ -78,6 +85,12 @@ public class ProductInfoActivity extends MultiLanguageActivity implements Produc
         txtProductSerial.setText(getProductSerial());
 
         ImageView imgProductImage = findViewById(R.id.img_product_image);
+
+        if (StringUtils.isNotBlank(getProductImage())) {
+            Bitmap bitmap = FileUtilities.retrieveStaticImageFromDisk(getProductImage());
+            imgProductImage.setImageBitmap(bitmap);
+        }
+
 
         ImageView imgBackButton = findViewById(R.id.img_profile_back);
         imgBackButton.setColorFilter(ContextCompat.getColor(getApplicationContext(), R.color.customAppThemeBlue));
@@ -93,7 +106,7 @@ public class ProductInfoActivity extends MultiLanguageActivity implements Produc
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == AppJsonFormUtils.REQUEST_CODE_GET_JSON && resultCode == RESULT_OK) {
+        if (requestCode == AppConstants.RequestCode.REQUEST_CODE_GET_JSON && resultCode == RESULT_OK) {
             try {
                 String jsonString = data.getStringExtra(JsonFormConstants.JSON_FORM_KEY.JSON);
                 Timber.d("JSON Result : %s", jsonString);
@@ -101,9 +114,9 @@ public class ProductInfoActivity extends MultiLanguageActivity implements Produc
                 JSONObject form = new JSONObject(jsonString);
                 String encounterType = form.getString(JsonFormConstants.ENCOUNTER_TYPE);
 
-                if (encounterType.equals(AppConstants.JsonForm.FLAG_PROBLEM)) {
-                    //showProgressDialog(R.string.saving_dialog_title);
-                    presenter().saveFlagProblemTask(encounterType, data);
+                if (AppConstants.EncounterType.FLAG_PROBLEM.equals(encounterType)) {
+                    showProgressDialog(R.string.saving_dialog_title);
+                    presenter().saveFlagProblemForm(taskDetail, encounterType, form, getStructureDetail());
                 }
 
             } catch (JSONException e) {
@@ -117,7 +130,7 @@ public class ProductInfoActivity extends MultiLanguageActivity implements Produc
         FragmentManager fragmentManager = getSupportFragmentManager();
         FragmentTransaction transaction = fragmentManager.beginTransaction();
         transaction.replace(R.id.fragment_container, getProductInfoFragment());
-        transaction.commit();
+        transaction.commitAllowingStateLoss();
     }
 
     @Override
@@ -126,8 +139,9 @@ public class ProductInfoActivity extends MultiLanguageActivity implements Produc
     }
 
     @Override
-    public void showDialog(String message) {
+    public void showProgressDialog(@StringRes int message) {
         if (progressDialog != null && !progressDialog.isShowing() && !this.isFinishing()) {
+            progressDialog.setTitle(message);
             progressDialog.show();
         }
     }
@@ -157,5 +171,20 @@ public class ProductInfoActivity extends MultiLanguageActivity implements Produc
         if (id == R.id.layout_back_button) {
             finish();
         }
+    }
+
+    @Override
+    public TaskDetail getTaskDetail() {
+        return taskDetail;
+    }
+
+    @Override
+    public StructureDetail getStructureDetail() {
+        return structureDetail;
+    }
+
+    @Override
+    public Activity getActivity() {
+        return this;
     }
 }

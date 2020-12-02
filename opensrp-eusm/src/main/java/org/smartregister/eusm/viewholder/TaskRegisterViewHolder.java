@@ -1,12 +1,12 @@
 package org.smartregister.eusm.viewholder;
 
 import android.content.Context;
+import android.graphics.Bitmap;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -16,10 +16,14 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import org.apache.commons.lang3.StringUtils;
 import org.smartregister.eusm.R;
-import org.smartregister.eusm.model.StructureTaskDetail;
+import org.smartregister.eusm.model.TaskDetail;
+import org.smartregister.eusm.util.AppConstants;
+import org.smartregister.util.FileUtilities;
 
 import java.text.SimpleDateFormat;
 import java.util.Locale;
+
+import timber.log.Timber;
 
 public class TaskRegisterViewHolder extends RecyclerView.ViewHolder {
 
@@ -27,17 +31,17 @@ public class TaskRegisterViewHolder extends RecyclerView.ViewHolder {
 
     private final Context context;
 
-    private TextView productNameView;
+    private final TextView productNameView;
 
-    private ImageView productImageView;
+    private final ImageView productImageView;
 
-    private ImageView rectangleOverlayImageView;
+    private final ImageView rectangleOverlayImageView;
 
-    private ImageView checkedOverlayImageView;
+    private final ImageView checkedOverlayImageView;
 
-    private ImageView statusOverlayImageView;
+    private final ImageView statusOverlayImageView;
 
-    private TextView productSerialView;
+    private final TextView productSerialView;
 
     public TaskRegisterViewHolder(@NonNull View itemView) {
         super(itemView);
@@ -50,48 +54,60 @@ public class TaskRegisterViewHolder extends RecyclerView.ViewHolder {
         statusOverlayImageView = itemView.findViewById(R.id.img_status_overlay);
     }
 
-    public void setProductImage(@Nullable StructureTaskDetail structureTaskDetail) {
-        this.productImageView.setImageDrawable(ResourcesCompat.getDrawable(context.getResources(), R.drawable.login_logo, context.getTheme()));
-        if (structureTaskDetail.isChecked()) {
+    public void setProductImage(@Nullable TaskDetail taskDetail) {
+        this.productImageView.setImageDrawable(ResourcesCompat.getDrawable(context.getResources(), R.drawable.default_product_photo_thumbnail, context.getTheme()));
+
+        if (StringUtils.isNotBlank(taskDetail.getProductImage())) {
+            Bitmap bitmap = FileUtilities.retrieveStaticImageFromDisk(taskDetail.getProductImage());
+            this.productImageView.setImageBitmap(bitmap);
+        }
+
+        if (taskDetail.isChecked()) {
             checkedOverlayImageView.setVisibility(View.VISIBLE);
             rectangleOverlayImageView.setVisibility(View.VISIBLE);
         }
 
-        if (structureTaskDetail.hasProblem()) {
+        if (taskDetail.hasProblem()) {
             statusOverlayImageView.setVisibility(View.VISIBLE);
-            if (structureTaskDetail.isChecked()) {
-                FrameLayout.LayoutParams layoutParams = new FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, 75);
+            if (taskDetail.isChecked()) {
+                FrameLayout.LayoutParams layoutParams = new FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, 55);
                 layoutParams.gravity = Gravity.END | Gravity.BOTTOM;
-                layoutParams.bottomMargin = 100;
-                layoutParams.rightMargin = 30;
+                layoutParams.bottomMargin = 80;
+                layoutParams.rightMargin = 40;
                 statusOverlayImageView.setScaleType(ImageView.ScaleType.FIT_END);
                 statusOverlayImageView.setLayoutParams(layoutParams);
             }
+        }
+
+        if (AppConstants.NonProductTasks.SERVICE_POINT_CHECK.equalsIgnoreCase(taskDetail.getEntityName())) {
+            this.productImageView.setImageDrawable(ResourcesCompat.getDrawable(context.getResources(), R.drawable.service_point_check_thumbnail, context.getTheme()));
+        } else if (AppConstants.NonProductTasks.RECORD_GPS.equalsIgnoreCase(taskDetail.getEntityName())) {
+            this.productImageView.setImageDrawable(ResourcesCompat.getDrawable(context.getResources(), R.drawable.record_gps_thumbnail, context.getTheme()));
         }
     }
 
     /**
      * holds text for serial, and quantity if available and date checked
      *
-     * @param structureTaskDetail
+     * @param taskDetail
      */
-    public void setProductSerial(@NonNull StructureTaskDetail structureTaskDetail) {
+    public void setProductSerial(@NonNull TaskDetail taskDetail) {
 
-        if (StringUtils.isNotBlank(structureTaskDetail.getProductSerial()) && !structureTaskDetail.isNonProductTask()) {
+        if (StringUtils.isNotBlank(taskDetail.getProductSerial()) && !taskDetail.isNonProductTask()) {
             String stringTemplate;
             String result = "";
-            if (StringUtils.isNotBlank(structureTaskDetail.getQuantity())) {
+            if (StringUtils.isNotBlank(taskDetail.getQuantity())) {
                 stringTemplate = context.getString(R.string.product_serial_n_quantity);
-                result = String.format(stringTemplate, structureTaskDetail.getQuantity(), structureTaskDetail.getProductSerial());
+                result = String.format(stringTemplate, taskDetail.getQuantity(), taskDetail.getProductSerial());
             }
 
-            if (structureTaskDetail.getDateChecked() != null) {
+            if (taskDetail.getDateChecked() != null) {
                 stringTemplate = context.getString(R.string.product_serial_n_date_checked);
-                result = String.format(stringTemplate, structureTaskDetail.getProductSerial(), "date checked");
+                result = String.format(stringTemplate, taskDetail.getProductSerial(), "date checked");
             }
             if (StringUtils.isBlank(result)) {
                 stringTemplate = context.getString(R.string.product_serial);
-                result = String.format(stringTemplate, structureTaskDetail.getProductSerial());
+                result = String.format(stringTemplate, taskDetail.getProductSerial());
             }
             this.productSerialView.setText(result);
         } else {

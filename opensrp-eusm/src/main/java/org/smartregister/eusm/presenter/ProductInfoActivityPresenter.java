@@ -1,9 +1,10 @@
 package org.smartregister.eusm.presenter;
 
-import android.content.Intent;
-
+import org.json.JSONObject;
 import org.smartregister.eusm.contract.ProductInfoActivityContract;
 import org.smartregister.eusm.interactor.ProductInfoActivityInteractor;
+import org.smartregister.eusm.model.StructureDetail;
+import org.smartregister.eusm.model.TaskDetail;
 
 import java.lang.ref.WeakReference;
 
@@ -22,11 +23,13 @@ public class ProductInfoActivityPresenter implements ProductInfoActivityContract
     }
 
     @Override
-    public void saveFlagProblemTask(String encounterType, Intent data) {
-        if (getView() != null) {
-            getView().showDialog("Saving Flag Problem");
-        }
-        productInfoActivityInteractor.saveFlagProblemTask(encounterType, data, this::onSavedFlagProblemTask);
+    public void saveFlagProblemForm(TaskDetail taskDetail, String encounterType,
+                                    JSONObject jsonForm, StructureDetail structureDetail) {
+        productInfoActivityInteractor.saveFlagProblemForm(taskDetail,
+                encounterType,
+                jsonForm,
+                structureDetail,
+                this);
     }
 
     @Override
@@ -41,6 +44,7 @@ public class ProductInfoActivityPresenter implements ProductInfoActivityContract
     public void onSavedFlagProblemTask(boolean isSaved) {
         if (getView() != null) {
             getView().hideDialog();
+            getView().getActivity().finish();
         }
     }
 }

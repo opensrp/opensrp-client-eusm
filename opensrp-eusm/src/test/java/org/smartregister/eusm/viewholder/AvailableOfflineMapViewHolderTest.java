@@ -15,7 +15,6 @@ import org.mockito.junit.MockitoRule;
 import org.robolectric.RuntimeEnvironment;
 import org.smartregister.eusm.BaseUnitTest;
 import org.smartregister.eusm.R;
-import org.smartregister.eusm.model.OfflineMapModel;
 
 import java.util.Date;
 

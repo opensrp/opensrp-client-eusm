@@ -5,14 +5,16 @@ import android.app.Activity;
 import androidx.annotation.NonNull;
 
 import org.json.JSONObject;
-import org.smartregister.eusm.adapter.TaskRegisterAdapter;
-import org.smartregister.eusm.model.StructureTaskDetail;
+import org.smartregister.eusm.model.StructureDetail;
+import org.smartregister.eusm.model.TaskDetail;
+import org.smartregister.tasking.adapter.TaskRegisterAdapter;
+import org.smartregister.view.contract.BaseRegisterFragmentContract;
 
 import java.util.List;
 
 public interface TaskRegisterFragmentContract {
 
-    interface View {
+    interface View extends BaseRegisterFragmentContract.View {
 
         void initializePresenter();
 
@@ -22,9 +24,11 @@ public interface TaskRegisterFragmentContract {
 
         TaskRegisterAdapter getAdapter();
 
-        void startFixProblemForm(JSONObject form);
+        void startFormActivity(JSONObject form);
 
         Activity getActivity();
+
+        StructureDetail getStructureDetail();
     }
 
     interface Presenter {
@@ -32,21 +36,23 @@ public interface TaskRegisterFragmentContract {
 
         View getView();
 
-        void startFixProblemForm(StructureTaskDetail structureTaskDetail);
-
+        void startForm(StructureDetail structureDetail, TaskDetail taskDetail, String formName);
     }
 
     interface Interactor {
-        void fetchData(@NonNull TaskRegisterFragmentContract.InteractorCallBack callBack);
 
-        String getFixProblemForm();
+        void fetchData(StructureDetail structureDetail, @NonNull InteractorCallBack callBack);
 
-        void startFixProblemForm(StructureTaskDetail structureTaskDetail, Activity activity, InteractorCallBack callBack);
+        void startForm(StructureDetail structureDetail, TaskDetail taskDetail, Activity activity, InteractorCallBack callBack, String formName);
+
+        void injectAdditionalFields(JSONObject jsonForm, String formName,
+                                          StructureDetail structureDetail,
+                                          TaskDetail taskDetail);
     }
 
     interface InteractorCallBack {
-        void onFetchedData(List<StructureTaskDetail> structureTaskDetailList);
+        void onFetchedData(List<TaskDetail> taskDetailList);
 
-        void onFixProblemFormFetched(JSONObject jsonForm);
+        void onFormFetched(JSONObject jsonForm);
     }
 }
