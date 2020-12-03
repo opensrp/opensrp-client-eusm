@@ -8,6 +8,7 @@ buildscript {
         classpath 'com.android.tools.build:gradle:4.0.2'
         classpath 'io.fabric.tools:gradle:1.31.2'
         classpath 'org.smartregister:gradle-jarjar-plugin:1.0.0-SNAPSHOT'
+        classpath "gradle.plugin.org.kt3k.gradle.plugin:coveralls-gradle-plugin:$coverallsVersion"
     }
 }
 
@@ -176,7 +177,7 @@ dependencies {
         exclude group: 'stax', module: 'stax-api'
     }
 
-    implementation('org.smartregister:opensrp-client-core:4.0.2-v3-SNAPSHOT@aar') {
+    implementation('org.smartregister:opensrp-client-core:4.0.2-SNAPSHOT@aar') {
         transitive = true
         exclude group: 'com.google.guava', module: 'guava'
         exclude group: 'com.android.support', module: 'appcompat-v7'
