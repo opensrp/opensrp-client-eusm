@@ -15,7 +15,6 @@ import org.smartregister.eusm.application.EusmApplication;
 import org.smartregister.eusm.model.StructureDetail;
 import org.smartregister.eusm.util.AppConstants;
 import org.smartregister.eusm.util.AppUtils;
-import org.smartregister.eusm.util.TestDataUtils;
 import org.smartregister.repository.BaseRepository;
 import org.smartregister.repository.StructureRepository;
 import org.smartregister.repository.helper.MappingHelper;
@@ -126,9 +125,13 @@ public class AppStructureRepository extends StructureRepository {
                 STRUCTURE_TABLE + "." + "geojson",
                 "(((?  - longitude)*(?  - longitude)) + ((?  - latitude)*(?  - latitude))) as dist",
                 "case \n" +
-                        "when (sum(task.business_status != 'Not Visited')*1.0/sum(task.business_status= 'Not Visited')*1.0) = 0.0 then count(task._id) \n" +
-                        "when (sum(task.business_status != 'Not Visited')*1.0/sum(task.business_status= 'Not Visited')*1.0) > 0.0 and (sum(task.business_status != 'Not Visited')*1.0/sum(task.business_status= 'Not Visited')*1.0) < 1.0 then 'in_progress'\n" +
-                        "else 'completed' end as taskStatus",
+                        "\twhen (sum(task.status = 'COMPLETED')*1.0/sum(task.status= 'READY')*1.0) = 0.0 \n" +
+                        "\t\tthen sum(task.status= 'READY')\n" +
+                        "\twhen (sum(task.status = 'COMPLETED')*1.0/sum(task.status= 'READY')*1.0) > 0.0 \n" +
+                        "\t\tthen 'in_progress'\n" +
+                        "\telse \n" +
+                        "\t    'completed' \n" +
+                        "\tend as taskStatus",
                 "count(task._id) as numOfTasks"
         };
 

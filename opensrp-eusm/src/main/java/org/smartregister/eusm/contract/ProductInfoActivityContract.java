@@ -6,10 +6,9 @@ import android.app.ProgressDialog;
 import androidx.annotation.StringRes;
 
 import org.json.JSONObject;
+import org.smartregister.domain.Event;
 import org.smartregister.eusm.model.StructureDetail;
 import org.smartregister.eusm.model.TaskDetail;
-
-import java.util.Map;
 
 public interface ProductInfoActivityContract {
     interface View {
@@ -57,6 +56,6 @@ public interface ProductInfoActivityContract {
     }
 
     interface InteractorCallback {
-        void onSavedFlagProblemTask(boolean isSaved);
+        void onSavedFlagProblemTask(boolean isSaved, Event event);
     }
 }

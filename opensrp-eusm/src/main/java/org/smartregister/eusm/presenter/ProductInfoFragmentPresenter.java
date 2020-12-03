@@ -1,23 +1,16 @@
 package org.smartregister.eusm.presenter;
 
-import com.vijay.jsonwizard.utils.FormUtils;
-
-import org.apache.commons.lang3.StringUtils;
 import org.json.JSONObject;
 import org.smartregister.domain.Event;
-import org.smartregister.domain.Task;
-import org.smartregister.eusm.application.EusmApplication;
+import org.smartregister.eusm.R;
 import org.smartregister.eusm.contract.ProductInfoFragmentContract;
 import org.smartregister.eusm.interactor.ProductInfoFragmentInteractor;
 import org.smartregister.eusm.model.ProductInfoQuestion;
 import org.smartregister.eusm.model.StructureDetail;
 import org.smartregister.eusm.model.TaskDetail;
-import org.smartregister.eusm.repository.AppTaskRepository;
-import org.smartregister.eusm.util.AppConstants;
 
 import java.lang.ref.WeakReference;
 import java.util.List;
-import java.util.Map;
 
 public class ProductInfoFragmentPresenter implements ProductInfoFragmentContract.Presenter, ProductInfoFragmentContract.InteractorCallBack {
 
@@ -25,11 +18,12 @@ public class ProductInfoFragmentPresenter implements ProductInfoFragmentContract
 
     private ProductInfoFragmentInteractor interactor;
 
-    private FormUtils formUtils;
-
     public ProductInfoFragmentPresenter(ProductInfoFragmentContract.View view) {
         viewWeakReference = new WeakReference<>(view);
         interactor = new ProductInfoFragmentInteractor();
+        if (getView() != null) {
+            getView().initializeProgressDialog();
+        }
     }
 
     @Override
@@ -52,12 +46,15 @@ public class ProductInfoFragmentPresenter implements ProductInfoFragmentContract
 
     @Override
     public void markProductAsGood(StructureDetail structureDetail, TaskDetail taskDetail) {
+        if (getView() != null) {
+            getView().showProgressDialog(R.string.looks_good_save_dialog);
+        }
         interactor.markProductAsGood(structureDetail, taskDetail, this, getView().getActivity());
     }
 
     @Override
     public void onQuestionsFetched(List<ProductInfoQuestion> productInfoQuestions) {
-        if (getView().getAdapter() != null) {
+        if (getView() != null && getView().getAdapter() != null) {
             getView().getAdapter().setData(productInfoQuestions);
         }
     }
@@ -65,18 +62,8 @@ public class ProductInfoFragmentPresenter implements ProductInfoFragmentContract
     @Override
     public void onProductMarkedAsGood(boolean isMarked, Event event) {
         if (getView() != null) {
+            getView().hideProgressDialog();
             getView().getActivity().finish();
-            if (isMarked && event != null) {
-                Map<String, String> map = event.getDetails();
-                if (map != null) {
-                    String taskId = map.get(AppConstants.EventDetailKey.TASK_ID);
-                    if (StringUtils.isNotBlank(taskId)) {
-                        //TODO to be replaced by event submission
-                        AppTaskRepository taskRepository = EusmApplication.getInstance().getAppTaskRepository();
-                        taskRepository.updateTaskStatus(taskId, Task.TaskStatus.COMPLETED, "VISITED");
-                    }
-                }
-            }
         }
     }
 
@@ -84,5 +71,4 @@ public class ProductInfoFragmentPresenter implements ProductInfoFragmentContract
     public void onFlagProblemFormFetched(JSONObject jsonForm) {
         getView().startFlagProblemForm(jsonForm);
     }
-
 }

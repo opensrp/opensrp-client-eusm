@@ -4,6 +4,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import org.json.JSONObject;
+import org.smartregister.domain.Event;
 import org.smartregister.eusm.R;
 import org.smartregister.eusm.contract.TaskRegisterActivityContract;
 import org.smartregister.eusm.interactor.TaskRegisterActivityInteractor;
@@ -58,7 +59,7 @@ public class TaskRegisterActivityPresenter implements TaskRegisterActivityContra
     }
 
     @Override
-    public void onFormSaved(String encounterType, boolean isSuccessful) {
+    public void onFormSaved(String encounterType, boolean isSuccessful, Event event) {
         if (getView() != null) {
             getView().hideProgressDialog();
             if (!isSuccessful) {

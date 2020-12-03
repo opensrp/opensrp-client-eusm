@@ -37,6 +37,8 @@ public class AppTaskRepository extends TaskRepository {
                 TASK_TABLE + "." + AppConstants.Column.Task.ID + " as taskId",
                 TASK_TABLE + "." + AppConstants.Column.Task.LOCATION + " as taskLocation",
                 TASK_TABLE + "." + AppConstants.Column.Task.STRUCTURE_ID,
+                TASK_TABLE + "." + AppConstants.Column.Task.CODE,
+
                 StockTypeRepository.STOCK_TYPE_TABLE_NAME + "." + StockTypeRepository.UNIQUE_ID,
                 StockTypeRepository.STOCK_TYPE_TABLE_NAME + "." + StockTypeRepository.NAME,
                 StockTypeRepository.STOCK_TYPE_TABLE_NAME + "." + StockTypeRepository.QUANTITY,
@@ -45,13 +47,19 @@ public class AppTaskRepository extends TaskRepository {
                 StockTypeRepository.STOCK_TYPE_TABLE_NAME + "." + StockTypeRepository.CONDITION,
                 StockTypeRepository.STOCK_TYPE_TABLE_NAME + "." + StockTypeRepository.AVAILABILITY,
                 StockTypeRepository.STOCK_TYPE_TABLE_NAME + "." + StockTypeRepository.APPROPRIATE_USAGE,
+
                 StockRepository.STOCK_TABLE_NAME + "." + StockRepository.STOCK_ID
         };
 
+//        String query = "SELECT " + StringUtils.join(columns, ",")
+//                + " FROM " + TASK_TABLE +
+//                " LEFT JOIN " + StockTypeRepository.STOCK_TYPE_TABLE_NAME + " ON " + StockTypeRepository.STOCK_TYPE_TABLE_NAME + "." + StockTypeRepository.UNIQUE_ID + " = " + TASK_TABLE + "." + AppConstants.Column.Task.FOR +
+//                " LEFT JOIN " + StockRepository.STOCK_TABLE_NAME + " ON " + StockRepository.STOCK_TABLE_NAME + "." + StockRepository.IDENTIFIER + " = " + StockTypeRepository.STOCK_TYPE_TABLE_NAME + "." + StockTypeRepository.UNIQUE_ID +
+//                " WHERE taskLocation = ? group by taskId";
         String query = "SELECT " + StringUtils.join(columns, ",")
                 + " FROM " + TASK_TABLE +
-                " LEFT JOIN " + StockTypeRepository.STOCK_TYPE_TABLE_NAME + " ON " + StockTypeRepository.STOCK_TYPE_TABLE_NAME + "." + StockTypeRepository.UNIQUE_ID + " = " + TASK_TABLE + "." + AppConstants.Column.Task.FOR +
-                " LEFT JOIN " + StockRepository.STOCK_TABLE_NAME + " ON " + StockRepository.STOCK_TABLE_NAME + "." + StockRepository.IDENTIFIER + " = " + StockTypeRepository.STOCK_TYPE_TABLE_NAME + "." + StockTypeRepository.UNIQUE_ID +
+                " LEFT JOIN " + StockRepository.STOCK_TABLE_NAME + " ON " + StockRepository.STOCK_TABLE_NAME + "." + StockRepository.STOCK_ID + " = " + TASK_TABLE + "." + AppConstants.Column.Task.FOR +
+                " LEFT JOIN " + StockTypeRepository.STOCK_TYPE_TABLE_NAME + " ON " + StockTypeRepository.STOCK_TYPE_TABLE_NAME + "." + StockTypeRepository.UNIQUE_ID + " = " + StockRepository.STOCK_TABLE_NAME + "." + StockRepository.IDENTIFIER +
                 " WHERE taskLocation = ? group by taskId";
         try (Cursor cursor = sqLiteDatabase.rawQuery(query, new String[]{structureId})) {
             if (cursor != null) {
@@ -82,8 +90,9 @@ public class AppTaskRepository extends TaskRepository {
         String appropriateUsage = cursor.getString(cursor.getColumnIndex(StockTypeRepository.APPROPRIATE_USAGE));
         String availability = cursor.getString(cursor.getColumnIndex(StockTypeRepository.AVAILABILITY));
         String stockId = cursor.getString(cursor.getColumnIndex(StockRepository.STOCK_ID));
+        String taskCode = cursor.getString(cursor.getColumnIndex(AppConstants.Column.Task.CODE));
 
-        TaskDetail taskDetail = new TaskDetail();
+        TaskDetail taskDetail = new TaskDetail(taskId);
         if (productName != null)
             taskDetail.setEntityName(productName);
         else
@@ -97,8 +106,11 @@ public class AppTaskRepository extends TaskRepository {
         taskDetail.setCondition(condition);
         taskDetail.setAppropriateUsage(appropriateUsage);
         taskDetail.setAvailability(availability);
-//        taskDetail.setChecked("Not Visited".equals(taskBusinessStatus));
+        taskDetail.setChecked(Task.TaskStatus.COMPLETED.name().equalsIgnoreCase(taskStatus));
         taskDetail.setStockId(stockId);
+        taskDetail.setTaskCode(taskCode);
+        taskDetail.setHasProblem(AppConstants.BusinessStatus.HAS_PROBLEM.equals(taskBusinessStatus));
+        taskDetail.setBusinessStatus(taskBusinessStatus);
         return taskDetail;
     }
 

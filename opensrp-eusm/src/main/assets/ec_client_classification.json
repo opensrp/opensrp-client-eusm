@@ -5,6 +5,41 @@
       "rule": {
         "type": "event",
         "fields": [
+          {
+            "field": "eventType",
+            "field_value": "fix_problem",
+            "creates_case": [
+              "event_task"
+            ]
+          },
+          {
+            "field": "eventType",
+            "field_value": "flag_problem",
+            "creates_case": [
+              "event_task"
+            ]
+          },
+          {
+            "field": "eventType",
+            "field_value": "record_gps",
+            "creates_case": [
+              "event_task"
+            ]
+          },
+          {
+            "field": "eventType",
+            "field_value": "service_point_check",
+            "creates_case": [
+              "event_task"
+            ]
+          },
+          {
+            "field": "eventType",
+            "field_value": "looks_good",
+            "creates_case": [
+              "event_task"
+            ]
+          }
         ]
       }
     }

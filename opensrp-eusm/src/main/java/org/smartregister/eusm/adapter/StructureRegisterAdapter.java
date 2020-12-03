@@ -80,6 +80,7 @@ public class StructureRegisterAdapter extends RecyclerView.Adapter<RecyclerView.
     public void clearData() {
         if (structureDetailList != null) {
             structureDetailList.clear();
+            notifyDataSetChanged();
         }
     }
 }

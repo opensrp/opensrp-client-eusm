@@ -4,8 +4,6 @@ import android.content.Context;
 
 import org.smartregister.eusm.R;
 import org.smartregister.eusm.application.EusmApplication;
-import org.smartregister.eusm.model.ProductInfoQuestion;
-import org.smartregister.eusm.model.TaskDetail;
 
 import java.util.ArrayList;
 import java.util.Arrays;

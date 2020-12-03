@@ -78,7 +78,7 @@ public class StructureRegisterViewHolder extends RecyclerView.ViewHolder {
         } else if (AppConstants.TaskStatus.COMPLETED.equals(structureDetail.getTaskStatus())) {
             taskStatus = AppConstants.TaskStatus.COMPLETED;
         } else {
-            taskStatus = String.format(context.getString(R.string.no_of_items), structureDetail.getNumOfTasks());
+            taskStatus = String.format(context.getString(R.string.no_of_items), structureDetail.getTaskStatus());
         }
         int colorId = getColorByTaskStatus(taskStatus);
         this.taskStatusView.setText(taskStatus);

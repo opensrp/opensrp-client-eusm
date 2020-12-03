@@ -7,13 +7,17 @@ import androidx.annotation.NonNull;
 
 import com.vijay.jsonwizard.constants.JsonFormConstants;
 
+import org.apache.commons.lang3.StringUtils;
 import org.json.JSONArray;
 import org.json.JSONObject;
+import org.smartregister.domain.Task;
 import org.smartregister.eusm.R;
 import org.smartregister.eusm.application.EusmApplication;
 import org.smartregister.eusm.contract.TaskRegisterFragmentContract;
 import org.smartregister.eusm.model.StructureDetail;
 import org.smartregister.eusm.model.TaskDetail;
+import org.smartregister.eusm.repository.AppRepository;
+import org.smartregister.eusm.repository.AppTaskRepository;
 import org.smartregister.eusm.util.AppJsonFormUtils;
 import org.smartregister.eusm.util.AppUtils;
 import org.smartregister.util.AppExecutors;
@@ -56,9 +60,10 @@ public class TaskRegisterFragmentInteractor implements TaskRegisterFragmentContr
         });
     }
 
+
     @Override
     public void startForm(StructureDetail structureDetail, TaskDetail taskDetail, Activity activity,
-                          TaskRegisterFragmentContract.InteractorCallBack callBack, String formName) {
+                          String formName, TaskRegisterFragmentContract.InteractorCallBack callBack) {
         appExecutors.diskIO().execute(() -> {
             JSONObject form = getJsonFormUtils().getFormObjectWithDetails(activity, formName, structureDetail, taskDetail);
             if (form != null) {
@@ -81,6 +86,40 @@ public class TaskRegisterFragmentInteractor implements TaskRegisterFragmentContr
             JSONObject jsonObject1 = AppUtils.getHiddenFieldTemplate(entry.getKey(), entry.getValue());
             jsonArray.put(jsonObject1);
         }
+    }
+
+    @Override
+    public void undoTask(TaskDetail taskDetail, TaskRegisterFragmentContract.InteractorCallBack callBack) {
+        appExecutors.diskIO().execute(new Runnable() {
+            @Override
+            public void run() {
+                if (taskDetail != null) {
+
+                    String taskId = taskDetail.getTaskId();
+                    if (StringUtils.isNotBlank(taskId)) {
+                        //TODO to be replaced by event submission
+
+                        AppRepository appRepository = EusmApplication.getInstance().getAppRepository();
+                        appRepository.archiveEventsForTask(taskDetail);
+
+                        AppTaskRepository taskRepository = EusmApplication.getInstance().getAppTaskRepository();
+                        taskRepository.updateTaskStatus(taskId, Task.TaskStatus.READY, "NOT VISITED");
+                    }
+                    returnResponse(callBack, taskDetail, true);
+                } else {
+                    returnResponse(callBack, taskDetail, false);
+                }
+            }
+        });
+    }
+
+    private void returnResponse(TaskRegisterFragmentContract.InteractorCallBack callBack, TaskDetail taskDetail, boolean status) {
+        appExecutors.mainThread().execute(new Runnable() {
+            @Override
+            public void run() {
+                callBack.onTaskUndone(status, taskDetail);
+            }
+        });
     }
 
     private List<TaskDetail> sortTaskDetails(List<TaskDetail> taskDetails_) {

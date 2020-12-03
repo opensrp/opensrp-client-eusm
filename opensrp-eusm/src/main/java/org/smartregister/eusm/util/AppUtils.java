@@ -66,7 +66,7 @@ public class AppUtils extends Utils {
                 .processClient(
                         EusmApplication.getInstance()
                                 .getEcSyncHelper()
-                                .getEvents(formSubmissionIds));
+                                .getEvents(formSubmissionIds), true);
 
         Utils.getAllSharedPreferences().saveLastUpdatedAtDate(lastSyncDate.getTime());
     }

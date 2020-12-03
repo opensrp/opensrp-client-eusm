@@ -1,6 +1,7 @@
 package org.smartregister.eusm.fragment;
 
 import android.app.AlertDialog;
+import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
@@ -9,6 +10,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 
+import androidx.annotation.StringRes;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -19,7 +21,6 @@ import com.vijay.jsonwizard.domain.Form;
 
 import org.json.JSONObject;
 import org.smartregister.eusm.R;
-import org.smartregister.eusm.activity.AppJsonFormActivity;
 import org.smartregister.eusm.adapter.ProductInfoQuestionsAdapter;
 import org.smartregister.eusm.contract.ProductInfoFragmentContract;
 import org.smartregister.eusm.model.StructureDetail;
@@ -37,6 +38,8 @@ public class ProductInfoFragment extends Fragment implements ProductInfoFragment
 
     private ProductInfoFragmentContract.Presenter presenter;
 
+    private ProgressDialog progressDialog;
+
     public static ProductInfoFragment newInstance(Bundle bundle) {
         ProductInfoFragment fragment = new ProductInfoFragment();
         fragment.setArguments(bundle);
@@ -50,6 +53,27 @@ public class ProductInfoFragment extends Fragment implements ProductInfoFragment
         structureDetail = (StructureDetail) getArguments().getSerializable(AppConstants.IntentData.STRUCTURE_DETAIL);
         initializeAdapter();
         initializePresenter();
+    }
+
+    @Override
+    public void initializeProgressDialog() {
+        progressDialog = new ProgressDialog(getActivity());
+        progressDialog.setCancelable(true);
+    }
+
+    @Override
+    public void showProgressDialog(@StringRes int message) {
+        if (progressDialog != null && !getActivity().isFinishing()) {
+            progressDialog.setTitle(getString(message));
+            progressDialog.show();
+        }
+    }
+
+    @Override
+    public void hideProgressDialog() {
+        if (progressDialog != null) {
+            progressDialog.dismiss();
+        }
     }
 
     @Override

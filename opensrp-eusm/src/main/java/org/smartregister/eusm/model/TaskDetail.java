@@ -1,11 +1,13 @@
 package org.smartregister.eusm.model;
 
+import androidx.annotation.NonNull;
+
+import org.smartregister.tasking.model.TaskDetails;
+
 import java.io.Serializable;
 import java.util.Date;
 
-public class TaskDetail implements Serializable {
-
-    private String taskId;
+public class TaskDetail extends TaskDetails {
 
     private String entityName;
 
@@ -37,6 +39,14 @@ public class TaskDetail implements Serializable {
 
     private String stockId;
 
+    public TaskDetail(@NonNull String taskId) {
+        super(taskId);
+    }
+
+    public TaskDetail() {
+        super("");
+    }
+
     public boolean hasProblem() {
         return hasProblem;
     }
@@ -51,14 +61,6 @@ public class TaskDetail implements Serializable {
 
     public void setEmptyView(boolean emptyView) {
         this.emptyView = emptyView;
-    }
-
-    public String getTaskId() {
-        return taskId;
-    }
-
-    public void setTaskId(String taskId) {
-        this.taskId = taskId;
     }
 
     public String getEntityName() {
@@ -164,4 +166,5 @@ public class TaskDetail implements Serializable {
     public void setStockId(String stockId) {
         this.stockId = stockId;
     }
+
 }

@@ -113,6 +113,7 @@
     <string name="back">Back</string>
     <string name="mark_as_looks_good_title">Mark as \"looks good\"?</string>
     <string name="looks_good_dialog_message">The item is there, it\'s in good condition, and it\'s being used appropriately.</string>
+    <string name="undo_task_title">Undo assessment on %s</string>
     <string name="undo_looks_good_title">Undo \"looks good\" on %s</string>
     <string name="undo_flag_problem_title">Undo \"flag problem\" on %s</string>
 
@@ -123,5 +124,7 @@
     <string name="is_it_there">Is it there?</string>
     <string name="is_it_good_condition">Is it in good condition?</string>
     <string name="is_it_being_used_appropriately">Is it being used appropriately?</string>
+    <string name="looks_good_save_dialog">Saving</string>
+    <string name="fix_problem_prefix">Fix Problem: %s</string>
 
 </resources>

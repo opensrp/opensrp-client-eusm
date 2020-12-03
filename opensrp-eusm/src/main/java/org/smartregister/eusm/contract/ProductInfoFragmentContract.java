@@ -2,6 +2,8 @@ package org.smartregister.eusm.contract;
 
 import android.app.Activity;
 
+import androidx.annotation.StringRes;
+
 import org.json.JSONObject;
 import org.smartregister.domain.Event;
 import org.smartregister.eusm.adapter.ProductInfoQuestionsAdapter;
@@ -14,6 +16,12 @@ import java.util.List;
 
 public interface ProductInfoFragmentContract {
     interface View {
+        void initializeProgressDialog();
+
+        void showProgressDialog(@StringRes int message);
+
+        void hideProgressDialog();
+
         void initializeAdapter();
 
         ProductInfoQuestionsAdapter getAdapter();

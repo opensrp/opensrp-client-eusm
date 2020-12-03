@@ -202,4 +202,5 @@ public class StructureRegisterFragment extends BaseDrawerRegisterFragment implem
     public void onClick(View v) {
         onViewClicked(v);
     }
+
 }

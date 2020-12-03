@@ -18,7 +18,6 @@ import com.vijay.jsonwizard.domain.Form;
 
 import org.json.JSONObject;
 import org.smartregister.eusm.R;
-import org.smartregister.eusm.activity.AppJsonFormActivity;
 import org.smartregister.eusm.activity.ProductInfoActivity;
 import org.smartregister.eusm.adapter.EusmTaskRegisterAdapter;
 import org.smartregister.eusm.contract.TaskRegisterFragmentContract;
@@ -118,7 +117,7 @@ public class EusmTasksRegisterFragment extends BaseRegisterFragment implements T
                 openUndoDialog(taskDetail);
             } else {
                 if (!taskDetail.isNonProductTask()) {
-                    if (taskDetail.hasProblem()) {
+                    if (AppConstants.EncounterType.FIX_PROBLEM.equals(taskDetail.getTaskCode())) {
                         presenter.startForm(structureDetail, taskDetail, getFixProblemForm());
                     } else {
                         Intent intent = new Intent(getActivity(), ProductInfoActivity.class);
@@ -133,7 +132,6 @@ public class EusmTasksRegisterFragment extends BaseRegisterFragment implements T
                         presenter.startForm(structureDetail, taskDetail, getRecordGpsForm());
                     }
                 }
-
             }
         }
     }
@@ -152,12 +150,15 @@ public class EusmTasksRegisterFragment extends BaseRegisterFragment implements T
 
     private void openUndoDialog(TaskDetail taskDetail) {
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-        builder.setTitle(String.format(getString(R.string.undo_looks_good_title), taskDetail.getEntityName()));
+        String alertMessage;
+        alertMessage = taskDetail.isNonProductTask() ? String.format(getString(R.string.undo_task_title), taskDetail.getEntityName())
+                : String.format(getString(R.string.undo_looks_good_title), taskDetail.getEntityName());
+        builder.setTitle(alertMessage);
         builder.setMessage(R.string.undo_dialog_message);
         builder.setPositiveButton(R.string.undo, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-
+                presenter.undoTask(taskDetail);
             }
         });
         builder.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
@@ -186,7 +187,7 @@ public class EusmTasksRegisterFragment extends BaseRegisterFragment implements T
 
     @Override
     protected void startRegistration() {
-
+        //Do nothing
     }
 
     protected TaskRegisterFragmentPresenter presenter() {

@@ -23,8 +23,6 @@ import org.smartregister.util.FileUtilities;
 import java.text.SimpleDateFormat;
 import java.util.Locale;
 
-import timber.log.Timber;
-
 public class TaskRegisterViewHolder extends RecyclerView.ViewHolder {
 
     private static final SimpleDateFormat dateFormat = new SimpleDateFormat("M/dd", Locale.getDefault());
@@ -56,6 +54,7 @@ public class TaskRegisterViewHolder extends RecyclerView.ViewHolder {
 
     public void setProductImage(@Nullable TaskDetail taskDetail) {
         this.productImageView.setImageDrawable(ResourcesCompat.getDrawable(context.getResources(), R.drawable.default_product_photo_thumbnail, context.getTheme()));
+        statusOverlayImageView.setVisibility(View.GONE);
 
         if (StringUtils.isNotBlank(taskDetail.getProductImage())) {
             Bitmap bitmap = FileUtilities.retrieveStaticImageFromDisk(taskDetail.getProductImage());
@@ -65,24 +64,31 @@ public class TaskRegisterViewHolder extends RecyclerView.ViewHolder {
         if (taskDetail.isChecked()) {
             checkedOverlayImageView.setVisibility(View.VISIBLE);
             rectangleOverlayImageView.setVisibility(View.VISIBLE);
-        }
-
-        if (taskDetail.hasProblem()) {
-            statusOverlayImageView.setVisibility(View.VISIBLE);
-            if (taskDetail.isChecked()) {
-                FrameLayout.LayoutParams layoutParams = new FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, 55);
-                layoutParams.gravity = Gravity.END | Gravity.BOTTOM;
-                layoutParams.bottomMargin = 80;
-                layoutParams.rightMargin = 40;
-                statusOverlayImageView.setScaleType(ImageView.ScaleType.FIT_END);
-                statusOverlayImageView.setLayoutParams(layoutParams);
+            if (AppConstants.BusinessStatus.HAS_PROBLEM.equals(taskDetail.getBusinessStatus())) {
+                statusOverlayImageView.setVisibility(View.VISIBLE);
+                if (taskDetail.isChecked()) {
+                    FrameLayout.LayoutParams layoutParams = new FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, 55);
+                    layoutParams.gravity = Gravity.END | Gravity.BOTTOM;
+                    layoutParams.bottomMargin = 80;
+                    layoutParams.rightMargin = 40;
+                    statusOverlayImageView.setScaleType(ImageView.ScaleType.FIT_END);
+                    statusOverlayImageView.setLayoutParams(layoutParams);
+                }
+            }
+        } else {
+            checkedOverlayImageView.setVisibility(View.GONE);
+            rectangleOverlayImageView.setVisibility(View.GONE);
+            if (AppConstants.EncounterType.FIX_PROBLEM.equals(taskDetail.getTaskCode())) {
+                statusOverlayImageView.setVisibility(View.VISIBLE);
             }
         }
 
-        if (AppConstants.NonProductTasks.SERVICE_POINT_CHECK.equalsIgnoreCase(taskDetail.getEntityName())) {
-            this.productImageView.setImageDrawable(ResourcesCompat.getDrawable(context.getResources(), R.drawable.service_point_check_thumbnail, context.getTheme()));
-        } else if (AppConstants.NonProductTasks.RECORD_GPS.equalsIgnoreCase(taskDetail.getEntityName())) {
-            this.productImageView.setImageDrawable(ResourcesCompat.getDrawable(context.getResources(), R.drawable.record_gps_thumbnail, context.getTheme()));
+        if (taskDetail.isNonProductTask()) {
+            if (AppConstants.NonProductTasks.SERVICE_POINT_CHECK.equalsIgnoreCase(taskDetail.getEntityName())) {
+                this.productImageView.setImageDrawable(ResourcesCompat.getDrawable(context.getResources(), R.drawable.service_point_check_thumbnail, context.getTheme()));
+            } else if (AppConstants.NonProductTasks.RECORD_GPS.equalsIgnoreCase(taskDetail.getEntityName())) {
+                this.productImageView.setImageDrawable(ResourcesCompat.getDrawable(context.getResources(), R.drawable.record_gps_thumbnail, context.getTheme()));
+            }
         }
     }
 

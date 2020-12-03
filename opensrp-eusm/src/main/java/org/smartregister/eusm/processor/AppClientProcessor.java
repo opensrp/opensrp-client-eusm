@@ -60,11 +60,11 @@ public class AppClientProcessor extends ClientProcessorForJava {
         return instance;
     }
 
-    @Override
-    public synchronized void processClient(List<EventClient> eventClientList) {
-        processClient(eventClientList, false);
-    }
-
+    //    @Override
+//    public synchronized void processClient(List<EventClient> eventClientList) {
+//        processClient(eventClientList, false);
+//    }
+//
     public void processClient(List<EventClient> eventClients, boolean localEvents) {
         ClientClassification clientClassification = assetJsonToJava("ec_client_classification.json", ClientClassification.class);
         if (clientClassification == null) {
@@ -82,8 +82,13 @@ public class AppClientProcessor extends ClientProcessorForJava {
                 if (event == null || event.getEventType() == null) {
                     continue;
                 }
-
                 String eventType = event.getEventType();
+
+                try {
+                    processEvent(event, new Client(event.getBaseEntityId()), clientClassification);
+                } catch (Exception e) {
+                    Timber.e(e);
+                }
                 if (!hasSyncedEventsInTarget && operationalAreaLocationId != null &&
                         operationalAreaLocationId.equals(operationalAreaId)) {
                     hasSyncedEventsInTarget = true;

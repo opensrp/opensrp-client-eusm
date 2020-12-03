@@ -1,6 +1,8 @@
 package org.smartregister.eusm.presenter;
 
 import org.json.JSONObject;
+import org.smartregister.domain.Event;
+import org.smartregister.eusm.R;
 import org.smartregister.eusm.contract.ProductInfoActivityContract;
 import org.smartregister.eusm.interactor.ProductInfoActivityInteractor;
 import org.smartregister.eusm.model.StructureDetail;
@@ -25,6 +27,9 @@ public class ProductInfoActivityPresenter implements ProductInfoActivityContract
     @Override
     public void saveFlagProblemForm(TaskDetail taskDetail, String encounterType,
                                     JSONObject jsonForm, StructureDetail structureDetail) {
+        if (getView() != null) {
+            getView().showProgressDialog(R.string.saving_message);
+        }
         productInfoActivityInteractor.saveFlagProblemForm(taskDetail,
                 encounterType,
                 jsonForm,
@@ -41,7 +46,7 @@ public class ProductInfoActivityPresenter implements ProductInfoActivityContract
     }
 
     @Override
-    public void onSavedFlagProblemTask(boolean isSaved) {
+    public void onSavedFlagProblemTask(boolean isSaved, Event event) {
         if (getView() != null) {
             getView().hideDialog();
             getView().getActivity().finish();

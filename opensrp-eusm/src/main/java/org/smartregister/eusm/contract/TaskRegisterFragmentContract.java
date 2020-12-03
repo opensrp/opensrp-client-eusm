@@ -37,22 +37,28 @@ public interface TaskRegisterFragmentContract {
         View getView();
 
         void startForm(StructureDetail structureDetail, TaskDetail taskDetail, String formName);
+
+        void undoTask(TaskDetail taskDetail);
     }
 
     interface Interactor {
 
         void fetchData(StructureDetail structureDetail, @NonNull InteractorCallBack callBack);
 
-        void startForm(StructureDetail structureDetail, TaskDetail taskDetail, Activity activity, InteractorCallBack callBack, String formName);
+        void startForm(StructureDetail structureDetail, TaskDetail taskDetail, Activity activity, String formName, InteractorCallBack callBack);
 
         void injectAdditionalFields(JSONObject jsonForm, String formName,
-                                          StructureDetail structureDetail,
-                                          TaskDetail taskDetail);
+                                    StructureDetail structureDetail,
+                                    TaskDetail taskDetail);
+
+        void undoTask(TaskDetail taskDetail, InteractorCallBack callBack);
     }
 
     interface InteractorCallBack {
         void onFetchedData(List<TaskDetail> taskDetailList);
 
         void onFormFetched(JSONObject jsonForm);
+
+        void onTaskUndone(boolean isSuccessFul, TaskDetail taskDetail);
     }
 }

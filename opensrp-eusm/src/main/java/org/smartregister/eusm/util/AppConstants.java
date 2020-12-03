@@ -8,11 +8,9 @@ public interface AppConstants extends TaskingConstants {
 
     Integer NEARBY_DISTANCE_IN_METRES = 382992;
 
-    String PLAN_IDENTIFIER = "4708ca0a-d0d6-4199-bb1b-8701803c2d02";
+    String PLAN_IDENTIFIER = "335ef7a3-7f35-58aa-8263-4419464946d8";
 
     String PLAN_NAME = "SS";
-
-    String STOCK_ID = "254720b1-f117-4c67-95ba-6e83bcd7e836";
 
     String LOCATION_ID = "location_id";
 
@@ -34,6 +32,7 @@ public interface AppConstants extends TaskingConstants {
             String LOCATION = "location";
             String STRUCTURE_ID = "business_status";
             String FOCUS = "focus";
+            String CODE = "code";
         }
     }
 
@@ -61,7 +60,6 @@ public interface AppConstants extends TaskingConstants {
         String PRODUCT_ID = "productId";
         String MISSION = "mission";
         String LOCATION_ID = "locationId";
-        String TASK_ID = "taskId";
         String STOCK_ID = "stockId";
     }
 
@@ -119,6 +117,10 @@ public interface AppConstants extends TaskingConstants {
         String IN_PROGRESS = "in_progress";
         String NOT_FINISHED = "not_finished";
         String OTHER = "other";
+    }
+
+    interface BusinessStatus {
+        String HAS_PROBLEM = "has_problem";
     }
 
     interface JsonFormKey {

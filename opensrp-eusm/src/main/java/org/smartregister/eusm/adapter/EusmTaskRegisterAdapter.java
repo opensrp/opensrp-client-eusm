@@ -10,6 +10,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import org.smartregister.eusm.R;
 import org.smartregister.eusm.model.TaskDetail;
+import org.smartregister.eusm.util.AppConstants;
 import org.smartregister.eusm.viewholder.GenericEmptyViewHolder;
 import org.smartregister.eusm.viewholder.GenericTitleViewHolder;
 import org.smartregister.eusm.viewholder.TaskRegisterViewHolder;
@@ -57,7 +58,11 @@ public class EusmTaskRegisterAdapter extends TaskRegisterAdapter {
             emptyViewHolder.setTitle(taskDetail.getEntityName());
         } else {
             TaskRegisterViewHolder taskRegisterViewHolder = (TaskRegisterViewHolder) viewHolder;
-            taskRegisterViewHolder.setProductName(taskDetail.getEntityName());
+            String productName = taskDetail.getEntityName();
+            if (AppConstants.EncounterType.FIX_PROBLEM.equals(taskDetail.getTaskCode())) {
+                productName = String.format(context.getString(R.string.fix_problem_prefix), productName);
+            }
+            taskRegisterViewHolder.setProductName(productName);
             taskRegisterViewHolder.setProductSerial(taskDetail);
             taskRegisterViewHolder.setProductImage(taskDetail);
             taskRegisterViewHolder.itemView.setOnClickListener(onClickListener);

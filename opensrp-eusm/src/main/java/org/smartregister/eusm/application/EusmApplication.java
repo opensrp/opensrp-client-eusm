@@ -43,6 +43,7 @@ import org.smartregister.receiver.SyncStatusBroadcastReceiver;
 import org.smartregister.receiver.ValidateAssignmentReceiver;
 import org.smartregister.repository.AllSettings;
 import org.smartregister.repository.AllSharedPreferences;
+import org.smartregister.repository.EventClientRepository;
 import org.smartregister.repository.LocationRepository;
 import org.smartregister.repository.LocationTagRepository;
 import org.smartregister.repository.PlanDefinitionRepository;
@@ -102,6 +103,8 @@ public class EusmApplication extends DrishtiApplication implements TimeChangedBr
     private ECSyncHelper ecSyncHelper;
 
     private Compressor compressor;
+
+    private EventClientRepository eventClientRepository;
 
     public static synchronized EusmApplication getInstance() {
         return (EusmApplication) mInstance;
@@ -463,5 +466,12 @@ public class EusmApplication extends DrishtiApplication implements TimeChangedBr
         }
 
         return compressor;
+    }
+
+    public EventClientRepository getEventClientRepository() {
+        if (eventClientRepository == null) {
+            eventClientRepository = new EventClientRepository();
+        }
+        return eventClientRepository;
     }
 }

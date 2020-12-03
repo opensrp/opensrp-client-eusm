@@ -4,6 +4,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import org.json.JSONObject;
+import org.smartregister.domain.Event;
 import org.smartregister.eusm.model.StructureDetail;
 import org.smartregister.view.contract.BaseRegisterContract;
 
@@ -49,6 +50,6 @@ public interface TaskRegisterActivityContract {
     }
 
     interface InteractorCallBack {
-        void onFormSaved(String encounterType, boolean isSuccessful);
+        void onFormSaved(String encounterType, boolean isSuccessful, Event event);
     }
 }

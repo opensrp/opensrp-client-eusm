@@ -7,6 +7,7 @@ buildscript {
     dependencies {
         classpath 'com.android.tools.build:gradle:4.0.2'
         classpath 'io.fabric.tools:gradle:1.31.2'
+        classpath 'org.smartregister:gradle-jarjar-plugin:1.0.0-SNAPSHOT'
     }
 }
 
@@ -16,6 +17,7 @@ allprojects {
         maven { url 'https://oss.sonatype.org/content/repositories/snapshots/' }
         maven { url "http://dl.bintray.com/ona/kujaku" }
         maven { url 'https://maven.fabric.io/public' }
+        maven { url 'https://dl.bintray.com/ibm-watson-health/ibm-fhir-server-releases'}
         mavenLocal()
     }
 }
@@ -24,6 +26,7 @@ apply plugin: 'com.android.application'
 apply plugin: 'jacoco'
 apply plugin: 'com.github.kt3k.coveralls'
 apply plugin: 'io.fabric'
+apply plugin: 'org.smartregister.gradle.jarjar'
 
 jacoco {
     toolVersion = "0.8.0"
@@ -164,6 +167,10 @@ dependencies {
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
     coreLibraryDesugaring 'com.android.tools:desugar_jdk_libs:1.0.9'
 
+    jarJar 'com.ibm.fhir:fhir-model:4.2.3'
+
+    implementation fileTree(dir: "./build/libs", include: ['*.jar'])
+
     implementation('io.ona.kujaku:library:0.9.0') {
         exclude group: 'com.android.volley'
         exclude group: 'stax', module: 'stax-api'
@@ -179,7 +186,7 @@ dependencies {
         exclude group: 'com.github.ybq', module: 'Android-SpinKit'
         exclude group: 'com.github.bmelnychuk', module: 'atv'
         exclude group: 'com.google.android.gms', module: 'play-services-vision'
-        exclude group: 'com.ibm.fhir', module: 'fhir-model'
+//        exclude group: 'com.ibm.fhir', module: 'fhir-model'
     }
 
     implementation('org.smartregister:opensrp-client-configurable-views:1.1.5-SNAPSHOT@aar') {
@@ -209,7 +216,7 @@ dependencies {
     }
 
 //    implementation(project(':opensrp-tasking')) {
-    implementation('org.smartregister:opensrp-client-tasking:0.0.3-v4-SNAPSHOT') {
+    implementation('org.smartregister:opensrp-client-tasking:0.0.3-v6-SNAPSHOT') {
         transitive = true
         exclude group: 'org.smartregister', module: 'opensrp-client-core'
         exclude group: 'com.ibm.fhir', module: 'fhir-model'
@@ -217,7 +224,7 @@ dependencies {
         exclude group: 'org.smartregister', module: 'opensrp-client-native-form'
     }
 
-    implementation('org.smartregister:opensrp-client-stock:1.2.0-v23-SNAPSHOT') {
+    implementation('org.smartregister:opensrp-client-stock:1.2.0-v25-SNAPSHOT') {
         transitive = true
         exclude group: 'org.smartregister', module: 'opensrp-client-core'
         exclude group: 'org.smartregister', module: 'opensrp-client-native-form'

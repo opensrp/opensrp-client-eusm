@@ -18,7 +18,6 @@ import org.json.JSONObject;
 import org.smartregister.domain.Event;
 import org.smartregister.domain.Obs;
 import org.smartregister.domain.ProfileImage;
-import org.smartregister.eusm.BuildConfig;
 import org.smartregister.eusm.activity.AppJsonFormActivity;
 import org.smartregister.eusm.application.EusmApplication;
 import org.smartregister.eusm.model.StructureDetail;
@@ -26,7 +25,6 @@ import org.smartregister.eusm.model.TaskDetail;
 import org.smartregister.location.helper.LocationHelper;
 import org.smartregister.repository.ImageRepository;
 import org.smartregister.stock.util.Constants;
-import org.smartregister.tasking.util.PreferencesUtil;
 import org.smartregister.util.JsonFormUtils;
 import org.smartregister.view.activity.DrishtiApplication;
 
@@ -166,7 +164,7 @@ public class AppJsonFormUtils {
             Map<String, String> map = new HashMap<>();
             map.put(AppConstants.EventDetailKey.LOCATION_NAME, structureDetail.getStructureName());
             map.put(AppConstants.EventDetailKey.LOCATION_ID, structureDetail.getStructureId());
-            map.put(AppConstants.EventDetailKey.TASK_ID, taskDetail.getTaskId());
+            map.put(AppConstants.Properties.TASK_IDENTIFIER, taskDetail.getTaskId());
             map.put(AppConstants.EventDetailKey.PLAN_IDENTIFIER, AppConstants.PLAN_IDENTIFIER);
             map.put(AppConstants.EventDetailKey.MISSION, AppConstants.PLAN_NAME);
             String entityId;
