@@ -3,9 +3,9 @@ package org.smartregister.eusm.presenter;
 import org.json.JSONObject;
 import org.smartregister.eusm.adapter.EusmTaskRegisterAdapter;
 import org.smartregister.eusm.contract.TaskRegisterFragmentContract;
+import org.smartregister.eusm.domain.StructureDetail;
+import org.smartregister.eusm.domain.TaskDetail;
 import org.smartregister.eusm.interactor.TaskRegisterFragmentInteractor;
-import org.smartregister.eusm.model.TaskDetail;
-import org.smartregister.eusm.model.StructureDetail;
 
 import java.lang.ref.WeakReference;
 import java.util.List;
@@ -13,9 +13,9 @@ import java.util.List;
 public class TaskRegisterFragmentPresenter implements TaskRegisterFragmentContract.Presenter,
         TaskRegisterFragmentContract.InteractorCallBack {
 
-    private TaskRegisterFragmentInteractor taskRegisterFragmentInteractor;
+    private final TaskRegisterFragmentInteractor taskRegisterFragmentInteractor;
 
-    private WeakReference<TaskRegisterFragmentContract.View> viewWeakReference;
+    private final WeakReference<TaskRegisterFragmentContract.View> viewWeakReference;
 
     public TaskRegisterFragmentPresenter(TaskRegisterFragmentContract.View view) {
         taskRegisterFragmentInteractor = new TaskRegisterFragmentInteractor();

@@ -5,7 +5,7 @@
     <corners android:radius="30dp" />
     <padding
         android:bottom="@dimen/status_label_vertical_padding"
-        android:left="@dimen/status_label_horizontal_padding"
-        android:right="@dimen/status_label_horizontal_padding"
+        android:left="70dp"
+        android:right="70dp"
         android:top="@dimen/status_label_vertical_padding"/>
 </shape>

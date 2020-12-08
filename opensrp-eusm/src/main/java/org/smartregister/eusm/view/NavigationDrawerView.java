@@ -2,16 +2,13 @@ package org.smartregister.eusm.view;
 
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.pm.PackageManager;
 import android.view.Gravity;
 import android.view.View;
 import android.widget.TextView;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.widget.PopupMenu;
 import androidx.core.util.Pair;
 import androidx.core.view.GravityCompat;
-import androidx.drawerlayout.widget.DrawerLayout;
 
 import com.google.android.material.navigation.NavigationView;
 import com.vijay.jsonwizard.customviews.TreeViewDialog;
@@ -22,7 +19,6 @@ import org.json.JSONException;
 import org.smartregister.eusm.BuildConfig;
 import org.smartregister.eusm.R;
 import org.smartregister.eusm.application.EusmApplication;
-import org.smartregister.eusm.helper.GenericDrawerLayoutListener;
 import org.smartregister.eusm.util.AppUtils;
 import org.smartregister.tasking.contract.BaseDrawerContract;
 import org.smartregister.tasking.view.DrawerMenuView;
@@ -45,6 +41,11 @@ public class NavigationDrawerView extends DrawerMenuView {
     public NavigationDrawerView(BaseDrawerContract.DrawerActivity activity) {
         super(activity);
     }
+//
+//    @Override
+//    public BaseDrawerContract.Interactor getInteractor() {
+//        return interactor = new EusmBaseDrawerInteractor(presenter);
+//    }
 
     @Override
     public void setUpViews(NavigationView navigationView) {
@@ -183,5 +184,10 @@ public class NavigationDrawerView extends DrawerMenuView {
             getContext().startActivity(intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK));
             return false;
         });
+    }
+
+    @Override
+    public void lockNavigationDrawerForSelection() {
+
     }
 }

@@ -1,4 +1,4 @@
-package org.smartregister.eusm.model;
+package org.smartregister.eusm.domain;
 
 import java.io.Serializable;
 

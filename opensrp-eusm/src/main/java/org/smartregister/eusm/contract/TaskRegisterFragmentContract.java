@@ -5,8 +5,8 @@ import android.app.Activity;
 import androidx.annotation.NonNull;
 
 import org.json.JSONObject;
-import org.smartregister.eusm.model.StructureDetail;
-import org.smartregister.eusm.model.TaskDetail;
+import org.smartregister.eusm.domain.StructureDetail;
+import org.smartregister.eusm.domain.TaskDetail;
 import org.smartregister.tasking.adapter.TaskRegisterAdapter;
 import org.smartregister.view.contract.BaseRegisterFragmentContract;
 

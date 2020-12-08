@@ -1,6 +1,6 @@
 package org.smartregister.eusm.comparator;
 
-import org.smartregister.eusm.model.StructureDetail;
+import org.smartregister.eusm.domain.StructureDetail;
 
 import java.util.Comparator;
 

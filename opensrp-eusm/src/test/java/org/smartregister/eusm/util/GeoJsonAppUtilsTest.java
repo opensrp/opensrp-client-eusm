@@ -12,7 +12,7 @@ import org.smartregister.domain.Location;
 import org.smartregister.domain.LocationProperty;
 import org.smartregister.domain.Task;
 import org.smartregister.eusm.BaseUnitTest;
-import org.smartregister.eusm.model.StructureDetail;
+import org.smartregister.eusm.domain.StructureDetail;
 import org.smartregister.util.PropertiesConverter;
 
 import java.util.ArrayList;

@@ -23,8 +23,8 @@ import org.json.JSONObject;
 import org.smartregister.eusm.R;
 import org.smartregister.eusm.adapter.ProductInfoQuestionsAdapter;
 import org.smartregister.eusm.contract.ProductInfoFragmentContract;
-import org.smartregister.eusm.model.StructureDetail;
-import org.smartregister.eusm.model.TaskDetail;
+import org.smartregister.eusm.domain.StructureDetail;
+import org.smartregister.eusm.domain.TaskDetail;
 import org.smartregister.eusm.presenter.ProductInfoFragmentPresenter;
 import org.smartregister.eusm.util.AppConstants;
 

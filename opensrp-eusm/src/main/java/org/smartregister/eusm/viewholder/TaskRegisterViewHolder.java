@@ -16,16 +16,11 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import org.apache.commons.lang3.StringUtils;
 import org.smartregister.eusm.R;
-import org.smartregister.eusm.model.TaskDetail;
+import org.smartregister.eusm.domain.TaskDetail;
 import org.smartregister.eusm.util.AppConstants;
 import org.smartregister.util.FileUtilities;
 
-import java.text.SimpleDateFormat;
-import java.util.Locale;
-
 public class TaskRegisterViewHolder extends RecyclerView.ViewHolder {
-
-    private static final SimpleDateFormat dateFormat = new SimpleDateFormat("M/dd", Locale.getDefault());
 
     private final Context context;
 
@@ -98,7 +93,6 @@ public class TaskRegisterViewHolder extends RecyclerView.ViewHolder {
      * @param taskDetail
      */
     public void setProductSerial(@NonNull TaskDetail taskDetail) {
-
         if (StringUtils.isNotBlank(taskDetail.getProductSerial()) && !taskDetail.isNonProductTask()) {
             String stringTemplate;
             String result = "";

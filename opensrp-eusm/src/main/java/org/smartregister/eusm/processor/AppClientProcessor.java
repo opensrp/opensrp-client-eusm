@@ -34,15 +34,11 @@ import timber.log.Timber;
  */
 public class AppClientProcessor extends ClientProcessorForJava {
 
-    private final EventClientRepository eventClientRepository;
-
-    private final TaskRepository taskRepository;
-
-    private final StructureRepository structureRepository;
-
-    private final EusmApplication eusmApplication;
-
     private static AppClientProcessor instance;
+    private final EventClientRepository eventClientRepository;
+    private final TaskRepository taskRepository;
+    private final StructureRepository structureRepository;
+    private final EusmApplication eusmApplication;
 
     public AppClientProcessor(Context context) {
         super(context);

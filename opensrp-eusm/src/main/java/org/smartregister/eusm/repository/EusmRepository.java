@@ -27,7 +27,6 @@ import org.smartregister.stock.repository.StockTypeRepository;
 import org.smartregister.tasking.util.TaskingConstants;
 import org.smartregister.util.DatabaseMigrationUtils;
 
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashSet;
 

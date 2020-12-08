@@ -108,10 +108,6 @@ public interface AppConstants extends TaskingConstants {
         String RECORD_GPS = "Record Gps";
     }
 
-    interface AppProperties {
-        String CHOOSE_OPERATIONAL_AREA_FIRST = "CHOOSE_OPERATIONAL_AREA_FIRST";
-    }
-
     interface TaskStatus {
         String COMPLETED = "completed";
         String IN_PROGRESS = "in_progress";
@@ -125,5 +121,15 @@ public interface AppConstants extends TaskingConstants {
 
     interface JsonFormKey {
         String PRODUCT_PICTURE = "product_picture";
+    }
+
+    interface CardDetailKeys {
+        String COMMUNE = "commune";
+        String STRUCTURE_ID = "structureId";
+        String DISTANCE_META = "distanceMeta";
+        String TASK_STATUS = "taskStatus";
+        String STATUS = "status";
+        String NAME = "name";
+        String TYPE = "type";
     }
 }

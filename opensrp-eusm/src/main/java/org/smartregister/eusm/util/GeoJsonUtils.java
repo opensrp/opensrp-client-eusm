@@ -2,8 +2,10 @@ package org.smartregister.eusm.util;
 
 import org.smartregister.domain.Location;
 import org.smartregister.domain.Task;
-import org.smartregister.eusm.model.StructureDetail;
+import org.smartregister.eusm.domain.StructureDetail;
+import org.smartregister.tasking.model.StructureDetails;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -26,13 +28,18 @@ import static org.smartregister.tasking.util.TaskingConstants.Properties.TASK_ST
 /**
  * Created by samuelgithengi on 1/7/19.
  */
-public class GeoJsonUtils {
+public class GeoJsonUtils extends org.smartregister.tasking.util.GeoJsonUtils {
 
     private static final String MDA_DISPENSE_TASK_COUNT = "mda_dispense_task_count";
 
-    public static String getGeoJsonFromStructuresAndTasks(List<Location> structures, Map<String, Set<Task>> tasks,
-                                                          String indexCase, Map<String, StructureDetail> structureNames) {
+    @Override
+    public String getGeoJsonFromStructuresAndTasks(List<Location> structures, Map<String, Set<Task>> tasks,
+                                                   String indexCase, Map<String, StructureDetails> structureNames) {
+        List<Location> stLocations = new ArrayList<>();
         for (Location structure : structures) {
+            if (structure.getGeometry() != null) {
+                stLocations.add(structure);
+            }
             Set<Task> taskSet = tasks.get(structure.getId());
             HashMap<String, String> taskProperties = new HashMap<>();
 
@@ -77,43 +84,26 @@ public class GeoJsonUtils {
             structure.getProperties().setCustomProperties(taskProperties);
 
         }
-        return gson.toJson(structures);
+        return gson.toJson(stLocations);
     }
 
-    private static void populateBusinessStatus(HashMap<String, String> taskProperties, Map<String, Integer> mdaStatusMap, StateWrapper state) {
-        // The assumption is that a register structure task always exists if the structure has
-        // atleast one bednet distribution or blood screening task
-//        if (AppUtils.isResidentialStructure(taskProperties.get(TASK_CODE))) {
-//
-//            boolean familyRegTaskMissingOrFamilyRegComplete = state.familyRegistered || !state.familyRegTaskExists;
-//
-//            if (AppUtils.isFocusInvestigation()) {
-//
-//                if (familyRegTaskMissingOrFamilyRegComplete &&
-//                        state.bednetDistributed && state.bloodScreeningDone) {
-//                    taskProperties.put(TASK_BUSINESS_STATUS, COMPLETE);
-//                } else if (state.ineligibleForFamReg) {
-//                    taskProperties.put(TASK_BUSINESS_STATUS, NOT_ELIGIBLE);
-//                } else {
-//                    taskProperties.put(TASK_BUSINESS_STATUS, NOT_VISITED);
-//                }
-//
-//            }
-//
-//        }
+
+    public String getGeoJsonFromStructureDetail(List<StructureDetail> structureDetails) {
+        List<Location> locations = new ArrayList<>();
+        for (StructureDetail structureDetail : structureDetails) {
+            Location location = structureDetail.getGeojson();
+            if (location != null) {
+                String taskStatus = structureDetail.getTaskStatus();
+                Map<String, String> map = location.getProperties().getCustomProperties();
+                map.put(AppConstants.CardDetailKeys.TASK_STATUS, taskStatus);
+                map.put(STRUCTURE_NAME, structureDetail.getStructureName());
+                map.put(AppConstants.CardDetailKeys.COMMUNE, structureDetail.getCommune());
+                map.put(AppConstants.CardDetailKeys.DISTANCE_META, structureDetail.getDistanceMeta());
+                map.put(AppConstants.CardDetailKeys.STRUCTURE_ID, structureDetail.getStructureId());
+                locations.add(location);
+            }
+        }
+        return gson.toJson(locations);
     }
 
-    private static class StateWrapper {
-        private final boolean familyRegistered = false;
-        private final boolean bednetDistributed = false;
-        private final boolean bloodScreeningDone = false;
-        private final boolean familyRegTaskExists = false;
-        private final boolean caseConfirmed = false;
-        private boolean fullyReceived;
-        private boolean nonReceived;
-        private boolean nonEligible;
-        private boolean partiallyReceived;
-        private final boolean bloodScreeningExists = false;
-        private final boolean ineligibleForFamReg = false;
-    }
 }

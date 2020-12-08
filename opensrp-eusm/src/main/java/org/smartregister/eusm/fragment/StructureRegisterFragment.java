@@ -15,7 +15,7 @@ import org.smartregister.eusm.activity.EusmHomeActivity;
 import org.smartregister.eusm.activity.EusmTaskRegisterActivity;
 import org.smartregister.eusm.adapter.StructureRegisterAdapter;
 import org.smartregister.eusm.contract.StructureRegisterFragmentContract;
-import org.smartregister.eusm.model.StructureDetail;
+import org.smartregister.eusm.domain.StructureDetail;
 import org.smartregister.eusm.presenter.StructureRegisterFragmentPresenter;
 import org.smartregister.eusm.util.AppConstants;
 import org.smartregister.tasking.TaskingLibrary;

@@ -11,10 +11,10 @@
     }
   },
   "center": [
-    47.3737376,
-    -18.7615606
+    49.54934061205424,
+    -16.08305061744329
   ],
-  "zoom": 4.735062037248435,
+  "zoom": 7.735062037248435,
   "bearing": 0,
   "pitch": 0,
   "sources": {
@@ -63,7 +63,7 @@
             "zoom"
           ],
           13.98,
-          0,
+          20,
           17.79,
           10,
           18.8,
@@ -73,52 +73,20 @@
           "match",
           [
             "get",
-            "taskBusinessStatus"
+            "taskStatus"
           ],
           [
-            "Not Visited"
+            "in_progress"
           ],
-          "hsl(46, 88%, 62%)",
+          "hsl(45.1,62.5%,50.8%)",
           [
-            "Not Sprayed",
-            "Incomplete",
-            "In Progress",
-            "None Received"
+            "complete"
           ],
-          "hsl(3, 71%, 54%)",
-          [
-            "Sprayed",
-            "Complete",
-            "Fully Received"
-          ],
-          "hsl(89, 52%, 48%)",
-          [
-            "Not Sprayable",
-            "Not Eligible"
-          ],
-          "hsl(0, 0%, 9%)",
-          [
-            "Family Registered"
-          ],
-          "hsl(335, 100%, 79%)",
-          [
-            "Bednet Distributed",
-            "Adherence Visit Done"
-          ],
-          "hsl(199, 68%, 55%)",
-          [
-            "Blood Screening Complete"
-          ],
-          "hsl(262, 100%, 68%)",
-          [
-            "Partially Sprayed",
-            "Partially Received"
-          ],
-          "hsl(26, 84%, 56%)",
-          "hsl(0, 0%, 78%)"
+          "hsl(102, 67%, 45%)",
+          "hsl(0, 0%, 64%)"
         ],
-        "circle-stroke-width": 1,
-        "circle-opacity": 0.5
+        "circle-stroke-width": 2,
+        "circle-opacity": 1
       }
     },
     {
@@ -131,7 +99,7 @@
         "Point"
       ],
       "paint": {
-        "circle-color": "hsla(360, 100%, 100%, 0)",
+        "circle-color": "hsl(201, 58%, 50%)",
         "circle-radius": [
           "interpolate",
           [
@@ -141,14 +109,14 @@
             "zoom"
           ],
           13.98,
-          0,
+          20,
           17.79,
           10,
           18.8,
           15
         ],
         "circle-stroke-width": 2,
-        "circle-stroke-color": "hsl(146, 100%, 50%)"
+        "circle-stroke-color": "hsl(0, 0%, 0%)"
       }
     }
   ],

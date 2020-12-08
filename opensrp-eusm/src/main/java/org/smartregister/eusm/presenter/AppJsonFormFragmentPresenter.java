@@ -46,21 +46,13 @@ import io.ona.kujaku.listeners.BaseLocationListener;
 public class AppJsonFormFragmentPresenter extends JsonFormFragmentPresenter implements UserLocationContract.UserLocationCallback {
 
     private final JsonFormFragment formFragment;
-
-    private AlertDialog passwordDialog;
-
     private final AppJsonFormActivity jsonFormView;
-
-    private TaskingMapView mapView;
-
-
     private final LocationUtils locationUtils;
-
-    private Location lastLocation;
-
     private final BaseLocationListener locationListener;
-
     private final AppJsonFormUtils jsonFormUtils;
+    private AlertDialog passwordDialog;
+    private TaskingMapView mapView;
+    private Location lastLocation;
 
     public AppJsonFormFragmentPresenter(JsonFormFragment formFragment, JsonFormInteractor jsonFormInteractor) {
         super(formFragment, jsonFormInteractor);

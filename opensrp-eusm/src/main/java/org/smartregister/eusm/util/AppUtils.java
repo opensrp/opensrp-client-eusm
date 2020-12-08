@@ -1,16 +1,21 @@
 package org.smartregister.eusm.util;
 
+import android.content.Context;
 import android.graphics.Bitmap;
+import android.graphics.Canvas;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
 
 import androidx.annotation.NonNull;
 
 import com.vijay.jsonwizard.constants.JsonFormConstants;
 
-import org.apache.commons.lang3.StringUtils;
+import org.jetbrains.annotations.NotNull;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.smartregister.clientandeventmodel.Event;
+import org.smartregister.eusm.R;
 import org.smartregister.eusm.application.EusmApplication;
 import org.smartregister.tasking.util.Utils;
 import org.smartregister.util.JsonFormUtils;
@@ -20,14 +25,12 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.util.Date;
 import java.util.List;
-import java.util.Map;
 
 import timber.log.Timber;
 
 import static org.smartregister.client.utils.constants.JsonFormConstants.Properties.DETAILS;
 import static org.smartregister.tasking.interactor.BaseInteractor.gson;
 import static org.smartregister.tasking.util.Constants.METADATA;
-import static org.smartregister.util.JsonFormUtils.ENCOUNTER_LOCATION;
 import static org.smartregister.util.JsonFormUtils.ENTITY_ID;
 import static org.smartregister.util.JsonFormUtils.getString;
 
@@ -56,7 +59,6 @@ public class AppUtils extends Utils {
         EusmApplication.getInstance().getEcSyncHelper().addEvent(entityId, eventJson);
         return gson.fromJson(eventJson.toString(), org.smartregister.domain.Event.class);
     }
-
 
 
     public static void initiateEventProcessing(@NonNull List<String> formSubmissionIds) throws Exception {
@@ -88,5 +90,31 @@ public class AppUtils extends Utils {
         FileOutputStream os = new FileOutputStream(outputFile);
         Bitmap.CompressFormat compressFormat = Bitmap.CompressFormat.JPEG;
         image.compress(compressFormat, 100, os);
+    }
+
+    public static Bitmap drawableToBitmap(Drawable drawable) {
+        if (drawable instanceof BitmapDrawable) {
+            return ((BitmapDrawable) drawable).getBitmap();
+        }
+
+        Bitmap bitmap = Bitmap.createBitmap(drawable.getIntrinsicWidth(), drawable.getIntrinsicHeight(), Bitmap.Config.ARGB_8888);
+        Canvas canvas = new Canvas(bitmap);
+        drawable.setBounds(0, 0, canvas.getWidth(), canvas.getHeight());
+        drawable.draw(canvas);
+
+        return bitmap;
+    }
+
+    @NotNull
+    public static String formatTaskStatus(String taskStatus_, Context context) {
+        String taskStatus = "";
+        if (AppConstants.TaskStatus.IN_PROGRESS.equals(taskStatus_)) {
+            taskStatus = context.getString(R.string.tasks_in_progress);
+        } else if (AppConstants.TaskStatus.COMPLETED.equals(taskStatus_)) {
+            taskStatus = context.getString(R.string.tasks_completed);
+        } else {
+            taskStatus = String.format(context.getString(R.string.no_of_items), taskStatus_);
+        }
+        return taskStatus;
     }
 }

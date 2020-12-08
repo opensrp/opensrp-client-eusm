@@ -19,8 +19,8 @@ import org.smartregister.eusm.R;
 import org.smartregister.eusm.application.EusmApplication;
 import org.smartregister.eusm.config.ServicePointType;
 import org.smartregister.eusm.contract.TaskRegisterActivityContract;
+import org.smartregister.eusm.domain.StructureDetail;
 import org.smartregister.eusm.fragment.EusmTasksRegisterFragment;
-import org.smartregister.eusm.model.StructureDetail;
 import org.smartregister.eusm.presenter.TaskRegisterActivityPresenter;
 import org.smartregister.eusm.util.AppConstants;
 import org.smartregister.tasking.activity.TaskRegisterActivity;
@@ -199,8 +199,7 @@ public class EusmTaskRegisterActivity extends TaskRegisterActivity implements Ta
 
     @Override
     public String getCommune() {
-        // TODO: update commune
-        return "Alarobia Ambatomanga";
+        return structureDetail.getCommune();
     }
 
     @Override

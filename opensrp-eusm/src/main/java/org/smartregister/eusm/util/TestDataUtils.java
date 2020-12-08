@@ -14,18 +14,18 @@ import org.smartregister.domain.PlanDefinition;
 import org.smartregister.domain.Task;
 import org.smartregister.eusm.application.EusmApplication;
 import org.smartregister.eusm.configuration.EusmStockSyncConfiguration;
-import org.smartregister.eusm.model.TaskDetail;
 import org.smartregister.repository.LocationRepository;
 import org.smartregister.repository.PlanDefinitionRepository;
 import org.smartregister.repository.StructureRepository;
 import org.smartregister.repository.TaskRepository;
+import org.smartregister.service.UserService;
 import org.smartregister.stock.domain.StockResponse;
 import org.smartregister.stock.util.GsonUtil;
 import org.smartregister.util.DateTimeTypeConverter;
 import org.smartregister.util.PropertiesConverter;
 
-import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 /**
  * Created by samuelgithengi on 12/3/18.
@@ -55,55 +55,55 @@ public class TestDataUtils {
         new EusmStockSyncConfiguration().getStockSyncIntentServiceHelper().batchInsertStocks(stockResponse.getStocks());
     }
 
-    public static List<TaskDetail> getStructureDetail() {
-
-        TaskDetail s = new TaskDetail();
-        s.setChecked(false);
-        s.setEntityName("Solar Fridge");
-        s.setHeader(false);
-        s.setHasProblem(true);
-        s.setNonProductTask(false);
-        s.setQuantity("3");
-        s.setProductSerial("3424");
-
-        TaskDetail s1 = new TaskDetail();
-        s1.setChecked(false);
-        s1.setEntityName("Scale,infant,springtype,25 kg x 100g");
-        s1.setHeader(false);
-        s1.setNonProductTask(false);
-        s1.setQuantity("3");
-        s1.setProductSerial("3424");
-
-        TaskDetail s11 = new TaskDetail();
-        s11.setChecked(false);
-        s11.setEntityName("Service Point Check");
-        s11.setHeader(false);
-        s11.setNonProductTask(true);
-
-        TaskDetail s12 = new TaskDetail();
-        s12.setChecked(false);
-        s12.setEntityName("Record Gps");
-        s12.setHeader(false);
-        s12.setNonProductTask(true);
-
-        TaskDetail s3 = new TaskDetail();
-        s3.setChecked(true);
-        s3.setHasProblem(true);
-        s3.setEntityName("Timer");
-        s3.setHeader(false);
-        s3.setNonProductTask(false);
-        s3.setQuantity("3");
-        s3.setProductSerial("3424");
-
-        List<TaskDetail> taskDetails = new ArrayList<>();
-        taskDetails.add(s);
-        taskDetails.add(s1);
-        taskDetails.add(s11);
-        taskDetails.add(s12);
-        taskDetails.add(s3);
-
-        return taskDetails;
-    }
+//    public static List<TaskDetail> getStructureDetail() {
+//
+//        TaskDetail s = new TaskDetail();
+//        s.setChecked(false);
+//        s.setEntityName("Solar Fridge");
+//        s.setHeader(false);
+//        s.setHasProblem(true);
+//        s.setNonProductTask(false);
+//        s.setQuantity("3");
+//        s.setProductSerial("3424");
+//
+//        TaskDetail s1 = new TaskDetail();
+//        s1.setChecked(false);
+//        s1.setEntityName("Scale,infant,springtype,25 kg x 100g");
+//        s1.setHeader(false);
+//        s1.setNonProductTask(false);
+//        s1.setQuantity("3");
+//        s1.setProductSerial("3424");
+//
+//        TaskDetail s11 = new TaskDetail();
+//        s11.setChecked(false);
+//        s11.setEntityName("Service Point Check");
+//        s11.setHeader(false);
+//        s11.setNonProductTask(true);
+//
+//        TaskDetail s12 = new TaskDetail();
+//        s12.setChecked(false);
+//        s12.setEntityName("Record Gps");
+//        s12.setHeader(false);
+//        s12.setNonProductTask(true);
+//
+//        TaskDetail s3 = new TaskDetail();
+//        s3.setChecked(true);
+//        s3.setHasProblem(true);
+//        s3.setEntityName("Timer");
+//        s3.setHeader(false);
+//        s3.setNonProductTask(false);
+//        s3.setQuantity("3");
+//        s3.setProductSerial("3424");
+//
+//        List<TaskDetail> taskDetails = new ArrayList<>();
+//        taskDetails.add(s);
+//        taskDetails.add(s1);
+//        taskDetails.add(s11);
+//        taskDetails.add(s12);
+//        taskDetails.add(s3);
+//
+//        return taskDetails;
+//    }
 
 //    public static List<ProductInfoQuestion> getProductInfoQuestionLIst() {
 //        ProductInfoQuestion p1 = new ProductInfoQuestion();
@@ -125,10 +125,15 @@ public class TestDataUtils {
     public void populateTestData() {
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(EusmApplication.getInstance().getApplicationContext());
         if (!sharedPreferences.getBoolean(TEST_DATA_POPULATED, false)) {
+            UserService userService = EusmApplication.getInstance().context().userService();
+            Set<String> strings = userService.fetchJurisdictionIds();
+            strings.add("ad56bb3b-66c5-4a29-8003-0a60582540a6");
+            strings.add("a7433a02-42be-4d19-8cbd-084dd5e0bbae");
+            userService.saveJurisdictionIds(strings);
             createLocations();
             createPlanDefinition();
             createTasks();
-            createStructures();
+            //createStructures();
             getPopulateInventory();
             sharedPreferences.edit().putBoolean(TEST_DATA_POPULATED, true).apply();
         }
@@ -138,7 +143,7 @@ public class TestDataUtils {
         try {
             Gson gson = new GsonBuilder().registerTypeAdapter(DateTime.class, new DateTimeTypeConverter("yyyy-MM-dd'T'HHmm"))
                     .serializeNulls().create();
-            String tasksJSON = "[{\"identifier\":\"076885f8-582e-4dc6-8a1a-510e1c8ed5d9\",\"campaignIdentifier\":\"IRS_2019_S1\",\"planIdentifier\":\"4708ca0a-d0d6-4199-bb1b-8701803c2d02\",\"groupIdentifier\":\"3537\",\"status\":\"Ready\",\"businessStatus\":\"Visited\",\"priority\":\"routine\",\"code\":\"GPS\",\"description\":\"Record Gps\",\"focus\":\"Record Gps\",\"for\":\"f3199af5-2eaf-46df-87c9-40d59606a2fb\",\"executionPeriod\":{\"start\":\"2018-11-10T22:00:00.000\"},\"authoredOn\":\"2018-11-29T0342\",\"lastModified\":\"2018-12-03T2212\",\"owner\":\"demoMTI\",\"location\":\"f3199af5-2eaf-46df-87c9-40d59606a2fb\",\"note\":null,\"serverVersion\":1543867945202},{\"identifier\":\"634fa9fa-736d-4298-96aa-3de68ac02cae\",\"campaignIdentifier\":\"IRS_2019_S1\",\"planIdentifier\":\"4708ca0a-d0d6-4199-bb1b-8701803c2d02\",\"groupIdentifier\":\"3537\",\"status\":\"Ready\",\"businessStatus\":\"Not Visited\",\"priority\":\"routine\",\"code\":\"IRS\",\"description\":\"Service Point Check\",\"focus\":\"Service Point Check\",\"for\":\"f3199af5-2eaf-46df-87c9-40d59606a2fb\",\"executionPeriod\":{\"start\":\"2018-11-10T22:00:00.000\"},\"authoredOn\":\"2018-11-29T0342\",\"lastModified\":\"2018-12-03T2212\",\"owner\":\"demoMTI\",\"location\":\"f3199af5-2eaf-46df-87c9-40d59606a2fb\",\"note\":null,\"serverVersion\":1543867945203},{\"identifier\":\"d3b237ff-f9d8-4077-9523-c7bf3552ff87\",\"campaignIdentifier\":\"IRS_2019_S1\",\"groupIdentifier\":\"3537\",\"planIdentifier\":\"4708ca0a-d0d6-4199-bb1b-8701803c2d02\",\"status\":\"Ready\",\"businessStatus\":\"Not Visited\",\"priority\":\"routine\",\"code\":\"IRS\",\"description\":\"Spray House\",\"focus\":\"IRS Visit\",\"for\":\"f3199af5-2eaf-46df-87c9-40d59606a2fb\",\"executionPeriod\":{\"start\":\"2018-11-10T22:00:00.000\"},\"authoredOn\":\"2018-11-29T0342\",\"lastModified\":\"2018-12-03T2212\",\"location\":\"f3199af5-2eaf-46df-87c9-40d59606a2fb\",\"owner\":\"demoMTI\",\"note\":null,\"serverVersion\":1543867945204},{\"identifier\":\"c6dd4abc-fb3e-4f72-afb8-923fc43f44d7\",\"campaignIdentifier\":\"IRS_2019_S1\",\"groupIdentifier\":\"3537\",\"status\":\"Ready\",\"planIdentifier\":\"4708ca0a-d0d6-4199-bb1b-8701803c2d02\",\"businessStatus\":\"Not Visited\",\"priority\":\"routine\",\"code\":\"IRS\",\"description\":\"product\",\"focus\":\"product\",\"for\":\"ddcaf383-882e-448b-b701-8b72cb0d4d7a\",\"executionPeriod\":{\"start\":\"2018-11-10T22:00:00.000\"},\"authoredOn\":\"2018-12-03T2212\",\"lastModified\":\"2018-12-03T2212\",\"owner\":\"demoMTI\",\"location\":\"f3199af5-2eaf-46df-87c9-40d59606a2fb\",\"note\":null,\"serverVersion\":1543867945195},{\"identifier\":\"2caa810d-d4da-4e67-838b-badb9bd86e06\",\"campaignIdentifier\":\"IRS_2019_S1\",\"groupIdentifier\":\"3537\",\"status\":\"Ready\",\"planIdentifier\":\"4708ca0a-d0d6-4199-bb1b-8701803c2d02\",\"businessStatus\":\"Not Visited\",\"priority\":\"routine\",\"code\":\"IRS\",\"description\":\"Service Point Check\",\"focus\":\"Service Point Check\",\"for\":\"b8a7998c-5df6-49eb-98e6-f0675db71848\",\"executionPeriod\":{\"start\":\"2018-11-10T22:00:00.000\"},\"authoredOn\":\"2018-12-03T2212\",\"lastModified\":\"2018-12-03T2212\",\"owner\":\"demoMTI\",\"location\":\"b8a7998c-5df6-49eb-98e6-f0675db71848\",\"note\":null,\"serverVersion\":1543867945196},{\"identifier\":\"bbf32ca5-9b83-444d-882f-2085974e90b5\",\"campaignIdentifier\":\"IRS_2019_S1\",\"groupIdentifier\":\"3537\",\"status\":\"Ready\",\"planIdentifier\":\"4708ca0a-d0d6-4199-bb1b-8701803c2d02\",\"businessStatus\":\"Not Visited\",\"priority\":\"routine\",\"code\":\"IRS\",\"description\":\"Record Gps\",\"focus\":\"Record Gps\",\"for\":\"b8a7998c-5df6-49eb-98e6-f0675db71848\",\"executionPeriod\":{\"start\":\"2018-11-10T22:00:00.000\"},\"authoredOn\":\"2018-12-03T2212\",\"lastModified\":\"2018-12-03T2212\",\"owner\":\"demoMTI\",\"location\":\"b8a7998c-5df6-49eb-98e6-f0675db71848\",\"note\":null,\"serverVersion\":1543867945196},{\"identifier\":\"6c303b8b-e47c-45e9-8ab5-3374c8f539a3\",\"campaignIdentifier\":\"IRS_2019_S1\",\"groupIdentifier\":\"3537\",\"status\":\"Ready\",\"planIdentifier\":\"4708ca0a-d0d6-4199-bb1b-8701803c2d02\",\"businessStatus\":\"Not Visited\",\"priority\":\"routine\",\"code\":\"IRS\",\"description\":\"product\",\"focus\":\"product\",\"for\":\"69227a92-7979-490c-b149-f28669c6b760\",\"executionPeriod\":{\"start\":\"2018-11-10T22:00:00.000\"},\"authoredOn\":\"2018-12-03T2212\",\"lastModified\":\"2018-12-03T2212\",\"owner\":\"demoMTI\",\"location\":\"b8a7998c-5df6-49eb-98e6-f0675db71848\",\"note\":null,\"serverVersion\":1543867945196}]";
+            String tasksJSON = "[{\"identifier\":\"076885f8-582e-4dc6-8a1a-510e1c8ed5d9\",\"campaignIdentifier\":\"IRS_2019_S1\",\"planIdentifier\":\"335ef7a3-7f35-58aa-8263-4419464946d8\",\"groupIdentifier\":\"8e74d042-4a71-4694-a652-bc3ba6369101\",\"status\":\"Ready\",\"businessStatus\":\"Visited\",\"priority\":\"routine\",\"code\":\"GPS\",\"description\":\"Record Gps\",\"focus\":\"Record Gps\",\"for\":\"f3199af5-2eaf-46df-87c9-40d59606a2fb\",\"executionPeriod\":{\"start\":\"2018-11-10T22:00:00.000\"},\"authoredOn\":\"2018-11-29T0342\",\"lastModified\":\"2018-12-03T2212\",\"owner\":\"demoMTI\",\"location\":\"f3199af5-2eaf-46df-87c9-40d59606a2fb\",\"note\":null,\"serverVersion\":1543867945202},{\"identifier\":\"634fa9fa-736d-4298-96aa-3de68ac02cae\",\"campaignIdentifier\":\"IRS_2019_S1\",\"planIdentifier\":\"335ef7a3-7f35-58aa-8263-4419464946d8\",\"groupIdentifier\":\"8e74d042-4a71-4694-a652-bc3ba6369101\",\"status\":\"Ready\",\"businessStatus\":\"Not Visited\",\"priority\":\"routine\",\"code\":\"IRS\",\"description\":\"Service Point Check\",\"focus\":\"Service Point Check\",\"for\":\"f3199af5-2eaf-46df-87c9-40d59606a2fb\",\"executionPeriod\":{\"start\":\"2018-11-10T22:00:00.000\"},\"authoredOn\":\"2018-11-29T0342\",\"lastModified\":\"2018-12-03T2212\",\"owner\":\"demoMTI\",\"location\":\"f3199af5-2eaf-46df-87c9-40d59606a2fb\",\"note\":null,\"serverVersion\":1543867945203},{\"identifier\":\"d3b237ff-f9d8-4077-9523-c7bf3552ff87\",\"campaignIdentifier\":\"IRS_2019_S1\",\"groupIdentifier\":\"8e74d042-4a71-4694-a652-bc3ba6369101\",\"planIdentifier\":\"335ef7a3-7f35-58aa-8263-4419464946d8\",\"status\":\"Ready\",\"businessStatus\":\"Not Visited\",\"priority\":\"routine\",\"code\":\"IRS\",\"description\":\"Spray House\",\"focus\":\"IRS Visit\",\"for\":\"c2635a23-a604-48fb-9e1c-8bf1e75e6759\",\"executionPeriod\":{\"start\":\"2018-11-10T22:00:00.000\"},\"authoredOn\":\"2018-11-29T0342\",\"lastModified\":\"2018-12-03T2212\",\"location\":\"f3199af5-2eaf-46df-87c9-40d59606a2fb\",\"owner\":\"demoMTI\",\"note\":null,\"serverVersion\":1543867945204},{\"identifier\":\"c6dd4abc-fb3e-4f72-afb8-923fc43f44d7\",\"campaignIdentifier\":\"IRS_2019_S1\",\"groupIdentifier\":\"8e74d042-4a71-4694-a652-bc3ba6369101\",\"status\":\"Ready\",\"planIdentifier\":\"335ef7a3-7f35-58aa-8263-4419464946d8\",\"businessStatus\":\"Not Visited\",\"priority\":\"routine\",\"code\":\"IRS\",\"description\":\"product\",\"focus\":\"product\",\"for\":\"ddcaf383-882e-448b-b701-8b72cb0d4d7a\",\"executionPeriod\":{\"start\":\"2018-11-10T22:00:00.000\"},\"authoredOn\":\"2018-12-03T2212\",\"lastModified\":\"2018-12-03T2212\",\"owner\":\"demoMTI\",\"location\":\"f3199af5-2eaf-46df-87c9-40d59606a2fb\",\"note\":null,\"serverVersion\":1543867945195},{\"identifier\":\"2caa810d-d4da-4e67-838b-badb9bd86e06\",\"campaignIdentifier\":\"IRS_2019_S1\",\"groupIdentifier\":\"8e74d042-4a71-4694-a652-bc3ba6369101\",\"status\":\"Ready\",\"planIdentifier\":\"335ef7a3-7f35-58aa-8263-4419464946d8\",\"businessStatus\":\"Not Visited\",\"priority\":\"routine\",\"code\":\"IRS\",\"description\":\"Service Point Check\",\"focus\":\"Service Point Check\",\"for\":\"b8a7998c-5df6-49eb-98e6-f0675db71848\",\"executionPeriod\":{\"start\":\"2018-11-10T22:00:00.000\"},\"authoredOn\":\"2018-12-03T2212\",\"lastModified\":\"2018-12-03T2212\",\"owner\":\"demoMTI\",\"location\":\"b8a7998c-5df6-49eb-98e6-f0675db71848\",\"note\":null,\"serverVersion\":1543867945196},{\"identifier\":\"bbf32ca5-9b83-444d-882f-2085974e90b5\",\"campaignIdentifier\":\"IRS_2019_S1\",\"groupIdentifier\":\"8e74d042-4a71-4694-a652-bc3ba6369101\",\"status\":\"Ready\",\"planIdentifier\":\"335ef7a3-7f35-58aa-8263-4419464946d8\",\"businessStatus\":\"Not Visited\",\"priority\":\"routine\",\"code\":\"IRS\",\"description\":\"Record Gps\",\"focus\":\"Record Gps\",\"for\":\"b8a7998c-5df6-49eb-98e6-f0675db71848\",\"executionPeriod\":{\"start\":\"2018-11-10T22:00:00.000\"},\"authoredOn\":\"2018-12-03T2212\",\"lastModified\":\"2018-12-03T2212\",\"owner\":\"demoMTI\",\"location\":\"b8a7998c-5df6-49eb-98e6-f0675db71848\",\"note\":null,\"serverVersion\":1543867945196},{\"identifier\":\"6c303b8b-e47c-45e9-8ab5-3374c8f539a3\",\"campaignIdentifier\":\"IRS_2019_S1\",\"groupIdentifier\":\"8e74d042-4a71-4694-a652-bc3ba6369101\",\"status\":\"Ready\",\"planIdentifier\":\"335ef7a3-7f35-58aa-8263-4419464946d8\",\"businessStatus\":\"Not Visited\",\"priority\":\"routine\",\"code\":\"IRS\",\"description\":\"product\",\"focus\":\"product\",\"for\":\"69227a92-7979-490c-b149-f28669c6b760\",\"executionPeriod\":{\"start\":\"2018-11-10T22:00:00.000\"},\"authoredOn\":\"2018-12-03T2212\",\"lastModified\":\"2018-12-03T2212\",\"owner\":\"demoMTI\",\"location\":\"b8a7998c-5df6-49eb-98e6-f0675db71848\",\"note\":null,\"serverVersion\":1543867945196}]";
             List<Task> tasks = gson.fromJson(tasksJSON, new TypeToken<List<Task>>() {
             }.getType());
             for (Task task : tasks) {
@@ -153,30 +158,24 @@ public class TestDataUtils {
         }
     }
 
-    private void createLocations() {
+    public void createLocations() {
         try {
 
 //            Location location = gson.fromJson(locationJSon, Location.class);
 //            locationRepository.addOrUpdate(location);
 //
-            String location2JSon = "    {\n" +
+            String location2JSon = "       {\n" +
                     "        \"type\": \"Feature\",\n" +
-                    "        \"id\": \"11fccc09-14f9-4dc7-9d1e-959bb58ce807\",\n" +
+                    "        \"id\": \"ad56bb3b-66c5-4a29-8003-0a60582540a6\",\n" +
                     "        \"properties\": {\n" +
                     "            \"status\": \"Active\",\n" +
-                    "            \"parentId\": \"7cd51ffb-ef6e-4e98-9000-34efc64c6eb8\",\n" +
-                    "            \"name\": \"Ambinanindilana\",\n" +
+                    "            \"parentId\": \"bb30770a-d039-4bfa-9c02-a32d0f32af42\",\n" +
+                    "            \"name\": \"MANANARA AVARATRA\",\n" +
                     "            \"geographicLevel\": 0,\n" +
                     "            \"version\": 0\n" +
                     "        },\n" +
-                    "        \"serverVersion\": 5565,\n" +
-                    "        \"locationTags\": [\n" +
-                    "            {\n" +
-                    "                \"id\": 4,\n" +
-                    "                \"name\": \"Commune\"\n" +
-                    "            }\n" +
-                    "        ]\n" +
-                    "    }";
+                    "        \"serverVersion\": 3013\n" +
+                    "   } ";
             Location location2 = gson.fromJson(location2JSon, Location.class);
             locationRepository.addOrUpdate(location2);
         } catch (Exception e) {
@@ -205,12 +204,15 @@ public class TestDataUtils {
     }
 
     public void createPlanDefinition() {
-
         try {
             Gson gson = PlanDefinitionRepository.gson;
-            String planDefinitionJSON = "{\"identifier\":\"335ef7a3-7f35-58aa-8263-4419464946d8\",\"version\":\"1\",\"name\":\"EUSM Mission 2020-11-17\",\"title\":\"EUSM Mission 2020-11-17\",\"status\":\"active\",\"date\":\"2020-11-17\",\"effectivePeriod\":{\"start\":\"2020-11-17\",\"end\":\"2021-12-24\"},\"useContext\":[{\"code\":\"taskGenerationStatus\",\"valueCodableConcept\":\"internal\"}],\"jurisdiction\":[{\"code\":\"8a26a7ea-b820-4c9a-9811-07b1c38b51fa\"}],\"serverVersion\":1599112764477,\"goal\":[{\"id\":\"Product_Check\",\"description\":\"Check for all products (100%) within the jurisdiction\",\"priority\":\"medium-priority\",\"target\":[{\"measure\":\"Percent of products checked\",\"detail\":{\"detailQuantity\":{\"value\":100,\"comparator\":\">\",\"unit\":\"Percent\"}},\"due\":\"2020-12-24\"}]},{\"id\":\"Fix_Product_Problem\",\"description\":\"Fix problems for all products (100%) within the jurisdiction\",\"priority\":\"medium-priority\",\"target\":[{\"measure\":\"Percent of products problems fixed\",\"detail\":{\"detailQuantity\":{\"value\":100,\"comparator\":\">\",\"unit\":\"Percent\"}},\"due\":\"2020-12-24\"}]},{\"id\":\"Record_GPS\",\"description\":\"Record GPS for all service points without GPS within the jurisdiction\",\"priority\":\"medium-priority\",\"target\":[{\"measure\":\"Percent of GPS recorded\",\"detail\":{\"detailQuantity\":{\"value\":100,\"comparator\":\">\",\"unit\":\"Percent\"}},\"due\":\"2020-12-24\"}]},{\"id\":\"Service_Point_Check\",\"description\":\"Conduct checks for all service point (100%) within the Jurisdiction\",\"priority\":\"medium-priority\",\"target\":[{\"measure\":\"Percent of service points checked\",\"detail\":{\"detailQuantity\":{\"value\":100,\"comparator\":\">\",\"unit\":\"Percent\"}},\"due\":\"2020-12-24\"}]}],\"action\":[{\"identifier\":\"bd90510c-e769-5176-ad18-5a256822822a\",\"prefix\":1,\"title\":\"Product Check\",\"description\":\"Check for all products (100%) within the jurisdiction\",\"code\":\"Product Check\",\"timingPeriod\":{\"start\":\"2020-11-17\",\"end\":\"2020-12-24\"},\"reason\":\"Routine\",\"goalId\":\"Product_Check\",\"subjectCodableConcept\":{\"text\":\"Device\"},\"trigger\":[{\"type\":\"named-event\",\"name\":\"plan-activation\"}],\"condition\":[{\"kind\":\"applicability\",\"expression\":{\"description\":\"Product exists\",\"expression\":\"$this.is(FHIR.Device)\"}}],\"definitionUri\":\"product_check.json\",\"type\":\"create\"},{\"identifier\":\"bd90510c-e769-5176-ad18-5a256822822a\",\"prefix\":2,\"title\":\"Fix Product Problem\",\"description\":\"Fix problems for all products (100%) within the jurisdiction\",\"code\":\"Fix Product Problems\",\"timingPeriod\":{\"start\":\"2020-11-17\",\"end\":\"2020-12-24\"},\"reason\":\"Routine\",\"goalId\":\"fix_problem\",\"subjectCodableConcept\":{\"text\":\"Task\"},\"trigger\":[{\"type\":\"named-event\",\"name\":\"event-submission\",\"expression\":{\"description\":\"Trigger when a Flag problem event is submitted\",\"expression\":\"questionnaire = 'flag_problem'\"}}],\"condition\":[{\"kind\":\"applicability\",\"expression\":{\"description\":\"Product exists\",\"expression\":\"$this.is(FHIR.QuestionnaireResponse)\"}}],\"definitionUri\":\"product_check.json\",\"type\":\"create\"},{\"identifier\":\"bd90510c-e769-5176-ad18-5a256822822a\",\"prefix\":3,\"title\":\"Record GPS\",\"description\":\"Record GPS for all service points (100%) without GPS within the jurisdiction\",\"code\":\"Record GPS\",\"timingPeriod\":{\"start\":\"2020-11-17\",\"end\":\"2020-12-24\"},\"reason\":\"Routine\",\"goalId\":\"Record_GPS\",\"subjectCodableConcept\":{\"text\":\"Location\"},\"trigger\":[{\"type\":\"named-event\",\"name\":\"plan-activation\"}],\"condition\":[{\"kind\":\"applicability\",\"expression\":{\"description\":\"Service point does not have geometry\",\"expression\":\"$this.identifier.where(id='hasGeometry').value='false'\"}}],\"definitionUri\":\"record_gps.json\",\"type\":\"create\"},{\"identifier\":\"bd90510c-e769-5176-ad18-5a256822822a\",\"prefix\":3,\"title\":\"Service Point Check\",\"description\":\"Conduct checkfor all service points (100%) within the jurisdiction\",\"code\":\"Service Point Check\",\"timingPeriod\":{\"start\":\"2020-11-17\",\"end\":\"2020-12-24\"},\"reason\":\"Routine\",\"goalId\":\"Service_Point_Check\",\"subjectCodableConcept\":{\"text\":\"Location\"},\"trigger\":[{\"type\":\"named-event\",\"name\":\"plan-activation\"}],\"condition\":[{\"kind\":\"applicability\",\"expression\":{\"description\":\"All service points\",\"expression\":\"$this.is(FHIR.Location)\"}}],\"definitionUri\":\"service_point_check.json\",\"type\":\"create\"}],\"experimental\":false}";
-            PlanDefinition planDefinition = gson.fromJson(planDefinitionJSON, PlanDefinition.class);
-            EusmApplication.getInstance().getPlanDefinitionRepository().addOrUpdate(planDefinition);
+
+            String planDefinitionJSON = "[{\"identifier\":\"335ef7a3-7f35-58aa-8263-4419464946d8\",\"version\":\"1\",\"name\":\"EUSM Mission 2020-11-17\",\"title\":\"EUSM Mission 2020-11-17\",\"status\":\"active\",\"date\":\"2020-11-17\",\"effectivePeriod\":{\"start\":\"2020-11-17\",\"end\":\"2021-12-24\"},\"useContext\":[{\"code\":\"taskGenerationStatus\",\"valueCodableConcept\":\"internal\"}],\"jurisdiction\":[{\"code\":\"ad56bb3b-66c5-4a29-8003-0a60582540a6\"}],\"serverVersion\":1599112764477,\"goal\":[{\"id\":\"Product_Check\",\"description\":\"Check for all products (100%) within the jurisdiction\",\"priority\":\"medium-priority\",\"target\":[{\"measure\":\"Percent of products checked\",\"detail\":{\"detailQuantity\":{\"value\":100,\"comparator\":\">\",\"unit\":\"Percent\"}},\"due\":\"2020-12-24\"}]},{\"id\":\"Fix_Product_Problem\",\"description\":\"Fix problems for all products (100%) within the jurisdiction\",\"priority\":\"medium-priority\",\"target\":[{\"measure\":\"Percent of products problems fixed\",\"detail\":{\"detailQuantity\":{\"value\":100,\"comparator\":\">\",\"unit\":\"Percent\"}},\"due\":\"2020-12-24\"}]},{\"id\":\"Record_GPS\",\"description\":\"Record GPS for all service points without GPS within the jurisdiction\",\"priority\":\"medium-priority\",\"target\":[{\"measure\":\"Percent of GPS recorded\",\"detail\":{\"detailQuantity\":{\"value\":100,\"comparator\":\">\",\"unit\":\"Percent\"}},\"due\":\"2020-12-24\"}]},{\"id\":\"Service_Point_Check\",\"description\":\"Conduct checks for all service point (100%) within the Jurisdiction\",\"priority\":\"medium-priority\",\"target\":[{\"measure\":\"Percent of service points checked\",\"detail\":{\"detailQuantity\":{\"value\":100,\"comparator\":\">\",\"unit\":\"Percent\"}},\"due\":\"2020-12-24\"}]}],\"action\":[{\"identifier\":\"bd90510c-e769-5176-ad18-5a256822822a\",\"prefix\":1,\"title\":\"Product Check\",\"description\":\"Check for all products (100%) within the jurisdiction\",\"code\":\"Product Check\",\"timingPeriod\":{\"start\":\"2020-11-17\",\"end\":\"2020-12-24\"},\"reason\":\"Routine\",\"goalId\":\"Product_Check\",\"subjectCodableConcept\":{\"text\":\"Device\"},\"trigger\":[{\"type\":\"named-event\",\"name\":\"plan-activation\"}],\"condition\":[{\"kind\":\"applicability\",\"expression\":{\"description\":\"Product exists\",\"expression\":\"$this.is(FHIR.Device)\"}}],\"definitionUri\":\"product_check.json\",\"type\":\"create\"},{\"identifier\":\"bd90510c-e769-5176-ad18-5a256822822a\",\"prefix\":2,\"title\":\"Fix Product Problem\",\"description\":\"Fix problems for all products (100%) within the jurisdiction\",\"code\":\"Fix Product Problems\",\"timingPeriod\":{\"start\":\"2020-11-17\",\"end\":\"2020-12-24\"},\"reason\":\"Routine\",\"goalId\":\"fix_problem\",\"subjectCodableConcept\":{\"text\":\"Task\"},\"trigger\":[{\"type\":\"named-event\",\"name\":\"event-submission\",\"expression\":{\"description\":\"Trigger when a Flag problem event is submitted\",\"expression\":\"questionnaire = 'flag_problem'\"}}],\"condition\":[{\"kind\":\"applicability\",\"expression\":{\"description\":\"Product exists\",\"expression\":\"$this.is(FHIR.QuestionnaireResponse)\"}}],\"definitionUri\":\"product_check.json\",\"type\":\"create\"},{\"identifier\":\"bd90510c-e769-5176-ad18-5a256822822a\",\"prefix\":3,\"title\":\"Record GPS\",\"description\":\"Record GPS for all service points (100%) without GPS within the jurisdiction\",\"code\":\"Record GPS\",\"timingPeriod\":{\"start\":\"2020-11-17\",\"end\":\"2020-12-24\"},\"reason\":\"Routine\",\"goalId\":\"Record_GPS\",\"subjectCodableConcept\":{\"text\":\"Location\"},\"trigger\":[{\"type\":\"named-event\",\"name\":\"plan-activation\"}],\"condition\":[{\"kind\":\"applicability\",\"expression\":{\"description\":\"Service point does not have geometry\",\"expression\":\"$this.identifier.where(id='hasGeometry').value='false'\"}}],\"definitionUri\":\"record_gps.json\",\"type\":\"create\"},{\"identifier\":\"bd90510c-e769-5176-ad18-5a256822822a\",\"prefix\":3,\"title\":\"Service Point Check\",\"description\":\"Conduct checkfor all service points (100%) within the jurisdiction\",\"code\":\"Service Point Check\",\"timingPeriod\":{\"start\":\"2020-11-17\",\"end\":\"2020-12-24\"},\"reason\":\"Routine\",\"goalId\":\"Service_Point_Check\",\"subjectCodableConcept\":{\"text\":\"Location\"},\"trigger\":[{\"type\":\"named-event\",\"name\":\"plan-activation\"}],\"condition\":[{\"kind\":\"applicability\",\"expression\":{\"description\":\"All service points\",\"expression\":\"$this.is(FHIR.Location)\"}}],\"definitionUri\":\"service_point_check.json\",\"type\":\"create\"}],\"experimental\":false},{\"identifier\":\"ad355553-dde1-4ad8-ab95-21f77d2e95cc\",\"version\":\"1\",\"name\":\"EUSM Mission 2020-11-18\",\"title\":\"EUSM Mission 2020-11-18\",\"status\":\"active\",\"date\":\"2020-11-18\",\"effectivePeriod\":{\"start\":\"2020-11-18\",\"end\":\"2021-12-24\"},\"useContext\":[{\"code\":\"taskGenerationStatus\",\"valueCodableConcept\":\"internal\"}],\"jurisdiction\":[{\"code\":\"a7433a02-42be-4d19-8cbd-084dd5e0bbae\"}],\"serverVersion\":1599112764477,\"goal\":[{\"id\":\"Product_Check\",\"description\":\"Check for all products (100%) within the jurisdiction\",\"priority\":\"medium-priority\",\"target\":[{\"measure\":\"Percent of products checked\",\"detail\":{\"detailQuantity\":{\"value\":100,\"comparator\":\">\",\"unit\":\"Percent\"}},\"due\":\"2020-12-24\"}]},{\"id\":\"Fix_Product_Problem\",\"description\":\"Fix problems for all products (100%) within the jurisdiction\",\"priority\":\"medium-priority\",\"target\":[{\"measure\":\"Percent of products problems fixed\",\"detail\":{\"detailQuantity\":{\"value\":100,\"comparator\":\">\",\"unit\":\"Percent\"}},\"due\":\"2020-12-24\"}]},{\"id\":\"Record_GPS\",\"description\":\"Record GPS for all service points without GPS within the jurisdiction\",\"priority\":\"medium-priority\",\"target\":[{\"measure\":\"Percent of GPS recorded\",\"detail\":{\"detailQuantity\":{\"value\":100,\"comparator\":\">\",\"unit\":\"Percent\"}},\"due\":\"2020-12-24\"}]},{\"id\":\"Service_Point_Check\",\"description\":\"Conduct checks for all service point (100%) within the Jurisdiction\",\"priority\":\"medium-priority\",\"target\":[{\"measure\":\"Percent of service points checked\",\"detail\":{\"detailQuantity\":{\"value\":100,\"comparator\":\">\",\"unit\":\"Percent\"}},\"due\":\"2020-12-24\"}]}],\"action\":[{\"identifier\":\"5eb16a00-e238-4ae5-ba4e-784ddefbb74e\",\"prefix\":1,\"title\":\"Product Check\",\"description\":\"Check for all products (100%) within the jurisdiction\",\"code\":\"Product Check\",\"timingPeriod\":{\"start\":\"2020-11-17\",\"end\":\"2020-12-24\"},\"reason\":\"Routine\",\"goalId\":\"Product_Check\",\"subjectCodableConcept\":{\"text\":\"Device\"},\"trigger\":[{\"type\":\"named-event\",\"name\":\"plan-activation\"}],\"condition\":[{\"kind\":\"applicability\",\"expression\":{\"description\":\"Product exists\",\"expression\":\"$this.is(FHIR.Device)\"}}],\"definitionUri\":\"product_check.json\",\"type\":\"create\"},{\"identifier\":\"bd90510c-e769-5176-ad18-5a256822822a\",\"prefix\":2,\"title\":\"Fix Product Problem\",\"description\":\"Fix problems for all products (100%) within the jurisdiction\",\"code\":\"Fix Product Problems\",\"timingPeriod\":{\"start\":\"2020-11-17\",\"end\":\"2020-12-24\"},\"reason\":\"Routine\",\"goalId\":\"fix_problem\",\"subjectCodableConcept\":{\"text\":\"Task\"},\"trigger\":[{\"type\":\"named-event\",\"name\":\"event-submission\",\"expression\":{\"description\":\"Trigger when a Flag problem event is submitted\",\"expression\":\"questionnaire = 'flag_problem'\"}}],\"condition\":[{\"kind\":\"applicability\",\"expression\":{\"description\":\"Product exists\",\"expression\":\"$this.is(FHIR.QuestionnaireResponse)\"}}],\"definitionUri\":\"product_check.json\",\"type\":\"create\"},{\"identifier\":\"bd90510c-e769-5176-ad18-5a256822822a\",\"prefix\":3,\"title\":\"Record GPS\",\"description\":\"Record GPS for all service points (100%) without GPS within the jurisdiction\",\"code\":\"Record GPS\",\"timingPeriod\":{\"start\":\"2020-11-17\",\"end\":\"2020-12-24\"},\"reason\":\"Routine\",\"goalId\":\"Record_GPS\",\"subjectCodableConcept\":{\"text\":\"Location\"},\"trigger\":[{\"type\":\"named-event\",\"name\":\"plan-activation\"}],\"condition\":[{\"kind\":\"applicability\",\"expression\":{\"description\":\"Service point does not have geometry\",\"expression\":\"$this.identifier.where(id='hasGeometry').value='false'\"}}],\"definitionUri\":\"record_gps.json\",\"type\":\"create\"},{\"identifier\":\"857ed970-4171-418a-9609-45456ed76e5d\",\"prefix\":3,\"title\":\"Service Point Check\",\"description\":\"Conduct checkfor all service points (100%) within the jurisdiction\",\"code\":\"Service Point Check\",\"timingPeriod\":{\"start\":\"2020-11-17\",\"end\":\"2020-12-24\"},\"reason\":\"Routine\",\"goalId\":\"Service_Point_Check\",\"subjectCodableConcept\":{\"text\":\"Location\"},\"trigger\":[{\"type\":\"named-event\",\"name\":\"plan-activation\"}],\"condition\":[{\"kind\":\"applicability\",\"expression\":{\"description\":\"All service points\",\"expression\":\"$this.is(FHIR.Location)\"}}],\"definitionUri\":\"service_point_check.json\",\"type\":\"create\"}],\"experimental\":false}]";
+            List<PlanDefinition> planDefinitions = gson.fromJson(planDefinitionJSON, new TypeToken<List<PlanDefinition>>() {
+            }.getType());
+            for (PlanDefinition planDefinition : planDefinitions) {
+                EusmApplication.getInstance().getPlanDefinitionRepository().addOrUpdate(planDefinition);
+            }
         } catch (Exception e) {
             e.printStackTrace();
         }

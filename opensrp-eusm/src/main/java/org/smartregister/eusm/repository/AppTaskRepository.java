@@ -6,7 +6,7 @@ import net.sqlcipher.database.SQLiteException;
 
 import org.apache.commons.lang3.StringUtils;
 import org.smartregister.domain.Task;
-import org.smartregister.eusm.model.TaskDetail;
+import org.smartregister.eusm.domain.TaskDetail;
 import org.smartregister.eusm.util.AppConstants;
 import org.smartregister.repository.BaseRepository;
 import org.smartregister.repository.TaskNotesRepository;

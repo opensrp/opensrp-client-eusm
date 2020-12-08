@@ -9,7 +9,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import org.smartregister.eusm.R;
-import org.smartregister.eusm.model.TaskDetail;
+import org.smartregister.eusm.domain.TaskDetail;
 import org.smartregister.eusm.util.AppConstants;
 import org.smartregister.eusm.viewholder.GenericEmptyViewHolder;
 import org.smartregister.eusm.viewholder.GenericTitleViewHolder;
@@ -22,9 +22,8 @@ import java.util.List;
 public class EusmTaskRegisterAdapter extends TaskRegisterAdapter {
 
     private final View.OnClickListener onClickListener;
-
-    private List<TaskDetail> taskDetails = new ArrayList<>();
     private final Context context;
+    private List<TaskDetail> taskDetails = new ArrayList<>();
 
     public EusmTaskRegisterAdapter(Context context, View.OnClickListener onClickListener) {
         super(context, onClickListener);

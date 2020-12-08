@@ -85,7 +85,7 @@
 
         <service android:name=".service.AppLocationTaskIntentService" />
         <service android:name=".service.AppSettingsSyncIntentService" />
-        <service android:name="org.smartregister.sync.intent.SyncIntentService" />
+        <service android:name=".service.AppSyncIntentService"/>
         <service android:name="org.smartregister.sync.intent.PullUniqueIdsIntentService" />
         <service android:name="org.smartregister.sync.intent.ValidateIntentService" />
         <service android:name="org.smartregister.sync.intent.ExtendedSyncIntentService" />

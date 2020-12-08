@@ -4,19 +4,19 @@ import org.json.JSONObject;
 import org.smartregister.domain.Event;
 import org.smartregister.eusm.R;
 import org.smartregister.eusm.contract.ProductInfoFragmentContract;
+import org.smartregister.eusm.domain.ProductInfoQuestion;
+import org.smartregister.eusm.domain.StructureDetail;
+import org.smartregister.eusm.domain.TaskDetail;
 import org.smartregister.eusm.interactor.ProductInfoFragmentInteractor;
-import org.smartregister.eusm.model.ProductInfoQuestion;
-import org.smartregister.eusm.model.StructureDetail;
-import org.smartregister.eusm.model.TaskDetail;
 
 import java.lang.ref.WeakReference;
 import java.util.List;
 
 public class ProductInfoFragmentPresenter implements ProductInfoFragmentContract.Presenter, ProductInfoFragmentContract.InteractorCallBack {
 
-    private WeakReference<ProductInfoFragmentContract.View> viewWeakReference;
+    private final WeakReference<ProductInfoFragmentContract.View> viewWeakReference;
 
-    private ProductInfoFragmentInteractor interactor;
+    private final ProductInfoFragmentInteractor interactor;
 
     public ProductInfoFragmentPresenter(ProductInfoFragmentContract.View view) {
         viewWeakReference = new WeakReference<>(view);

@@ -7,6 +7,7 @@ import com.evernote.android.job.Job;
 import com.evernote.android.job.JobCreator;
 
 import org.smartregister.eusm.service.AppLocationTaskIntentService;
+import org.smartregister.eusm.service.AppSyncIntentService;
 import org.smartregister.job.DocumentConfigurationServiceJob;
 import org.smartregister.job.ExtendedSyncServiceJob;
 import org.smartregister.job.SyncServiceJob;
@@ -14,7 +15,6 @@ import org.smartregister.job.ValidateSyncDataServiceJob;
 import org.smartregister.stock.job.SyncStockServiceJob;
 import org.smartregister.stock.job.SyncStockTypeServiceJob;
 import org.smartregister.sync.intent.DocumentConfigurationIntentService;
-import org.smartregister.sync.intent.SyncIntentService;
 
 import timber.log.Timber;
 
@@ -27,7 +27,7 @@ public class AppJobCreator implements JobCreator {
     public Job create(@NonNull String tag) {
         switch (tag) {
             case SyncServiceJob.TAG:
-                return new SyncServiceJob(SyncIntentService.class);
+                return new SyncServiceJob(AppSyncIntentService.class);
             case LocationTaskServiceJob.TAG:
                 return new LocationTaskServiceJob(AppLocationTaskIntentService.class);
             case AppSyncSettingsServiceJob.TAG:

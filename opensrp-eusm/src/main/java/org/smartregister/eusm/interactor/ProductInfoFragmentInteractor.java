@@ -9,10 +9,10 @@ import org.smartregister.domain.Event;
 import org.smartregister.domain.Task;
 import org.smartregister.eusm.application.EusmApplication;
 import org.smartregister.eusm.contract.ProductInfoFragmentContract;
+import org.smartregister.eusm.domain.ProductInfoQuestion;
+import org.smartregister.eusm.domain.StructureDetail;
+import org.smartregister.eusm.domain.TaskDetail;
 import org.smartregister.eusm.model.ProductInfoFragmentModel;
-import org.smartregister.eusm.model.ProductInfoQuestion;
-import org.smartregister.eusm.model.StructureDetail;
-import org.smartregister.eusm.model.TaskDetail;
 import org.smartregister.eusm.repository.AppTaskRepository;
 import org.smartregister.eusm.util.AppConstants;
 import org.smartregister.eusm.util.AppJsonFormUtils;
@@ -31,7 +31,7 @@ public class ProductInfoFragmentInteractor implements ProductInfoFragmentContrac
 
     private AppJsonFormUtils jsonFormUtils;
 
-    private ProductInfoFragmentModel productInfoFragmentModel;
+    private final ProductInfoFragmentModel productInfoFragmentModel;
 
     public ProductInfoFragmentInteractor() {
         appExecutors = EusmApplication.getInstance().getAppExecutors();

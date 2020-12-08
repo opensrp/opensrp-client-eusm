@@ -1,10 +1,9 @@
-package org.smartregister.eusm.model;
+package org.smartregister.eusm.domain;
 
 import androidx.annotation.NonNull;
 
 import org.smartregister.tasking.model.TaskDetails;
 
-import java.io.Serializable;
 import java.util.Date;
 
 public class TaskDetail extends TaskDetails {
@@ -71,10 +70,6 @@ public class TaskDetail extends TaskDetails {
         this.entityName = productName;
     }
 
-    public void setProductImage(String productImage) {
-        this.productImage = productImage;
-    }
-
     public boolean isHeader() {
         return header;
     }
@@ -125,6 +120,10 @@ public class TaskDetail extends TaskDetails {
 
     public String getProductImage() {
         return productImage;
+    }
+
+    public void setProductImage(String productImage) {
+        this.productImage = productImage;
     }
 
     public String getProductId() {

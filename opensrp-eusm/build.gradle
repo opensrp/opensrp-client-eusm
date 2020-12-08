@@ -135,7 +135,7 @@ android {
             buildConfigField "boolean", "DISPLAY_OUTSIDE_OPERATIONAL_AREA_MASK", 'false'
             buildConfigField "boolean", "DISPLAY_DISTANCE_SCALE", 'true'
             buildConfigField "String[]", "FACILITY_LEVELS", '{"Country", "Region", "District"}'
-            buildConfigField "String[]", "LOCATION_LEVELS", '{"Country", "Region", "District", "Commune"}'
+            buildConfigField "String[]", "LOCATION_LEVELS", '{"Country", "Region", "District"}'
 
             testCoverageEnabled true
         }
@@ -217,7 +217,7 @@ dependencies {
     }
 
 //    implementation(project(':opensrp-tasking')) {
-    implementation('org.smartregister:opensrp-client-tasking:0.0.3-v6-SNAPSHOT') {
+    implementation('org.smartregister:opensrp-client-tasking:0.0.3-v34-SNAPSHOT') {
         transitive = true
         exclude group: 'org.smartregister', module: 'opensrp-client-core'
         exclude group: 'com.ibm.fhir', module: 'fhir-model'

@@ -14,7 +14,7 @@ public class LocationTaskServiceJob extends BaseJob {
 
     public static final String TAG = "LocationTaskServiceJob";
 
-    private Class<? extends LocationTaskIntentService> locationTaskIntentService;
+    private final Class<? extends LocationTaskIntentService> locationTaskIntentService;
 
     public LocationTaskServiceJob() {
         locationTaskIntentService = LocationTaskIntentService.class;

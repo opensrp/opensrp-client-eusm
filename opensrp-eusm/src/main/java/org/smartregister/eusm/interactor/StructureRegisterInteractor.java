@@ -8,7 +8,7 @@ import org.smartregister.eusm.R;
 import org.smartregister.eusm.application.EusmApplication;
 import org.smartregister.eusm.comparator.StructureDetailNameComparator;
 import org.smartregister.eusm.contract.StructureRegisterFragmentContract;
-import org.smartregister.eusm.model.StructureDetail;
+import org.smartregister.eusm.domain.StructureDetail;
 import org.smartregister.eusm.model.StructureRegisterFragmentModel;
 import org.smartregister.eusm.util.AppConstants;
 import org.smartregister.tasking.TaskingLibrary;

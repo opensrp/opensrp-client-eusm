@@ -1,4 +1,6 @@
-package org.smartregister.eusm.model;
+package org.smartregister.eusm.domain;
+
+import org.smartregister.domain.Location;
 
 import java.io.Serializable;
 
@@ -13,6 +15,7 @@ public class StructureDetail implements Serializable {
     private String structureType;
     private String commune;
     private String numOfTasks;
+    private Location geojson;
 
     public String getDistanceMeta() {
         return distanceMeta;
@@ -92,6 +95,14 @@ public class StructureDetail implements Serializable {
 
     public void setStructureId(String structureId) {
         this.structureId = structureId;
+    }
+
+    public Location getGeojson() {
+        return geojson;
+    }
+
+    public void setGeojson(Location geojson) {
+        this.geojson = geojson;
     }
 
     @Override

@@ -4,7 +4,7 @@ import android.content.Context;
 
 import org.smartregister.domain.Event;
 import org.smartregister.domain.Task;
-import org.smartregister.eusm.model.TaskDetail;
+import org.smartregister.eusm.domain.TaskDetail;
 import org.smartregister.tasking.contract.BaseContract;
 import org.smartregister.tasking.contract.UserLocationContract;
 

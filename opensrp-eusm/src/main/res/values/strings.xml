@@ -126,5 +126,8 @@
     <string name="is_it_being_used_appropriately">Is it being used appropriately?</string>
     <string name="looks_good_save_dialog">Saving</string>
     <string name="fix_problem_prefix">Fix Problem: %s</string>
+    <string name="view_inventory">View inventory</string>
+    <string name="tasks_in_progress">In Progress</string>
+    <string name="tasks_completed">Completed</string>
 
 </resources>

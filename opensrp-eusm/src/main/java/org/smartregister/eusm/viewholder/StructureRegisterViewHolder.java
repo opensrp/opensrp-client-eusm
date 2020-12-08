@@ -16,8 +16,9 @@ import org.apache.commons.lang3.StringUtils;
 import org.smartregister.eusm.R;
 import org.smartregister.eusm.application.EusmApplication;
 import org.smartregister.eusm.config.ServicePointType;
-import org.smartregister.eusm.model.StructureDetail;
+import org.smartregister.eusm.domain.StructureDetail;
 import org.smartregister.eusm.util.AppConstants;
+import org.smartregister.eusm.util.AppUtils;
 
 public class StructureRegisterViewHolder extends RecyclerView.ViewHolder {
 
@@ -72,15 +73,8 @@ public class StructureRegisterViewHolder extends RecyclerView.ViewHolder {
     }
 
     public void setTaskStatus(StructureDetail structureDetail) {
-        String taskStatus = "";
-        if (AppConstants.TaskStatus.IN_PROGRESS.equals(structureDetail.getTaskStatus())) {
-            taskStatus = AppConstants.TaskStatus.IN_PROGRESS;
-        } else if (AppConstants.TaskStatus.COMPLETED.equals(structureDetail.getTaskStatus())) {
-            taskStatus = AppConstants.TaskStatus.COMPLETED;
-        } else {
-            taskStatus = String.format(context.getString(R.string.no_of_items), structureDetail.getTaskStatus());
-        }
-        int colorId = getColorByTaskStatus(taskStatus);
+        String taskStatus = AppUtils.formatTaskStatus(structureDetail.getTaskStatus(), context);
+        int colorId = getColorByTaskStatus(structureDetail.getTaskStatus());
         this.taskStatusView.setText(taskStatus);
         this.taskStatusView.setTextColor(ContextCompat.getColor(context, colorId));
     }

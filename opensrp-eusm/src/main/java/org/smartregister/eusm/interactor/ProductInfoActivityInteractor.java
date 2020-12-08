@@ -8,8 +8,8 @@ import org.smartregister.domain.Event;
 import org.smartregister.domain.Task;
 import org.smartregister.eusm.application.EusmApplication;
 import org.smartregister.eusm.contract.ProductInfoActivityContract;
-import org.smartregister.eusm.model.StructureDetail;
-import org.smartregister.eusm.model.TaskDetail;
+import org.smartregister.eusm.domain.StructureDetail;
+import org.smartregister.eusm.domain.TaskDetail;
 import org.smartregister.eusm.repository.AppTaskRepository;
 import org.smartregister.eusm.util.AppConstants;
 import org.smartregister.eusm.util.AppJsonFormUtils;
@@ -25,7 +25,7 @@ public class ProductInfoActivityInteractor implements ProductInfoActivityContrac
 
     private AppJsonFormUtils jsonFormUtils;
 
-    private AppExecutors appExecutors;
+    private final AppExecutors appExecutors;
 
     public ProductInfoActivityInteractor() {
         appExecutors = EusmApplication.getInstance().getAppExecutors();

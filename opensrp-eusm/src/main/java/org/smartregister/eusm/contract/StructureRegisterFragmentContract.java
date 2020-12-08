@@ -7,7 +7,7 @@ import androidx.annotation.StringRes;
 
 import org.json.JSONObject;
 import org.smartregister.eusm.adapter.StructureRegisterAdapter;
-import org.smartregister.eusm.model.StructureDetail;
+import org.smartregister.eusm.domain.StructureDetail;
 import org.smartregister.tasking.util.LocationUtils;
 import org.smartregister.view.contract.BaseRegisterFragmentContract;
 

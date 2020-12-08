@@ -12,7 +12,7 @@ import net.sqlcipher.database.SQLiteDatabase;
 import org.apache.commons.lang3.StringUtils;
 import org.smartregister.domain.Geometry;
 import org.smartregister.eusm.application.EusmApplication;
-import org.smartregister.eusm.model.StructureDetail;
+import org.smartregister.eusm.domain.StructureDetail;
 import org.smartregister.eusm.util.AppConstants;
 import org.smartregister.eusm.util.AppUtils;
 import org.smartregister.repository.BaseRepository;
@@ -45,10 +45,8 @@ public class AppStructureRepository extends StructureRepository {
 
     private static final String CREATE_STRUCTURE_PARENT_INDEX = "CREATE INDEX "
             + STRUCTURE_TABLE + "_" + PARENT_ID + "_ind ON " + STRUCTURE_TABLE + "(" + PARENT_ID + ")";
-
-    private MappingHelper helper;
-
     private final int CURRENT_LIMIT = AppConstants.STRUCTURE_REGISTER_PAGE_SIZE;
+    private MappingHelper helper;
 
     public static void createTable(SQLiteDatabase database) {
         database.execSQL(CREATE_STRUCTURE_TABLE);
@@ -113,7 +111,16 @@ public class AppStructureRepository extends StructureRepository {
         return count;
     }
 
-    public List<StructureDetail> fetchStructureDetails(int pageNo, String locationId, String nameFilter) {
+    public List<StructureDetail> fetchStructureDetails(int pageNo, String locationParentId, String nameFilter) {
+        return fetchStructureDetails(pageNo, locationParentId, nameFilter, false);
+    }
+
+    public List<StructureDetail> fetchStructureDetails(String locationParentId, String nameFilter) {
+        return fetchStructureDetails(null, locationParentId, nameFilter, false);
+    }
+
+    public List<StructureDetail> fetchStructureDetails(Integer pageNo, String locationParentId,
+                                                       String nameFilter, boolean isForMapping) {
         List<StructureDetail> structureDetails = new ArrayList<>();
         SQLiteDatabase sqLiteDatabase = getReadableDatabase();
         String[] columns = new String[]{
@@ -122,7 +129,9 @@ public class AppStructureRepository extends StructureRepository {
                 STRUCTURE_TABLE + "." + "type",
                 STRUCTURE_TABLE + "." + "latitude",
                 STRUCTURE_TABLE + "." + "longitude",
-                STRUCTURE_TABLE + "." + "geojson",
+                STRUCTURE_TABLE + "." + "geojson as structureGeoJson",
+                LOCATION_TABLE + "." + "name as locationName",
+                LOCATION_TABLE + "." + "parent_id as locationParentId",
                 "(((?  - longitude)*(?  - longitude)) + ((?  - latitude)*(?  - latitude))) as dist",
                 "case \n" +
                         "\twhen (sum(task.status = 'COMPLETED')*1.0/sum(task.status= 'READY')*1.0) = 0.0 \n" +
@@ -135,23 +144,31 @@ public class AppStructureRepository extends StructureRepository {
                 "count(task._id) as numOfTasks"
         };
 
-        int offset = pageNo * CURRENT_LIMIT;
-
         String query = "SELECT " + StringUtils.join(columns, ",") + " from " + StructureRepository.STRUCTURE_TABLE
-                + " join task on task.location = " + StructureRepository.STRUCTURE_TABLE + "._id ";
+                + " join task on task.location = " + StructureRepository.STRUCTURE_TABLE + "._id "
+                + " join location on location._id = " + StructureRepository.STRUCTURE_TABLE + ".parent_id ";
+
 
         Location location = EusmApplication.getInstance().getUserLocation();
-        String[] args = new String[]{String.valueOf(location.getLongitude()), String.valueOf(location.getLongitude()), String.valueOf(location.getLatitude()), String.valueOf(location.getLatitude())};
+        String[] args = new String[]{
+                String.valueOf(location.getLongitude()),
+                String.valueOf(location.getLongitude()),
+                String.valueOf(location.getLatitude()),
+                String.valueOf(location.getLatitude()),
+                locationParentId};
+        query += " where locationParentId = ? ";
+
         if (StringUtils.isNotBlank(nameFilter)) {
-            query += " where name like '%" + nameFilter + "%'";
+            query += " and name like '%" + nameFilter + "%'";
         }
 
-        query += " group by " + STRUCTURE_TABLE + "." + "_id" + " order by case when dist is null then 1 else 0 end, dist LIMIT " + CURRENT_LIMIT + " OFFSET " + offset;
+        query += " group by " + STRUCTURE_TABLE + "." + "_id" + " order by case when dist is null then 1 else 0 end, dist"
+                + (pageNo == null ? "" : " LIMIT " + CURRENT_LIMIT + " OFFSET " + (pageNo * CURRENT_LIMIT));
 
         try (Cursor cursor = sqLiteDatabase.rawQuery(query, args)) {
             if (cursor != null) {
                 while (cursor.moveToNext()) {
-                    structureDetails.add(createStructureDetail(cursor));
+                    structureDetails.add(createStructureDetail(cursor, isForMapping));
                 }
             }
         } catch (SQLException e) {
@@ -160,13 +177,15 @@ public class AppStructureRepository extends StructureRepository {
         return structureDetails;
     }
 
-    private StructureDetail createStructureDetail(@NonNull Cursor cursor) {
+    private StructureDetail createStructureDetail(@NonNull Cursor cursor, boolean isForMapping) {
         String id = cursor.getString(cursor.getColumnIndex(ID));
         String name = cursor.getString(cursor.getColumnIndex(NAME));
         String type = cursor.getString(cursor.getColumnIndex(TYPE));
         String latitude = cursor.getString(cursor.getColumnIndex(LATITUDE));
         String longitude = cursor.getString(cursor.getColumnIndex(LONGITUDE));
         String taskStatus = cursor.getString(cursor.getColumnIndex("taskStatus"));
+        String commune = cursor.getString(cursor.getColumnIndex("locationName"));
+        String geojson = cursor.getString(cursor.getColumnIndex("structureGeoJson"));
 
         StructureDetail structureDetail = new StructureDetail();
         structureDetail.setStructureId(id);
@@ -174,6 +193,7 @@ public class AppStructureRepository extends StructureRepository {
         structureDetail.setStructureType(type);
         structureDetail.setTaskStatus(taskStatus);
         structureDetail.setNumOfTasks(cursor.getString(cursor.getColumnIndex("numOfTasks")));
+        structureDetail.setCommune(commune);
 
         if (StringUtils.isNotBlank(latitude) && StringUtils.isNotBlank(longitude)) {
             Location location = new Location("b");
@@ -186,6 +206,10 @@ public class AppStructureRepository extends StructureRepository {
                 structureDetail.setDistanceMeta(formatDistance(distanceInMetres));
                 structureDetail.setNearby(distanceInMetres <= AppConstants.NEARBY_DISTANCE_IN_METRES);
             }
+
+            if (isForMapping)
+                structureDetail.setGeojson(gson.fromJson(geojson, org.smartregister.domain.Location.class));
+
         }
 
         return structureDetail;

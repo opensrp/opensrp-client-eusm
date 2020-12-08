@@ -9,7 +9,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import org.smartregister.eusm.R;
-import org.smartregister.eusm.model.StructureDetail;
+import org.smartregister.eusm.domain.StructureDetail;
 import org.smartregister.eusm.viewholder.GenericTitleViewHolder;
 import org.smartregister.eusm.viewholder.StructureRegisterViewHolder;
 
@@ -53,7 +53,7 @@ public class StructureRegisterAdapter extends RecyclerView.Adapter<RecyclerView.
             viewHolder.setServicePointName(structureDetail.getStructureName());
             viewHolder.setServicePointIcon(structureDetail.getTaskStatus(), structureDetail.getStructureType());
             viewHolder.setServicePointType(structureDetail);
-//            viewHolder.setCommune("commune");
+            viewHolder.setCommune(structureDetail.getCommune());
             viewHolder.setTaskStatus(structureDetail);
         } else {
             GenericTitleViewHolder viewHolder = (GenericTitleViewHolder) holder;

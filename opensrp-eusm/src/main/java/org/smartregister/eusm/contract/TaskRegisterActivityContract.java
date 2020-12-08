@@ -5,7 +5,7 @@ import androidx.annotation.Nullable;
 
 import org.json.JSONObject;
 import org.smartregister.domain.Event;
-import org.smartregister.eusm.model.StructureDetail;
+import org.smartregister.eusm.domain.StructureDetail;
 import org.smartregister.view.contract.BaseRegisterContract;
 
 public interface TaskRegisterActivityContract {

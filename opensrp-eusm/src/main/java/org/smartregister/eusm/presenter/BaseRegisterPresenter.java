@@ -6,10 +6,10 @@ import java.util.List;
 
 public class BaseRegisterPresenter implements BaseRegisterContract.Presenter {
 
-   // protected TaskRegisterInteractor taskRegisterInteractor;
+    // protected TaskRegisterInteractor taskRegisterInteractor;
 
     public BaseRegisterPresenter(BaseRegisterContract.View view) {
-       // taskRegisterInteractor = new TaskRegisterInteractor(null);
+        // taskRegisterInteractor = new TaskRegisterInteractor(null);
     }
 
     @Override
@@ -19,12 +19,12 @@ public class BaseRegisterPresenter implements BaseRegisterContract.Presenter {
 
     @Override
     public void unregisterViewConfiguration(List<String> viewIdentifiers) {
-       // taskRegisterInteractor.unregisterViewConfiguration(viewIdentifiers);
+        // taskRegisterInteractor.unregisterViewConfiguration(viewIdentifiers);
     }
 
     @Override
     public void onDestroy(boolean isChangingConfiguration) {
-       // taskRegisterInteractor.cleanupResources();
+        // taskRegisterInteractor.cleanupResources();
     }
 
     @Override

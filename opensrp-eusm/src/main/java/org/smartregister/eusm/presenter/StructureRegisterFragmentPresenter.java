@@ -5,9 +5,9 @@ import android.view.View;
 import androidx.annotation.StringRes;
 
 import org.smartregister.eusm.contract.StructureRegisterFragmentContract;
+import org.smartregister.eusm.domain.StructureDetail;
 import org.smartregister.eusm.fragment.StructureRegisterFragment;
 import org.smartregister.eusm.interactor.StructureRegisterInteractor;
-import org.smartregister.eusm.model.StructureDetail;
 import org.smartregister.eusm.util.AppConstants;
 
 import java.lang.ref.WeakReference;
@@ -15,7 +15,7 @@ import java.util.List;
 
 public class StructureRegisterFragmentPresenter extends BaseRegisterFragmentPresenter implements StructureRegisterFragmentContract.Presenter, StructureRegisterFragmentContract.InteractorCallback {
 
-    private WeakReference<StructureRegisterFragmentContract.View> viewWeakReference;
+    private final WeakReference<StructureRegisterFragmentContract.View> viewWeakReference;
 
     private int currentPageNo = 0;
 
@@ -23,11 +23,11 @@ public class StructureRegisterFragmentPresenter extends BaseRegisterFragmentPres
 
     private int totalPageCount = 0;
 
-    private int pageSize = AppConstants.STRUCTURE_REGISTER_PAGE_SIZE;
+    private final int pageSize = AppConstants.STRUCTURE_REGISTER_PAGE_SIZE;
 
     private String nameFilter;
 
-    private StructureRegisterInteractor structureRegisterInteractor;
+    private final StructureRegisterInteractor structureRegisterInteractor;
 
     public StructureRegisterFragmentPresenter(StructureRegisterFragmentContract.View view) {
         this.viewWeakReference = new WeakReference<>(view);

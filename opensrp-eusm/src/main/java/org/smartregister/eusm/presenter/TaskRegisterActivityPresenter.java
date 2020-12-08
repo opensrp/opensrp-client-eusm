@@ -7,17 +7,17 @@ import org.json.JSONObject;
 import org.smartregister.domain.Event;
 import org.smartregister.eusm.R;
 import org.smartregister.eusm.contract.TaskRegisterActivityContract;
+import org.smartregister.eusm.domain.StructureDetail;
 import org.smartregister.eusm.interactor.TaskRegisterActivityInteractor;
-import org.smartregister.eusm.model.StructureDetail;
 
 import java.lang.ref.WeakReference;
 import java.util.List;
 
 public class TaskRegisterActivityPresenter implements TaskRegisterActivityContract.Presenter, TaskRegisterActivityContract.InteractorCallBack {
 
-    private TaskRegisterActivityInteractor taskRegisterActivityInteractor;
+    private final TaskRegisterActivityInteractor taskRegisterActivityInteractor;
 
-    private WeakReference<TaskRegisterActivityContract.View> viewWeakReference;
+    private final WeakReference<TaskRegisterActivityContract.View> viewWeakReference;
 
     public TaskRegisterActivityPresenter(TaskRegisterActivityContract.View view) {
         taskRegisterActivityInteractor = new TaskRegisterActivityInteractor();

@@ -11,6 +11,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.util.Pair;
 
+import com.google.gson.JsonObject;
 import com.mapbox.geojson.Feature;
 import com.mapbox.geojson.FeatureCollection;
 
@@ -20,19 +21,25 @@ import org.json.JSONObject;
 import org.smartregister.clientandeventmodel.Event;
 import org.smartregister.commonregistry.CommonPersonObjectClient;
 import org.smartregister.domain.Location;
+import org.smartregister.domain.PlanDefinition;
 import org.smartregister.domain.Task;
 import org.smartregister.eusm.activity.EusmHomeActivity;
 import org.smartregister.eusm.activity.EusmOfflineMapsActivity;
 import org.smartregister.eusm.activity.StructureRegisterActivity;
 import org.smartregister.eusm.application.EusmApplication;
+import org.smartregister.eusm.domain.EusmCardDetail;
+import org.smartregister.eusm.helper.EusmTaskingMapHelper;
 import org.smartregister.eusm.job.LocationTaskServiceJob;
+import org.smartregister.eusm.util.AppConstants;
 import org.smartregister.eusm.util.DefaultLocationUtils;
 import org.smartregister.eusm.view.NavigationDrawerView;
+import org.smartregister.repository.PlanDefinitionRepository;
 import org.smartregister.tasking.activity.TaskingHomeActivity;
 import org.smartregister.tasking.adapter.TaskRegisterAdapter;
 import org.smartregister.tasking.contract.BaseContract;
 import org.smartregister.tasking.contract.BaseDrawerContract;
 import org.smartregister.tasking.contract.BaseFormFragmentContract;
+import org.smartregister.tasking.contract.TaskingHomeActivityContract;
 import org.smartregister.tasking.layer.DigitalGlobeLayer;
 import org.smartregister.tasking.model.BaseTaskDetails;
 import org.smartregister.tasking.model.CardDetails;
@@ -48,12 +55,18 @@ import org.smartregister.tasking.util.TaskingMapHelper;
 import org.smartregister.tasking.viewholder.TaskRegisterViewHolder;
 import org.smartregister.util.AppExecutors;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
+
+import timber.log.Timber;
 
 import static org.smartregister.tasking.util.Utils.getGlobalConfig;
 
 public class AppTaskingLibraryConfiguration extends TaskingLibraryConfiguration {
+
+    private boolean isSynced;
 
     @NonNull
     @Override
@@ -219,12 +232,12 @@ public class AppTaskingLibraryConfiguration extends TaskingLibraryConfiguration 
 
     @Override
     public boolean getSynced() {
-        return false;
+        return isSynced;
     }
 
     @Override
     public void setSynced(boolean synced) {
-
+        isSynced = synced;
     }
 
     @Override
@@ -316,7 +329,7 @@ public class AppTaskingLibraryConfiguration extends TaskingLibraryConfiguration 
 
     @Override
     public TaskingMapHelper getMapHelper() {
-        return new TaskingMapHelper();
+        return new EusmTaskingMapHelper();
     }
 
     @Override
@@ -387,6 +400,96 @@ public class AppTaskingLibraryConfiguration extends TaskingLibraryConfiguration 
 
     @Override
     public GeoJsonUtils getGeoJsonUtils() {
-        return new GeoJsonUtils();
+        return new org.smartregister.eusm.util.GeoJsonUtils();
     }
+
+    @Override
+    public String getProvinceFromTreeDialogValue(ArrayList<String> arrayList) {
+        return "";
+    }
+
+    @Override
+    public String getDistrictFromTreeDialogValue(ArrayList<String> arrayList) {
+        try {
+            return arrayList.get(2);
+        } catch (IndexOutOfBoundsException e) {
+            Timber.e(e);
+        }
+        return "";
+    }
+
+    @Override
+    public void onShowFilledForms() {
+
+    }
+
+    @Override
+    public void onFeatureSelectedByLongClick(Feature feature, TaskingHomeActivityContract.Presenter presenter) {
+        Timber.e("sd");
+    }
+
+    @Override
+    public void onFeatureSelectedByClick(Feature feature, TaskingHomeActivityContract.Presenter presenter) {
+        getAppExecutors().diskIO().execute(new Runnable() {
+            @Override
+            public void run() {
+                JsonObject jsonObject = feature.properties();
+                if (jsonObject != null) {
+                    EusmCardDetail eusmCardDetail = new EusmCardDetail(jsonObject.get(AppConstants.CardDetailKeys.STATUS).getAsString());
+                    eusmCardDetail.setCommune(jsonObject.get(AppConstants.CardDetailKeys.COMMUNE).getAsString());
+                    eusmCardDetail.setDistanceMeta(jsonObject.get(AppConstants.CardDetailKeys.DISTANCE_META).getAsString());
+                    eusmCardDetail.setStructureId(jsonObject.get(AppConstants.CardDetailKeys.STRUCTURE_ID).getAsString());
+                    eusmCardDetail.setTaskStatus(jsonObject.get(AppConstants.CardDetailKeys.TASK_STATUS).getAsString());
+                    eusmCardDetail.setStructureName(jsonObject.get(AppConstants.CardDetailKeys.NAME).getAsString());
+                    eusmCardDetail.setStructureType(jsonObject.get(AppConstants.CardDetailKeys.TYPE).getAsString());
+                    getAppExecutors().mainThread().execute(new Runnable() {
+                        @Override
+                        public void run() {
+                            presenter.onCardDetailsFetched(eusmCardDetail);
+                        }
+                    });
+                }
+            }
+        });
+        Timber.e("e");
+    }
+
+    @Override
+    public double getOnClickMaxZoomLevel() {
+        return 6;
+    }
+
+    @Override
+    public void fetchPlans(String jurisdictionName, BaseDrawerContract.Presenter presenter) {
+        //if(StringUtils.isBlank(jurisdictionName)){
+        PlanDefinitionRepository planDefinitionRepository = EusmApplication.getInstance().getPlanDefinitionRepository();
+        Set<PlanDefinition> planDefinitionSet = planDefinitionRepository.findAllPlanDefinitions();
+        getAppExecutors().mainThread().execute(new Runnable() {
+            @Override
+            public void run() {
+                presenter.onPlansFetched(planDefinitionSet);
+            }
+        });
+        // }
+    }
+
+    @Override
+    public void validateCurrentPlan(String s, String s1, BaseDrawerContract.Presenter presenter) {
+
+    }
+
+//    @Override
+//    public void fetchPlans(String jurisdictionName) {
+//        if(StringUtils.isBlank(jurisdictionName)){
+//            Set<PlanDefinition> planDefinitionSet = planDefinitionRepository.findAllPlanDefinitions();
+//            getAppExecutors().mainThread().execute(new Runnable() {
+//                @Override
+//                public void run() {
+//                    presenter.onPlansFetched(planDefinitionSet);
+//                }
+//            });
+//        }
+//    }
+
+
 }

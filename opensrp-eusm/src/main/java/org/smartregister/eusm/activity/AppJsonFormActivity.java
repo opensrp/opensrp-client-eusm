@@ -1,7 +1,6 @@
 package org.smartregister.eusm.activity;
 
 import android.app.ProgressDialog;
-import android.content.Intent;
 import android.location.Location;
 import android.os.Bundle;
 

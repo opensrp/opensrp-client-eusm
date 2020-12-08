@@ -8,7 +8,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import org.smartregister.eusm.R;
-import org.smartregister.eusm.model.ProductInfoQuestion;
+import org.smartregister.eusm.domain.ProductInfoQuestion;
 import org.smartregister.eusm.viewholder.ProductInfoQuestionViewHolder;
 
 import java.util.ArrayList;
