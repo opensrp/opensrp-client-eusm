@@ -4,7 +4,7 @@
     <dimen name="login_font_size">16sp</dimen>
     <dimen name="login_view_component_height">48dp</dimen>
     <dimen name="login_logo_height">190dp</dimen>
-    <dimen name="login_logo_top_padding">100dp</dimen>
+    <dimen name="login_logo_top_padding">60dp</dimen>
     <dimen name="login_horizontal_margin">100dp</dimen>
     <dimen name="login_bottom_margin">50dp</dimen>
     <dimen name="login_edit_text_textSize">18sp</dimen>

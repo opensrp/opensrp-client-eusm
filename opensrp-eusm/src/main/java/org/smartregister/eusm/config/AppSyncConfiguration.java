@@ -139,8 +139,8 @@ public class AppSyncConfiguration extends SyncConfiguration {
         return LoginActivity.class;
     }
 
-//    @Override
-//    public boolean runPlanEvaluationOnClientProcessing() {
-//        return true;
-//    }
+    @Override
+    public boolean runPlanEvaluationOnClientProcessing() {
+        return true;
+    }
 }

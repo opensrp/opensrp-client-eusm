@@ -49,7 +49,6 @@
     <string name="select_offline_map_to_delete">Select Offline map to delete</string>
     <string name="delete">delete</string>
     <string name="select_offline_map_to_download">Select Offline map to download</string>
-    <string name="localhost_url">/%d</string>
 
     <string name="operational_area_not_selected">District not selected</string>
     <string name="plan_not_selected">Mission not selected</string>
@@ -129,5 +128,7 @@
     <string name="view_inventory">View inventory</string>
     <string name="tasks_in_progress">In Progress</string>
     <string name="tasks_completed">Completed</string>
+    <string name="flag_problem_button_text">Flag problem</string>
+    <string name="looks_good_button_text">Looks good!</string>
 
 </resources>

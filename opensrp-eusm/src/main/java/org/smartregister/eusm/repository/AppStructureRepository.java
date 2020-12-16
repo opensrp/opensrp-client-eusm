@@ -16,6 +16,7 @@ import org.smartregister.eusm.domain.StructureDetail;
 import org.smartregister.eusm.util.AppConstants;
 import org.smartregister.eusm.util.AppUtils;
 import org.smartregister.repository.BaseRepository;
+import org.smartregister.repository.LocationRepository;
 import org.smartregister.repository.StructureRepository;
 import org.smartregister.repository.helper.MappingHelper;
 import org.smartregister.util.P2PUtil;
@@ -125,7 +126,7 @@ public class AppStructureRepository extends StructureRepository {
         SQLiteDatabase sqLiteDatabase = getReadableDatabase();
         String[] columns = new String[]{
                 STRUCTURE_TABLE + "." + "_id",
-                STRUCTURE_TABLE + "." + "name",
+                STRUCTURE_TABLE + "." + "name as structureName",
                 STRUCTURE_TABLE + "." + "type",
                 STRUCTURE_TABLE + "." + "latitude",
                 STRUCTURE_TABLE + "." + "longitude",
@@ -159,7 +160,7 @@ public class AppStructureRepository extends StructureRepository {
         query += " where locationParentId = ? ";
 
         if (StringUtils.isNotBlank(nameFilter)) {
-            query += " and name like '%" + nameFilter + "%'";
+            query += " and structureName like '%" + nameFilter + "%'";
         }
 
         query += " group by " + STRUCTURE_TABLE + "." + "_id" + " order by case when dist is null then 1 else 0 end, dist"
@@ -179,7 +180,7 @@ public class AppStructureRepository extends StructureRepository {
 
     private StructureDetail createStructureDetail(@NonNull Cursor cursor, boolean isForMapping) {
         String id = cursor.getString(cursor.getColumnIndex(ID));
-        String name = cursor.getString(cursor.getColumnIndex(NAME));
+        String name = cursor.getString(cursor.getColumnIndex("structureName"));
         String type = cursor.getString(cursor.getColumnIndex(TYPE));
         String latitude = cursor.getString(cursor.getColumnIndex(LATITUDE));
         String longitude = cursor.getString(cursor.getColumnIndex(LONGITUDE));
@@ -225,5 +226,76 @@ public class AppStructureRepository extends StructureRepository {
             result = String.format(Locale.ENGLISH, "%.1f m", distanceInMetres);
         }
         return result;
+    }
+
+    public List<org.smartregister.domain.Location> getLocationByDistrictIds(List<String> districtIds) {
+        List<org.smartregister.domain.Location> locations = new ArrayList<>();
+        String[] columns = new String[]{
+                LOCATION_TABLE + "." + "parent_id as locationParentId",
+                LOCATION_TABLE + "." + "geojson as structureGeoJson"
+        };
+
+        String query = String.format("SELECT %s from %s join %s on location._id = %s.parent_id ",
+                StringUtils.join(columns, ","), LocationRepository.LOCATION_TABLE, StructureRepository.STRUCTURE_TABLE, StructureRepository.STRUCTURE_TABLE);
+
+
+        query += String.format(" where locationParentId IN (%s) and latitude is not null group by location._id", StringUtils.repeat("?", ", ", districtIds.size()));
+
+        extractLocationFromCursor(locations, query, districtIds.toArray(new String[0]));
+
+        return locations;
+    }
+
+    public List<org.smartregister.domain.Location> getStructuresByDistrictId(String districtId) {
+        List<org.smartregister.domain.Location> locations = new ArrayList<>();
+        String[] columns = new String[]{
+                LOCATION_TABLE + "." + "parent_id as locationParentId",
+                STRUCTURE_TABLE + "." + "geojson as structureGeoJson",
+                STRUCTURE_TABLE + "." + "latitude",
+                STRUCTURE_TABLE + "." + "longitude",
+        };
+
+        String query = "SELECT " + StringUtils.join(columns, ",") + " from " + StructureRepository.STRUCTURE_TABLE
+                + " join location on location._id = " + StructureRepository.STRUCTURE_TABLE + ".parent_id ";
+
+
+        String[] args = new String[]{districtId};
+        query += " where locationParentId = ? ";
+
+        extractLocationFromCursor(locations, query, args);
+
+        return locations;
+    }
+
+
+    public List<org.smartregister.domain.Location> getStructuresByCommuneId(String communeId) {
+        List<org.smartregister.domain.Location> locations = new ArrayList<>();
+        String[] columns = new String[]{
+                STRUCTURE_TABLE + "." + "geojson as structureGeoJson",
+                STRUCTURE_TABLE + "." + "parent_id",
+        };
+
+        String query = String.format("SELECT %s from %s", StringUtils.join(columns, ","), StructureRepository.STRUCTURE_TABLE);
+
+        String[] args = new String[]{communeId};
+        query += " where parent_id = ? and latitude is not null";
+
+        extractLocationFromCursor(locations, query, args);
+
+        return locations;
+    }
+
+    private void extractLocationFromCursor(List<org.smartregister.domain.Location> locations, String query, String[] args) {
+        SQLiteDatabase sqLiteDatabase = getReadableDatabase();
+        try (Cursor cursor = sqLiteDatabase.rawQuery(query, args)) {
+            if (cursor != null) {
+                while (cursor.moveToNext()) {
+                    String geojson = cursor.getString(cursor.getColumnIndex("structureGeoJson"));
+                    locations.add(gson.fromJson(geojson, org.smartregister.domain.Location.class));
+                }
+            }
+        } catch (SQLException e) {
+            Timber.e(e);
+        }
     }
 }

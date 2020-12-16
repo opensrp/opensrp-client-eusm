@@ -6,6 +6,12 @@ public class EusmStockSyncConfiguration extends StockSyncConfiguration {
 
     @Override
     public String getStockSyncParams() {
+//        Set<String> set = AppUtils.fetchStructureIds();
+//        String locations = "";
+//        if (set != null) {
+//            locations = StringUtils.join(set, ",");
+//        }
+//        return String.format("&locations=%s", locations);//TODO add all structure
         return "";
     }
 

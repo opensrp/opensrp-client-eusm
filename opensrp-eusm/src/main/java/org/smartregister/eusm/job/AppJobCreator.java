@@ -10,6 +10,7 @@ import org.smartregister.eusm.service.AppLocationTaskIntentService;
 import org.smartregister.eusm.service.AppSyncIntentService;
 import org.smartregister.job.DocumentConfigurationServiceJob;
 import org.smartregister.job.ExtendedSyncServiceJob;
+import org.smartregister.job.ImageUploadServiceJob;
 import org.smartregister.job.SyncServiceJob;
 import org.smartregister.job.ValidateSyncDataServiceJob;
 import org.smartregister.stock.job.SyncStockServiceJob;
@@ -42,6 +43,8 @@ public class AppJobCreator implements JobCreator {
                 return new SyncStockTypeServiceJob();
             case SyncStockServiceJob.TAG:
                 return new SyncStockServiceJob();
+            case ImageUploadServiceJob.TAG:
+                return new ImageUploadServiceJob();
             default:
                 Timber.w("%s is not declared in RevealJobCreator Job Creator", tag);
                 return null;

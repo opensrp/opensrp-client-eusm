@@ -35,7 +35,6 @@ import org.smartregister.eusm.processor.AppClientProcessor;
 import org.smartregister.eusm.repository.AppRepository;
 import org.smartregister.eusm.repository.AppStructureRepository;
 import org.smartregister.eusm.repository.AppTaskRepository;
-import org.smartregister.eusm.repository.AppTaskingRepository;
 import org.smartregister.eusm.repository.EusmRepository;
 import org.smartregister.eusm.util.AppConstants;
 import org.smartregister.eusm.util.AppUtils;
@@ -149,9 +148,11 @@ public class EusmApplication extends DrishtiApplication implements TimeChangedBr
         // Initialize Modules
         Fabric.with(this, new Crashlytics.Builder().core(new CrashlyticsCore.Builder().disabled(BuildConfig.DEBUG).build()).build());
 
-        TaskingLibrary.init(new AppTaskingLibraryConfiguration(), new AppTaskingRepository(), new AppStructureRepository());
+        TaskingLibrary.init(new AppTaskingLibraryConfiguration(), null, new AppStructureRepository());
 
         TaskingLibrary.getInstance().setDigitalGlobeConnectId(BuildConfig.DG_CONNECT_ID);
+
+        TaskingLibrary.getInstance().setMapboxAccessToken(BuildConfig.MAPBOX_SDK_ACCESS_TOKEN);
 
         CoreLibrary.init(context, new AppSyncConfiguration(), BuildConfig.BUILD_TIMESTAMP);
 

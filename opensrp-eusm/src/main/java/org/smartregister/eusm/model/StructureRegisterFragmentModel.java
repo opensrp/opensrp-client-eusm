@@ -1,11 +1,13 @@
 package org.smartregister.eusm.model;
 
+import org.smartregister.domain.Location;
 import org.smartregister.eusm.application.EusmApplication;
 import org.smartregister.eusm.domain.StructureDetail;
 import org.smartregister.eusm.repository.AppStructureRepository;
 import org.smartregister.tasking.util.PreferencesUtil;
 import org.smartregister.tasking.util.Utils;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class StructureRegisterFragmentModel {
@@ -21,6 +23,11 @@ public class StructureRegisterFragmentModel {
     }
 
     public List<StructureDetail> fetchStructures(int pageNo, String nameFilter) {
-        return appStructureRepository.fetchStructureDetails(pageNo, Utils.getOperationalAreaLocation(PreferencesUtil.getInstance().getCurrentOperationalArea()).getId(), nameFilter);
+        Location location = Utils.getOperationalAreaLocation(PreferencesUtil.getInstance().getCurrentOperationalArea());
+        if (location != null) {
+            return appStructureRepository.fetchStructureDetails(pageNo, location.getId(), nameFilter);
+        } else {
+            return new ArrayList<>();
+        }
     }
 }

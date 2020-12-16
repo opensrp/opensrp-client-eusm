@@ -46,10 +46,36 @@ public class ProductInfoActivityPresenter implements ProductInfoActivityContract
     }
 
     @Override
+    public void startFlagProblemForm(StructureDetail structureDetail, TaskDetail taskDetail, String formName) {
+        productInfoActivityInteractor.startFlagProblemForm(structureDetail, taskDetail, formName, getView().getActivity(), this);
+    }
+
+    @Override
+    public void markProductAsGood(StructureDetail structureDetail, TaskDetail taskDetail) {
+        if (getView() != null) {
+            getView().showProgressDialog(R.string.looks_good_save_dialog);
+            productInfoActivityInteractor.markProductAsGood(structureDetail, taskDetail, this, getView().getActivity());
+        }
+    }
+
+    @Override
     public void onSavedFlagProblemTask(boolean isSaved, Event event) {
         if (getView() != null) {
             getView().hideDialog();
             getView().getActivity().finish();
         }
+    }
+
+    @Override
+    public void onProductMarkedAsGood(boolean isMarked, Event event) {
+        if (getView() != null) {
+            getView().hideDialog();
+            getView().getActivity().finish();
+        }
+    }
+
+    @Override
+    public void onFlagProblemFormFetched(JSONObject jsonForm) {
+        getView().startFlagProblemForm(jsonForm);
     }
 }

@@ -20,14 +20,26 @@
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/eusm_app_name"
-        android:usesCleartextTraffic="true"
         android:networkSecurityConfig="@xml/network_security_config"
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
+        android:usesCleartextTraffic="true"
         tools:replace="android:label,android:theme">
-        <activity android:name=".activity.ProductInfoActivity"></activity>
-        <activity android:name=".activity.EusmTaskRegisterActivity" />
-        <activity android:name=".activity.StructureRegisterActivity" />
+        <activity
+            android:name=".activity.ProductInfoActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar"
+            android:windowSoftInputMode="stateAlwaysHidden|adjustResize" />
+        <activity
+            android:name=".activity.EusmTaskRegisterActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar"
+            android:windowSoftInputMode="stateAlwaysHidden|adjustResize" />
+        <activity
+            android:name=".activity.StructureRegisterActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar"
+            android:windowSoftInputMode="stateAlwaysHidden|adjustResize" />
 
         <uses-library
             android:name="org.apache.http.legacy"
@@ -49,7 +61,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".activity.EusmHomeActivity"
+            android:name=".activity.EusmTaskingMapActivity"
             android:launchMode="singleTask"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="stateAlwaysHidden|adjustResize" />
@@ -59,7 +71,6 @@
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar"
             android:windowSoftInputMode="stateAlwaysHidden|adjustResize" />
-        <activity android:name="com.vijay.jsonwizard.activities.JsonWizardFormActivity" />
 
         <activity
             android:name=".activity.EusmOfflineMapsActivity"
@@ -67,7 +78,7 @@
             android:screenOrientation="portrait" />
 
         <activity
-            android:name="com.vijay.jsonwizard.activities.JsonFormActivity"
+            android:name=".activity.AppJsonWizardFormActivity"
             android:launchMode="singleTask"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar"
@@ -85,13 +96,15 @@
 
         <service android:name=".service.AppLocationTaskIntentService" />
         <service android:name=".service.AppSettingsSyncIntentService" />
-        <service android:name=".service.AppSyncIntentService"/>
+        <service android:name=".service.AppSyncIntentService" />
         <service android:name="org.smartregister.sync.intent.PullUniqueIdsIntentService" />
         <service android:name="org.smartregister.sync.intent.ValidateIntentService" />
         <service android:name="org.smartregister.sync.intent.ExtendedSyncIntentService" />
         <service android:name="org.smartregister.sync.intent.DocumentConfigurationIntentService" />
-        <service android:name="org.smartregister.stock.sync.StockTypeIntentService"/>
-        <service android:name="org.smartregister.stock.sync.StockSyncIntentService"/>
+        <service android:name="org.smartregister.service.ImageUploadSyncService" />
+
+        <service android:name="org.smartregister.stock.sync.StockTypeIntentService" />
+        <service android:name="org.smartregister.stock.sync.StockSyncIntentService" />
 
     </application>
 

@@ -17,13 +17,16 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="horizontal"
-            android:padding="30dp">
+            android:paddingStart="30dp"
+            android:paddingTop="20dp"
+            android:paddingEnd="30dp"
+            android:paddingBottom="20dp">
 
             <LinearLayout
                 android:layout_width="wrap_content"
-                android:paddingEnd="20dp"
                 android:layout_height="match_parent"
-                android:orientation="vertical">
+                android:orientation="vertical"
+                android:paddingEnd="20dp">
 
                 <ImageView
                     android:id="@+id/img_service_point_type"
@@ -85,7 +88,7 @@
                 android:id="@+id/btn_view_inventory"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="5dp"
+                android:layout_marginTop="0dp"
                 android:layout_marginBottom="@dimen/change_spray_status_btn_bottom_margin"
                 android:layout_weight="2"
                 android:background="@drawable/rounded_blue_outline"

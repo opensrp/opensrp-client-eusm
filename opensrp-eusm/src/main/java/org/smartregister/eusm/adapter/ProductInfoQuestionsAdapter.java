@@ -24,6 +24,11 @@ public class ProductInfoQuestionsAdapter extends RecyclerView.Adapter<ProductInf
         this.onClickListener = onClickListener;
     }
 
+    public ProductInfoQuestionsAdapter() {
+        onClickListener = null;
+    }
+
+
     @NonNull
     @Override
     public ProductInfoQuestionViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int viewType) {
@@ -36,7 +41,7 @@ public class ProductInfoQuestionsAdapter extends RecyclerView.Adapter<ProductInf
         ProductInfoQuestion productInfoQuestion = productInfoQuestions.get(position);
         viewHolder.setProductInfoAnswer(productInfoQuestion.getAnswer());
         viewHolder.setProductInfoQuestion(productInfoQuestion.getQuestion());
-        viewHolder.setImageProductInfoQuestion(productInfoQuestion.getQuestion());
+        viewHolder.setImageProductInfoQuestion(productInfoQuestion.getImageId());
     }
 
     @Override

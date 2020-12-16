@@ -11,10 +11,10 @@
     }
   },
   "center": [
-    32.449160147068596,
-    -14.08573404883333
+    49.54934061205424,
+    -16.08305061744329
   ],
-  "zoom": 8.735062037248435,
+  "zoom": 7.735062037248435,
   "bearing": 0,
   "pitch": 0,
   "sources": {
@@ -52,100 +52,6 @@
       }
     },
     {
-      "id": "Thailand EarthWatch Imagery",
-      "type": "raster",
-      "metadata": {},
-      "source": "diimagery",
-      "layout": {},
-      "paint": {}
-    },
-    {
-      "id": "reveal-data-polygons",
-      "type": "fill",
-      "layout": {},
-      "source": "reveal-data-set",
-      "filter": [
-        "==",
-        "$type",
-        "Polygon"
-      ],
-      "paint": {
-        "fill-color": [
-          "match",
-          [
-            "get",
-            "taskBusinessStatus"
-          ],
-          [
-            "Not Visited"
-          ],
-          "hsl(46, 88%, 62%)",
-          [
-            "Not Sprayed",
-            "Incomplete",
-            "In Progress",
-            "None Received"
-          ],
-          "hsl(3, 71%, 54%)",
-          [
-            "Sprayed",
-            "Complete",
-            "Fully Received"
-          ],
-          "hsl(89, 52%, 48%)",
-          [
-            "Not Sprayable",
-            "Not Eligible"
-          ],
-          "hsl(0, 0%, 9%)",
-          [
-            "Family Registered"
-          ],
-          "hsl(335, 100%, 79%)",
-          [
-            "Bednet Distributed",
-            "Adherence Visit Done"
-          ],
-          "hsl(199, 68%, 55%)",
-          [
-            "Blood Screening Complete"
-          ],
-          "hsl(262, 100%, 68%)",
-          [
-            "Partially Sprayed",
-            "Partially Received"
-          ],
-          "hsl(26, 84%, 56%)",
-          "hsl(0, 0%, 78%)"
-        ],
-        "fill-opacity": [
-          "match",
-          [
-            "get",
-            "taskBusinessStatus"
-          ],
-          [
-            "Not Visited"
-          ],
-          0.7,
-          [
-            "Not Sprayed"
-          ],
-          0.7,
-          [
-            "Sprayed"
-          ],
-          0.7,
-          [
-            "Not Sprayable"
-          ],
-          1,
-          0.75
-        ],
-        "fill-outline-color": "rgb(0, 0, 0)"
-      }
-    },
-    {
       "id": "reveal-data-points",
       "type": "circle",
       "source": "reveal-data-set",
@@ -164,78 +70,33 @@
           [
             "zoom"
           ],
-          13.98,
-          0,
+          7.0,
+          17,
+          13.0,
+          30,
+          15.0,
+          35,
           17.79,
-          10,
-          18.8,
-          15
+          45
         ],
         "circle-color": [
           "match",
           [
             "get",
-            "taskBusinessStatus"
+            "taskStatus"
           ],
           [
-            "Not Visited"
+            "in_progress"
           ],
-          "hsl(46, 88%, 62%)",
+          "hsl(45.1,62.5%,50.8%)",
           [
-            "Not Sprayed",
-            "Incomplete",
-            "In Progress",
-            "None Received"
+            "completed"
           ],
-          "hsl(3, 71%, 54%)",
-          [
-            "Sprayed",
-            "Complete",
-            "Fully Received"
-          ],
-          "hsl(89, 52%, 48%)",
-          [
-            "Not Sprayable",
-            "Not Eligible"
-          ],
-          "hsl(0, 0%, 9%)",
-          [
-            "Family Registered"
-          ],
-          "hsl(335, 100%, 79%)",
-          [
-            "Bednet Distributed",
-            "Adherence Visit Done"
-          ],
-          "hsl(199, 68%, 55%)",
-          [
-            "Blood Screening Complete"
-          ],
-          "hsl(262, 100%, 68%)",
-          [
-            "Partially Sprayed",
-            "Partially Received"
-          ],
-          "hsl(26, 84%, 56%)",
-          "hsl(0, 0%, 78%)"
+          "hsl(101.6,66.8%,44.9%)",
+          "hsl(0, 0%, 64%)"
         ],
-        "circle-stroke-width": 1,
-        "circle-opacity": 0.5
-      }
-    },
-    {
-      "id": "select-layer-polygons",
-      "type": "line",
-      "source": "select-data",
-      "filter": [
-        "==",
-        "$type",
-        "Polygon"
-      ],
-      "layout": {},
-      "paint": {
-        "line-color": "hsl(146, 100%, 50%)",
-        "line-width": 4
+        "circle-stroke-width": 2,
+        "circle-opacity": 1
       }
     },
     {
@@ -248,7 +109,7 @@
         "Point"
       ],
       "paint": {
-        "circle-color": "hsla(360, 100%, 100%, 0)",
+        "circle-color": "hsl(201, 58%, 50%)",
         "circle-radius": [
           "interpolate",
           [
@@ -257,15 +118,17 @@
           [
             "zoom"
           ],
-          13.98,
-          0,
+          7.0,
+          17,
+          13.0,
+          30,
+          15.0,
+          35,
           17.79,
-          10,
-          18.8,
-          15
+          45
         ],
         "circle-stroke-width": 2,
-        "circle-stroke-color": "hsl(146, 100%, 50%)"
+        "circle-stroke-color": "hsl(0, 0%, 0%)"
       }
     }
   ],

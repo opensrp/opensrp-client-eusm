@@ -55,73 +55,6 @@ public class TestDataUtils {
         new EusmStockSyncConfiguration().getStockSyncIntentServiceHelper().batchInsertStocks(stockResponse.getStocks());
     }
 
-//    public static List<TaskDetail> getStructureDetail() {
-//
-//        TaskDetail s = new TaskDetail();
-//        s.setChecked(false);
-//        s.setEntityName("Solar Fridge");
-//        s.setHeader(false);
-//        s.setHasProblem(true);
-//        s.setNonProductTask(false);
-//        s.setQuantity("3");
-//        s.setProductSerial("3424");
-//
-//        TaskDetail s1 = new TaskDetail();
-//        s1.setChecked(false);
-//        s1.setEntityName("Scale,infant,springtype,25 kg x 100g");
-//        s1.setHeader(false);
-//        s1.setNonProductTask(false);
-//        s1.setQuantity("3");
-//        s1.setProductSerial("3424");
-//
-//        TaskDetail s11 = new TaskDetail();
-//        s11.setChecked(false);
-//        s11.setEntityName("Service Point Check");
-//        s11.setHeader(false);
-//        s11.setNonProductTask(true);
-//
-//        TaskDetail s12 = new TaskDetail();
-//        s12.setChecked(false);
-//        s12.setEntityName("Record Gps");
-//        s12.setHeader(false);
-//        s12.setNonProductTask(true);
-//
-//        TaskDetail s3 = new TaskDetail();
-//        s3.setChecked(true);
-//        s3.setHasProblem(true);
-//        s3.setEntityName("Timer");
-//        s3.setHeader(false);
-//        s3.setNonProductTask(false);
-//        s3.setQuantity("3");
-//        s3.setProductSerial("3424");
-//
-//        List<TaskDetail> taskDetails = new ArrayList<>();
-//        taskDetails.add(s);
-//        taskDetails.add(s1);
-//        taskDetails.add(s11);
-//        taskDetails.add(s12);
-//        taskDetails.add(s3);
-//
-//        return taskDetails;
-//    }
-
-//    public static List<ProductInfoQuestion> getProductInfoQuestionLIst() {
-//        ProductInfoQuestion p1 = new ProductInfoQuestion();
-//        p1.setAnswer("Solar Direct Drive Refrigerator for storage vaccines");
-//        p1.setQuestion("Is it there?");
-//
-//        ProductInfoQuestion p2 = new ProductInfoQuestion();
-//        p2.setAnswer("Supplied with temperature monitoring device, 10 fuses of each type, lid with loc, plus 2 keys and 6 baskets." +
-//                " Compass");
-//        p2.setQuestion("Is it in good condition?");
-//
-//        ProductInfoQuestion p3 = new ProductInfoQuestion();
-//        p3.setAnswer("Ambient operating temperatire: Min. +5 C , Max +43 ");
-//        p3.setQuestion("Is it being used appropriately?");
-//
-//        return new ArrayList<>(Arrays.asList(p1, p2, p3));
-//    }
-
     public void populateTestData() {
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(EusmApplication.getInstance().getApplicationContext());
         if (!sharedPreferences.getBoolean(TEST_DATA_POPULATED, false)) {
@@ -134,7 +67,7 @@ public class TestDataUtils {
             createPlanDefinition();
             createTasks();
             //createStructures();
-            getPopulateInventory();
+//            getPopulateInventory();
             sharedPreferences.edit().putBoolean(TEST_DATA_POPULATED, true).apply();
         }
     }
@@ -143,7 +76,7 @@ public class TestDataUtils {
         try {
             Gson gson = new GsonBuilder().registerTypeAdapter(DateTime.class, new DateTimeTypeConverter("yyyy-MM-dd'T'HHmm"))
                     .serializeNulls().create();
-            String tasksJSON = "[{\"identifier\":\"076885f8-582e-4dc6-8a1a-510e1c8ed5d9\",\"campaignIdentifier\":\"IRS_2019_S1\",\"planIdentifier\":\"335ef7a3-7f35-58aa-8263-4419464946d8\",\"groupIdentifier\":\"8e74d042-4a71-4694-a652-bc3ba6369101\",\"status\":\"Ready\",\"businessStatus\":\"Visited\",\"priority\":\"routine\",\"code\":\"GPS\",\"description\":\"Record Gps\",\"focus\":\"Record Gps\",\"for\":\"f3199af5-2eaf-46df-87c9-40d59606a2fb\",\"executionPeriod\":{\"start\":\"2018-11-10T22:00:00.000\"},\"authoredOn\":\"2018-11-29T0342\",\"lastModified\":\"2018-12-03T2212\",\"owner\":\"demoMTI\",\"location\":\"f3199af5-2eaf-46df-87c9-40d59606a2fb\",\"note\":null,\"serverVersion\":1543867945202},{\"identifier\":\"634fa9fa-736d-4298-96aa-3de68ac02cae\",\"campaignIdentifier\":\"IRS_2019_S1\",\"planIdentifier\":\"335ef7a3-7f35-58aa-8263-4419464946d8\",\"groupIdentifier\":\"8e74d042-4a71-4694-a652-bc3ba6369101\",\"status\":\"Ready\",\"businessStatus\":\"Not Visited\",\"priority\":\"routine\",\"code\":\"IRS\",\"description\":\"Service Point Check\",\"focus\":\"Service Point Check\",\"for\":\"f3199af5-2eaf-46df-87c9-40d59606a2fb\",\"executionPeriod\":{\"start\":\"2018-11-10T22:00:00.000\"},\"authoredOn\":\"2018-11-29T0342\",\"lastModified\":\"2018-12-03T2212\",\"owner\":\"demoMTI\",\"location\":\"f3199af5-2eaf-46df-87c9-40d59606a2fb\",\"note\":null,\"serverVersion\":1543867945203},{\"identifier\":\"d3b237ff-f9d8-4077-9523-c7bf3552ff87\",\"campaignIdentifier\":\"IRS_2019_S1\",\"groupIdentifier\":\"8e74d042-4a71-4694-a652-bc3ba6369101\",\"planIdentifier\":\"335ef7a3-7f35-58aa-8263-4419464946d8\",\"status\":\"Ready\",\"businessStatus\":\"Not Visited\",\"priority\":\"routine\",\"code\":\"IRS\",\"description\":\"Spray House\",\"focus\":\"IRS Visit\",\"for\":\"c2635a23-a604-48fb-9e1c-8bf1e75e6759\",\"executionPeriod\":{\"start\":\"2018-11-10T22:00:00.000\"},\"authoredOn\":\"2018-11-29T0342\",\"lastModified\":\"2018-12-03T2212\",\"location\":\"f3199af5-2eaf-46df-87c9-40d59606a2fb\",\"owner\":\"demoMTI\",\"note\":null,\"serverVersion\":1543867945204},{\"identifier\":\"c6dd4abc-fb3e-4f72-afb8-923fc43f44d7\",\"campaignIdentifier\":\"IRS_2019_S1\",\"groupIdentifier\":\"8e74d042-4a71-4694-a652-bc3ba6369101\",\"status\":\"Ready\",\"planIdentifier\":\"335ef7a3-7f35-58aa-8263-4419464946d8\",\"businessStatus\":\"Not Visited\",\"priority\":\"routine\",\"code\":\"IRS\",\"description\":\"product\",\"focus\":\"product\",\"for\":\"ddcaf383-882e-448b-b701-8b72cb0d4d7a\",\"executionPeriod\":{\"start\":\"2018-11-10T22:00:00.000\"},\"authoredOn\":\"2018-12-03T2212\",\"lastModified\":\"2018-12-03T2212\",\"owner\":\"demoMTI\",\"location\":\"f3199af5-2eaf-46df-87c9-40d59606a2fb\",\"note\":null,\"serverVersion\":1543867945195},{\"identifier\":\"2caa810d-d4da-4e67-838b-badb9bd86e06\",\"campaignIdentifier\":\"IRS_2019_S1\",\"groupIdentifier\":\"8e74d042-4a71-4694-a652-bc3ba6369101\",\"status\":\"Ready\",\"planIdentifier\":\"335ef7a3-7f35-58aa-8263-4419464946d8\",\"businessStatus\":\"Not Visited\",\"priority\":\"routine\",\"code\":\"IRS\",\"description\":\"Service Point Check\",\"focus\":\"Service Point Check\",\"for\":\"b8a7998c-5df6-49eb-98e6-f0675db71848\",\"executionPeriod\":{\"start\":\"2018-11-10T22:00:00.000\"},\"authoredOn\":\"2018-12-03T2212\",\"lastModified\":\"2018-12-03T2212\",\"owner\":\"demoMTI\",\"location\":\"b8a7998c-5df6-49eb-98e6-f0675db71848\",\"note\":null,\"serverVersion\":1543867945196},{\"identifier\":\"bbf32ca5-9b83-444d-882f-2085974e90b5\",\"campaignIdentifier\":\"IRS_2019_S1\",\"groupIdentifier\":\"8e74d042-4a71-4694-a652-bc3ba6369101\",\"status\":\"Ready\",\"planIdentifier\":\"335ef7a3-7f35-58aa-8263-4419464946d8\",\"businessStatus\":\"Not Visited\",\"priority\":\"routine\",\"code\":\"IRS\",\"description\":\"Record Gps\",\"focus\":\"Record Gps\",\"for\":\"b8a7998c-5df6-49eb-98e6-f0675db71848\",\"executionPeriod\":{\"start\":\"2018-11-10T22:00:00.000\"},\"authoredOn\":\"2018-12-03T2212\",\"lastModified\":\"2018-12-03T2212\",\"owner\":\"demoMTI\",\"location\":\"b8a7998c-5df6-49eb-98e6-f0675db71848\",\"note\":null,\"serverVersion\":1543867945196},{\"identifier\":\"6c303b8b-e47c-45e9-8ab5-3374c8f539a3\",\"campaignIdentifier\":\"IRS_2019_S1\",\"groupIdentifier\":\"8e74d042-4a71-4694-a652-bc3ba6369101\",\"status\":\"Ready\",\"planIdentifier\":\"335ef7a3-7f35-58aa-8263-4419464946d8\",\"businessStatus\":\"Not Visited\",\"priority\":\"routine\",\"code\":\"IRS\",\"description\":\"product\",\"focus\":\"product\",\"for\":\"69227a92-7979-490c-b149-f28669c6b760\",\"executionPeriod\":{\"start\":\"2018-11-10T22:00:00.000\"},\"authoredOn\":\"2018-12-03T2212\",\"lastModified\":\"2018-12-03T2212\",\"owner\":\"demoMTI\",\"location\":\"b8a7998c-5df6-49eb-98e6-f0675db71848\",\"note\":null,\"serverVersion\":1543867945196}]";
+            String tasksJSON = "[{\"identifier\":\"076885f8-582e-4dc6-8a1a-510e1c8ed5d9\",\"campaignIdentifier\":\"IRS_2019_S1\",\"planIdentifier\":\"335ef7a3-7f35-58aa-8263-4419464946d8\",\"groupIdentifier\":\"8e74d042-4a71-4694-a652-bc3ba6369101\",\"status\":\"Ready\",\"businessStatus\":\"Visited\",\"priority\":\"routine\",\"code\":\"Record GPS\",\"description\":\"Record GPS\",\"focus\":\"Record GPS\",\"for\":\"a1b6e201-b91c-441a-8368-b75a82e06a42\",\"executionPeriod\":{\"start\":\"2018-11-10T22:00:00.000\"},\"authoredOn\":\"2018-11-29T0342\",\"lastModified\":\"2018-12-03T2212\",\"owner\":\"demoMTI\",\"location\":\"a1b6e201-b91c-441a-8368-b75a82e06a42\",\"note\":null,\"serverVersion\":1543867945202},{\"identifier\":\"634fa9fa-736d-4298-96aa-3de68ac02cae\",\"campaignIdentifier\":\"IRS_2019_S1\",\"planIdentifier\":\"335ef7a3-7f35-58aa-8263-4419464946d8\",\"groupIdentifier\":\"8e74d042-4a71-4694-a652-bc3ba6369101\",\"status\":\"Ready\",\"businessStatus\":\"Not Visited\",\"priority\":\"routine\",\"code\":\"IRS\",\"description\":\"Service Point Check\",\"focus\":\"Service Point Check\",\"for\":\"f3199af5-2eaf-46df-87c9-40d59606a2fb\",\"executionPeriod\":{\"start\":\"2018-11-10T22:00:00.000\"},\"authoredOn\":\"2018-11-29T0342\",\"lastModified\":\"2018-12-03T2212\",\"owner\":\"demoMTI\",\"location\":\"f3199af5-2eaf-46df-87c9-40d59606a2fb\",\"note\":null,\"serverVersion\":1543867945203},{\"identifier\":\"d3b237ff-f9d8-4077-9523-c7bf3552ff87\",\"campaignIdentifier\":\"IRS_2019_S1\",\"groupIdentifier\":\"8e74d042-4a71-4694-a652-bc3ba6369101\",\"planIdentifier\":\"335ef7a3-7f35-58aa-8263-4419464946d8\",\"status\":\"Ready\",\"businessStatus\":\"Not Visited\",\"priority\":\"routine\",\"code\":\"IRS\",\"description\":\"Spray House\",\"focus\":\"IRS Visit\",\"for\":\"c2635a23-a604-48fb-9e1c-8bf1e75e6759\",\"executionPeriod\":{\"start\":\"2018-11-10T22:00:00.000\"},\"authoredOn\":\"2018-11-29T0342\",\"lastModified\":\"2018-12-03T2212\",\"location\":\"f3199af5-2eaf-46df-87c9-40d59606a2fb\",\"owner\":\"demoMTI\",\"note\":null,\"serverVersion\":1543867945204},{\"identifier\":\"c6dd4abc-fb3e-4f72-afb8-923fc43f44d7\",\"campaignIdentifier\":\"IRS_2019_S1\",\"groupIdentifier\":\"8e74d042-4a71-4694-a652-bc3ba6369101\",\"status\":\"Ready\",\"planIdentifier\":\"335ef7a3-7f35-58aa-8263-4419464946d8\",\"businessStatus\":\"Not Visited\",\"priority\":\"routine\",\"code\":\"IRS\",\"description\":\"product\",\"focus\":\"product\",\"for\":\"ddcaf383-882e-448b-b701-8b72cb0d4d7a\",\"executionPeriod\":{\"start\":\"2018-11-10T22:00:00.000\"},\"authoredOn\":\"2018-12-03T2212\",\"lastModified\":\"2018-12-03T2212\",\"owner\":\"demoMTI\",\"location\":\"f3199af5-2eaf-46df-87c9-40d59606a2fb\",\"note\":null,\"serverVersion\":1543867945195},{\"identifier\":\"2caa810d-d4da-4e67-838b-badb9bd86e06\",\"campaignIdentifier\":\"IRS_2019_S1\",\"groupIdentifier\":\"8e74d042-4a71-4694-a652-bc3ba6369101\",\"status\":\"Ready\",\"planIdentifier\":\"335ef7a3-7f35-58aa-8263-4419464946d8\",\"businessStatus\":\"Not Visited\",\"priority\":\"routine\",\"code\":\"IRS\",\"description\":\"Service Point Check\",\"focus\":\"Service Point Check\",\"for\":\"b8a7998c-5df6-49eb-98e6-f0675db71848\",\"executionPeriod\":{\"start\":\"2018-11-10T22:00:00.000\"},\"authoredOn\":\"2018-12-03T2212\",\"lastModified\":\"2018-12-03T2212\",\"owner\":\"demoMTI\",\"location\":\"b8a7998c-5df6-49eb-98e6-f0675db71848\",\"note\":null,\"serverVersion\":1543867945196},{\"identifier\":\"bbf32ca5-9b83-444d-882f-2085974e90b5\",\"campaignIdentifier\":\"IRS_2019_S1\",\"groupIdentifier\":\"8e74d042-4a71-4694-a652-bc3ba6369101\",\"status\":\"Ready\",\"planIdentifier\":\"335ef7a3-7f35-58aa-8263-4419464946d8\",\"businessStatus\":\"Not Visited\",\"priority\":\"routine\",\"code\":\"Record GPS\",\"description\":\"Record GPS\",\"focus\":\"Record GPS\",\"for\":\"bb0b393c-2fd6-4d99-a5b1-f32ef498a76d\",\"executionPeriod\":{\"start\":\"2018-11-10T22:00:00.000\"},\"authoredOn\":\"2018-12-03T2212\",\"lastModified\":\"2018-12-03T2212\",\"owner\":\"demoMTI\",\"location\":\"bb0b393c-2fd6-4d99-a5b1-f32ef498a76d\",\"note\":null,\"serverVersion\":1543867945196},{\"identifier\":\"6c303b8b-e47c-45e9-8ab5-3374c8f539a3\",\"campaignIdentifier\":\"IRS_2019_S1\",\"groupIdentifier\":\"8e74d042-4a71-4694-a652-bc3ba6369101\",\"status\":\"Ready\",\"planIdentifier\":\"335ef7a3-7f35-58aa-8263-4419464946d8\",\"businessStatus\":\"Not Visited\",\"priority\":\"routine\",\"code\":\"IRS\",\"description\":\"product\",\"focus\":\"product\",\"for\":\"69227a92-7979-490c-b149-f28669c6b760\",\"executionPeriod\":{\"start\":\"2018-11-10T22:00:00.000\"},\"authoredOn\":\"2018-12-03T2212\",\"lastModified\":\"2018-12-03T2212\",\"owner\":\"demoMTI\",\"location\":\"b8a7998c-5df6-49eb-98e6-f0675db71848\",\"note\":null,\"serverVersion\":1543867945196}]";
             List<Task> tasks = gson.fromJson(tasksJSON, new TypeToken<List<Task>>() {
             }.getType());
             for (Task task : tasks) {

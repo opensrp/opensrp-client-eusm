@@ -10,6 +10,7 @@ import androidx.annotation.NonNull;
 
 import com.vijay.jsonwizard.constants.JsonFormConstants;
 
+import org.apache.commons.lang3.StringUtils;
 import org.jetbrains.annotations.NotNull;
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -23,12 +24,16 @@ import org.smartregister.util.JsonFormUtils;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 import timber.log.Timber;
 
 import static org.smartregister.client.utils.constants.JsonFormConstants.Properties.DETAILS;
+import static org.smartregister.eusm.util.AppConstants.STRUCTURE_IDS;
 import static org.smartregister.tasking.interactor.BaseInteractor.gson;
 import static org.smartregister.tasking.util.Constants.METADATA;
 import static org.smartregister.util.JsonFormUtils.ENTITY_ID;
@@ -116,5 +121,15 @@ public class AppUtils extends Utils {
             taskStatus = String.format(context.getString(R.string.no_of_items), taskStatus_);
         }
         return taskStatus;
+    }
+
+    public static void saveStructureIds(List<String> structureIds) {
+        if (structureIds != null && !structureIds.isEmpty())
+            Utils.getAllSharedPreferences().savePreference(STRUCTURE_IDS, android.text.TextUtils.join(",", structureIds));
+    }
+
+    public static Set<String> fetchStructureIds() {
+        String structureIds = Utils.getAllSharedPreferences().getPreference(STRUCTURE_IDS);
+        return Arrays.stream(StringUtils.split(structureIds, ",")).collect(Collectors.toSet());
     }
 }

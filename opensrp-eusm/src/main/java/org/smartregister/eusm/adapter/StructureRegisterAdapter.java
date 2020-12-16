@@ -73,6 +73,7 @@ public class StructureRegisterAdapter extends RecyclerView.Adapter<RecyclerView.
     }
 
     public void setData(List<StructureDetail> structureDetails) {
+        structureDetailList.clear();
         structureDetailList.addAll(structureDetails);
         notifyDataSetChanged();
     }

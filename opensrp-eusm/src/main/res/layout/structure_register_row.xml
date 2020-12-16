@@ -50,9 +50,9 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="5dp"
-                    android:text="CBS 2.5m away"
+                    android:text="Watrer Point CBS 22323.5m away"
                     android:textColor="@color/text_black"
-                    android:textSize="15sp" />
+                    android:textSize="14sp" />
 
                 <include
                     android:id="@+id/gps_unknown_view"
@@ -83,7 +83,7 @@
                 android:layout_width="90dp"
                 android:layout_height="wrap_content"
                 android:gravity="end"
-                android:text="Completed"
+                android:text="In Progress"
                 android:textColor="@color/toaster_note_green_icon"
                 android:textSize="15sp" />
         </LinearLayout>

@@ -11,18 +11,17 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@color/white"
-        app:elevation="0dp"
-        android:paddingBottom="0dp">
+        android:paddingBottom="0dp"
+        app:elevation="0dp">
 
         <com.google.android.material.appbar.CollapsingToolbarLayout
             android:id="@+id/collapsing_toolbar_layout"
             android:layout_width="match_parent"
-            app:elevation="0dp"
             android:layout_height="match_parent"
             android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
             app:contentScrim="@color/customAppThemeBlue"
-            app:layout_scrollFlags="snap">
-
+            app:elevation="0dp"
+            app:layout_scrollFlags="scroll|exitUntilCollapsed">
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -51,9 +50,9 @@
                     android:layout_gravity="center"
                     android:gravity="center"
                     android:paddingStart="15dp"
+                    android:paddingTop="18dp"
                     android:paddingEnd="15dp"
                     android:paddingBottom="18dp"
-                    android:paddingTop="18dp"
                     android:text="Solar Fridge"
                     android:textColor="@color/black"
                     android:textSize="23dp"
@@ -88,17 +87,18 @@
                     android:id="@+id/layout_back_button"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:background="@drawable/back_bg"
                     android:layout_marginTop="10dp"
+                    android:background="@drawable/back_bg"
                     android:elevation="10dp">
 
                     <ImageView
                         android:id="@+id/img_profile_back"
-                        android:layout_width="40dp"
+                        android:layout_width="30dp"
                         android:layout_height="match_parent"
                         android:layout_gravity="start"
                         android:layout_marginEnd="0dp"
-                        android:paddingStart="0dp"
+                        android:paddingStart="5dp"
+                        android:scaleType="fitStart"
                         android:paddingTop="0dp"
                         android:src="@drawable/ic_baseline_arrow_back" />
 
@@ -107,11 +107,12 @@
                         android:layout_width="wrap_content"
                         android:layout_height="match_parent"
                         android:layout_gravity="start"
-                        android:paddingStart="0dp"
+                        android:paddingStart="3dp"
+                        android:paddingEnd="3dp"
                         android:paddingTop="0dp"
                         android:text="@string/back"
                         android:textColor="@color/customAppThemeBlue"
-                        android:textSize="19dp"
+                        android:textSize="16dp"
                         android:textStyle="bold" />
                 </LinearLayout>
             </androidx.appcompat.widget.Toolbar>
@@ -122,4 +123,84 @@
 
     <include layout="@layout/content_product_info" />
 
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom"
+        android:background="@color/white"
+        android:orientation="vertical">
+        <View
+            android:id="@+id/divider"
+            android:layout_width="match_parent"
+            android:layout_height="2dp"
+            android:layout_marginBottom="0dp"
+            android:background="#e1e1e1" />
+
+        <LinearLayout
+            android:id="@+id/layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_marginStart="10dp"
+            android:layout_marginEnd="10dp"
+            android:orientation="horizontal"
+            android:paddingTop="10dp"
+            android:paddingBottom="5dp"
+            android:weightSum="1">
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_marginEnd="5dp"
+                android:layout_weight="0.5">
+
+                <Button
+                    android:id="@+id/btn_product_looks_good"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingStart="11dp"
+                    android:paddingEnd="11dp"
+                    android:background="@drawable/login_button_bg"
+                    android:text="@string/looks_good_button_text"
+                    android:textAllCaps="false"
+                    android:textColor="@color/white"
+                    android:textSize="@dimen/activity_title_size"
+                    android:textStyle="normal" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_marginStart="5dp"
+                android:layout_height="match_parent"
+                android:layout_weight="0.5">
+
+                <LinearLayout
+                    android:id="@+id/layout_flag_problem"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="@drawable/structure_task_action_bg"
+                    android:gravity="center"
+                    android:orientation="horizontal"
+                    android:paddingTop="11dp"
+                    android:paddingBottom="11dp">
+
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:src="@drawable/ic_baseline_warning"
+                        android:textAllCaps="false" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:layout_marginLeft="10dp"
+                        android:gravity="center"
+                        android:text="@string/flag_problem_button_text"
+                        android:textColor="#FFB000"
+                        android:textSize="@dimen/activity_title_size"
+                        android:textStyle="bold" />
+                </LinearLayout>
+            </LinearLayout>
+        </LinearLayout>
+    </LinearLayout>
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

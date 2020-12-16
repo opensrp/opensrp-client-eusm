@@ -16,18 +16,12 @@ import java.util.List;
 public class StructureRegisterFragmentPresenter extends BaseRegisterFragmentPresenter implements StructureRegisterFragmentContract.Presenter, StructureRegisterFragmentContract.InteractorCallback {
 
     private final WeakReference<StructureRegisterFragmentContract.View> viewWeakReference;
-
-    private int currentPageNo = 0;
-
-    private int totalCount = 0;
-
-    private int totalPageCount = 0;
-
     private final int pageSize = AppConstants.STRUCTURE_REGISTER_PAGE_SIZE;
-
-    private String nameFilter;
-
     private final StructureRegisterInteractor structureRegisterInteractor;
+    private int currentPageNo = 0;
+    private int totalCount = 0;
+    private int totalPageCount = 0;
+    private String nameFilter;
 
     public StructureRegisterFragmentPresenter(StructureRegisterFragmentContract.View view) {
         this.viewWeakReference = new WeakReference<>(view);
@@ -42,9 +36,9 @@ public class StructureRegisterFragmentPresenter extends BaseRegisterFragmentPres
     public void initializeQueries(String s) {
         if (getView().getAdapter() == null) {
             getView().initializeAdapter();
-            countOfStructures();
-            fetchStructures();
         }
+        countOfStructures();
+        fetchStructures();
     }
 
     public void countOfStructures() {

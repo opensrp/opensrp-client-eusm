@@ -29,4 +29,17 @@ public class AppLocationTaskIntentService extends LocationTaskIntentService {
         }
         return extractStructureIds(syncedStructures, syncedTasks);
     }
+
+//    @Override
+//    protected List<Location> syncStructures(LocationServiceHelper locationServiceHelper) {
+//        List<Location> locationList = super.syncStructures(locationServiceHelper);
+//
+//        List<String> locations= EusmApplication.getInstance().getStructureRepository().getAllLocationIds();
+//
+//        if (locations != null && !locations.isEmpty()) {
+//            AppUtils.saveStructureIds(locations);
+//            SyncStockServiceJob.scheduleJobImmediately(SyncStockServiceJob.TAG);
+//        }
+//        return locationList;
+//    }
 }

@@ -64,8 +64,8 @@ public class TaskRegisterViewHolder extends RecyclerView.ViewHolder {
                 if (taskDetail.isChecked()) {
                     FrameLayout.LayoutParams layoutParams = new FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, 55);
                     layoutParams.gravity = Gravity.END | Gravity.BOTTOM;
-                    layoutParams.bottomMargin = 80;
-                    layoutParams.rightMargin = 40;
+                    layoutParams.bottomMargin = 50;
+                    layoutParams.rightMargin = 10;
                     statusOverlayImageView.setScaleType(ImageView.ScaleType.FIT_END);
                     statusOverlayImageView.setLayoutParams(layoutParams);
                 }

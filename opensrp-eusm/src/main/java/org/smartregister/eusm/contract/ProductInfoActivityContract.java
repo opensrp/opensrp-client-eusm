@@ -37,6 +37,8 @@ public interface ProductInfoActivityContract {
         StructureDetail getStructureDetail();
 
         Activity getActivity();
+
+        void startFlagProblemForm(JSONObject jsonForm);
     }
 
     interface Presenter {
@@ -44,6 +46,10 @@ public interface ProductInfoActivityContract {
                                  JSONObject jsonForm, StructureDetail structureDetail);
 
         View getView();
+
+        void startFlagProblemForm(StructureDetail structureDetail, TaskDetail taskDetail, String flagProblemForm);
+
+        void markProductAsGood(StructureDetail structureDetail, TaskDetail taskDetail);
     }
 
     interface Interactor {
@@ -53,9 +59,17 @@ public interface ProductInfoActivityContract {
         void saveEventAndInitiateProcessing(String encounterType, JSONObject form,
                                             String bindType, InteractorCallback interactorCallback,
                                             String entityId);
+
+        void startFlagProblemForm(StructureDetail structureDetail, TaskDetail taskDetail, String formName, Activity activity, InteractorCallback interactorCallback);
+
+        void markProductAsGood(StructureDetail structureDetail, TaskDetail taskDetail, InteractorCallback interactorCallback, Activity activity);
     }
 
     interface InteractorCallback {
         void onSavedFlagProblemTask(boolean isSaved, Event event);
+
+        void onProductMarkedAsGood(boolean isMarked, Event event);
+
+        void onFlagProblemFormFetched(JSONObject jsonForm);
     }
 }

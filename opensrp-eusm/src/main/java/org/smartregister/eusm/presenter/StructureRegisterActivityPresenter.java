@@ -8,6 +8,8 @@ import org.json.JSONArray;
 import org.smartregister.commonregistry.CommonPersonObjectClient;
 import org.smartregister.domain.Task;
 import org.smartregister.tasking.contract.BaseContract;
+import org.smartregister.tasking.contract.UserLocationContract;
+import org.smartregister.tasking.model.TaskFilterParams;
 import org.smartregister.view.contract.BaseRegisterContract;
 
 public class StructureRegisterActivityPresenter extends BaseRegisterPresenter implements BaseContract.BasePresenter {
@@ -37,5 +39,15 @@ public class StructureRegisterActivityPresenter extends BaseRegisterPresenter im
     @Override
     public void onFamilyFound(CommonPersonObjectClient commonPersonObjectClient) {
 
+    }
+
+    @Override
+    public void filterTasks(TaskFilterParams taskFilterParams) {
+
+    }
+
+    @Override
+    public UserLocationContract.UserLocationPresenter getLocationPresenter() {
+        return null;
     }
 }

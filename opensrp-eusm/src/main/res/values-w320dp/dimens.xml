@@ -4,7 +4,7 @@
     <dimen name="login_font_size">16sp</dimen>
     <dimen name="login_view_component_height">48dp</dimen>
     <dimen name="login_logo_height">110dp</dimen>
-    <dimen name="login_logo_top_padding">130dp</dimen>
+    <dimen name="login_logo_top_padding">60dp</dimen>
     <dimen name="login_horizontal_margin">20dp</dimen>
     <dimen name="login_bottom_margin">50dp</dimen>
     <dimen name="login_edit_text_textSize">18sp</dimen>
@@ -19,7 +19,7 @@
 
     <dimen name="dialog_min_width_major">@dimen/abc_dialog_min_width_major</dimen>
 
-    <dimen name="structure_info_card_text_size">24sp</dimen>
+    <dimen name="structure_info_card_text_size">20sp</dimen>
     <dimen name="structure_info_card_status_text_size">28sp</dimen>
     <dimen name="structure_info_card_scroll_layout_height">280dp</dimen>
 

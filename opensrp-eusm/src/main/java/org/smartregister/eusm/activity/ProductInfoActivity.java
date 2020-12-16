@@ -1,11 +1,14 @@
 package org.smartregister.eusm.activity;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.app.ProgressDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -15,7 +18,10 @@ import androidx.core.content.ContextCompat;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
+import com.google.android.material.appbar.AppBarLayout;
+import com.google.android.material.appbar.CollapsingToolbarLayout;
 import com.vijay.jsonwizard.constants.JsonFormConstants;
+import com.vijay.jsonwizard.domain.Form;
 
 import org.apache.commons.lang3.StringUtils;
 import org.json.JSONException;
@@ -32,15 +38,16 @@ import org.smartregister.view.activity.MultiLanguageActivity;
 
 import timber.log.Timber;
 
-public class ProductInfoActivity extends MultiLanguageActivity implements ProductInfoActivityContract.View, View.OnClickListener {
+public class ProductInfoActivity extends MultiLanguageActivity implements ProductInfoActivityContract.View, View.OnClickListener, AppBarLayout.OnOffsetChangedListener {
 
+    protected AppBarLayout appBarLayout;
     private TaskDetail taskDetail;
-
     private StructureDetail structureDetail;
-
     private ProductInfoActivityPresenter presenter;
-
     private ProgressDialog progressDialog;
+    private CollapsingToolbarLayout collapsingToolbarLayout;
+    private boolean appBarTitleIsShown = true;
+    private int appBarLayoutScrollRange = -1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,6 +56,9 @@ public class ProductInfoActivity extends MultiLanguageActivity implements Produc
         taskDetail = (TaskDetail) getIntent().getSerializableExtra(AppConstants.IntentData.TASK_DETAIL);
         structureDetail = (StructureDetail) getIntent().getSerializableExtra(AppConstants.IntentData.STRUCTURE_DETAIL);
         presenter = new ProductInfoActivityPresenter(this);
+        appBarLayout = findViewById(R.id.collapsing_toolbar_appbarlayout);
+        collapsingToolbarLayout = appBarLayout.findViewById(org.smartregister.R.id.collapsing_toolbar_layout);
+        appBarLayout.addOnOffsetChangedListener(this);
         initializeFragment();
         setUpViews();
     }
@@ -89,6 +99,8 @@ public class ProductInfoActivity extends MultiLanguageActivity implements Produc
         if (StringUtils.isNotBlank(getProductImage())) {
             Bitmap bitmap = FileUtilities.retrieveStaticImageFromDisk(getProductImage());
             imgProductImage.setImageBitmap(bitmap);
+        } else {
+            imgProductImage.setScaleType(ImageView.ScaleType.FIT_XY);
         }
 
 
@@ -97,6 +109,12 @@ public class ProductInfoActivity extends MultiLanguageActivity implements Produc
 
         View layoutBackButton = findViewById(R.id.layout_back_button);
         layoutBackButton.setOnClickListener(this);
+
+        Button btnLooksGood = findViewById(R.id.btn_product_looks_good);
+        btnLooksGood.setOnClickListener(this);
+
+        View flagProblemView = findViewById(R.id.layout_flag_problem);
+        flagProblemView.setOnClickListener(this);
     }
 
     protected ProductInfoFragment getProductInfoFragment() {
@@ -170,7 +188,39 @@ public class ProductInfoActivity extends MultiLanguageActivity implements Produc
         int id = v.getId();
         if (id == R.id.layout_back_button) {
             finish();
+        } else if (id == R.id.btn_product_looks_good) {
+            openLooksGoodConfirmationDialog();
+        } else if (id == R.id.layout_flag_problem) {
+            startFlagProblemForm();
         }
+    }
+
+    protected void startFlagProblemForm() {
+        presenter.startFlagProblemForm(structureDetail,
+                taskDetail,
+                AppConstants.JsonForm.FLAG_PROBLEM_FORM);
+    }
+
+    protected void openLooksGoodConfirmationDialog() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+        builder.setTitle(R.string.mark_as_looks_good_title);
+        builder.setMessage(R.string.looks_good_dialog_message);
+        builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                //Do nothing
+            }
+        });
+
+        builder.setPositiveButton("Looks Good!", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                //TODO add logic to update
+                presenter.markProductAsGood(structureDetail, taskDetail);
+            }
+        });
+
+        builder.show();
     }
 
     @Override
@@ -187,4 +237,37 @@ public class ProductInfoActivity extends MultiLanguageActivity implements Produc
     public Activity getActivity() {
         return this;
     }
+
+    @Override
+    public void onOffsetChanged(AppBarLayout appBarLayout, int verticalOffset) {
+        if (appBarLayoutScrollRange == -1) {
+            appBarLayoutScrollRange = appBarLayout.getTotalScrollRange();
+        }
+        if (appBarLayoutScrollRange + verticalOffset == 0) {
+
+            collapsingToolbarLayout.setTitle("");
+            appBarTitleIsShown = true;
+        } else if (appBarTitleIsShown) {
+            collapsingToolbarLayout.setTitle(" ");
+            appBarTitleIsShown = false;
+        }
+    }
+
+    @Override
+    public void startFlagProblemForm(JSONObject jsonForm) {
+        Form form = new Form();
+        form.setWizard(true);
+        form.setName("Flag Problem");
+        form.setBackIcon(R.drawable.ic_action_close);
+        form.setSaveLabel(getString(R.string.save));
+        form.setActionBarBackground(R.color.primaryDark);
+        form.setNavigationBackground(R.color.primaryDark);
+        form.setHideSaveLabel(true);
+
+        Intent intent = new Intent(getActivity(), AppJsonWizardFormActivity.class);
+        intent.putExtra(JsonFormConstants.JSON_FORM_KEY.JSON, jsonForm.toString());
+        intent.putExtra(JsonFormConstants.JSON_FORM_KEY.FORM, form);
+        startActivityForResult(intent, AppConstants.RequestCode.REQUEST_CODE_GET_JSON);
+    }
+
 }

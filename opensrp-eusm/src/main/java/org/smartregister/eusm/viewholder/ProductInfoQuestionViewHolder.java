@@ -6,6 +6,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.core.content.res.ResourcesCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
 import org.smartregister.eusm.R;
@@ -32,8 +33,8 @@ public class ProductInfoQuestionViewHolder extends RecyclerView.ViewHolder {
         productInfoAnswerView = itemView.findViewById(R.id.txt_product_info_answer);
     }
 
-    public void setImageProductInfoQuestion(String question) {
-        //this.imageProductInfoQuestionView = imageProductInfoQuestionView;
+    public void setImageProductInfoQuestion(int questionPhoto) {
+        this.imageProductInfoQuestionView.setImageDrawable(ResourcesCompat.getDrawable(context.getResources(), questionPhoto, context.getTheme()));
     }
 
     public void setProductInfoQuestion(String question) {

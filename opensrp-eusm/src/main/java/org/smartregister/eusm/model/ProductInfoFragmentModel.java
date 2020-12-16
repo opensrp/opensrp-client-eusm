@@ -18,14 +18,18 @@ public class ProductInfoFragmentModel {
         ProductInfoQuestion p1 = new ProductInfoQuestion();
         p1.setAnswer(taskDetail.getAvailability());
         p1.setQuestion(getContext().getString(R.string.is_it_there));
+        p1.setImageId(R.drawable.ic_icon_there);
 
         ProductInfoQuestion p2 = new ProductInfoQuestion();
         p2.setAnswer(taskDetail.getCondition());
         p2.setQuestion(getContext().getString(R.string.is_it_good_condition));
+        p2.setImageId(R.drawable.ic_icon_condition);
 
         ProductInfoQuestion p3 = new ProductInfoQuestion();
         p3.setAnswer(taskDetail.getAppropriateUsage());
         p3.setQuestion(getContext().getString(R.string.is_it_being_used_appropriately));
+        p3.setImageId(R.drawable.ic_icon_used);
+
         return new ArrayList<>(Arrays.asList(p1, p2, p3));
     }
 

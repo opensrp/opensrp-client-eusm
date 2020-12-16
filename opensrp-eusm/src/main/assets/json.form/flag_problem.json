@@ -48,7 +48,7 @@
     "encounter_location": ""
   },
   "step1": {
-    "title": "Problem",
+    "title": "Flag Problem",
     "next": "step2",
     "fields": [
       {
@@ -121,7 +121,7 @@
         "openmrs_entity": "",
         "openmrs_entity_id": "",
         "type": "native_radio",
-        "label": "Product is not in good condition",
+        "label": "What is wrong with the product?",
         "label_text_style": "bold",
         "options": [
           {
@@ -189,7 +189,7 @@
         "openmrs_entity": "",
         "openmrs_entity_id": "",
         "type": "native_radio",
-        "label": "Product is not there",
+        "label": "What happened to the product?",
         "label_text_style": "bold",
         "options": [
           {
@@ -264,7 +264,7 @@
         "openmrs_entity": "",
         "openmrs_entity_id": "",
         "type": "native_radio",
-        "label": "Product is not being used appropriately.",
+        "label": "How is the product not being used appropriately?",
         "label_text_style": "bold",
         "options": [
           {

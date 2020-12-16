@@ -8,7 +8,6 @@ import android.widget.TextView;
 
 import androidx.appcompat.widget.PopupMenu;
 import androidx.core.util.Pair;
-import androidx.core.view.GravityCompat;
 
 import com.google.android.material.navigation.NavigationView;
 import com.vijay.jsonwizard.customviews.TreeViewDialog;
@@ -19,6 +18,7 @@ import org.json.JSONException;
 import org.smartregister.eusm.BuildConfig;
 import org.smartregister.eusm.R;
 import org.smartregister.eusm.application.EusmApplication;
+import org.smartregister.eusm.presenter.EusmBaseDrawerPresenter;
 import org.smartregister.eusm.util.AppUtils;
 import org.smartregister.tasking.contract.BaseDrawerContract;
 import org.smartregister.tasking.view.DrawerMenuView;
@@ -28,7 +28,6 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
@@ -41,23 +40,17 @@ public class NavigationDrawerView extends DrawerMenuView {
     public NavigationDrawerView(BaseDrawerContract.DrawerActivity activity) {
         super(activity);
     }
-//
-//    @Override
-//    public BaseDrawerContract.Interactor getInteractor() {
-//        return interactor = new EusmBaseDrawerInteractor(presenter);
-//    }
 
     @Override
-    public void setUpViews(NavigationView navigationView) {
-        super.setUpViews(navigationView);
-        View headerView = navigationView.getHeaderView(0);
+    public void setUpViews() {
+        super.setUpViews();
 
         String buildDate = new SimpleDateFormat("dd/MM/yyyy", Locale.getDefault())
                 .format(new Date(BuildConfig.BUILD_TIMESTAMP));
 
-        ((TextView) headerView.findViewById(R.id.application_updated)).setText(getContext().getString(R.string.app_updated, buildDate));
+        ((TextView) getContext().findViewById(R.id.application_updated)).setText(getContext().getString(R.string.app_updated, buildDate));
 
-        languageChooserTextView = headerView.findViewById(R.id.btn_navMenu_language_chooser);
+        languageChooserTextView = getContext().findViewById(R.id.btn_navMenu_language_chooser);
 
         String language = LangUtils.getLanguage(getContext());
 
@@ -100,57 +93,6 @@ public class NavigationDrawerView extends DrawerMenuView {
     }
 
     @Override
-    public void showOperationalAreaSelector(Pair<String, ArrayList<String>> locationHierarchy) {
-        try {
-            TreeViewDialog treeViewDialog = new TreeViewDialog(getContext(),
-                    R.style.AppTheme_WideDialog,
-                    new JSONArray(locationHierarchy.first), locationHierarchy.second, locationHierarchy.second);
-            treeViewDialog.setCancelable(true);
-            treeViewDialog.setCanceledOnTouchOutside(true);
-            treeViewDialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
-                @Override
-                public void onDismiss(DialogInterface dialog) {
-                    getPresenter().onOperationalAreaSelectorClicked(treeViewDialog.getName());
-                }
-            });
-            treeViewDialog.show();
-        } catch (JSONException e) {
-            Timber.e(e);
-        }
-
-    }
-
-    @Override
-    public void showPlanSelector(List<String> campaigns, String entireTreeString) {
-        if (StringUtils.isBlank(entireTreeString)) {
-            displayNotification(R.string.plans_download_on_progress_title, R.string.plans_download_on_progress);
-            return;
-        }
-        try {
-            TreeViewDialog treeViewDialog = new TreeViewDialog(getContext(),
-                    R.style.AppTheme_WideDialog,
-                    new JSONArray(entireTreeString), new ArrayList<>(campaigns), new ArrayList<>(campaigns));
-            treeViewDialog.show();
-            treeViewDialog.setCanceledOnTouchOutside(true);
-            treeViewDialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
-                @Override
-                public void onDismiss(DialogInterface dialog) {
-                    getPresenter().onPlanSelectorClicked(treeViewDialog.getValue(), treeViewDialog.getName());
-                }
-            });
-            treeViewDialog.show();
-        } catch (JSONException e) {
-            Timber.e(e);
-        }
-    }
-
-    public void closeDrawerLayout() {
-        if (getPresenter().isPlanAndOperationalAreaSelected()) {
-            mDrawerLayout.closeDrawer(GravityCompat.START);
-        }
-    }
-
-    @Override
     public void onClick(View v) {
         if (v.getId() == R.id.operational_area_selector)
             getPresenter().onShowOperationalAreaSelector();
@@ -187,7 +129,30 @@ public class NavigationDrawerView extends DrawerMenuView {
     }
 
     @Override
-    public void lockNavigationDrawerForSelection() {
+    public BaseDrawerContract.Presenter getPresenter() {
+        if (presenter == null) {
+            presenter = new EusmBaseDrawerPresenter(this, this.activity);
+        }
+        return presenter;
+    }
 
+    @Override
+    public void showOperationalAreaSelector(Pair<String, ArrayList<String>> locationHierarchy) {
+        try {
+            TreeViewDialog treeViewDialog = new TreeViewDialog(getContext(),
+                    R.style.AppTheme_WideDialog,
+                    new JSONArray(locationHierarchy.first), locationHierarchy.second, new ArrayList<>());
+            treeViewDialog.setCancelable(true);
+            treeViewDialog.setCanceledOnTouchOutside(true);
+            treeViewDialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
+                @Override
+                public void onDismiss(DialogInterface dialog) {
+                    getPresenter().onOperationalAreaSelectorClicked(treeViewDialog.getName());
+                }
+            });
+            treeViewDialog.show();
+        } catch (JSONException e) {
+            Timber.e(e);
+        }
     }
 }

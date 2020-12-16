@@ -1,6 +1,7 @@
 package org.smartregister.eusm.activity;
 
 import android.content.Intent;
+import android.os.Bundle;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
@@ -22,23 +23,28 @@ import org.smartregister.eusm.application.EusmApplication;
 import org.smartregister.eusm.config.ServicePointType;
 import org.smartregister.eusm.domain.EusmCardDetail;
 import org.smartregister.eusm.domain.StructureDetail;
-import org.smartregister.eusm.presenter.EusmTaskingHomePresenter;
+import org.smartregister.eusm.presenter.EusmTaskingMapPresenter;
 import org.smartregister.eusm.util.AppConstants;
 import org.smartregister.eusm.util.AppUtils;
-import org.smartregister.tasking.activity.TaskingHomeActivity;
-import org.smartregister.tasking.contract.TaskingHomeActivityContract;
+import org.smartregister.tasking.activity.TaskingMapActivity;
+import org.smartregister.tasking.contract.TaskingMapActivityContract;
 import org.smartregister.tasking.model.CardDetails;
 
-public class EusmHomeActivity extends TaskingHomeActivity {
+public class EusmTaskingMapActivity extends TaskingMapActivity {
 
     @Override
-    public TaskingHomeActivityContract.Presenter getPresenter() {
-        return new EusmTaskingHomePresenter(this, drawerView.getPresenter());
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        findViewById(R.id.filter_tasks_fab).setVisibility(View.GONE);
+    }
+
+    @Override
+    public TaskingMapActivityContract.Presenter getPresenter() {
+        return new EusmTaskingMapPresenter(this, drawerView.getPresenter());
     }
 
     @Override
     public boolean onMapClick(@NonNull LatLng point) {
-        findViewById(R.id.card_view).setVisibility(View.GONE);
         clearSelectedFeature();
         return super.onMapClick(point);
     }
@@ -72,8 +78,8 @@ public class EusmHomeActivity extends TaskingHomeActivity {
 
             View view = (View) cardView.getParent();
             FrameLayout.LayoutParams layoutParams = new FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-            layoutParams.leftMargin = 20;
-            layoutParams.rightMargin = 20;
+            layoutParams.leftMargin = 25;
+            layoutParams.rightMargin = 25;
             layoutParams.bottomMargin = 20;
             layoutParams.gravity = Gravity.BOTTOM;
             view.setLayoutParams(layoutParams);
@@ -105,7 +111,13 @@ public class EusmHomeActivity extends TaskingHomeActivity {
     }
 
     @Override
-    public void displaySelectedFeature(Feature feature, LatLng clickedPoint, double zoomlevel) {
+    public void clearSelectedFeature() {
+        super.clearSelectedFeature();
+        findViewById(R.id.card_view).setVisibility(View.GONE);
+    }
+
+    @Override
+    public void displaySelectedFeature(Feature feature, LatLng clickedPoint, double zoomLevel) {
         //TODO get a zoom level on selection
         adjustFocusPoint(clickedPoint);
         if (selectedGeoJsonSource != null) {

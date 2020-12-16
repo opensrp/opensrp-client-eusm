@@ -1,5 +1,7 @@
 package org.smartregister.eusm.interactor;
 
+import android.app.Activity;
+
 import org.apache.commons.lang3.StringUtils;
 import org.joda.time.DateTime;
 import org.json.JSONException;
@@ -17,15 +19,15 @@ import org.smartregister.eusm.util.AppUtils;
 import org.smartregister.util.AppExecutors;
 
 import java.util.Collections;
+import java.util.Map;
 import java.util.UUID;
 
 import timber.log.Timber;
 
 public class ProductInfoActivityInteractor implements ProductInfoActivityContract.Interactor {
 
-    private AppJsonFormUtils jsonFormUtils;
-
     private final AppExecutors appExecutors;
+    private AppJsonFormUtils jsonFormUtils;
 
     public ProductInfoActivityInteractor() {
         appExecutors = EusmApplication.getInstance().getAppExecutors();
@@ -40,7 +42,6 @@ public class ProductInfoActivityInteractor implements ProductInfoActivityContrac
             @Override
             public void run() {
                 getJsonFormUtils().saveImage(jsonForm, AppConstants.EventEntityType.PRODUCT);
-
                 saveEventAndInitiateProcessing(encounterType, jsonForm, "", interactorCallback,
                         AppConstants.EventEntityType.PRODUCT);
             }
@@ -66,8 +67,39 @@ public class ProductInfoActivityInteractor implements ProductInfoActivityContrac
         }
     }
 
+    @Override
+    public void markProductAsGood(StructureDetail structureDetail, TaskDetail taskDetail, ProductInfoActivityContract.InteractorCallback callBack,
+                                  Activity activity) {
+        appExecutors.diskIO().execute(new Runnable() {
+            @Override
+            public void run() {
+                JSONObject jsonObject = getJsonFormUtils()
+                        .getFormObjectWithDetails(activity, AppConstants.JsonForm.LOOKS_GOOD, structureDetail, taskDetail);
+                saveEventAndInitiateProcessing(AppConstants.EncounterType.LOOKS_GOOD, jsonObject,
+                        "", callBack, AppConstants.EventEntityType.PRODUCT);
+            }
+        });
+    }
+
+    @Override
+    public void startFlagProblemForm(StructureDetail structureDetail, TaskDetail taskDetail, String formName, Activity activity,
+                                     ProductInfoActivityContract.InteractorCallback interactorCallBack) {
+        appExecutors.diskIO().execute(new Runnable() {
+            @Override
+            public void run() {
+                JSONObject form = getJsonFormUtils().getFormObjectWithDetails(activity, formName, structureDetail, taskDetail);
+                appExecutors.mainThread().execute(new Runnable() {
+                    @Override
+                    public void run() {
+                        interactorCallBack.onFlagProblemFormFetched(form);
+                    }
+                });
+            }
+        });
+    }
+
     private void returnResponse(ProductInfoActivityContract.InteractorCallback interactorCallback, Event event, boolean status) {
-        if (status && event != null && event.getDetails() != null) {
+        if (event != null && event.getDetails() != null) {
             String encounterType = event.getEventType();
 
             if (AppConstants.EncounterType.FLAG_PROBLEM.equals(encounterType)) {
@@ -93,12 +125,29 @@ public class ProductInfoActivityInteractor implements ProductInfoActivityContrac
                 task.setLocation(event.getLocationId());
                 task.setCode(AppConstants.EncounterType.FIX_PROBLEM);
                 taskRepository.addOrUpdate(task, false);
+            } else if (AppConstants.EncounterType.LOOKS_GOOD.equals(encounterType)) {
+                Map<String, String> map = event.getDetails();
+                if (map != null) {
+                    String taskId = map.get(AppConstants.Properties.TASK_IDENTIFIER);
+                    if (StringUtils.isNotBlank(taskId)) {
+                        //TODO to be replaced by event submission
+                        AppTaskRepository taskRepository = EusmApplication.getInstance().getAppTaskRepository();
+                        taskRepository.updateTaskStatus(taskId, Task.TaskStatus.COMPLETED, "VISITED");
+                    }
+                }
             }
         }
         appExecutors.mainThread().execute(new Runnable() {
             @Override
             public void run() {
-                interactorCallback.onSavedFlagProblemTask(status, event);
+                if (event != null) {
+                    String encounterType = event.getEventType();
+                    if (AppConstants.EncounterType.FLAG_PROBLEM.equals(encounterType)) {
+                        interactorCallback.onSavedFlagProblemTask(status, event);
+                    } else if (AppConstants.EncounterType.LOOKS_GOOD.equals(encounterType)) {
+                        interactorCallback.onProductMarkedAsGood(status, event);
+                    }
+                }
             }
         });
     }

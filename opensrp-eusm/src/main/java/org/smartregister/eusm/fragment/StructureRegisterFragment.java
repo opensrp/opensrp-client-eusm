@@ -11,7 +11,7 @@ import androidx.annotation.UiThread;
 
 import org.json.JSONObject;
 import org.smartregister.eusm.R;
-import org.smartregister.eusm.activity.EusmHomeActivity;
+import org.smartregister.eusm.activity.EusmTaskingMapActivity;
 import org.smartregister.eusm.activity.EusmTaskRegisterActivity;
 import org.smartregister.eusm.adapter.StructureRegisterAdapter;
 import org.smartregister.eusm.contract.StructureRegisterFragmentContract;
@@ -148,7 +148,7 @@ public class StructureRegisterFragment extends BaseDrawerRegisterFragment implem
 
     @Override
     public void startMapActivity() {
-        Intent intent = new Intent(getActivity(), EusmHomeActivity.class);
+        Intent intent = new Intent(getActivity(), EusmTaskingMapActivity.class);
         getActivity().startActivity(intent);
     }
 

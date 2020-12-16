@@ -14,9 +14,9 @@
             android:id="@+id/image_product_info_question"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
+            android:layout_marginTop="15dp"
             android:contentDescription="product info question image"
-            android:src="@drawable/ic_distribution_site_sp" />
+            android:src="@drawable/ic_icon_there" />
     </LinearLayout>
 
     <LinearLayout
@@ -39,7 +39,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="5dp"
-            android:textSize="@dimen/activity_title_size"
+            android:paddingEnd="30dp"
+            android:textSize="@dimen/activity_sub_title_size"
             android:text="Solar Direct Drive Refrigerator for Sorage of Vaccines"
             android:textColor="@color/black" />
 

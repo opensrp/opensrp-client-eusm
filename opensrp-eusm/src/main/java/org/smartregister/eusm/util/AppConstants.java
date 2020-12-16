@@ -14,6 +14,8 @@ public interface AppConstants extends TaskingConstants {
 
     String LOCATION_ID = "location_id";
 
+    String STRUCTURE_IDS = "STRUCTURE_IDS";
+
     interface Table {
         String STRUCTURE_TABLE = "structure";
     }
@@ -131,5 +133,10 @@ public interface AppConstants extends TaskingConstants {
         String STATUS = "status";
         String NAME = "name";
         String TYPE = "type";
+    }
+
+    interface LocationLevels {
+        String DISTRICT = "district";
+        String COMMUNE = "commune";
     }
 }

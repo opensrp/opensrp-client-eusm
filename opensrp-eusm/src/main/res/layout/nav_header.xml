@@ -3,6 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/white"
     android:fitsSystemWindows="true"
     android:theme="@style/AppTheme.Nav.ThemeOverlay">
 
@@ -207,9 +208,10 @@
         android:layout_marginStart="@dimen/drawer_margin"
         android:layout_marginTop="@dimen/drawer_margin_vertical"
         android:text="@string/facility"
-        android:visibility="gone"
         android:textColor="@color/text_gray"
+        android:visibility="gone"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/district_label" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

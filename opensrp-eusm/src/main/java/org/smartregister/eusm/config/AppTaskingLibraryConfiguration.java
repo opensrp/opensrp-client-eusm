@@ -10,6 +10,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.util.Pair;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.gson.JsonObject;
 import com.mapbox.geojson.Feature;
@@ -22,8 +23,9 @@ import org.smartregister.clientandeventmodel.Event;
 import org.smartregister.commonregistry.CommonPersonObjectClient;
 import org.smartregister.domain.Location;
 import org.smartregister.domain.PlanDefinition;
+import org.smartregister.domain.PlanDefinitionSearch;
 import org.smartregister.domain.Task;
-import org.smartregister.eusm.activity.EusmHomeActivity;
+import org.smartregister.eusm.activity.EusmTaskingMapActivity;
 import org.smartregister.eusm.activity.EusmOfflineMapsActivity;
 import org.smartregister.eusm.activity.StructureRegisterActivity;
 import org.smartregister.eusm.application.EusmApplication;
@@ -34,12 +36,13 @@ import org.smartregister.eusm.util.AppConstants;
 import org.smartregister.eusm.util.DefaultLocationUtils;
 import org.smartregister.eusm.view.NavigationDrawerView;
 import org.smartregister.repository.PlanDefinitionRepository;
-import org.smartregister.tasking.activity.TaskingHomeActivity;
+import org.smartregister.repository.PlanDefinitionSearchRepository;
+import org.smartregister.tasking.activity.TaskingMapActivity;
 import org.smartregister.tasking.adapter.TaskRegisterAdapter;
 import org.smartregister.tasking.contract.BaseContract;
 import org.smartregister.tasking.contract.BaseDrawerContract;
 import org.smartregister.tasking.contract.BaseFormFragmentContract;
-import org.smartregister.tasking.contract.TaskingHomeActivityContract;
+import org.smartregister.tasking.contract.TaskingMapActivityContract;
 import org.smartregister.tasking.layer.DigitalGlobeLayer;
 import org.smartregister.tasking.model.BaseTaskDetails;
 import org.smartregister.tasking.model.CardDetails;
@@ -52,13 +55,12 @@ import org.smartregister.tasking.util.TaskingConstants;
 import org.smartregister.tasking.util.TaskingJsonFormUtils;
 import org.smartregister.tasking.util.TaskingLibraryConfiguration;
 import org.smartregister.tasking.util.TaskingMapHelper;
-import org.smartregister.tasking.viewholder.TaskRegisterViewHolder;
 import org.smartregister.util.AppExecutors;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import timber.log.Timber;
 
@@ -287,12 +289,12 @@ public class AppTaskingLibraryConfiguration extends TaskingLibraryConfiguration 
 
     @Override
     public void startMapActivity(Activity activity, String searchViewText, TaskFilterParams taskFilterParams) {
-        Intent intent = new Intent(activity, EusmHomeActivity.class);
+        Intent intent = new Intent(activity, EusmTaskingMapActivity.class);
         activity.startActivity(intent);
     }
 
     @Override
-    public void onTaskRegisterBindViewHolder(@NonNull Context context, @NonNull TaskRegisterViewHolder viewHolder, @NonNull View.OnClickListener registerActionHandler, @NonNull TaskDetails taskDetails, int position) {
+    public void onTaskRegisterBindViewHolder(@NonNull Context context, @NonNull RecyclerView.ViewHolder viewHolder, @NonNull View.OnClickListener registerActionHandler, @NonNull TaskDetails taskDetails, int position) {
 
     }
 
@@ -334,7 +336,7 @@ public class AppTaskingLibraryConfiguration extends TaskingLibraryConfiguration 
 
     @Override
     public boolean isRefreshMapOnEventSaved() {
-        return false;
+        return true;
     }
 
     @Override
@@ -373,7 +375,7 @@ public class AppTaskingLibraryConfiguration extends TaskingLibraryConfiguration 
     }
 
     @Override
-    public void openTaskRegister(TaskFilterParams filterParams, TaskingHomeActivity activity) {
+    public void openTaskRegister(TaskFilterParams filterParams, TaskingMapActivity activity) {
         Intent intent = new Intent(activity, StructureRegisterActivity.class);
         activity.startActivity(intent);
     }
@@ -404,12 +406,12 @@ public class AppTaskingLibraryConfiguration extends TaskingLibraryConfiguration 
     }
 
     @Override
-    public String getProvinceFromTreeDialogValue(ArrayList<String> arrayList) {
+    public String getProvinceFromTreeDialogValue(List<String> arrayList) {
         return "";
     }
 
     @Override
-    public String getDistrictFromTreeDialogValue(ArrayList<String> arrayList) {
+    public String getDistrictFromTreeDialogValue(List<String> arrayList) {
         try {
             return arrayList.get(2);
         } catch (IndexOutOfBoundsException e) {
@@ -424,12 +426,12 @@ public class AppTaskingLibraryConfiguration extends TaskingLibraryConfiguration 
     }
 
     @Override
-    public void onFeatureSelectedByLongClick(Feature feature, TaskingHomeActivityContract.Presenter presenter) {
+    public void onFeatureSelectedByLongClick(Feature feature, TaskingMapActivityContract.Presenter presenter) {
         Timber.e("sd");
     }
 
     @Override
-    public void onFeatureSelectedByClick(Feature feature, TaskingHomeActivityContract.Presenter presenter) {
+    public void onFeatureSelectedByClick(Feature feature, TaskingMapActivityContract.Presenter presenter) {
         getAppExecutors().diskIO().execute(new Runnable() {
             @Override
             public void run() {
@@ -478,18 +480,36 @@ public class AppTaskingLibraryConfiguration extends TaskingLibraryConfiguration 
 
     }
 
-//    @Override
-//    public void fetchPlans(String jurisdictionName) {
-//        if(StringUtils.isBlank(jurisdictionName)){
-//            Set<PlanDefinition> planDefinitionSet = planDefinitionRepository.findAllPlanDefinitions();
-//            getAppExecutors().mainThread().execute(new Runnable() {
-//                @Override
-//                public void run() {
-//                    presenter.onPlansFetched(planDefinitionSet);
-//                }
-//            });
+    @Override
+    public void setFacility(List<String> list, BaseDrawerContract.View view) {
+
+    }
+
+    @Override
+    public void openFilterTaskActivity(TaskFilterParams taskFilterParams, TaskingMapActivity TaskingMapActivity) {
+
+    }
+
+    @Override
+    public List<Location> getLocationsIdsForDownload(List<String> downloadedLocations) {
+        PlanDefinitionSearchRepository planDefinitionRepository = EusmApplication.getInstance().getPlanDefinitionSearchRepository();
+        List<String> jurisdictionIds = planDefinitionRepository
+                .findPlanDefinitionSearchByPlanStatus(PlanDefinition.PlanStatus.ACTIVE)
+                .stream().map(PlanDefinitionSearch::getJurisdictionId).collect(Collectors.toList());
+
+        if (downloadedLocations != null) {
+            jurisdictionIds.removeAll(downloadedLocations);
+        }
+//        List<Location> locationList =  EusmApplication.getInstance().getStructureRepository().getLocationByDistrictIds(jurisdictionIds);
+//
+//        if (downloadedLocations != null) {
+//            locationList = locationList.stream().filter(location -> !downloadedLocations.contains(location.getId())).collect(Collectors.toList());
 //        }
-//    }
+        return EusmApplication.getInstance().getLocationRepository().getLocationsByIds(jurisdictionIds);
+    }
 
-
+    @Override
+    public Pair<Double, Double> getMinMaxZoomMapDownloadPair() {
+        return Pair.create(5d, 11d);
+    }
 }

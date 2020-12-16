@@ -2,7 +2,7 @@
     <dimen name="login_font_size">16sp</dimen>
     <dimen name="login_view_component_height">48dp</dimen>
     <dimen name="login_logo_height">100dp</dimen>
-    <dimen name="login_logo_top_padding">120dp</dimen>
+    <dimen name="login_logo_top_padding">60dp</dimen>
     <dimen name="login_horizontal_margin">30dp</dimen>
     <dimen name="login_bottom_margin">15dp</dimen>
     <dimen name="login_edit_text_textSize">16sp</dimen>
@@ -23,7 +23,7 @@
 
     <dimen name="drawer_icon_margin">40dp</dimen>
 
-    <dimen name="structure_info_card_text_size">18sp</dimen>
+    <dimen name="structure_info_card_text_size">16sp</dimen>
     <dimen name="structure_info_card_status_text_size">22sp</dimen>
     <dimen name="mosquito_collection_card_view_title_text_size">20sp</dimen>
     <dimen name="mosquito_collection_card_view_title_left_margin">25dp</dimen>

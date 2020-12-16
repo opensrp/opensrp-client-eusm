@@ -7,8 +7,6 @@ import org.smartregister.eusm.domain.TaskDetail;
 import org.smartregister.repository.BaseRepository;
 import org.smartregister.tasking.util.InteractorUtils;
 
-import java.util.List;
-
 public class AppRepository extends BaseRepository {
 
     public void archiveEventsForTask(TaskDetail taskDetail) {
@@ -17,15 +15,7 @@ public class AppRepository extends BaseRepository {
         InteractorUtils interactorUtils = new InteractorUtils(eusmApplication.getTaskRepository(),
                 eusmApplication.getEventClientRepository(),
                 eusmApplication.getClientProcessor());
-        boolean archived = interactorUtils.archiveEventsForTask(db, taskDetail);
-        if (archived) {
-            List<String> formSubmissionIds = interactorUtils
-                    .getFormSubmissionIdsFromEventTask(db, taskDetail);
-//            try {
-//                AppUtils.initiateEventProcessing(formSubmissionIds);
-//            } catch (Exception e) {
-//                Timber.e(e);
-//            }
-        }
+        interactorUtils.archiveEventsForTask(db, taskDetail);
+        //invoke sync here
     }
 }

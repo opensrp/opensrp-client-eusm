@@ -163,6 +163,7 @@ public class TaskRegisterFragmentInteractor implements TaskRegisterFragmentContr
 
         if (!hasCheckedItems) {
             taskDetails.add(sChecked);
+            sEmpty.setEntityName(getContext().getString(R.string.no_items_checked_yet));
             taskDetails.add(sEmpty);
         }
 
