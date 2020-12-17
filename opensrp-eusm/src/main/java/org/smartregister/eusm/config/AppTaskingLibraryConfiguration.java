@@ -25,8 +25,8 @@ import org.smartregister.domain.Location;
 import org.smartregister.domain.PlanDefinition;
 import org.smartregister.domain.PlanDefinitionSearch;
 import org.smartregister.domain.Task;
-import org.smartregister.eusm.activity.EusmTaskingMapActivity;
 import org.smartregister.eusm.activity.EusmOfflineMapsActivity;
+import org.smartregister.eusm.activity.EusmTaskingMapActivity;
 import org.smartregister.eusm.activity.StructureRegisterActivity;
 import org.smartregister.eusm.application.EusmApplication;
 import org.smartregister.eusm.domain.EusmCardDetail;
@@ -35,8 +35,12 @@ import org.smartregister.eusm.job.LocationTaskServiceJob;
 import org.smartregister.eusm.util.AppConstants;
 import org.smartregister.eusm.util.DefaultLocationUtils;
 import org.smartregister.eusm.view.NavigationDrawerView;
+import org.smartregister.job.ImageUploadServiceJob;
+import org.smartregister.job.SyncServiceJob;
 import org.smartregister.repository.PlanDefinitionRepository;
 import org.smartregister.repository.PlanDefinitionSearchRepository;
+import org.smartregister.stock.job.SyncStockServiceJob;
+import org.smartregister.stock.job.SyncStockTypeServiceJob;
 import org.smartregister.tasking.activity.TaskingMapActivity;
 import org.smartregister.tasking.adapter.TaskRegisterAdapter;
 import org.smartregister.tasking.contract.BaseContract;
@@ -90,6 +94,10 @@ public class AppTaskingLibraryConfiguration extends TaskingLibraryConfiguration 
     @Override
     public void startImmediateSync() {
         LocationTaskServiceJob.scheduleJobImmediately(LocationTaskServiceJob.TAG);
+        SyncServiceJob.scheduleJobImmediately(SyncServiceJob.TAG);
+        SyncStockTypeServiceJob.scheduleJobImmediately(SyncStockTypeServiceJob.TAG);
+        ImageUploadServiceJob.scheduleJobImmediately(ImageUploadServiceJob.TAG);
+        SyncStockServiceJob.scheduleJobImmediately(SyncStockServiceJob.TAG);
     }
 
     @Override

@@ -61,7 +61,7 @@ public class AppClientProcessor extends ClientProcessorForJava {
 //        processClient(eventClientList, false);
 //    }
 //
-    public void processClient(List<EventClient> eventClients, boolean localEvents) {
+    public void processClient(List<EventClient> eventClients, boolean localSubmission) {
         ClientClassification clientClassification = assetJsonToJava("ec_client_classification.json", ClientClassification.class);
         if (clientClassification == null) {
             return;
@@ -89,12 +89,15 @@ public class AppClientProcessor extends ClientProcessorForJava {
                         operationalAreaLocationId.equals(operationalAreaId)) {
                     hasSyncedEventsInTarget = true;
                 }
+//                if (localSubmission && CoreLibrary.getInstance().getSyncConfiguration().runPlanEvaluationOnClientProcessing()) {
+//                    processPlanEvaluation(eventClient);
+//                }
             }
         }
 
         if (hasSyncedEventsInTarget) {
             Intent intent = new Intent(AppConstants.Action.STRUCTURE_TASK_SYNCED);
-            intent.putExtra(AppConstants.CONFIGURATION.LOCAL_SYNC_DONE, localEvents);
+            intent.putExtra(AppConstants.CONFIGURATION.LOCAL_SYNC_DONE, localSubmission);
             LocalBroadcastManager.getInstance(getContext()).sendBroadcast(intent);
         }
     }

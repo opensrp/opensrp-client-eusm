@@ -98,8 +98,8 @@
                         android:layout_gravity="start"
                         android:layout_marginEnd="0dp"
                         android:paddingStart="5dp"
-                        android:scaleType="fitStart"
                         android:paddingTop="0dp"
+                        android:scaleType="fitStart"
                         android:src="@drawable/ic_baseline_arrow_back" />
 
                     <TextView
@@ -108,8 +108,8 @@
                         android:layout_height="match_parent"
                         android:layout_gravity="start"
                         android:paddingStart="3dp"
-                        android:paddingEnd="3dp"
                         android:paddingTop="0dp"
+                        android:paddingEnd="3dp"
                         android:text="@string/back"
                         android:textColor="@color/customAppThemeBlue"
                         android:textSize="16dp"
@@ -126,9 +126,10 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_gravity="bottom"
+        android:layout_gravity="bottom|center"
         android:background="@color/white"
         android:orientation="vertical">
+
         <View
             android:id="@+id/divider"
             android:layout_width="match_parent"
@@ -140,10 +141,11 @@
             android:id="@+id/layout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"
             android:layout_marginStart="10dp"
             android:layout_marginEnd="10dp"
             android:orientation="horizontal"
+            android:layout_gravity="center"
+            android:gravity="center"
             android:paddingTop="10dp"
             android:paddingBottom="5dp"
             android:weightSum="1">
@@ -152,15 +154,17 @@
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:layout_marginEnd="5dp"
-                android:layout_weight="0.5">
+                android:layout_weight="0.5"
+                android:background="@drawable/login_button_bg"
+                android:gravity="center"
+                android:paddingStart="11dp"
+                android:id="@+id/layout_product_looks_good"
+                android:paddingEnd="11dp">
 
-                <Button
-                    android:id="@+id/btn_product_looks_good"
+                <TextView
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:paddingStart="11dp"
-                    android:paddingEnd="11dp"
-                    android:background="@drawable/login_button_bg"
+                    android:layout_height="match_parent"
+                    android:gravity="center"
                     android:text="@string/looks_good_button_text"
                     android:textAllCaps="false"
                     android:textColor="@color/white"
@@ -169,37 +173,30 @@
             </LinearLayout>
 
             <LinearLayout
+                android:id="@+id/layout_flag_problem"
                 android:layout_width="wrap_content"
+                android:layout_height="47dp"
                 android:layout_marginStart="5dp"
-                android:layout_height="match_parent"
-                android:layout_weight="0.5">
+                android:layout_weight="0.44"
+                android:background="@drawable/structure_task_action_bg"
+                android:gravity="center"
+                android:orientation="horizontal">
 
-                <LinearLayout
-                    android:id="@+id/layout_flag_problem"
-                    android:layout_width="match_parent"
+                <ImageView
+                    android:layout_width="wrap_content"
                     android:layout_height="match_parent"
-                    android:background="@drawable/structure_task_action_bg"
+                    android:src="@drawable/ic_baseline_warning"
+                    android:textAllCaps="false" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_marginLeft="10dp"
                     android:gravity="center"
-                    android:orientation="horizontal"
-                    android:paddingTop="11dp"
-                    android:paddingBottom="11dp">
-
-                    <ImageView
-                        android:layout_width="wrap_content"
-                        android:layout_height="match_parent"
-                        android:src="@drawable/ic_baseline_warning"
-                        android:textAllCaps="false" />
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="match_parent"
-                        android:layout_marginLeft="10dp"
-                        android:gravity="center"
-                        android:text="@string/flag_problem_button_text"
-                        android:textColor="#FFB000"
-                        android:textSize="@dimen/activity_title_size"
-                        android:textStyle="bold" />
-                </LinearLayout>
+                    android:text="@string/flag_problem_button_text"
+                    android:textColor="#FFB000"
+                    android:textSize="@dimen/activity_title_size"
+                    android:textStyle="bold" />
             </LinearLayout>
         </LinearLayout>
     </LinearLayout>

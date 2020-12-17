@@ -17,7 +17,6 @@ import org.smartregister.eusm.R;
 import org.smartregister.eusm.application.EusmApplication;
 import org.smartregister.eusm.config.ServicePointType;
 import org.smartregister.eusm.domain.StructureDetail;
-import org.smartregister.eusm.util.AppConstants;
 import org.smartregister.eusm.util.AppUtils;
 
 public class StructureRegisterViewHolder extends RecyclerView.ViewHolder {
@@ -48,7 +47,7 @@ public class StructureRegisterViewHolder extends RecyclerView.ViewHolder {
     public void setServicePointIcon(@Nullable String taskStatus, @NonNull String serviceType) {
         this.servicePointIconView.setImageDrawable(ResourcesCompat.getDrawable(servicePointIconView.getResources(), getDrawableByTaskType(serviceType), context.getTheme()));
         if (StringUtils.isNotBlank(taskStatus)) {
-            int color = getColorByTaskStatus(taskStatus);
+            int color = AppUtils.getColorByTaskStatus(taskStatus);
             this.servicePointIconView.setColorFilter(ContextCompat.getColor(context, color));
         }
     }
@@ -62,19 +61,9 @@ public class StructureRegisterViewHolder extends RecyclerView.ViewHolder {
         }
     }
 
-    private int getColorByTaskStatus(@NonNull String taskStatus) {
-        int colorId = R.color.text_gray;
-        if (taskStatus.equalsIgnoreCase(AppConstants.TaskStatus.COMPLETED)) {
-            colorId = R.color.task_completed;
-        } else if (taskStatus.equalsIgnoreCase(AppConstants.TaskStatus.IN_PROGRESS)) {
-            colorId = R.color.task_in_progress;
-        }
-        return colorId;
-    }
-
     public void setTaskStatus(StructureDetail structureDetail) {
         String taskStatus = AppUtils.formatTaskStatus(structureDetail.getTaskStatus(), context);
-        int colorId = getColorByTaskStatus(structureDetail.getTaskStatus());
+        int colorId = AppUtils.getColorByTaskStatus(structureDetail.getTaskStatus());
         this.taskStatusView.setText(taskStatus);
         this.taskStatusView.setTextColor(ContextCompat.getColor(context, colorId));
     }

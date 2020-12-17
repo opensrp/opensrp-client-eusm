@@ -123,6 +123,16 @@ public class AppUtils extends Utils {
         return taskStatus;
     }
 
+    public static int getColorByTaskStatus(@NonNull String taskStatus) {
+        int colorId = R.color.text_gray;
+        if (AppConstants.TaskStatus.COMPLETED.equals(taskStatus)) {
+            colorId = R.color.task_completed;
+        } else if (AppConstants.TaskStatus.IN_PROGRESS.equals(taskStatus)) {
+            colorId = R.color.task_in_progress;
+        }
+        return colorId;
+    }
+
     public static void saveStructureIds(List<String> structureIds) {
         if (structureIds != null && !structureIds.isEmpty())
             Utils.getAllSharedPreferences().savePreference(STRUCTURE_IDS, android.text.TextUtils.join(",", structureIds));

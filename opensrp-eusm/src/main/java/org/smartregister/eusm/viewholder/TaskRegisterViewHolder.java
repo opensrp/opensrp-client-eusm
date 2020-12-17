@@ -2,6 +2,7 @@ package org.smartregister.eusm.viewholder;
 
 import android.content.Context;
 import android.graphics.Bitmap;
+import android.graphics.Typeface;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
@@ -110,6 +111,12 @@ public class TaskRegisterViewHolder extends RecyclerView.ViewHolder {
                 result = String.format(stringTemplate, taskDetail.getProductSerial());
             }
             this.productSerialView.setText(result);
+            if (taskDetail.isChecked()) {
+                this.productSerialView.setTextColor(context.getResources().getColor(R.color.text_checked));
+            } else {
+                this.productSerialView.setTextColor(context.getResources().getColor(R.color.black));
+            }
+            this.productSerialView.setVisibility(View.VISIBLE);
         } else {
             this.productSerialView.setVisibility(View.GONE);
         }
@@ -120,7 +127,14 @@ public class TaskRegisterViewHolder extends RecyclerView.ViewHolder {
      *
      * @param productName
      */
-    public void setProductName(@NonNull String productName) {
+    public void setProductName(@NonNull String productName, boolean isChecked) {
         this.productNameView.setText(productName);
+        if (isChecked) {
+            this.productNameView.setTextColor(context.getResources().getColor(R.color.text_checked));
+            this.productNameView.setTypeface(null, Typeface.NORMAL);
+        } else {
+            this.productNameView.setTypeface(null, Typeface.BOLD);
+            this.productNameView.setTextColor(context.getResources().getColor(R.color.black));
+        }
     }
 }

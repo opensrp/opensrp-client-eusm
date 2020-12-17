@@ -9,7 +9,6 @@ import android.widget.TextView;
 import androidx.appcompat.widget.PopupMenu;
 import androidx.core.util.Pair;
 
-import com.google.android.material.navigation.NavigationView;
 import com.vijay.jsonwizard.customviews.TreeViewDialog;
 
 import org.apache.commons.lang3.StringUtils;

@@ -4,13 +4,11 @@ import org.smartregister.CoreLibrary;
 import org.smartregister.eusm.BuildConfig;
 import org.smartregister.eusm.application.EusmApplication;
 import org.smartregister.eusm.job.LocationTaskServiceJob;
-import org.smartregister.eusm.util.AppUtils;
 import org.smartregister.job.DocumentConfigurationServiceJob;
 import org.smartregister.job.ImageUploadServiceJob;
-import org.smartregister.job.SyncServiceJob;
 import org.smartregister.login.interactor.BaseLoginInteractor;
 import org.smartregister.stock.job.SyncStockServiceJob;
-import org.smartregister.stock.job.SyncStockTypeServiceJob;
+import org.smartregister.tasking.TaskingLibrary;
 import org.smartregister.view.contract.BaseLoginContract;
 
 import java.lang.ref.WeakReference;
@@ -39,11 +37,7 @@ public class LoginInteractor extends BaseLoginInteractor implements BaseLoginCon
 
     @Override
     protected void scheduleJobsImmediately() {
-        SyncServiceJob.scheduleJobImmediately(SyncServiceJob.TAG);
-        SyncStockTypeServiceJob.scheduleJobImmediately(SyncStockTypeServiceJob.TAG);
-        ImageUploadServiceJob.scheduleJobImmediately(ImageUploadServiceJob.TAG);
-        SyncStockServiceJob.scheduleJobImmediately(SyncStockServiceJob.TAG);
-        AppUtils.startImmediateSync();
+        TaskingLibrary.getInstance().getTaskingLibraryConfiguration().startImmediateSync();
     }
 
     @Override

@@ -9,7 +9,6 @@ import org.smartregister.eusm.application.EusmApplication;
 import org.smartregister.eusm.domain.StructureDetail;
 import org.smartregister.eusm.repository.AppStructureRepository;
 import org.smartregister.eusm.util.GeoJsonUtils;
-import org.smartregister.repository.LocationRepository;
 import org.smartregister.tasking.contract.TaskingMapActivityContract;
 import org.smartregister.tasking.interactor.TaskingMapInteractor;
 import org.smartregister.tasking.model.TaskDetails;
@@ -26,7 +25,6 @@ public class EusmTaskingMapInteractor extends TaskingMapInteractor {
     private final PreferencesUtil preferencesUtil;
     private final AppStructureRepository appStructureRepository;
     private final GeoJsonUtils geoJsonUtils;
-    private LocationRepository locationRepository;
 
     public EusmTaskingMapInteractor(TaskingMapActivityContract.Presenter presenter) {
         super(presenter);

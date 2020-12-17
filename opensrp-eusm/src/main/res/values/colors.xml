@@ -42,4 +42,6 @@
 
     <color name="task_completed">#55bf26</color>
     <color name="task_in_progress">#d0a933</color>
+
+    <color name="text_checked">#747474</color>
 </resources>

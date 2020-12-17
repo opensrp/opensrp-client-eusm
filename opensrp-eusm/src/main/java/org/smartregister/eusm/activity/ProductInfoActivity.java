@@ -8,8 +8,8 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.Nullable;
@@ -110,7 +110,7 @@ public class ProductInfoActivity extends MultiLanguageActivity implements Produc
         View layoutBackButton = findViewById(R.id.layout_back_button);
         layoutBackButton.setOnClickListener(this);
 
-        Button btnLooksGood = findViewById(R.id.btn_product_looks_good);
+        LinearLayout btnLooksGood = findViewById(R.id.layout_product_looks_good);
         btnLooksGood.setOnClickListener(this);
 
         View flagProblemView = findViewById(R.id.layout_flag_problem);
@@ -188,7 +188,7 @@ public class ProductInfoActivity extends MultiLanguageActivity implements Produc
         int id = v.getId();
         if (id == R.id.layout_back_button) {
             finish();
-        } else if (id == R.id.btn_product_looks_good) {
+        } else if (id == R.id.layout_product_looks_good) {
             openLooksGoodConfirmationDialog();
         } else if (id == R.id.layout_flag_problem) {
             startFlagProblemForm();

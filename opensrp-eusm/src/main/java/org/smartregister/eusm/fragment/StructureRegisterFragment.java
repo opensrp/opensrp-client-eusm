@@ -11,8 +11,8 @@ import androidx.annotation.UiThread;
 
 import org.json.JSONObject;
 import org.smartregister.eusm.R;
-import org.smartregister.eusm.activity.EusmTaskingMapActivity;
 import org.smartregister.eusm.activity.EusmTaskRegisterActivity;
+import org.smartregister.eusm.activity.EusmTaskingMapActivity;
 import org.smartregister.eusm.adapter.StructureRegisterAdapter;
 import org.smartregister.eusm.contract.StructureRegisterFragmentContract;
 import org.smartregister.eusm.domain.StructureDetail;

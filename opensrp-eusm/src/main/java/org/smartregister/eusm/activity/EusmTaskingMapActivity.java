@@ -6,12 +6,15 @@ import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.widget.AppCompatImageButton;
 import androidx.cardview.widget.CardView;
+import androidx.core.content.ContextCompat;
 import androidx.core.content.res.ResourcesCompat;
 
 import com.mapbox.geojson.Feature;
@@ -36,6 +39,9 @@ public class EusmTaskingMapActivity extends TaskingMapActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         findViewById(R.id.filter_tasks_fab).setVisibility(View.GONE);
+        AppCompatImageButton buttonSearchCancel = findViewById(R.id.btn_search_cancel);
+        buttonSearchCancel.setVisibility(View.VISIBLE);
+        buttonSearchCancel.setOnClickListener(this);
     }
 
     @Override
@@ -59,14 +65,16 @@ public class EusmTaskingMapActivity extends TaskingMapActivity {
             TextView structureCommuneView = cardView.findViewById(R.id.txt_commune);
             TextView structureTaskStatusView = cardView.findViewById(R.id.txt_task_status);
             ImageView imgServicePointType = cardView.findViewById(R.id.img_service_point_type);
+            int taskStatusColor = AppUtils.getColorByTaskStatus(eusmCardDetail.getTaskStatus());
 
-            ServicePointType servicePointType = EusmApplication.getInstance().getServicePointKeyToType().get(((EusmCardDetail) cardDetails).getStructureType()
-                    .toLowerCase().replaceAll(" ", ""));
+            ServicePointType servicePointType = EusmApplication.getInstance()
+                    .getServicePointKeyToType().get(eusmCardDetail.getStructureType().toLowerCase().replaceAll(" ", ""));
             if (servicePointType != null) {
                 imgServicePointType.setImageDrawable(ResourcesCompat.getDrawable(getResources(), servicePointType.drawableId, getBaseContext().getTheme()));
+                imgServicePointType.setColorFilter(ContextCompat.getColor(getApplicationContext(), taskStatusColor));
             }
 
-            imgServicePointType.setAlpha(0.4F);
+//            imgServicePointType.setAlpha(0.9F);
 
             Button viewInventoryView = cardView.findViewById(R.id.btn_view_inventory);
             viewInventoryView.setTag(R.id.card_detail, eusmCardDetail);
@@ -75,6 +83,7 @@ public class EusmTaskingMapActivity extends TaskingMapActivity {
             structureDistanceView.setText(String.format(getString(R.string.distance_from_structure), eusmCardDetail.getStructureType(), eusmCardDetail.getDistanceMeta()));
             structureCommuneView.setText(eusmCardDetail.getCommune());
             structureTaskStatusView.setText(AppUtils.formatTaskStatus(eusmCardDetail.getTaskStatus(), getApplicationContext()));
+            structureTaskStatusView.setTextColor(ContextCompat.getColor(getApplicationContext(), taskStatusColor));
 
             View view = (View) cardView.getParent();
             FrameLayout.LayoutParams layoutParams = new FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
@@ -92,7 +101,6 @@ public class EusmTaskingMapActivity extends TaskingMapActivity {
         super.onClick(v);
         int viewId = v.getId();
         if (viewId == R.id.btn_view_inventory) {
-
             EusmCardDetail eusmCardDetail = (EusmCardDetail) v.getTag(R.id.card_detail);
             if (eusmCardDetail != null) {
                 StructureDetail structureDetail = new StructureDetail();
@@ -106,6 +114,11 @@ public class EusmTaskingMapActivity extends TaskingMapActivity {
                 Intent intent = new Intent(getActivity(), EusmTaskRegisterActivity.class);
                 intent.putExtra(AppConstants.IntentData.STRUCTURE_DETAIL, structureDetail);
                 getActivity().startActivity(intent);
+            }
+        } else if (viewId == R.id.btn_search_cancel) {
+            EditText searchView = findViewById(org.smartregister.tasking.R.id.edt_search);
+            if (searchView != null) {
+                searchView.setText("");
             }
         }
     }

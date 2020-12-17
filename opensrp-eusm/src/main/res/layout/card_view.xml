@@ -48,7 +48,7 @@
                     android:layout_height="wrap_content"
                     android:text="Alabsdos  sdwewe"
                     android:textColor="@color/text_black"
-                    android:textSize="23dp"
+                    android:textSize="20dp"
                     android:textStyle="bold" />
 
                 <TextView
@@ -65,7 +65,8 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="4dp"
                     android:text="Alarobial Ambsad"
-                    android:textSize="17dp" />
+
+                    android:textSize="@dimen/activity_title_size" />
 
                 <TextView
                     android:id="@+id/txt_task_status"
