@@ -15,12 +15,12 @@ public abstract class BaseDrawerRegisterFragment extends BaseRegisterFragment im
 
     @Override
     public void setUniqueID(String s) {
-
+        //do nothing
     }
 
     @Override
     public void setAdvancedSearchFormData(HashMap<String, String> hashMap) {
-
+        //do nothing
     }
 
     @Override
@@ -35,12 +35,12 @@ public abstract class BaseDrawerRegisterFragment extends BaseRegisterFragment im
 
     @Override
     protected void startRegistration() {
-
+        //do nothing
     }
 
     @Override
     public void showNotFoundPopup(String s) {
-
+        //do nothing
     }
 
     @Override

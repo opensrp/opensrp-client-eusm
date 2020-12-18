@@ -60,12 +60,12 @@ public class StructureRegisterInteractor implements StructureRegisterFragmentCon
     private List<StructureDetail> sortStructures(@NonNull List<StructureDetail> structureDetails) {
         StructureDetail structureDetailNearby = new StructureDetail();
         structureDetailNearby.setHeader(true);
-        structureDetailNearby.setStructureName(
+        structureDetailNearby.setEntityName(
                 String.format(context.getString(R.string.nearby_within_n_m), AppConstants.NEARBY_DISTANCE_IN_METRES.toString()));
 
         StructureDetail structureDetailOther = new StructureDetail();
         structureDetailOther.setHeader(true);
-        structureDetailOther.setStructureName(context.getString(R.string.other_service_points_a_to_z));
+        structureDetailOther.setEntityName(context.getString(R.string.other_service_points_a_to_z));
 
         boolean hasOtherPoints = false;
         boolean hasNearbyPoints = false;

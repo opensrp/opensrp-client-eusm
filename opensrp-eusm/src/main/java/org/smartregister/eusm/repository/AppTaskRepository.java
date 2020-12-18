@@ -51,11 +51,6 @@ public class AppTaskRepository extends TaskRepository {
                 StockRepository.STOCK_TABLE_NAME + "." + StockRepository.STOCK_ID
         };
 
-//        String query = "SELECT " + StringUtils.join(columns, ",")
-//                + " FROM " + TASK_TABLE +
-//                " LEFT JOIN " + StockTypeRepository.STOCK_TYPE_TABLE_NAME + " ON " + StockTypeRepository.STOCK_TYPE_TABLE_NAME + "." + StockTypeRepository.UNIQUE_ID + " = " + TASK_TABLE + "." + AppConstants.Column.Task.FOR +
-//                " LEFT JOIN " + StockRepository.STOCK_TABLE_NAME + " ON " + StockRepository.STOCK_TABLE_NAME + "." + StockRepository.IDENTIFIER + " = " + StockTypeRepository.STOCK_TYPE_TABLE_NAME + "." + StockTypeRepository.UNIQUE_ID +
-//                " WHERE taskLocation = ? group by taskId";
         String query = "SELECT " + StringUtils.join(columns, ",")
                 + " FROM " + TASK_TABLE +
                 " LEFT JOIN " + StockRepository.STOCK_TABLE_NAME + " ON " + StockRepository.STOCK_TABLE_NAME + "." + StockRepository.STOCK_ID + " = " + TASK_TABLE + "." + AppConstants.Column.Task.FOR +

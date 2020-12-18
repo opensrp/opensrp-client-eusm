@@ -11,7 +11,7 @@ public class EusmStockSyncConfiguration extends StockSyncConfiguration {
 //        if (set != null) {
 //            locations = StringUtils.join(set, ",");
 //        }
-//        return String.format("&locations=%s", locations);//TODO add all structure
+//        return String.format("&locations=%s", locations);//TODO add all structureIds
         return "";
     }
 

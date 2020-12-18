@@ -38,7 +38,7 @@ public interface ProductInfoActivityContract {
 
         Activity getActivity();
 
-        void startFlagProblemForm(JSONObject jsonForm);
+        void startForm(JSONObject jsonForm);
     }
 
     interface Presenter {

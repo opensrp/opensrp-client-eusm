@@ -142,7 +142,7 @@ public class AppTaskingLibraryConfiguration extends TaskingLibraryConfiguration 
 
     @Override
     public void tagEventTaskDetails(List<Event> events, SQLiteDatabase sqLiteDatabase) {
-
+        //do nothing
     }
 
     @Override
@@ -177,7 +177,7 @@ public class AppTaskingLibraryConfiguration extends TaskingLibraryConfiguration 
 
     @Override
     public void formatCardDetails(CardDetails cardDetails) {
-
+        //do nothing
     }
 
     @Override
@@ -192,12 +192,12 @@ public class AppTaskingLibraryConfiguration extends TaskingLibraryConfiguration 
 
     @Override
     public void showBasicForm(BaseFormFragmentContract.View view, Context context, String formName) {
-
+        //do nothing
     }
 
     @Override
     public void onLocationValidated(@NonNull Context context, @NonNull BaseFormFragmentContract.View view, @NonNull BaseFormFragmentContract.Interactor interactor, @NonNull BaseTaskDetails baseTaskDetails, @NonNull Location structure) {
-
+        //do nothing
     }
 
     @Override
@@ -227,7 +227,7 @@ public class AppTaskingLibraryConfiguration extends TaskingLibraryConfiguration 
 
     @Override
     public void saveCaseConfirmation(BaseContract.BaseInteractor baseInteractor, BaseContract.BasePresenter presenterCallBack, JSONObject jsonForm, String eventType) {
-
+        //do nothing
     }
 
     @Override
@@ -257,7 +257,7 @@ public class AppTaskingLibraryConfiguration extends TaskingLibraryConfiguration 
 
     @Override
     public void setMyLocationComponentEnabled(boolean myLocationComponentEnabled) {
-
+        //do nothing
     }
 
     @Override
@@ -267,32 +267,32 @@ public class AppTaskingLibraryConfiguration extends TaskingLibraryConfiguration 
 
     @Override
     public void saveLocationInterventionForm(BaseContract.BaseInteractor baseInteractor, BaseContract.BasePresenter presenterCallBack, JSONObject jsonForm) {
-
+        //do nothing
     }
 
     @Override
     public void saveJsonForm(BaseContract.BaseInteractor baseInteractor, String json) {
-
+        //do nothing
     }
 
     @Override
     public void openFilterActivity(Activity activity, TaskFilterParams filterParams) {
-
+        //do nothing
     }
 
     @Override
     public void openFamilyProfile(Activity activity, CommonPersonObjectClient family, BaseTaskDetails taskDetails) {
-
+        //do nothing
     }
 
     @Override
     public void setTaskDetails(Activity activity, TaskRegisterAdapter taskAdapter, List<TaskDetails> tasks) {
-
+        //do nothing
     }
 
     @Override
     public void showNotFoundPopup(Activity activity, String opensrpId) {
-
+        //do nothing
     }
 
     @Override
@@ -303,7 +303,7 @@ public class AppTaskingLibraryConfiguration extends TaskingLibraryConfiguration 
 
     @Override
     public void onTaskRegisterBindViewHolder(@NonNull Context context, @NonNull RecyclerView.ViewHolder viewHolder, @NonNull View.OnClickListener registerActionHandler, @NonNull TaskDetails taskDetails, int position) {
-
+        //do nothing
     }
 
     @NonNull
@@ -319,7 +319,7 @@ public class AppTaskingLibraryConfiguration extends TaskingLibraryConfiguration 
 
     @Override
     public void showTasksCompleteActionView(TextView actionView) {
-
+        //do nothing
     }
 
     @Override
@@ -349,12 +349,12 @@ public class AppTaskingLibraryConfiguration extends TaskingLibraryConfiguration 
 
     @Override
     public void setRefreshMapOnEventSaved(boolean isRefreshMapOnEventSaved) {
-
+        //do nothing
     }
 
     @Override
     public void setFeatureCollection(FeatureCollection featureCollection) {
-
+        //do nothing
     }
 
     @Override
@@ -379,7 +379,7 @@ public class AppTaskingLibraryConfiguration extends TaskingLibraryConfiguration 
 
     @Override
     public void registerFamily(Feature selectedFeature) {
-
+        //do nothing
     }
 
     @Override
@@ -430,12 +430,12 @@ public class AppTaskingLibraryConfiguration extends TaskingLibraryConfiguration 
 
     @Override
     public void onShowFilledForms() {
-
+        //do nothing
     }
 
     @Override
     public void onFeatureSelectedByLongClick(Feature feature, TaskingMapActivityContract.Presenter presenter) {
-        Timber.e("sd");
+        //do nothing
     }
 
     @Override
@@ -461,7 +461,6 @@ public class AppTaskingLibraryConfiguration extends TaskingLibraryConfiguration 
                 }
             }
         });
-        Timber.e("e");
     }
 
     @Override
@@ -480,22 +479,21 @@ public class AppTaskingLibraryConfiguration extends TaskingLibraryConfiguration 
                 presenter.onPlansFetched(planDefinitionSet);
             }
         });
-        // }
     }
 
     @Override
     public void validateCurrentPlan(String s, String s1, BaseDrawerContract.Presenter presenter) {
-
+        //do nothing
     }
 
     @Override
     public void setFacility(List<String> list, BaseDrawerContract.View view) {
-
+        //do nothing
     }
 
     @Override
     public void openFilterTaskActivity(TaskFilterParams taskFilterParams, TaskingMapActivity TaskingMapActivity) {
-
+        //do nothing
     }
 
     @Override

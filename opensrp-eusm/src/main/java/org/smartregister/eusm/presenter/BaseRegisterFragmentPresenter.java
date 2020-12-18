@@ -7,23 +7,21 @@ public class BaseRegisterFragmentPresenter implements BaseRegisterFragmentContra
 
     @Override
     public void processViewConfigurations() {
-
+        //do nothing
     }
 
     @Override
     public void initializeQueries(String s) {
-
+        //do nothing
     }
 
     @Override
     public void startSync() {
-
+        //do nothing
     }
 
     @Override
     public void searchGlobally(String s) {
-
+        //do nothing
     }
-
-
 }

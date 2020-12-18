@@ -93,7 +93,7 @@ public class EusmTaskRegisterActivity extends TaskRegisterActivity implements Ta
 
     @Override
     public void startFamilyRegistration(BaseTaskDetails taskDetails) {
-
+        //Do nothing
     }
 
     @Override
@@ -124,7 +124,7 @@ public class EusmTaskRegisterActivity extends TaskRegisterActivity implements Ta
 
     @Override
     public void startFormActivity(String s, String s1, Map<String, String> map) {
-
+        //Do nothing
     }
 
     protected void setServicePointIcon(ImageView imgServicePointType) {
@@ -148,16 +148,6 @@ public class EusmTaskRegisterActivity extends TaskRegisterActivity implements Ta
         }
     }
 
-    //    @Override
-//    public void onOffsetChanged(AppBarLayout appBarLayout, int verticalOffset) {
-//        super.onOffsetChanged(appBarLayout, verticalOffset);
-//        if (appBarTitleIsShown) {
-//            txtProfileBack.setVisibility(View.GONE);
-//        } else {
-//            txtProfileBack.setVisibility(View.VISIBLE);
-//        }
-//    }
-//
     public EusmTasksRegisterFragment getTasksRegisterFragment() {
         return EusmTasksRegisterFragment.newInstance(getIntent().getExtras());
     }
@@ -172,13 +162,12 @@ public class EusmTaskRegisterActivity extends TaskRegisterActivity implements Ta
 
     @Override
     public String getStructureIcon() {
-        // TODO: condition for image
         return structureDetail.getStructureType();
     }
 
     @Override
     public String getStructureName() {
-        return structureDetail.getStructureName();
+        return structureDetail.getEntityName();
     }
 
     @Override
@@ -226,15 +215,4 @@ public class EusmTaskRegisterActivity extends TaskRegisterActivity implements Ta
             }
         }
     }
-
-    //    @Override
-//    protected String getToolBarLayoutTitleAfterCollapse() {
-//        return getStructureName();
-//    }
-//
-//    @Override
-//    protected boolean shouldEnableDisplayHomeAsUpEnabled() {
-//        return false;
-//    }
-
 }

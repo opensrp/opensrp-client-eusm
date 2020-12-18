@@ -9,8 +9,11 @@ import org.smartregister.Context;
 import org.smartregister.CoreLibrary;
 import org.smartregister.configurableviews.ConfigurableViewsLibrary;
 import org.smartregister.eusm.application.EusmApplication;
+import org.smartregister.eusm.config.AppTaskingLibraryConfiguration;
 import org.smartregister.receiver.ValidateAssignmentReceiver;
 import org.smartregister.repository.Repository;
+import org.smartregister.tasking.TaskingLibrary;
+import org.smartregister.util.AppExecutors;
 
 import java.util.concurrent.Executors;
 
@@ -30,6 +33,8 @@ public class TestEusmApplication extends EusmApplication {
         context.updateApplicationContext(getApplicationContext());
         CoreLibrary.init(context);
         ConfigurableViewsLibrary.init(context);
+
+        TaskingLibrary.init(new AppTaskingLibraryConfiguration());
 
         setTheme(R.style.Theme_AppCompat); //or just R.style.Theme_AppCompat
 
@@ -56,5 +61,9 @@ public class TestEusmApplication extends EusmApplication {
     public RealmDatabase getRealmDatabase(android.content.Context context) {
 
         return mock(RealmDatabase.class);
+    }
+
+    @Override
+    public void onTerminate() {
     }
 }

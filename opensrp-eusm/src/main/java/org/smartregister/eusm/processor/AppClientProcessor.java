@@ -3,21 +3,16 @@ package org.smartregister.eusm.processor;
 import android.content.Context;
 import android.content.Intent;
 
-import androidx.annotation.NonNull;
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 
-import org.joda.time.DateTime;
 import org.smartregister.domain.Client;
 import org.smartregister.domain.Event;
 import org.smartregister.domain.Location;
-import org.smartregister.domain.Obs;
-import org.smartregister.domain.Task;
 import org.smartregister.domain.db.EventClient;
 import org.smartregister.domain.jsonmapping.ClientClassification;
 import org.smartregister.eusm.application.EusmApplication;
 import org.smartregister.eusm.util.AppConstants;
 import org.smartregister.eusm.util.AppUtils;
-import org.smartregister.repository.BaseRepository;
 import org.smartregister.repository.EventClientRepository;
 import org.smartregister.repository.StructureRepository;
 import org.smartregister.repository.TaskRepository;
@@ -100,117 +95,6 @@ public class AppClientProcessor extends ClientProcessorForJava {
             intent.putExtra(AppConstants.CONFIGURATION.LOCAL_SYNC_DONE, localSubmission);
             LocalBroadcastManager.getInstance(getContext()).sendBroadcast(intent);
         }
-    }
-
-    private String processRegisterStructureEvent(Event event, ClientClassification clientClassification) {
-        try {
-            processEvent(event, new Client(event.getBaseEntityId()), clientClassification);
-            if (event.getDetails() != null && event.getDetails().get(AppConstants.Properties.LOCATION_PARENT) != null) {
-                return event.getDetails().get(AppConstants.Properties.LOCATION_PARENT);
-            }
-        } catch (Exception e) {
-            Timber.e(e, "Error processing register structure event");
-        }
-        return null;
-    }
-
-    private String processEvent(Event event, ClientClassification clientClassification, boolean localEvents, @NonNull String formField) {
-        String operationalAreaId = null;
-        if (event.getDetails() != null && event.getDetails().get(AppConstants.Properties.TASK_IDENTIFIER) != null) {
-            operationalAreaId = updateTask(event, localEvents);
-
-            Location structure = structureRepository.getLocationById(event.getBaseEntityId());
-            if (structure != null) {
-                Obs eventObs = event.findObs(null, false, formField);
-//                if (eventObs != null && AppConstants.JsonForm.PAOT_STATUS.equals(formField)) {
-//                    structure.getProperties().setStatus(PropertyStatus.valueOf(eventObs.getValue().toString().toUpperCase()));
-//                    structureRepository.addOrUpdate(structure);
-//                } else if (eventObs != null && AppConstants.JsonForm.STRUCTURE_TYPE.equals(formField)) {
-//                    structure.getProperties().setType(eventObs.getValue().toString());
-//                    structureRepository.addOrUpdate(structure);
-//                }
-                if (operationalAreaId == null) {
-                    operationalAreaId = structure.getProperties().getParentId();
-                }
-            }
-
-            try {
-                Client client = new Client(event.getBaseEntityId());
-                processEvent(event, client, clientClassification);
-            } catch (Exception e) {
-                Timber.e(e, "Error processing %s event", event.getEventType());
-            }
-        } else {
-            Timber.w("%s Event %s does not have task details", event.getEventType(), event.getEventId());
-        }
-        return operationalAreaId;
-    }
-
-    private String processEvent(Event event, ClientClassification clientClassification, boolean localEvents) {
-        String operationalAreaId = null;
-        if (event.getDetails() != null && event.getDetails().get(AppConstants.Properties.TASK_IDENTIFIER) != null) {
-            operationalAreaId = updateTask(event, localEvents);
-            try {
-                Client client = new Client(event.getBaseEntityId());
-                processEvent(event, client, clientClassification);
-            } catch (Exception e) {
-                Timber.e(e, "Error processing spray event");
-            }
-        }
-        return operationalAreaId;
-    }
-
-    private void processSummaryFormEvent(Event event, ClientClassification clientClassification) {
-        try {
-            processEvent(event, new Client(event.getBaseEntityId()), clientClassification);
-        } catch (Exception e) {
-            Timber.e(e, "Error processing register structure event");
-        }
-    }
-
-    private String updateTask(Event event, boolean localEvents) {
-        String taskIdentifier = event.getDetails().get(AppConstants.Properties.TASK_IDENTIFIER);
-        Task task = taskRepository.getTaskByIdentifier(taskIdentifier);
-        String operationalAreaId = null;
-        if (task != null && task.getStatus() != Task.TaskStatus.CANCELLED && task.getStatus() != Task.TaskStatus.ARCHIVED) {
-            task.setBusinessStatus(calculateBusinessStatus(event));
-            task.setStatus(Task.TaskStatus.COMPLETED);
-            task.setLastModified(new DateTime());
-            // update task sync status to unsynced if it was already synced,
-            // ignore if task status is created so that it will be created on server
-            if (localEvents && BaseRepository.TYPE_Synced.equals(task.getSyncStatus())) {
-                task.setSyncStatus(BaseRepository.TYPE_Unsynced);
-                eusmApplication.setSynced(false);
-            } else if (!localEvents && event.getServerVersion() != 0) {
-                // for events synced from server and task exists mark events as being fully synced
-                eventClientRepository.markEventAsSynced(event.getFormSubmissionId());
-            }
-            taskRepository.addOrUpdate(task);
-            operationalAreaId = task.getGroupIdentifier();
-        } else if (!localEvents) {
-            eventClientRepository.markEventAsTaskUnprocessed(event.getFormSubmissionId());
-        }
-        return operationalAreaId;
-    }
-
-    public String calculateBusinessStatus(Event event) {
-//        if (FamilyConstants.EventType.FAMILY_REGISTRATION.equals(event.getEventType()) || FamilyConstants.EventType.FAMILY_MEMBER_REGISTRATION.equals(event.getEventType())) {
-//            return AppConstants.BusinessStatus.COMPLETE;
-//        }
-//        Obs businessStatusObs = event.findObs(null, false, AppConstants.JsonForm.BUSINESS_STATUS);
-//        if (businessStatusObs != null) {
-//            return businessStatusObs.getValue().toString();
-//        } else {
-//            //supported only for backward compatibility, business status now being calculated on form
-//            Obs structureType = event.findObs(null, false, AppConstants.JsonForm.STRUCTURE_TYPE);
-//            if (structureType != null && !AppConstants.StructureType.RESIDENTIAL.equals(structureType.getValue().toString())) {
-//                return AppConstants.BusinessStatus.NOT_SPRAYABLE;
-//            } else {
-//                Obs sprayStatus = event.findObs(null, false, AppConstants.JsonForm.SPRAY_STATUS);
-//                return sprayStatus == null ? null : sprayStatus.getValue().toString();
-//            }
-//        }
-        return "";
     }
 
     @Override

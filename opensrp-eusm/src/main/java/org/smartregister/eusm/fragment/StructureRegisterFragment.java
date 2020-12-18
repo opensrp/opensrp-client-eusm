@@ -91,7 +91,7 @@ public class StructureRegisterFragment extends BaseDrawerRegisterFragment implem
 
     @Override
     public void setTotalServicePoints(int structuresWithinBuffer) {
-
+        //do nothing
     }
 
     @UiThread
@@ -102,17 +102,17 @@ public class StructureRegisterFragment extends BaseDrawerRegisterFragment implem
 
     @Override
     public void displayNotification(int title, int message, Object... formatArgs) {
-
+        //do nothing
     }
 
     @Override
     public void showProgressDialog(int title, int message) {
-
+        //do nothing
     }
 
     @Override
     public void hideProgressDialog() {
-
+        //do nothing
     }
 
     @Override
@@ -122,17 +122,17 @@ public class StructureRegisterFragment extends BaseDrawerRegisterFragment implem
 
     @Override
     public void displayIndexCaseDetails(JSONObject indexCase) {
-
+        //do nothing
     }
 
     @Override
     public void setNumberOfFilters(int numberOfFilters) {
-
+        //do nothing
     }
 
     @Override
     public void clearFilter() {
-
+        //do nothing
     }
 
     @Override
@@ -143,7 +143,7 @@ public class StructureRegisterFragment extends BaseDrawerRegisterFragment implem
 
     @Override
     public void setSearchPhrase(String searchPhrase) {
-
+        //do nothing
     }
 
     @Override

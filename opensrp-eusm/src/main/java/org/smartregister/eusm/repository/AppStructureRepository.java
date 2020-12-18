@@ -190,7 +190,7 @@ public class AppStructureRepository extends StructureRepository {
 
         StructureDetail structureDetail = new StructureDetail();
         structureDetail.setStructureId(id);
-        structureDetail.setStructureName(name);
+        structureDetail.setEntityName(name);
         structureDetail.setStructureType(type);
         structureDetail.setTaskStatus(taskStatus);
         structureDetail.setNumOfTasks(cursor.getString(cursor.getColumnIndex("numOfTasks")));

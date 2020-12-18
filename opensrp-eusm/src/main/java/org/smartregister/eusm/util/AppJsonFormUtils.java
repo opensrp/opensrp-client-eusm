@@ -75,76 +75,6 @@ public class AppJsonFormUtils {
         return taskEvent;
     }
 
-//    public JSONObject getFormJSON(Context context, String formName, Feature feature, String sprayStatus, String familyHead) {
-//
-//        String taskBusinessStatus = getPropertyValue(feature, AppConstants.Properties.TASK_BUSINESS_STATUS);
-//        String taskIdentifier = getPropertyValue(feature, AppConstants.Properties.TASK_IDENTIFIER);
-//        String taskStatus = getPropertyValue(feature, AppConstants.Properties.TASK_STATUS);
-//
-//        String structureId = feature.id();
-//        String structureUUID = getPropertyValue(feature, AppConstants.Properties.LOCATION_UUID);
-//        String structureVersion = getPropertyValue(feature, AppConstants.Properties.LOCATION_VERSION);
-//        String structureType = getPropertyValue(feature, AppConstants.Properties.LOCATION_TYPE);
-//
-//        String formString = getFormObject(context, formName, structureType);
-//        try {
-//            JSONObject formJson = populateFormDetails(formString, structureId, structureId, taskIdentifier,
-//                    taskBusinessStatus, taskStatus, structureUUID,
-//                    structureVersion == null ? null : Integer.valueOf(structureVersion));
-//
-//            populateFormFields(formJson, structureType, sprayStatus, familyHead);
-//            return formJson;
-//        } catch (Exception e) {
-//            Timber.e(e, "error launching form%s", formName);
-//        }
-//        return null;
-//    }
-
-//    public JSONObject getFormJSON(Context context, String formName, BaseTaskDetails task, Location structure) {
-//
-//        String taskBusinessStatus = "";
-//        String taskIdentifier = "";
-//        String taskStatus = "";
-//        String entityId = "";
-//        if (task != null) {
-//            taskBusinessStatus = task.getBusinessStatus();
-//            taskIdentifier = task.getTaskId();
-//            taskStatus = task.getTaskStatus();
-//
-//            entityId = task.getTaskEntity();
-//        }
-//
-//        String structureId = "";
-//        String structureUUID = "";
-//        int structureVersion = 0;
-//        String structureType = "";
-//        if (structure != null) {
-//            structureId = structure.getId();
-//            structureUUID = structure.getProperties().getUid();
-//            structureVersion = structure.getProperties().getVersion();
-//            structureType = structure.getProperties().getType();
-//        }
-//
-//        String sprayStatus = null;
-//        String familyHead = null;
-//
-//        if (task instanceof TaskDetails) {
-//            sprayStatus = ((TaskDetails) task).getSprayStatus();
-//            familyHead = ((TaskDetails) task).getFamilyName();
-//        }
-//
-//        String formString = getFormObject(context, formName, structureType);
-//        try {
-//            JSONObject formJson = populateFormDetails(formString, entityId, structureId, taskIdentifier,
-//                    taskBusinessStatus, taskStatus, structureUUID, structureVersion);
-//            populateFormFields(formJson, structureType, sprayStatus, familyHead);
-//            return formJson;
-//        } catch (JSONException e) {
-//            Timber.e(e, "error launching form%s", formName);
-//        }
-//        return null;
-//    }
-
     public JSONObject getFormObject(Context context, String formName) {
         try {
             FormUtils formUtils = new FormUtils();
@@ -162,7 +92,7 @@ public class AppJsonFormUtils {
             updateFormEncounterLocation(jsonObject, structureDetail.getStructureId());
 
             Map<String, String> map = new HashMap<>();
-            map.put(AppConstants.EventDetailKey.LOCATION_NAME, structureDetail.getStructureName());
+            map.put(AppConstants.EventDetailKey.LOCATION_NAME, structureDetail.getEntityName());
             map.put(AppConstants.EventDetailKey.LOCATION_ID, structureDetail.getStructureId());
             map.put(AppConstants.Properties.TASK_IDENTIFIER, taskDetail.getTaskId());
             map.put(AppConstants.EventDetailKey.PLAN_IDENTIFIER, AppConstants.PLAN_IDENTIFIER);

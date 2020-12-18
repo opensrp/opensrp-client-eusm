@@ -76,6 +76,6 @@ public class ProductInfoActivityPresenter implements ProductInfoActivityContract
 
     @Override
     public void onFlagProblemFormFetched(JSONObject jsonForm) {
-        getView().startFlagProblemForm(jsonForm);
+        getView().startForm(jsonForm);
     }
 }

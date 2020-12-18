@@ -16,18 +16,7 @@ import java.util.List;
 
 public class ProductInfoQuestionsAdapter extends RecyclerView.Adapter<ProductInfoQuestionViewHolder> {
 
-    private final View.OnClickListener onClickListener;
-
     private List<ProductInfoQuestion> productInfoQuestions = new ArrayList<>();
-
-    public ProductInfoQuestionsAdapter(View.OnClickListener onClickListener) {
-        this.onClickListener = onClickListener;
-    }
-
-    public ProductInfoQuestionsAdapter() {
-        onClickListener = null;
-    }
-
 
     @NonNull
     @Override

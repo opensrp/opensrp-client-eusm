@@ -90,12 +90,12 @@ public class EusmTasksRegisterFragment extends BaseRegisterFragment implements T
 
     @Override
     public void setUniqueID(String s) {
-
+        //do nothing
     }
 
     @Override
     public void setAdvancedSearchFormData(HashMap<String, String> hashMap) {
-
+        //do nothing
     }
 
     @Override
@@ -106,6 +106,7 @@ public class EusmTasksRegisterFragment extends BaseRegisterFragment implements T
 
     @Override
     protected void renderView() {
+        //do nothing
     }
 
     @Override
@@ -227,6 +228,6 @@ public class EusmTasksRegisterFragment extends BaseRegisterFragment implements T
 
     @Override
     public void showNotFoundPopup(String s) {
-
+        //do nothing
     }
 }

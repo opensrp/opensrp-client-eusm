@@ -30,7 +30,7 @@ public class StructureRegisterActivity extends BaseAppRegisterActivity {
 
     @Override
     protected void onActivityResultExtended(int i, int i1, Intent intent) {
-
+        //do nothing
     }
 
     @Override

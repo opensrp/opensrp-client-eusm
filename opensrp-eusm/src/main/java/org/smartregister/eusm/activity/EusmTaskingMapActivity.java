@@ -8,11 +8,11 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.FrameLayout;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.widget.AppCompatImageButton;
 import androidx.cardview.widget.CardView;
 import androidx.core.content.ContextCompat;
 import androidx.core.content.res.ResourcesCompat;
@@ -35,18 +35,28 @@ import org.smartregister.tasking.model.CardDetails;
 
 public class EusmTaskingMapActivity extends TaskingMapActivity {
 
+    private CardView eusmCardView;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setUpViews();
+    }
+
+    public void setUpViews() {
+        eusmCardView = findViewById(R.id.card_view);
         findViewById(R.id.filter_tasks_fab).setVisibility(View.GONE);
-        AppCompatImageButton buttonSearchCancel = findViewById(R.id.btn_search_cancel);
+        ImageButton buttonSearchCancel = findViewById(R.id.btn_search_cancel);
         buttonSearchCancel.setVisibility(View.VISIBLE);
         buttonSearchCancel.setOnClickListener(this);
     }
 
     @Override
     public TaskingMapActivityContract.Presenter getPresenter() {
-        return new EusmTaskingMapPresenter(this, drawerView.getPresenter());
+        if (taskingMapPresenter == null) {
+            taskingMapPresenter = new EusmTaskingMapPresenter(this, drawerView.getPresenter());
+        }
+        return taskingMapPresenter;
     }
 
     @Override
@@ -59,40 +69,41 @@ public class EusmTaskingMapActivity extends TaskingMapActivity {
     public void openCardView(CardDetails cardDetails) {
         if (cardDetails != null) {
             EusmCardDetail eusmCardDetail = (EusmCardDetail) cardDetails;
-            CardView cardView = findViewById(R.id.card_view);
-            TextView structureNameView = cardView.findViewById(R.id.txt_structure_name);
-            TextView structureDistanceView = cardView.findViewById(R.id.txt_distance);
-            TextView structureCommuneView = cardView.findViewById(R.id.txt_commune);
-            TextView structureTaskStatusView = cardView.findViewById(R.id.txt_task_status);
-            ImageView imgServicePointType = cardView.findViewById(R.id.img_service_point_type);
-            int taskStatusColor = AppUtils.getColorByTaskStatus(eusmCardDetail.getTaskStatus());
+            if (eusmCardView != null) {
+                TextView structureNameView = eusmCardView.findViewById(R.id.txt_structure_name);
+                TextView structureDistanceView = eusmCardView.findViewById(R.id.txt_distance);
+                TextView structureCommuneView = eusmCardView.findViewById(R.id.txt_commune);
+                TextView structureTaskStatusView = eusmCardView.findViewById(R.id.txt_task_status);
+                ImageView imgServicePointType = eusmCardView.findViewById(R.id.img_service_point_type);
+                int taskStatusColor = AppUtils.getColorByTaskStatus(eusmCardDetail.getTaskStatus());
 
-            ServicePointType servicePointType = EusmApplication.getInstance()
-                    .getServicePointKeyToType().get(eusmCardDetail.getStructureType().toLowerCase().replaceAll(" ", ""));
-            if (servicePointType != null) {
-                imgServicePointType.setImageDrawable(ResourcesCompat.getDrawable(getResources(), servicePointType.drawableId, getBaseContext().getTheme()));
-                imgServicePointType.setColorFilter(ContextCompat.getColor(getApplicationContext(), taskStatusColor));
-            }
+                ServicePointType servicePointType = EusmApplication.getInstance()
+                        .getServicePointKeyToType().get(eusmCardDetail.getStructureType().toLowerCase().replaceAll(" ", ""));
+                if (servicePointType != null) {
+                    imgServicePointType.setImageDrawable(ResourcesCompat.getDrawable(getResources(), servicePointType.drawableId, getBaseContext().getTheme()));
+                    imgServicePointType.setColorFilter(ContextCompat.getColor(getApplicationContext(), taskStatusColor));
+                }
 
 //            imgServicePointType.setAlpha(0.9F);
 
-            Button viewInventoryView = cardView.findViewById(R.id.btn_view_inventory);
-            viewInventoryView.setTag(R.id.card_detail, eusmCardDetail);
-            viewInventoryView.setOnClickListener(this);
-            structureNameView.setText(eusmCardDetail.getStructureName());
-            structureDistanceView.setText(String.format(getString(R.string.distance_from_structure), eusmCardDetail.getStructureType(), eusmCardDetail.getDistanceMeta()));
-            structureCommuneView.setText(eusmCardDetail.getCommune());
-            structureTaskStatusView.setText(AppUtils.formatTaskStatus(eusmCardDetail.getTaskStatus(), getApplicationContext()));
-            structureTaskStatusView.setTextColor(ContextCompat.getColor(getApplicationContext(), taskStatusColor));
+                Button viewInventoryView = eusmCardView.findViewById(R.id.btn_view_inventory);
+                viewInventoryView.setTag(R.id.card_detail, eusmCardDetail);
+                viewInventoryView.setOnClickListener(this);
+                structureNameView.setText(eusmCardDetail.getStructureName());
+                structureDistanceView.setText(String.format(getString(R.string.distance_from_structure), eusmCardDetail.getStructureType(), eusmCardDetail.getDistanceMeta()));
+                structureCommuneView.setText(eusmCardDetail.getCommune());
+                structureTaskStatusView.setText(AppUtils.formatTaskStatus(eusmCardDetail.getTaskStatus(), getApplicationContext()));
+                structureTaskStatusView.setTextColor(ContextCompat.getColor(getApplicationContext(), taskStatusColor));
 
-            View view = (View) cardView.getParent();
-            FrameLayout.LayoutParams layoutParams = new FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-            layoutParams.leftMargin = 25;
-            layoutParams.rightMargin = 25;
-            layoutParams.bottomMargin = 20;
-            layoutParams.gravity = Gravity.BOTTOM;
-            view.setLayoutParams(layoutParams);
-            cardView.setVisibility(View.VISIBLE);
+                View view = (View) eusmCardView.getParent();
+                FrameLayout.LayoutParams layoutParams = new FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+                layoutParams.leftMargin = 25;
+                layoutParams.rightMargin = 25;
+                layoutParams.bottomMargin = 20;
+                layoutParams.gravity = Gravity.BOTTOM;
+                view.setLayoutParams(layoutParams);
+                eusmCardView.setVisibility(View.VISIBLE);
+            }
         }
     }
 
@@ -109,11 +120,11 @@ public class EusmTaskingMapActivity extends TaskingMapActivity {
                 structureDetail.setStructureId(eusmCardDetail.getStructureId());
                 structureDetail.setStructureType(eusmCardDetail.getStructureType());
                 structureDetail.setTaskStatus(eusmCardDetail.getTaskStatus());
-                structureDetail.setStructureName(eusmCardDetail.getStructureName());
+                structureDetail.setEntityName(eusmCardDetail.getStructureName());
 
                 Intent intent = new Intent(getActivity(), EusmTaskRegisterActivity.class);
                 intent.putExtra(AppConstants.IntentData.STRUCTURE_DETAIL, structureDetail);
-                getActivity().startActivity(intent);
+                startActivity(intent);
             }
         } else if (viewId == R.id.btn_search_cancel) {
             EditText searchView = findViewById(org.smartregister.tasking.R.id.edt_search);
@@ -126,7 +137,8 @@ public class EusmTaskingMapActivity extends TaskingMapActivity {
     @Override
     public void clearSelectedFeature() {
         super.clearSelectedFeature();
-        findViewById(R.id.card_view).setVisibility(View.GONE);
+        if (eusmCardView != null)
+            eusmCardView.setVisibility(View.GONE);
     }
 
     @Override

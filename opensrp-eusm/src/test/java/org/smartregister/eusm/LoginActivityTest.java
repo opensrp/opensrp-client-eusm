@@ -254,7 +254,7 @@ public class LoginActivityTest extends BaseActivityUnitTest {
 
         Mockito.verify(spyActivity).startActivity(intentArgumentCaptor.capture());
         assertNotNull(intentArgumentCaptor.getValue());
-        assertEquals(".activity.HomeActivity", intentArgumentCaptor.getValue().getComponent().getShortClassName());
+        assertEquals(".activity.EusmTaskingMapActivity", intentArgumentCaptor.getValue().getComponent().getShortClassName());
         Mockito.verify(spyActivity).finish();
     }
 

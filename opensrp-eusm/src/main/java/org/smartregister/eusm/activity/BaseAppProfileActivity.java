@@ -79,7 +79,7 @@ public abstract class BaseAppProfileActivity extends BaseProfileActivity {
 
     @Override
     protected void initializePresenter() {
-
+        //Do nothing
     }
 
     @Override
@@ -89,6 +89,7 @@ public abstract class BaseAppProfileActivity extends BaseProfileActivity {
 
     @Override
     protected void fetchProfileData() {
+        //Do nothing
     }
 
     protected int getLayoutId() {

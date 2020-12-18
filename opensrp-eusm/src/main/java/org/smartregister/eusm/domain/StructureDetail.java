@@ -11,7 +11,7 @@ public class StructureDetail implements Serializable {
     private String distanceMeta;
     private boolean isHeader;
     private String taskStatus;
-    private String structureName;
+    private String entityName;
     private String structureType;
     private String commune;
     private String numOfTasks;
@@ -57,12 +57,12 @@ public class StructureDetail implements Serializable {
         this.taskStatus = taskStatus;
     }
 
-    public String getStructureName() {
-        return structureName;
+    public String getEntityName() {
+        return entityName;
     }
 
-    public void setStructureName(String structureName) {
-        this.structureName = structureName;
+    public void setEntityName(String entityName) {
+        this.entityName = entityName;
     }
 
     public String getStructureType() {
@@ -113,7 +113,7 @@ public class StructureDetail implements Serializable {
                 ", distanceMeta='" + distanceMeta + '\'' +
                 ", isHeader=" + isHeader +
                 ", taskStatus='" + taskStatus + '\'' +
-                ", structureName='" + structureName + '\'' +
+                ", structureName='" + entityName + '\'' +
                 ", structureType='" + structureType + '\'' +
                 ", commune='" + commune + '\'' +
                 '}';

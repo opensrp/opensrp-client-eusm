@@ -63,12 +63,12 @@ public class StructureRegisterFragmentPresenter extends BaseRegisterFragmentPres
 
     @Override
     public void onDestroy() {
-
+        //do nothing
     }
 
     @Override
     public void onDrawerClosed() {
-
+        //do nothing
     }
 
     public void filterByName(String nameFilter) {

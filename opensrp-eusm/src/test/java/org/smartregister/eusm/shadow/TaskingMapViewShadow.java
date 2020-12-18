@@ -8,12 +8,13 @@ import androidx.annotation.Nullable;
 
 import org.robolectric.annotation.Implementation;
 import org.robolectric.annotation.Implements;
+import org.smartregister.tasking.view.TaskingMapView;
 
 /**
  * Created by samuelgithengi on 1/23/20.
  */
-@Implements(AppMapView.class)
-public class RevealMapViewShadow extends KujakuMapViewShadow {
+@Implements(TaskingMapView.class)
+public class TaskingMapViewShadow extends KujakuMapViewShadow {
 
     @Implementation
     public void __constructor__(@NonNull Context context, @Nullable AttributeSet attrs) {

@@ -103,7 +103,6 @@ public class ProductInfoActivity extends MultiLanguageActivity implements Produc
             imgProductImage.setScaleType(ImageView.ScaleType.FIT_XY);
         }
 
-
         ImageView imgBackButton = findViewById(R.id.img_profile_back);
         imgBackButton.setColorFilter(ContextCompat.getColor(getApplicationContext(), R.color.customAppThemeBlue));
 
@@ -254,7 +253,7 @@ public class ProductInfoActivity extends MultiLanguageActivity implements Produc
     }
 
     @Override
-    public void startFlagProblemForm(JSONObject jsonForm) {
+    public void startForm(JSONObject jsonForm) {
         Form form = new Form();
         form.setWizard(true);
         form.setName("Flag Problem");

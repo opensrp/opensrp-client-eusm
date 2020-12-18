@@ -50,14 +50,14 @@ public class StructureRegisterAdapter extends RecyclerView.Adapter<RecyclerView.
             holder.itemView.setTag(R.id.structure_detail, structureDetail);
 
             StructureRegisterViewHolder viewHolder = (StructureRegisterViewHolder) holder;
-            viewHolder.setServicePointName(structureDetail.getStructureName());
+            viewHolder.setServicePointName(structureDetail.getEntityName());
             viewHolder.setServicePointIcon(structureDetail.getTaskStatus(), structureDetail.getStructureType());
             viewHolder.setServicePointType(structureDetail);
             viewHolder.setCommune(structureDetail.getCommune());
             viewHolder.setTaskStatus(structureDetail);
         } else {
             GenericTitleViewHolder viewHolder = (GenericTitleViewHolder) holder;
-            viewHolder.setTitle(structureDetail.getStructureName());
+            viewHolder.setTitle(structureDetail.getEntityName());
         }
     }
 
