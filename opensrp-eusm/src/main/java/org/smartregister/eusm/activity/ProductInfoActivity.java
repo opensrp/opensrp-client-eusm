@@ -20,6 +20,7 @@ import androidx.fragment.app.FragmentTransaction;
 
 import com.google.android.material.appbar.AppBarLayout;
 import com.google.android.material.appbar.CollapsingToolbarLayout;
+import com.vijay.jsonwizard.activities.JsonWizardFormActivity;
 import com.vijay.jsonwizard.constants.JsonFormConstants;
 import com.vijay.jsonwizard.domain.Form;
 
@@ -263,7 +264,7 @@ public class ProductInfoActivity extends MultiLanguageActivity implements Produc
         form.setNavigationBackground(R.color.primaryDark);
         form.setHideSaveLabel(true);
 
-        Intent intent = new Intent(getActivity(), AppJsonWizardFormActivity.class);
+        Intent intent = new Intent(getActivity(), JsonWizardFormActivity.class);
         intent.putExtra(JsonFormConstants.JSON_FORM_KEY.JSON, jsonForm.toString());
         intent.putExtra(JsonFormConstants.JSON_FORM_KEY.FORM, form);
         startActivityForResult(intent, AppConstants.RequestCode.REQUEST_CODE_GET_JSON);

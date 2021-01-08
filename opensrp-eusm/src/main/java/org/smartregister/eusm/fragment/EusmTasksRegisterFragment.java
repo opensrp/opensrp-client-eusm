@@ -9,15 +9,16 @@ import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.annotation.VisibleForTesting;
 import androidx.appcompat.app.AlertDialog;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
+import com.vijay.jsonwizard.activities.JsonWizardFormActivity;
 import com.vijay.jsonwizard.constants.JsonFormConstants;
 import com.vijay.jsonwizard.domain.Form;
 
 import org.json.JSONObject;
 import org.smartregister.eusm.R;
-import org.smartregister.eusm.activity.AppJsonWizardFormActivity;
 import org.smartregister.eusm.activity.ProductInfoActivity;
 import org.smartregister.eusm.adapter.EusmTaskRegisterAdapter;
 import org.smartregister.eusm.contract.TaskRegisterFragmentContract;
@@ -149,7 +150,8 @@ public class EusmTasksRegisterFragment extends BaseRegisterFragment implements T
         return AppConstants.JsonForm.RECORD_GPS_FORM;
     }
 
-    private void openUndoDialog(TaskDetail taskDetail) {
+    @VisibleForTesting
+    protected void openUndoDialog(TaskDetail taskDetail) {
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
         String alertMessage;
         alertMessage = taskDetail.isNonProductTask() ? String.format(getString(R.string.undo_task_title), taskDetail.getEntityName())
@@ -210,7 +212,7 @@ public class EusmTasksRegisterFragment extends BaseRegisterFragment implements T
         form.setActionBarBackground(R.color.primaryDark);
         form.setNavigationBackground(R.color.primaryDark);
 
-        Intent intent = new Intent(getActivity(), AppJsonWizardFormActivity.class);
+        Intent intent = new Intent(getActivity(), JsonWizardFormActivity.class);
         intent.putExtra(JsonFormConstants.JSON_FORM_KEY.JSON, jsonForm.toString());
         intent.putExtra(JsonFormConstants.JSON_FORM_KEY.FORM, form);
         getActivity().startActivityForResult(intent, AppConstants.RequestCode.REQUEST_CODE_GET_JSON);

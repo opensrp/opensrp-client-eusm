@@ -14,7 +14,6 @@ import java.util.List;
 
 public class StructureRegisterActivity extends BaseAppRegisterActivity {
 
-
     @Override
     protected void initializePresenter() {
         presenter = new StructureRegisterActivityPresenter(this);

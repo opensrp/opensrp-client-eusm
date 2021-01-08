@@ -105,12 +105,16 @@ public class NavigationDrawerView extends DrawerMenuView {
             showLanguageChooser();
         else if (v.getId() == R.id.sync_button) {
             toggleProgressBarView(true);
-            AppUtils.startImmediateSync();
+            startImmediateSync();
             closeDrawerLayout();
         }
     }
 
-    private void showLanguageChooser() {
+    protected void startImmediateSync() {
+        AppUtils.startImmediateSync();
+    }
+
+    protected void showLanguageChooser() {
         PopupMenu popupMenu = new PopupMenu(getContext(), languageChooserTextView, Gravity.TOP);
         popupMenu.inflate(R.menu.menu_language_chooser);
         popupMenu.show();

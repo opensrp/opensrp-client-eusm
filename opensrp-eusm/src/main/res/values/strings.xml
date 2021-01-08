@@ -130,5 +130,6 @@
     <string name="tasks_completed">Completed</string>
     <string name="flag_problem_button_text">Flag problem</string>
     <string name="looks_good_button_text">Looks good!</string>
+    <string name="download_starting">Download starting</string>
 
 </resources>

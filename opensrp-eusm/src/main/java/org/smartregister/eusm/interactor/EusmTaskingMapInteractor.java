@@ -11,8 +11,6 @@ import org.smartregister.eusm.repository.AppStructureRepository;
 import org.smartregister.eusm.util.GeoJsonUtils;
 import org.smartregister.tasking.contract.TaskingMapActivityContract;
 import org.smartregister.tasking.interactor.TaskingMapInteractor;
-import org.smartregister.tasking.model.TaskDetails;
-import org.smartregister.tasking.util.PreferencesUtil;
 import org.smartregister.tasking.util.TaskingConstants;
 import org.smartregister.tasking.util.Utils;
 
@@ -22,24 +20,21 @@ import timber.log.Timber;
 
 public class EusmTaskingMapInteractor extends TaskingMapInteractor {
 
-    private final PreferencesUtil preferencesUtil;
-    private final AppStructureRepository appStructureRepository;
-    private final GeoJsonUtils geoJsonUtils;
+    private AppStructureRepository appStructureRepository;
+    private GeoJsonUtils geoJsonUtils;
 
     public EusmTaskingMapInteractor(TaskingMapActivityContract.Presenter presenter) {
         super(presenter);
         geoJsonUtils = new GeoJsonUtils();
         appStructureRepository = EusmApplication.getInstance().getStructureRepository();
-        preferencesUtil = PreferencesUtil.getInstance();
     }
-
 
     @Override
     public void fetchLocations(String plan, String operationalArea, String point, Boolean locationComponentActive) {
         appExecutors.diskIO().execute(new Runnable() {
             @Override
             public void run() {
-                Location operationalAreaLocation = Utils.getOperationalAreaLocation(operationalArea);
+                Location operationalAreaLocation = getOperationalAreaLocation(operationalArea);
                 JSONObject featureCollection = null;
                 try {
                     featureCollection = createFeatureCollection();
@@ -56,7 +51,6 @@ public class EusmTaskingMapInteractor extends TaskingMapInteractor {
                     Timber.e(e);
                 }
                 JSONObject finalFeatureCollection = featureCollection;
-                List<TaskDetails> finalTaskDetailsList = null;
                 appExecutors.mainThread().execute(new Runnable() {
                     @Override
                     public void run() {
@@ -64,9 +58,9 @@ public class EusmTaskingMapInteractor extends TaskingMapInteractor {
                             operationalAreaId = operationalAreaLocation.getId();
                             Feature operationalAreaFeature = Feature.fromJson(gson.toJson(operationalAreaLocation));
                             if (locationComponentActive != null) {
-                                getPresenter().onStructuresFetched(finalFeatureCollection, operationalAreaFeature, finalTaskDetailsList, point, locationComponentActive);
+                                getPresenter().onStructuresFetched(finalFeatureCollection, operationalAreaFeature, null, point, locationComponentActive);
                             } else {
-                                getPresenter().onStructuresFetched(finalFeatureCollection, operationalAreaFeature, finalTaskDetailsList);
+                                getPresenter().onStructuresFetched(finalFeatureCollection, operationalAreaFeature, null);
                             }
                         } else {
                             getPresenter().onStructuresFetched(finalFeatureCollection, null, null);
@@ -75,5 +69,9 @@ public class EusmTaskingMapInteractor extends TaskingMapInteractor {
                 });
             }
         });
+    }
+
+    protected Location getOperationalAreaLocation(String operationalArea) {
+        return Utils.getOperationalAreaLocation(operationalArea);
     }
 }

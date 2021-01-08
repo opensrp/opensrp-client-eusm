@@ -470,7 +470,6 @@ public class AppTaskingLibraryConfiguration extends TaskingLibraryConfiguration 
 
     @Override
     public void fetchPlans(String jurisdictionName, BaseDrawerContract.Presenter presenter) {
-        //if(StringUtils.isBlank(jurisdictionName)){
         PlanDefinitionRepository planDefinitionRepository = EusmApplication.getInstance().getPlanDefinitionRepository();
         Set<PlanDefinition> planDefinitionSet = planDefinitionRepository.findAllPlanDefinitions();
         getAppExecutors().mainThread().execute(new Runnable() {

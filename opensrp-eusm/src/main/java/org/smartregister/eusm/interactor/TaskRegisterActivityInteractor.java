@@ -93,7 +93,9 @@ public class TaskRegisterActivityInteractor implements TaskRegisterActivityContr
             if (StringUtils.isNotBlank(taskId)) {
                 //TODO to be replaced by event submission
                 AppTaskRepository taskRepository = EusmApplication.getInstance().getAppTaskRepository();
-                taskRepository.updateTaskStatus(taskId, Task.TaskStatus.COMPLETED, "VISITED");
+                if (taskRepository != null) {
+                    taskRepository.updateTaskStatus(taskId, Task.TaskStatus.COMPLETED, "VISITED");
+                }
             }
         }
         appExecutors.mainThread().execute(new Runnable() {

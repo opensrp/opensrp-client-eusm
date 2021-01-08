@@ -93,18 +93,15 @@ public class TaskRegisterFragmentInteractor implements TaskRegisterFragmentContr
         appExecutors.diskIO().execute(new Runnable() {
             @Override
             public void run() {
-                if (taskDetail != null) {
+                if (taskDetail != null && StringUtils.isNotBlank(taskDetail.getTaskId())) {
 
                     String taskId = taskDetail.getTaskId();
-                    if (StringUtils.isNotBlank(taskId)) {
-                        //TODO to be replaced by event submission
 
-                        AppRepository appRepository = EusmApplication.getInstance().getAppRepository();
-                        appRepository.archiveEventsForTask(taskDetail);
+                    AppRepository appRepository = EusmApplication.getInstance().getAppRepository();
+                    appRepository.archiveEventsForTask(taskDetail);
 
-                        AppTaskRepository taskRepository = EusmApplication.getInstance().getAppTaskRepository();
-                        taskRepository.updateTaskStatus(taskId, Task.TaskStatus.READY, "NOT VISITED");
-                    }
+                    AppTaskRepository taskRepository = EusmApplication.getInstance().getAppTaskRepository();
+                    taskRepository.updateTaskStatus(taskId, Task.TaskStatus.READY, "NOT VISITED");
                     returnResponse(callBack, taskDetail, true);
                 } else {
                     returnResponse(callBack, taskDetail, false);

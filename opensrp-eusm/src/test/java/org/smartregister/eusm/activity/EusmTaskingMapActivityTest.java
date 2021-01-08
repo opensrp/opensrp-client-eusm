@@ -6,20 +6,26 @@ import android.view.View;
 
 import androidx.cardview.widget.CardView;
 
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
+import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.robolectric.Robolectric;
 import org.robolectric.RuntimeEnvironment;
 import org.robolectric.android.controller.ActivityController;
 import org.robolectric.util.ReflectionHelpers;
+import org.smartregister.Context;
+import org.smartregister.CoreLibrary;
 import org.smartregister.eusm.BaseActivityUnitTest;
 import org.smartregister.eusm.R;
 import org.smartregister.eusm.domain.EusmCardDetail;
+import org.smartregister.repository.AllSharedPreferences;
 
 import static org.junit.Assert.assertNotNull;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.spy;
 import static org.mockito.Mockito.verify;
 
@@ -29,9 +35,23 @@ public class EusmTaskingMapActivityTest extends BaseActivityUnitTest {
 
     private ActivityController<EusmTaskingMapActivity> controller;
 
+    @Mock
+    private CoreLibrary coreLibrary;
+
+    @Mock
+    private Context opensrpContext;
+
+    @Mock
+    private AllSharedPreferences allSharedPreferences;
+
     @Before
     public void setUp() {
         MockitoAnnotations.initMocks(this);
+        ReflectionHelpers.setStaticField(CoreLibrary.class, "instance", coreLibrary);
+        doReturn(opensrpContext).when(coreLibrary).context();
+        doReturn(allSharedPreferences).when(opensrpContext).allSharedPreferences();
+        doReturn("23.2").when(allSharedPreferences).fetchManifestVersion();
+
         controller = Robolectric.buildActivity(EusmTaskingMapActivity.class).create().start();
         eusmTaskingMapActivity = spy(controller.get());
     }
@@ -69,5 +89,10 @@ public class EusmTaskingMapActivityTest extends BaseActivityUnitTest {
     @Override
     protected ActivityController getActivityController() {
         return controller;
+    }
+
+    @After
+    public void tearDown() {
+        destroyController();
     }
 }

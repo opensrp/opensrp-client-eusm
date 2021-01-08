@@ -16,7 +16,6 @@ import org.smartregister.eusm.domain.StructureDetail;
 import org.smartregister.eusm.util.AppConstants;
 import org.smartregister.eusm.util.AppUtils;
 import org.smartregister.repository.BaseRepository;
-import org.smartregister.repository.LocationRepository;
 import org.smartregister.repository.StructureRepository;
 import org.smartregister.repository.helper.MappingHelper;
 import org.smartregister.util.P2PUtil;
@@ -32,7 +31,7 @@ import static org.smartregister.AllConstants.TYPE;
 
 public class AppStructureRepository extends StructureRepository {
 
-    private static final String CREATE_STRUCTURE_TABLE =
+    protected static final String CREATE_STRUCTURE_TABLE =
             "CREATE TABLE " + STRUCTURE_TABLE + " (" +
                     ID + " VARCHAR NOT NULL PRIMARY KEY," +
                     UUID + " VARCHAR , " +
@@ -44,7 +43,7 @@ public class AppStructureRepository extends StructureRepository {
                     LONGITUDE + " FLOAT , " +
                     GEOJSON + " VARCHAR ) ";
 
-    private static final String CREATE_STRUCTURE_PARENT_INDEX = "CREATE INDEX "
+    protected static final String CREATE_STRUCTURE_PARENT_INDEX = "CREATE INDEX "
             + STRUCTURE_TABLE + "_" + PARENT_ID + "_ind ON " + STRUCTURE_TABLE + "(" + PARENT_ID + ")";
     private final int CURRENT_LIMIT = AppConstants.STRUCTURE_REGISTER_PAGE_SIZE;
     private MappingHelper helper;
@@ -228,24 +227,6 @@ public class AppStructureRepository extends StructureRepository {
         return result;
     }
 
-    public List<org.smartregister.domain.Location> getLocationByDistrictIds(List<String> districtIds) {
-        List<org.smartregister.domain.Location> locations = new ArrayList<>();
-        String[] columns = new String[]{
-                LOCATION_TABLE + "." + "parent_id as locationParentId",
-                LOCATION_TABLE + "." + "geojson as structureGeoJson"
-        };
-
-        String query = String.format("SELECT %s from %s join %s on location._id = %s.parent_id ",
-                StringUtils.join(columns, ","), LocationRepository.LOCATION_TABLE, StructureRepository.STRUCTURE_TABLE, StructureRepository.STRUCTURE_TABLE);
-
-
-        query += String.format(" where locationParentId IN (%s) and latitude is not null group by location._id", StringUtils.repeat("?", ", ", districtIds.size()));
-
-        extractLocationFromCursor(locations, query, districtIds.toArray(new String[0]));
-
-        return locations;
-    }
-
     public List<org.smartregister.domain.Location> getStructuresByDistrictId(String districtId) {
         List<org.smartregister.domain.Location> locations = new ArrayList<>();
         String[] columns = new String[]{
@@ -261,24 +242,6 @@ public class AppStructureRepository extends StructureRepository {
 
         String[] args = new String[]{districtId};
         query += " where locationParentId = ? ";
-
-        extractLocationFromCursor(locations, query, args);
-
-        return locations;
-    }
-
-
-    public List<org.smartregister.domain.Location> getStructuresByCommuneId(String communeId) {
-        List<org.smartregister.domain.Location> locations = new ArrayList<>();
-        String[] columns = new String[]{
-                STRUCTURE_TABLE + "." + "geojson as structureGeoJson",
-                STRUCTURE_TABLE + "." + "parent_id",
-        };
-
-        String query = String.format("SELECT %s from %s", StringUtils.join(columns, ","), StructureRepository.STRUCTURE_TABLE);
-
-        String[] args = new String[]{communeId};
-        query += " where parent_id = ? and latitude is not null";
 
         extractLocationFromCursor(locations, query, args);
 

@@ -98,6 +98,13 @@ public class EusmBaseDrawerPresenter extends BaseDrawerPresenter {
                 }.getType());
     }
 
+    /**
+     * Filter out district not in the plan
+     *
+     * @param filteredIn
+     * @param entireTree
+     * @return
+     */
     private List<FormLocation> filterLocations(List<String> filteredIn, List<FormLocation> entireTree) {
         if (entireTree != null && !entireTree.isEmpty()) {
             List<FormLocation> formLocations;

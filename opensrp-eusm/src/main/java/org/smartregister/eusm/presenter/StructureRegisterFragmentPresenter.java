@@ -97,7 +97,7 @@ public class StructureRegisterFragmentPresenter extends BaseRegisterFragmentPres
         }
     }
 
-    private StructureRegisterFragment getFragment() {
+    protected StructureRegisterFragment getFragment() {
         return (StructureRegisterFragment) getView();
     }
 
@@ -152,7 +152,9 @@ public class StructureRegisterFragmentPresenter extends BaseRegisterFragmentPres
     public void onCountOfStructuresFetched(int count) {
         totalCount = count;
         totalPageCount = (int) Math.ceil((double) totalCount == 0 ? 1 : totalCount / (double) pageSize);
-        getFragment().getNextButton().setVisibility((totalPageCount > 1) ? View.VISIBLE : View.INVISIBLE);
+        if (getFragment().getNextButton() != null) {
+            getFragment().getNextButton().setVisibility((totalPageCount > 1) ? View.VISIBLE : View.INVISIBLE);
+        }
         getFragment().updatePageInfo();
     }
 }

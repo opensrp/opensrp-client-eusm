@@ -10,6 +10,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.smartregister.domain.Location;
+import org.smartregister.eusm.R;
 import org.smartregister.eusm.application.EusmApplication;
 import org.smartregister.eusm.repository.AppStructureRepository;
 import org.smartregister.tasking.fragment.AvailableOfflineMapsFragment;
@@ -41,7 +42,7 @@ public class EusmAvailableOfflineMapsFragment extends AvailableOfflineMapsFragme
 
     @Override
     protected void downloadLocation(@NonNull Location location) {
-        Utils.showToast(getContext(), "Download starting");
+        Utils.showToast(getContext(), getString(R.string.download_starting));
         getAppExecutors().diskIO().execute(new Runnable() {
             @Override
             public void run() {
@@ -54,7 +55,7 @@ public class EusmAvailableOfflineMapsFragment extends AvailableOfflineMapsFragme
                     getAppExecutors().mainThread().execute(new Runnable() {
                         @Override
                         public void run() {
-                            OfflineMapHelper.downloadMap(FeatureCollection.fromJson(featureCollection.toString()), name, getContext());
+                            downloadMap(FeatureCollection.fromJson(featureCollection.toString()), name);
                         }
                     });
                 } catch (JSONException e) {
@@ -62,6 +63,10 @@ public class EusmAvailableOfflineMapsFragment extends AvailableOfflineMapsFragme
                 }
             }
         });
+    }
+
+    protected void downloadMap(FeatureCollection operationalAreaFeature, String mapName) {
+        OfflineMapHelper.downloadMap(operationalAreaFeature, mapName, getContext());
     }
 
     public AppStructureRepository getAppStructureRepository() {

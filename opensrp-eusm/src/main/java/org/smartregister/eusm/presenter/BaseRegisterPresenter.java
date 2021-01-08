@@ -6,25 +6,23 @@ import java.util.List;
 
 public class BaseRegisterPresenter implements BaseRegisterContract.Presenter {
 
-    // protected TaskRegisterInteractor taskRegisterInteractor;
-
     public BaseRegisterPresenter(BaseRegisterContract.View view) {
-        // taskRegisterInteractor = new TaskRegisterInteractor(null);
+        //do nothing
     }
 
     @Override
     public void registerViewConfigurations(List<String> viewIdentifiers) {
-        //taskRegisterInteractor.registerViewConfigurations(viewIdentifiers);
+        //do nothing
     }
 
     @Override
     public void unregisterViewConfiguration(List<String> viewIdentifiers) {
-        // taskRegisterInteractor.unregisterViewConfiguration(viewIdentifiers);
+        //do nothing
     }
 
     @Override
     public void onDestroy(boolean isChangingConfiguration) {
-        // taskRegisterInteractor.cleanupResources();
+        //do nothing
     }
 
     @Override

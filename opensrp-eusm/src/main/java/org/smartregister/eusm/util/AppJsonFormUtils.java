@@ -1,28 +1,19 @@
 package org.smartregister.eusm.util;
 
-import android.app.Activity;
 import android.content.Context;
-import android.content.Intent;
 import android.graphics.Bitmap;
 
 import androidx.annotation.NonNull;
-import androidx.core.util.Pair;
 
-import com.vijay.jsonwizard.constants.JsonFormConstants;
 import com.vijay.jsonwizard.utils.FormUtils;
 
 import org.apache.commons.lang3.StringUtils;
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-import org.smartregister.domain.Event;
-import org.smartregister.domain.Obs;
 import org.smartregister.domain.ProfileImage;
-import org.smartregister.eusm.activity.AppJsonFormActivity;
 import org.smartregister.eusm.application.EusmApplication;
 import org.smartregister.eusm.domain.StructureDetail;
 import org.smartregister.eusm.domain.TaskDetail;
-import org.smartregister.location.helper.LocationHelper;
 import org.smartregister.repository.ImageRepository;
 import org.smartregister.stock.util.Constants;
 import org.smartregister.util.JsonFormUtils;
@@ -32,23 +23,12 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.OutputStream;
-import java.util.Date;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Map;
-import java.util.Set;
 import java.util.UUID;
 
 import timber.log.Timber;
 
-import static com.vijay.jsonwizard.constants.JsonFormConstants.CHECK_BOX;
-import static com.vijay.jsonwizard.constants.JsonFormConstants.KEY;
-import static com.vijay.jsonwizard.constants.JsonFormConstants.KEYS;
-import static com.vijay.jsonwizard.constants.JsonFormConstants.TYPE;
-import static com.vijay.jsonwizard.constants.JsonFormConstants.VALUE;
-import static com.vijay.jsonwizard.constants.JsonFormConstants.VALUES;
-import static org.smartregister.AllConstants.OPTIONS;
-import static org.smartregister.AllConstants.TEXT;
 import static org.smartregister.client.utils.constants.JsonFormConstants.Properties.DETAILS;
 import static org.smartregister.tasking.util.Constants.METADATA;
 import static org.smartregister.util.JsonFormUtils.ENCOUNTER_LOCATION;
@@ -56,23 +36,10 @@ import static org.smartregister.util.JsonFormUtils.ENTITY_ID;
 import static org.smartregister.util.JsonFormUtils.getString;
 
 
-/**
- * Created by samuelgithengi on 3/22/19.
- */
 public class AppJsonFormUtils {
 
-    public static final int REQUEST_CODE_GET_JSON = 2244;
-    private final Set<String> nonEditableFields;
-    private final LocationHelper locationHelper = LocationHelper.getInstance();
 
     public AppJsonFormUtils() {
-        nonEditableFields = new HashSet<>();
-    }
-
-    public static org.smartregister.clientandeventmodel.Event createTaskEvent(String baseEntityId, String locationId, Map<String, String> details, String eventType, String entityType) {
-        org.smartregister.clientandeventmodel.Event taskEvent = (org.smartregister.clientandeventmodel.Event) new org.smartregister.clientandeventmodel.Event().withBaseEntityId(baseEntityId).withEventDate(new Date()).withEventType(eventType)
-                .withLocationId(locationId).withEntityType(entityType).withFormSubmissionId(UUID.randomUUID().toString()).withDateCreated(new Date());
-        return taskEvent;
     }
 
     public JSONObject getFormObject(Context context, String formName) {
@@ -131,135 +98,6 @@ public class AppJsonFormUtils {
         String planIdentifier = AppConstants.PLAN_IDENTIFIER;//PreferencesUtil.getInstance().getCurrentPlanId();
         formData.put(AppConstants.Properties.PLAN_IDENTIFIER, planIdentifier);
         formJson.put(AppConstants.DETAILS, formData);
-    }
-
-    private void populateFormFields(JSONObject formJson, String structureType, String sprayStatus, String familyHead) throws JSONException {
-
-        JSONArray fields = org.smartregister.util.JsonFormUtils.fields(formJson);
-        if (StringUtils.isNotBlank(structureType) || StringUtils.isNotBlank(sprayStatus) || StringUtils.isNotBlank(familyHead)) {
-            for (int i = 0; i < fields.length(); i++) {
-                JSONObject field = fields.getJSONObject(i);
-                String key = field.getString(KEY);
-//                if (key.equalsIgnoreCase(AppConstants.JsonForm.STRUCTURE_TYPE))
-//                    field.put(org.smartregister.util.JsonFormUtils.VALUE, structureType);
-//                else if (key.equalsIgnoreCase(AppConstants.JsonForm.SPRAY_STATUS))
-//                    field.put(org.smartregister.util.JsonFormUtils.VALUE, sprayStatus);
-//                else if (key.equalsIgnoreCase(AppConstants.JsonForm.HEAD_OF_HOUSEHOLD))
-//                    field.put(org.smartregister.util.JsonFormUtils.VALUE, familyHead);
-            }
-        }
-
-    }
-
-    public void startJsonForm(JSONObject form, Activity context) {
-        startJsonForm(form, context, AppConstants.RequestCode.REQUEST_CODE_GET_JSON);
-    }
-
-    public void startJsonForm(JSONObject form, Activity context, int requestCode) {
-        Intent intent = new Intent(context, AppJsonFormActivity.class);
-        try {
-            intent.putExtra(AppConstants.JSON_FORM_PARAM_JSON, form.toString());
-            context.startActivityForResult(intent, requestCode);
-        } catch (Exception e) {
-            Timber.e(e);
-        }
-    }
-
-    public String getFormName(String encounterType, String taskCode) {
-        String formName = null;
-        return formName;
-    }
-
-    public String getFormName(String encounterType) {
-        return getFormName(encounterType, null);
-    }
-
-    public void populateField(JSONObject formJson, String key, String value, String fieldToPopulate) throws JSONException {
-        JSONObject field = JsonFormUtils.getFieldJSONObject(JsonFormUtils.getMultiStepFormFields(formJson), key);
-        if (field != null) {
-            field.put(fieldToPopulate, value);
-        }
-    }
-
-    public void populateForm(Event event, JSONObject formJSON) {
-        if (event == null)
-            return;
-        JSONArray fields = JsonFormUtils.fields(formJSON);
-        for (int i = 0; i < fields.length(); i++) {
-            try {
-                JSONObject field = fields.getJSONObject(i);
-                String key = field.getString(KEY);
-                Obs obs = event.findObs(null, false, key);
-                if (obs != null && obs.getValues() != null) {
-                    if (CHECK_BOX.equals(field.getString(TYPE))) {
-                        JSONArray options = field.getJSONArray(OPTIONS);
-                        Map<String, String> optionsKeyValue = new HashMap<>();
-                        for (int j = 0; j < options.length(); j++) {
-                            JSONObject option = options.getJSONObject(j);
-                            optionsKeyValue.put(option.getString(TEXT), option.getString(KEY));
-                        }
-                        JSONArray keys = new JSONArray();
-                        for (Object value : obs.getValues()) {
-                            keys.put(optionsKeyValue.get(value.toString()));
-                        }
-                        field.put(VALUE, keys);
-                    } else {
-                        if (!JsonFormConstants.REPEATING_GROUP.equals(field.optString(TYPE))) {
-                            field.put(VALUE, obs.getValue());
-                        }
-                    }
-                }
-
-            } catch (JSONException e) {
-                Timber.e(e);
-            }
-        }
-    }
-
-
-    public Pair<JSONArray, JSONArray> populateServerOptions(Map<String, Object> serverConfigs, String settingsConfigKey, JSONObject field, String filterKey) {
-        if (serverConfigs == null || field == null)
-            return null;
-        JSONArray serverConfig = (JSONArray) serverConfigs.get(settingsConfigKey);
-        if (serverConfig != null && !serverConfig.isNull(0)) {
-            JSONArray options = serverConfig.optJSONObject(0).optJSONArray(filterKey);
-            if (options == null)
-                return null;
-            JSONArray codes = new JSONArray();
-            JSONArray values = new JSONArray();
-            for (int i = 0; i < options.length(); i++) {
-                JSONObject operator = options.optJSONObject(i);
-                if (operator == null)
-                    continue;
-                String code = operator.optString(AppConstants.CONFIGURATION.CODE, null);
-                String name = operator.optString(AppConstants.CONFIGURATION.NAME);
-                if (StringUtils.isBlank(code) || code.equalsIgnoreCase(name)) {
-                    codes.put(name);
-                    values.put(name);
-                } else {
-                    codes.put(code + ":" + name);
-                    values.put(code + " - " + name);
-                }
-            }
-            try {
-                field.put(KEYS, codes);
-                field.put(VALUES, values);
-            } catch (JSONException e) {
-                Timber.e(e, "Error populating %s Operators ", filterKey);
-            }
-            return new Pair<>(codes, values);
-        }
-        return null;
-    }
-
-    public Map<String, JSONObject> getFields(JSONObject formJSON) {
-        JSONArray fields = JsonFormUtils.fields(formJSON);
-        Map<String, JSONObject> fieldsMap = new HashMap<>();
-        for (int i = 0; i < fields.length(); i++) {
-            JSONObject field = fields.optJSONObject(i);
-            fieldsMap.put(field.optString(JsonFormUtils.KEY), field);
-        }
-        return fieldsMap;
     }
 
     public void saveImage(JSONObject jsonForm, String entityType) {
