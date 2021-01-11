@@ -47,7 +47,7 @@ public class AppJsonFormUtilsTest extends BaseUnitTest {
     private EusmApplication eusmApplication;
 
     @Before
-    public void AppJsonFormUtils() {
+    public void setUp() {
         MockitoAnnotations.initMocks(this);
         jsonFormUtils = spy(AppJsonFormUtils.class);
     }

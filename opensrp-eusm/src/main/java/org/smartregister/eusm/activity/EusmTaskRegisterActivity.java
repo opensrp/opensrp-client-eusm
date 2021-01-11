@@ -38,10 +38,6 @@ public class EusmTaskRegisterActivity extends TaskRegisterActivity implements Ta
 
     private View gpsUnknownView;
 
-    private TextView txtProfileBack;
-
-    private ViewPagerAdapter mPagerAdapter;
-
     @Override
     protected void onCreation() {
         //Do nothing
@@ -63,7 +59,7 @@ public class EusmTaskRegisterActivity extends TaskRegisterActivity implements Ta
         mBaseFragment = getRegisterFragment();
 
         // Instantiate a ViewPager and a PagerAdapter.
-        mPagerAdapter = new ViewPagerAdapter(getSupportFragmentManager());
+        ViewPagerAdapter mPagerAdapter = new ViewPagerAdapter(getSupportFragmentManager());
         mPagerAdapter.addFragment(getRegisterFragment(), "");
         mPager.setOffscreenPageLimit(otherFragments.length);
         mPager.setAdapter(mPagerAdapter);
@@ -114,7 +110,7 @@ public class EusmTaskRegisterActivity extends TaskRegisterActivity implements Ta
         ImageView imgProfileBack = findViewById(R.id.img_profile_back);
         imgProfileBack.setOnClickListener(this);
 
-        txtProfileBack = findViewById(R.id.txt_profile_back);
+        TextView txtProfileBack = findViewById(R.id.txt_profile_back);
         txtProfileBack.setOnClickListener(this);
 
         ImageView imgServicePointType = findViewById(R.id.img_service_point_type);
@@ -198,20 +194,18 @@ public class EusmTaskRegisterActivity extends TaskRegisterActivity implements Ta
 
     @Override
     protected void onActivityResultExtended(int requestCode, int resultCode, Intent data) {
-        if (resultCode == RESULT_OK) {
-            if (requestCode == AppConstants.RequestCode.REQUEST_CODE_GET_JSON) {
-                try {
-                    String jsonString = data.getStringExtra(JsonFormConstants.JSON_FORM_KEY.JSON);
-                    Timber.d("JSONResult : %s", jsonString);
-                    JSONObject form = new JSONObject(jsonString);
-                    String encounterType = form.optString(JsonFormConstants.ENCOUNTER_TYPE);
-                    if (StringUtils.isNotBlank(encounterType)) {
-                        showProgressDialog(R.string.saving_message);
-                        presenter().saveForm(encounterType, form, structureDetail);
-                    }
-                } catch (JSONException e) {
-                    Timber.e(e);
+        if (resultCode == RESULT_OK && (requestCode == AppConstants.RequestCode.REQUEST_CODE_GET_JSON)) {
+            try {
+                String jsonString = data.getStringExtra(JsonFormConstants.JSON_FORM_KEY.JSON);
+                Timber.d("JSONResult : %s", jsonString);
+                JSONObject form = new JSONObject(jsonString);
+                String encounterType = form.optString(JsonFormConstants.ENCOUNTER_TYPE);
+                if (StringUtils.isNotBlank(encounterType)) {
+                    showProgressDialog(R.string.saving_message);
+                    presenter().saveForm(encounterType, form, structureDetail);
                 }
+            } catch (JSONException e) {
+                Timber.e(e);
             }
         }
     }
