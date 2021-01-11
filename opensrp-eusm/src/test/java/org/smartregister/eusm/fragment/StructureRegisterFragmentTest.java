@@ -101,10 +101,6 @@ public class StructureRegisterFragmentTest extends BaseUnitTest {
 
     public static class TestStructureRegisterFragment extends StructureRegisterFragment {
 
-
-        public TestStructureRegisterFragment() {
-        }
-
         @Override
         public void onCreate(Bundle savedInstanceState) {
             super.onCreate(savedInstanceState);

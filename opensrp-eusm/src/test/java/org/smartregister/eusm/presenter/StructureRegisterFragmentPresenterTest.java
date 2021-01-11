@@ -1,6 +1,5 @@
 package org.smartregister.eusm.presenter;
 
-import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
@@ -63,10 +62,5 @@ public class StructureRegisterFragmentPresenterTest extends BaseUnitTest {
                 eq(nameToFilter));
         verify(structureRegisterFragmentPresenter).onCountOfStructuresFetched(anyInt());
         verify(structureRegisterFragmentPresenter).onFetchedStructures(anyList());
-    }
-
-    @After
-    public void tearDown() {
-
     }
 }

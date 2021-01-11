@@ -45,7 +45,7 @@ public class EusmOfflineMapsActivityTest extends BaseActivityUnitTest {
     }
 
     @After
-    public void tearDown(){
+    public void tearDown() {
         destroyController();
     }
 }

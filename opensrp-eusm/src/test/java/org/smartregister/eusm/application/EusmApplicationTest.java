@@ -13,7 +13,6 @@ import org.robolectric.RuntimeEnvironment;
 import org.robolectric.util.ReflectionHelpers;
 import org.smartregister.dto.UserAssignmentDTO;
 import org.smartregister.eusm.BaseUnitTest;
-import org.smartregister.repository.AllSharedPreferences;
 import org.smartregister.service.UserService;
 import org.smartregister.tasking.util.PreferencesUtil;
 
@@ -36,9 +35,6 @@ public class EusmApplicationTest extends BaseUnitTest {
     private EusmApplication eusmApplication;
     private UserService userService;
     private Context context;
-
-    @Mock
-    private AllSharedPreferences allSharedPreferences;
 
     @Mock
     private PreferencesUtil preferencesUtil;

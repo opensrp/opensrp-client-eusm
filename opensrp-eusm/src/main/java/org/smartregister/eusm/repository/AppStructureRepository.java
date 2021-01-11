@@ -84,7 +84,7 @@ public class AppStructureRepository extends StructureRepository {
                 contentValues.put(LONGITUDE, location.getGeometry().getCoordinates().get(0).getAsFloat());
                 contentValues.put(LATITUDE, location.getGeometry().getCoordinates().get(1).getAsFloat());
             } else if (getHelper() != null) {
-                android.location.Location center = getHelper().getCenter(gson.toJson(location.getGeometry()));
+                Location center = getHelper().getCenter(gson.toJson(location.getGeometry()));
                 contentValues.put(LATITUDE, center.getLatitude());
                 contentValues.put(LONGITUDE, center.getLongitude());
             }

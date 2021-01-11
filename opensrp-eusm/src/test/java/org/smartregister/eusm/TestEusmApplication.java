@@ -65,5 +65,6 @@ public class TestEusmApplication extends EusmApplication {
 
     @Override
     public void onTerminate() {
+        //Do nothing
     }
 }

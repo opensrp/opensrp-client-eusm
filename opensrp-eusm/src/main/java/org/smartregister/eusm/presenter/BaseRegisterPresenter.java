@@ -6,7 +6,10 @@ import java.util.List;
 
 public class BaseRegisterPresenter implements BaseRegisterContract.Presenter {
 
+    private final BaseRegisterContract.View view;
+
     public BaseRegisterPresenter(BaseRegisterContract.View view) {
+        this.view = view;
         //do nothing
     }
 
@@ -26,6 +29,11 @@ public class BaseRegisterPresenter implements BaseRegisterContract.Presenter {
     }
 
     @Override
-    public void updateInitials() {//do nothing
+    public void updateInitials() {
+        //do nothing
+    }
+
+    public BaseRegisterContract.View getView() {
+        return view;
     }
 }

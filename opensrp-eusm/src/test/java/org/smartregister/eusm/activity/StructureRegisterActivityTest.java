@@ -45,7 +45,7 @@ public class StructureRegisterActivityTest extends BaseActivityUnitTest {
     }
 
     @After
-    public void tearDown(){
+    public void tearDown() {
         destroyController();
     }
 }

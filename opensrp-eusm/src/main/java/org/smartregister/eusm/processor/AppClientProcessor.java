@@ -7,19 +7,11 @@ import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 
 import org.smartregister.domain.Client;
 import org.smartregister.domain.Event;
-import org.smartregister.domain.Location;
 import org.smartregister.domain.db.EventClient;
 import org.smartregister.domain.jsonmapping.ClientClassification;
-import org.smartregister.eusm.application.EusmApplication;
 import org.smartregister.eusm.util.AppConstants;
-import org.smartregister.eusm.util.AppUtils;
-import org.smartregister.repository.EventClientRepository;
-import org.smartregister.repository.StructureRepository;
-import org.smartregister.repository.TaskRepository;
 import org.smartregister.sync.ClientProcessorForJava;
-import org.smartregister.tasking.util.PreferencesUtil;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import timber.log.Timber;
@@ -30,19 +22,10 @@ import timber.log.Timber;
 public class AppClientProcessor extends ClientProcessorForJava {
 
     private static AppClientProcessor instance;
-    private final EventClientRepository eventClientRepository;
-    private final TaskRepository taskRepository;
-    private final StructureRepository structureRepository;
-    private final EusmApplication eusmApplication;
 
     public AppClientProcessor(Context context) {
         super(context);
-        eusmApplication = EusmApplication.getInstance();
-        eventClientRepository = eusmApplication.getContext().getEventClientRepository();
-        taskRepository = eusmApplication.getTaskRepository();
-        structureRepository = eusmApplication.getStructureRepository();
     }
-
 
     public static AppClientProcessor getInstance(Context context) {
         if (instance == null) {
@@ -61,28 +44,20 @@ public class AppClientProcessor extends ClientProcessorForJava {
         if (clientClassification == null) {
             return;
         }
-
-        ArrayList<Client> clients = new ArrayList<>();
-        Location operationalArea = AppUtils.getOperationalAreaLocation(PreferencesUtil.getInstance().getCurrentOperationalArea());
-        String operationalAreaLocationId = operationalArea == null ? null : operationalArea.getId();
         boolean hasSyncedEventsInTarget = false;
         if (!eventClients.isEmpty()) {
-            String operationalAreaId = null;
             for (EventClient eventClient : eventClients) {
                 Event event = eventClient.getEvent();
-                if (event == null || event.getEventType() == null) {
-                    continue;
-                }
-                String eventType = event.getEventType();
-
-                try {
-                    processEvent(event, new Client(event.getBaseEntityId()), clientClassification);
-                } catch (Exception e) {
-                    Timber.e(e);
-                }
-                if (!hasSyncedEventsInTarget && operationalAreaLocationId != null &&
-                        operationalAreaLocationId.equals(operationalAreaId)) {
-                    hasSyncedEventsInTarget = true;
+                if (event != null && event.getEventType() != null) {
+                    try {
+                        processEvent(event, new Client(event.getBaseEntityId()), clientClassification);
+                    } catch (Exception e) {
+                        Timber.e(e);
+                    }
+//                    if (!hasSyncedEventsInTarget && operationalAreaLocationId != null &&
+//                            operationalAreaLocationId.equals(operationalAreaId)) {
+//                        hasSyncedEventsInTarget = true;
+//                    }
                 }
 //                if (localSubmission && CoreLibrary.getInstance().getSyncConfiguration().runPlanEvaluationOnClientProcessing()) {
 //                    processPlanEvaluation(eventClient);

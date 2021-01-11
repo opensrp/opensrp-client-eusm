@@ -38,11 +38,7 @@ import static org.smartregister.util.JsonFormUtils.getString;
 
 public class AppJsonFormUtils {
 
-
-    public AppJsonFormUtils() {
-    }
-
-    public JSONObject getFormObject(Context context, String formName) {
+    public JSONObject getFormObject(@NonNull Context context,@NonNull String formName) {
         try {
             FormUtils formUtils = new FormUtils();
             return formUtils.getFormJsonFromRepositoryOrAssets(context, formName);

@@ -14,12 +14,9 @@ import org.smartregister.view.contract.BaseRegisterContract;
 
 public class StructureRegisterActivityPresenter extends BaseRegisterPresenter implements BaseContract.BasePresenter {
 
-    private BaseRegisterContract.View view;
-
     public StructureRegisterActivityPresenter(BaseRegisterContract.View view) {
         super(view);
     }
-
 
     @Override
     public void onFormSaved(@NonNull String structureId, String taskID, @NonNull Task.TaskStatus taskStatus, @NonNull String businessStatus, String interventionType) {

@@ -12,7 +12,6 @@ import androidx.recyclerview.widget.RecyclerView;
 import org.smartregister.eusm.R;
 import org.smartregister.eusm.adapter.ProductInfoQuestionsAdapter;
 import org.smartregister.eusm.contract.ProductInfoFragmentContract;
-import org.smartregister.eusm.domain.StructureDetail;
 import org.smartregister.eusm.domain.TaskDetail;
 import org.smartregister.eusm.presenter.ProductInfoFragmentPresenter;
 import org.smartregister.eusm.util.AppConstants;
@@ -20,8 +19,6 @@ import org.smartregister.eusm.util.AppConstants;
 public class ProductInfoFragment extends Fragment implements ProductInfoFragmentContract.View {
 
     private TaskDetail taskDetail;
-
-    private StructureDetail structureDetail;
 
     private ProductInfoQuestionsAdapter productInfoQuestionsAdapter;
 
@@ -37,7 +34,7 @@ public class ProductInfoFragment extends Fragment implements ProductInfoFragment
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         taskDetail = (TaskDetail) getArguments().getSerializable(AppConstants.IntentData.TASK_DETAIL);
-        structureDetail = (StructureDetail) getArguments().getSerializable(AppConstants.IntentData.STRUCTURE_DETAIL);
+//        StructureDetail structureDetail = (StructureDetail) getArguments().getSerializable(AppConstants.IntentData.STRUCTURE_DETAIL);
         initializeAdapter();
         initializePresenter();
     }

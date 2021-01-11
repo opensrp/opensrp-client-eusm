@@ -130,10 +130,12 @@ public class EusmApplication extends DrishtiApplication implements TimeChangedBr
     }
 
     private static String[] getFtsSearchFields(String tableName) {
+        Timber.d(tableName);
         return null;
     }
 
     private static String[] getFtsSortFields(String tableName) {
+        Timber.d(tableName);
         return null;
     }
 

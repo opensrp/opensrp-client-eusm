@@ -7,7 +7,6 @@ import com.google.gson.JsonArray;
 import net.sqlcipher.Cursor;
 import net.sqlcipher.database.SQLiteDatabase;
 
-import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
@@ -173,10 +172,4 @@ public class AppStructureRepositoryTest extends BaseUnitTest {
 
         assertEquals(1, structureDetails.size());
     }
-
-    @After
-    public void tearDown() {
-    }
-
-
 }

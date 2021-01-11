@@ -9,8 +9,6 @@ import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
 
-import junit.framework.Assert;
-
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -65,14 +63,14 @@ public class LoginActivityTest extends BaseActivityUnitTest {
     public void testUserNameEditTextIsInitialized() {
 
         EditText userNameEditText = Whitebox.getInternalState(loginActivity, "userNameEditText");
-        Assert.assertNotNull(userNameEditText);
+        assertNotNull(userNameEditText);
     }
 
     @Test
     public void testPasswordEditTextIsInitialized() {
 
         EditText userPasswordEditText = Whitebox.getInternalState(loginActivity, "passwordEditText");
-        Assert.assertNotNull(userPasswordEditText);
+        assertNotNull(userPasswordEditText);
     }
 
 
@@ -80,14 +78,14 @@ public class LoginActivityTest extends BaseActivityUnitTest {
     public void testShowPasswordCheckBoxIsInitialized() {
 
         CheckBox showPasswordCheckBox = Whitebox.getInternalState(loginActivity, "showPasswordCheckBox");
-        Assert.assertNotNull(showPasswordCheckBox);
+        assertNotNull(showPasswordCheckBox);
     }
 
     @Test
     public void testProgressDialogIsInitialized() {
 
         ProgressDialog progressDialog = Whitebox.getInternalState(loginActivity, "progressDialog");
-        Assert.assertNotNull(progressDialog);
+        assertNotNull(progressDialog);
     }
 
 
@@ -241,7 +239,7 @@ public class LoginActivityTest extends BaseActivityUnitTest {
     @Test
     public void testGetActivityContextReturnsCorrectInstance() {
         LoginActivity spyActivity = Mockito.spy(loginActivity);
-        Assert.assertEquals(spyActivity, spyActivity.getActivityContext());
+        assertEquals(spyActivity, spyActivity.getActivityContext());
     }
 
     @Test

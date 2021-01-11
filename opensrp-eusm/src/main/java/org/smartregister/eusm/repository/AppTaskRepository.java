@@ -70,11 +70,11 @@ public class AppTaskRepository extends TaskRepository {
 
     private TaskDetail readStructureTaskDetailCursor(Cursor cursor) {
         String taskName = cursor.getString(cursor.getColumnIndex("taskName"));
-        String taskFor = cursor.getString(cursor.getColumnIndex(AppConstants.Column.Task.FOR));
+//        String taskFor = cursor.getString(cursor.getColumnIndex(AppConstants.Column.Task.FOR));
         String taskBusinessStatus = cursor.getString(cursor.getColumnIndex(AppConstants.Column.Task.BUSINESS_STATUS));
         String taskStatus = cursor.getString(cursor.getColumnIndex(AppConstants.Column.Task.STATUS));
         String taskId = cursor.getString(cursor.getColumnIndex("taskId"));
-        String taskLocation = cursor.getString(cursor.getColumnIndex("taskLocation"));
+//        String taskLocation = cursor.getString(cursor.getColumnIndex("taskLocation"));
         String productName = cursor.getString(cursor.getColumnIndex(StockTypeRepository.NAME));
         String quantity = cursor.getString(cursor.getColumnIndex(StockTypeRepository.QUANTITY));
         String productSerial = cursor.getString(cursor.getColumnIndex(StockTypeRepository.MATERIAL_NUMBER));

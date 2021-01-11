@@ -7,6 +7,8 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import org.junit.Before;
 import org.junit.Test;
+import org.mockito.Mock;
+import org.mockito.MockitoAnnotations;
 import org.robolectric.RuntimeEnvironment;
 import org.smartregister.eusm.BaseUnitTest;
 import org.smartregister.eusm.domain.StructureDetail;
@@ -25,14 +27,13 @@ public class StructureRegisterAdapterTest extends BaseUnitTest {
 
     private StructureRegisterAdapter structureRegisterAdapter;
 
+    @Mock
+    private View.OnClickListener onClickListener;
+
     @Before
     public void setUp() {
-        structureRegisterAdapter = spy(new StructureRegisterAdapter(RuntimeEnvironment.application, new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-            }
-        }));
+        MockitoAnnotations.initMocks(this);
+        structureRegisterAdapter = spy(new StructureRegisterAdapter(RuntimeEnvironment.application, onClickListener));
     }
 
     @Test

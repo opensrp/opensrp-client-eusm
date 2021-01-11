@@ -7,8 +7,6 @@ import net.sqlcipher.database.SQLiteDatabase;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
-import org.robolectric.RuntimeEnvironment;
-import org.smartregister.CoreLibrary;
 import org.smartregister.eusm.BaseUnitTest;
 import org.smartregister.repository.DrishtiRepository;
 

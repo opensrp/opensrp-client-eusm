@@ -8,6 +8,8 @@ import androidx.recyclerview.widget.RecyclerView;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
+import org.mockito.Mock;
+import org.mockito.MockitoAnnotations;
 import org.robolectric.RuntimeEnvironment;
 import org.smartregister.eusm.BaseUnitTest;
 import org.smartregister.eusm.domain.TaskDetail;
@@ -26,14 +28,13 @@ public class EusmTaskRegisterAdapterTest extends BaseUnitTest {
 
     private EusmTaskRegisterAdapter eusmTaskRegisterAdapter;
 
+    @Mock
+    private View.OnClickListener onClickListener;
+
     @Before
     public void setUp() {
-        eusmTaskRegisterAdapter = spy(new EusmTaskRegisterAdapter(RuntimeEnvironment.application, new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-            }
-        }));
+        MockitoAnnotations.initMocks(this);
+        eusmTaskRegisterAdapter = spy(new EusmTaskRegisterAdapter(RuntimeEnvironment.application, onClickListener));
     }
 
     @Test
