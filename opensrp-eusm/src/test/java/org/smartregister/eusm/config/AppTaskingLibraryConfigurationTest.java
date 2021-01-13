@@ -52,8 +52,10 @@ public class AppTaskingLibraryConfigurationTest extends BaseUnitTest {
     }
 
     @Test
-    public void testFetchPlansShouldInvokeRequiredMethod() {
+    public void testFetchPlansShouldInvokeRequiredMethod() throws InterruptedException {
         appTaskingLibraryConfiguration.fetchPlans("re", baseDrawerPresenter);
+        shadowOf(getMainLooper()).idle();
+        Thread.sleep(ASYNC_TIMEOUT);
         verify(baseDrawerPresenter).onPlansFetched(anySet());
     }
 
