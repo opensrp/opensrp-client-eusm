@@ -1,0 +1,9 @@
+[main]
+host = https://www.transifex.com
+
+[opensrp-eusm.strings-xml]
+file_filter = opensrp-eusm/src/main/res/values-<lang>/strings.xml
+minimum_perc = 0
+source_file = opensrp-eusm/src/main/res/values/strings.xml
+source_lang = en
+type = ANDROID
