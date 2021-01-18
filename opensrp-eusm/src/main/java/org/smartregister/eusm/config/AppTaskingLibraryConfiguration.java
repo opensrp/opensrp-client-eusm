@@ -39,8 +39,6 @@ import org.smartregister.job.ImageUploadServiceJob;
 import org.smartregister.job.SyncServiceJob;
 import org.smartregister.repository.PlanDefinitionRepository;
 import org.smartregister.repository.PlanDefinitionSearchRepository;
-import org.smartregister.stock.job.SyncStockServiceJob;
-import org.smartregister.stock.job.SyncStockTypeServiceJob;
 import org.smartregister.tasking.activity.TaskingMapActivity;
 import org.smartregister.tasking.adapter.TaskRegisterAdapter;
 import org.smartregister.tasking.contract.BaseContract;
@@ -95,9 +93,8 @@ public class AppTaskingLibraryConfiguration extends TaskingLibraryConfiguration 
     public void startImmediateSync() {
         LocationTaskServiceJob.scheduleJobImmediately(LocationTaskServiceJob.TAG);
         SyncServiceJob.scheduleJobImmediately(SyncServiceJob.TAG);
-        SyncStockTypeServiceJob.scheduleJobImmediately(SyncStockTypeServiceJob.TAG);
         ImageUploadServiceJob.scheduleJobImmediately(ImageUploadServiceJob.TAG);
-        SyncStockServiceJob.scheduleJobImmediately(SyncStockServiceJob.TAG);
+        //SyncStockServiceJob.scheduleJobImmediately(SyncStockServiceJob.TAG);
     }
 
     @Override

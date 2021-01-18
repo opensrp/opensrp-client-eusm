@@ -8,12 +8,22 @@ import org.smartregister.tasking.presenter.TaskingMapPresenter;
 
 public class EusmTaskingMapPresenter extends TaskingMapPresenter {
 
+    private TaskingMapInteractor taskingMapInteractor;
+
     public EusmTaskingMapPresenter(TaskingMapActivityContract.View view, BaseDrawerContract.Presenter drawerPresenter) {
         super(view, drawerPresenter);
     }
 
     @Override
     public TaskingMapInteractor getTaskingMapInteractor() {
-        return new EusmTaskingMapInteractor(this);
+        if (taskingMapInteractor == null) {
+            taskingMapInteractor = new EusmTaskingMapInteractor(this);
+        }
+        return taskingMapInteractor;
+    }
+
+    @Override
+    public void requestUserPassword() {
+        //Do nothing
     }
 }

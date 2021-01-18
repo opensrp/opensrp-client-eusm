@@ -131,5 +131,6 @@
     <string name="flag_problem_button_text">Flag problem</string>
     <string name="looks_good_button_text">Looks good!</string>
     <string name="download_starting">Download starting</string>
+    <string name="user_location_not_received">User location has not been received</string>
 
 </resources>

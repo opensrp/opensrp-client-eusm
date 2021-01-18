@@ -23,6 +23,7 @@ import org.smartregister.eusm.domain.StructureDetail;
 import org.smartregister.view.activity.DrishtiApplication;
 
 import java.util.List;
+import java.util.UUID;
 
 import static org.junit.Assert.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
@@ -106,7 +107,7 @@ public class AppStructureRepositoryTest extends BaseUnitTest {
             }
         }).when(cursor).moveToNext();
 
-        int result = appStructureRepository.countOfStructures("tes");
+        int result = appStructureRepository.countOfStructures("tes", UUID.randomUUID().toString());
 
         assertEquals(0, result);
     }

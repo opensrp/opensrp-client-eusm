@@ -62,7 +62,6 @@ public interface AppConstants extends TaskingConstants {
         String PRODUCT_ID = "productId";
         String MISSION = "mission";
         String LOCATION_ID = "locationId";
-        String STOCK_ID = "stockId";
     }
 
     interface EncounterType {

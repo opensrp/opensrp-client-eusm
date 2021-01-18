@@ -1,17 +1,17 @@
 package org.smartregister.eusm.configuration;
 
+import org.json.JSONArray;
+import org.smartregister.eusm.util.AppUtils;
 import org.smartregister.stock.configuration.StockSyncConfiguration;
+import org.smartregister.stock.util.Constants;
+
+import java.util.Map;
+import java.util.Set;
 
 public class EusmStockSyncConfiguration extends StockSyncConfiguration {
 
     @Override
     public String getStockSyncParams() {
-//        Set<String> set = AppUtils.fetchStructureIds();
-//        String locations = "";
-//        if (set != null) {
-//            locations = StringUtils.join(set, ",");
-//        }
-//        return String.format("&locations=%s", locations);//TODO add all structureIds
         return "";
     }
 
@@ -33,5 +33,28 @@ public class EusmStockSyncConfiguration extends StockSyncConfiguration {
     @Override
     public boolean useDefaultStockExistenceCheck() {
         return false;
+    }
+
+    @Override
+    public boolean syncStockByPost() {
+        return true;
+    }
+
+    @Override
+    public String stockSyncRequestBody(Map<String, Object> syncParams) {
+        Set<String> savedStructureIds = AppUtils.fetchStructureIds();
+
+        JSONArray jsonArray = null;
+        if (savedStructureIds != null && !savedStructureIds.isEmpty()) {
+            jsonArray = new JSONArray();
+            for (String location : savedStructureIds) {
+                jsonArray.put(location);
+            }
+        }
+
+        if (jsonArray != null) {
+            syncParams.put(Constants.StockResponseKey.LOCATIONS, jsonArray);
+        }
+        return super.stockSyncRequestBody(syncParams);
     }
 }

@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.location.Location;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 
 import com.crashlytics.android.Crashlytics;
 import com.crashlytics.android.core.CrashlyticsCore;
@@ -39,19 +40,20 @@ import org.smartregister.eusm.repository.EusmRepository;
 import org.smartregister.eusm.util.AppConstants;
 import org.smartregister.eusm.util.AppUtils;
 import org.smartregister.location.helper.LocationHelper;
+import org.smartregister.pathevaluator.PathEvaluatorLibrary;
 import org.smartregister.receiver.SyncStatusBroadcastReceiver;
 import org.smartregister.receiver.ValidateAssignmentReceiver;
 import org.smartregister.repository.AllSettings;
 import org.smartregister.repository.AllSharedPreferences;
 import org.smartregister.repository.EventClientRepository;
 import org.smartregister.repository.LocationRepository;
-import org.smartregister.repository.LocationTagRepository;
 import org.smartregister.repository.PlanDefinitionRepository;
 import org.smartregister.repository.PlanDefinitionSearchRepository;
 import org.smartregister.repository.Repository;
 import org.smartregister.repository.TaskNotesRepository;
 import org.smartregister.repository.TaskRepository;
 import org.smartregister.stock.StockLibrary;
+import org.smartregister.stock.repository.dao.StockDaoImpl;
 import org.smartregister.sync.ClientProcessorForJava;
 import org.smartregister.sync.DrishtiSyncScheduler;
 import org.smartregister.sync.helper.ECSyncHelper;
@@ -158,6 +160,8 @@ public class EusmApplication extends DrishtiApplication implements TimeChangedBr
 
         CoreLibrary.init(context, new AppSyncConfiguration(), BuildConfig.BUILD_TIMESTAMP);
 
+        PathEvaluatorLibrary.getInstance().setStockDao(new StockDaoImpl());
+
         ConfigurableViewsLibrary.init(context);
 
         LocationHelper.init(AppUtils.ALLOWED_LEVELS, AppUtils.DEFAULT_LOCATION_LEVEL);
@@ -182,9 +186,11 @@ public class EusmApplication extends DrishtiApplication implements TimeChangedBr
         ValidateAssignmentReceiver.init(this);
 
         ValidateAssignmentReceiver.getInstance().addListener(this);
+
         Location location = new Location("dest");
         location.setLongitude(46.3777);
         location.setLatitude(-15.654);
+
         setUserLocation(location);
     }
 
@@ -267,10 +273,6 @@ public class EusmApplication extends DrishtiApplication implements TimeChangedBr
         return CoreLibrary.getInstance().context().getLocationRepository();
     }
 
-    public LocationTagRepository getLocationTagRepository() {
-        return CoreLibrary.getInstance().context().getLocationTagRepository();
-    }
-
     public AllSettings getSettingsRepository() {
         return getInstance().getContext().allSettings();
     }
@@ -280,7 +282,7 @@ public class EusmApplication extends DrishtiApplication implements TimeChangedBr
         populateConfigs(getSettingsRepository().getSetting(AppConstants.CONFIGURATION.TEAM_CONFIGS));
     }
 
-    private void populateConfigs(@NonNull Setting setting) {
+    private void populateConfigs(@Nullable Setting setting) {
         if (setting == null) {
             return;
         }

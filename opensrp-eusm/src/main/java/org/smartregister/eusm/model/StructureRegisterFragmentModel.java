@@ -19,7 +19,12 @@ public class StructureRegisterFragmentModel {
     }
 
     public int countOfStructures(String nameFilter) {
-        return appStructureRepository.countOfStructures(nameFilter);
+        Location location = Utils.getOperationalAreaLocation(PreferencesUtil.getInstance().getCurrentOperationalArea());
+        if (location != null) {
+            return appStructureRepository.countOfStructures(nameFilter, location.getId());
+        } else {
+            return 0;
+        }
     }
 
     public List<StructureDetail> fetchStructures(int pageNo, String nameFilter) {

@@ -212,7 +212,7 @@ dependencies {
     }
 
 //    implementation(project(':opensrp-tasking')) {
-    implementation('org.smartregister:opensrp-client-tasking:0.0.3-EUSM-SNAPSHOT') {
+    implementation('org.smartregister:opensrp-client-tasking:0.0.3-v1-EUSM-SNAPSHOT') {
         transitive = true
         exclude group: 'org.smartregister', module: 'opensrp-client-core'
         exclude group: 'com.ibm.fhir', module: 'fhir-model'
@@ -220,7 +220,7 @@ dependencies {
         exclude group: 'org.smartregister', module: 'opensrp-client-native-form'
     }
 
-    api('org.smartregister:opensrp-client-stock:1.2.2-PREVIEW-SNAPSHOT') {
+    api('org.smartregister:opensrp-client-stock:1.2.1-v4-102-SNAPSHOT') {
         transitive = true
         exclude group: 'org.smartregister', module: 'opensrp-client-core'
         exclude group: 'org.smartregister', module: 'opensrp-client-native-form'

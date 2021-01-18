@@ -5,6 +5,7 @@ import android.content.Intent;
 
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 
+import org.smartregister.CoreLibrary;
 import org.smartregister.domain.Client;
 import org.smartregister.domain.Event;
 import org.smartregister.domain.db.EventClient;
@@ -59,9 +60,9 @@ public class AppClientProcessor extends ClientProcessorForJava {
 //                        hasSyncedEventsInTarget = true;
 //                    }
                 }
-//                if (localSubmission && CoreLibrary.getInstance().getSyncConfiguration().runPlanEvaluationOnClientProcessing()) {
-//                    processPlanEvaluation(eventClient);
-//                }
+                if (localSubmission && CoreLibrary.getInstance().getSyncConfiguration().runPlanEvaluationOnClientProcessing()) {
+                    processPlanEvaluation(eventClient);
+                }
             }
         }
 
