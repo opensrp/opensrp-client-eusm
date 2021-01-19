@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <item name="task_details" type="id" />
+    <item name="filter_category" type="id" />
+    <item name="structure_detail" type="id" />
+    <item name="structure_task_detail" type="id" />
+    <item name="task_detail" type="id" />
+    <item name="product_info_question" type="id" />
+    <item name="card_detail" type="id" />
+</resources>
