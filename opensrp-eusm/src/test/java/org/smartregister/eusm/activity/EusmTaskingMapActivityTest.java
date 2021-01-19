@@ -93,6 +93,7 @@ public class EusmTaskingMapActivityTest extends BaseActivityUnitTest {
 
     @After
     public void tearDown() {
+        ReflectionHelpers.setStaticField(CoreLibrary.class, "instance", null);
         destroyController();
     }
 }
