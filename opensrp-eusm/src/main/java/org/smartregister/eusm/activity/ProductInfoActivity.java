@@ -44,7 +44,7 @@ public class ProductInfoActivity extends MultiLanguageActivity implements Produc
     protected AppBarLayout appBarLayout;
     private TaskDetail taskDetail;
     private StructureDetail structureDetail;
-    private ProductInfoActivityPresenter presenter;
+    private ProductInfoActivityContract.Presenter presenter;
     private ProgressDialog progressDialog;
     private CollapsingToolbarLayout collapsingToolbarLayout;
     private boolean appBarTitleIsShown = true;
@@ -133,7 +133,7 @@ public class ProductInfoActivity extends MultiLanguageActivity implements Produc
                 String encounterType = form.getString(JsonFormConstants.ENCOUNTER_TYPE);
 
                 if (AppConstants.EncounterType.FLAG_PROBLEM.equals(encounterType)) {
-                    showProgressDialog(R.string.saving_dialog_title);
+                    showProgressDialog(R.string.saving_dialog_title, R.string.saving_message);
                     presenter().saveFlagProblemForm(taskDetail, encounterType, form, getStructureDetail());
                 }
 
@@ -157,9 +157,10 @@ public class ProductInfoActivity extends MultiLanguageActivity implements Produc
     }
 
     @Override
-    public void showProgressDialog(@StringRes int message) {
+    public void showProgressDialog(@StringRes int dialogTitle, @StringRes int dialogMessage) {
         if (progressDialog != null && !progressDialog.isShowing() && !this.isFinishing()) {
-            progressDialog.setTitle(message);
+            progressDialog.setTitle(dialogTitle);
+            progressDialog.setMessage(getString(dialogMessage));
             progressDialog.show();
         }
     }
@@ -173,8 +174,8 @@ public class ProductInfoActivity extends MultiLanguageActivity implements Produc
 
     @Override
     public void initializeDialog() {
-        if (progressDialog != null) {
-            progressDialog = new ProgressDialog(getApplicationContext());
+        if (progressDialog == null) {
+            progressDialog = new ProgressDialog(ProductInfoActivity.this);
         }
     }
 
@@ -257,7 +258,7 @@ public class ProductInfoActivity extends MultiLanguageActivity implements Produc
     public void startForm(JSONObject jsonForm) {
         Form form = new Form();
         form.setWizard(true);
-        form.setName("Flag Problem");
+        form.setName(getString(R.string.flag_problem_form_name));
         form.setBackIcon(R.drawable.ic_action_close);
         form.setSaveLabel(getString(R.string.save));
         form.setActionBarBackground(R.color.primaryDark);

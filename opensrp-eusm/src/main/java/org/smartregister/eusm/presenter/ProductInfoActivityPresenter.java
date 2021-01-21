@@ -28,7 +28,7 @@ public class ProductInfoActivityPresenter implements ProductInfoActivityContract
     public void saveFlagProblemForm(TaskDetail taskDetail, String encounterType,
                                     JSONObject jsonForm, StructureDetail structureDetail) {
         if (getView() != null) {
-            getView().showProgressDialog(R.string.saving_message);
+            getView().showProgressDialog(R.string.saving_message, R.string.saving_message);
         }
         productInfoActivityInteractor.saveFlagProblemForm(taskDetail,
                 encounterType,
@@ -53,7 +53,7 @@ public class ProductInfoActivityPresenter implements ProductInfoActivityContract
     @Override
     public void markProductAsGood(StructureDetail structureDetail, TaskDetail taskDetail) {
         if (getView() != null) {
-            getView().showProgressDialog(R.string.looks_good_save_dialog);
+            getView().showProgressDialog(R.string.looks_good_save_dialog, R.string.saving_message);
             productInfoActivityInteractor.markProductAsGood(structureDetail, taskDetail, this, getView().getActivity());
         }
     }

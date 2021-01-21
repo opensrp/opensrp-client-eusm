@@ -23,7 +23,6 @@ import org.smartregister.eusm.domain.StructureDetail;
 import org.smartregister.eusm.fragment.EusmTasksRegisterFragment;
 import org.smartregister.eusm.presenter.TaskRegisterActivityPresenter;
 import org.smartregister.eusm.util.AppConstants;
-import org.smartregister.stock.widget.StockDatePickerFactory;
 import org.smartregister.tasking.activity.TaskRegisterActivity;
 import org.smartregister.tasking.adapter.ViewPagerAdapter;
 import org.smartregister.tasking.model.BaseTaskDetails;

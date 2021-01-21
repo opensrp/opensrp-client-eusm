@@ -22,7 +22,7 @@
         android:alpha="0.7"
         android:layout_marginBottom="1dp"
         android:paddingStart="0dp"
-        android:text="GPS unknown"
+        android:text="@string/gps_unknown"
         android:textColor="@android:color/white"
         android:textSize="14dp" />
 </LinearLayout>

@@ -151,7 +151,7 @@ public class AppStructureRepository extends StructureRepository {
         };
 
         String query = "SELECT " + StringUtils.join(columns, ",") + " from " + StructureRepository.STRUCTURE_TABLE
-                + " join task on task.location = " + StructureRepository.STRUCTURE_TABLE + "._id "
+                + " join task on task.structure_id = " + StructureRepository.STRUCTURE_TABLE + "._id "
                 + " join location on location._id = " + StructureRepository.STRUCTURE_TABLE + ".parent_id ";
 
 

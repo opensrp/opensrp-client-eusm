@@ -5,6 +5,7 @@ import androidx.annotation.Nullable;
 
 import org.json.JSONObject;
 import org.smartregister.domain.Event;
+import org.smartregister.domain.FetchStatus;
 import org.smartregister.eusm.R;
 import org.smartregister.eusm.contract.TaskRegisterActivityContract;
 import org.smartregister.eusm.domain.StructureDetail;
@@ -62,6 +63,9 @@ public class TaskRegisterActivityPresenter implements TaskRegisterActivityContra
     public void onFormSaved(String encounterType, boolean isSuccessful, Event event) {
         if (getView() != null) {
             getView().hideProgressDialog();
+
+            getView().refreshList(FetchStatus.fetched);
+
             if (!isSuccessful) {
                 getView().displayToast(R.string.error_occurred_saving_form);
             }

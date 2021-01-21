@@ -31,13 +31,14 @@ public class AppTaskRepository extends TaskRepository {
         SQLiteDatabase sqLiteDatabase = getReadableDatabase();
         String[] columns = new String[]{
                 TASK_TABLE + "." + AppConstants.Column.Task.FOR,
-                TASK_TABLE + "." + AppConstants.Column.Task.FOCUS + " as taskName",
                 TASK_TABLE + "." + AppConstants.Column.Task.BUSINESS_STATUS,
                 TASK_TABLE + "." + AppConstants.Column.Task.STATUS,
                 TASK_TABLE + "." + AppConstants.Column.Task.ID + " as taskId",
                 TASK_TABLE + "." + AppConstants.Column.Task.LOCATION + " as taskLocation",
                 TASK_TABLE + "." + AppConstants.Column.Task.STRUCTURE_ID,
                 TASK_TABLE + "." + AppConstants.Column.Task.CODE,
+                TASK_TABLE + "." + AppConstants.Column.Task.PLAN_ID,
+                TASK_TABLE + "." + AppConstants.Column.Task.GROUP_ID,
 
                 StockTypeRepository.STOCK_TYPE_TABLE_NAME + "." + StockTypeRepository.UNIQUE_ID,
                 StockTypeRepository.STOCK_TYPE_TABLE_NAME + "." + StockTypeRepository.NAME,
@@ -55,7 +56,7 @@ public class AppTaskRepository extends TaskRepository {
                 + " FROM " + TASK_TABLE +
                 " LEFT JOIN " + StockRepository.STOCK_TABLE_NAME + " ON " + StockRepository.STOCK_TABLE_NAME + "." + StockRepository.STOCK_ID + " = " + TASK_TABLE + "." + AppConstants.Column.Task.FOR +
                 " LEFT JOIN " + StockTypeRepository.STOCK_TYPE_TABLE_NAME + " ON " + StockTypeRepository.STOCK_TYPE_TABLE_NAME + "." + StockTypeRepository.UNIQUE_ID + " = " + StockRepository.STOCK_TABLE_NAME + "." + StockRepository.IDENTIFIER +
-                " WHERE taskLocation = ? group by taskId";
+                " WHERE task.structure_id = ? group by taskId";
         try (Cursor cursor = sqLiteDatabase.rawQuery(query, new String[]{structureId})) {
             if (cursor != null) {
                 while (cursor.moveToNext()) {
@@ -69,8 +70,10 @@ public class AppTaskRepository extends TaskRepository {
     }
 
     private TaskDetail readStructureTaskDetailCursor(Cursor cursor) {
-        String taskName = cursor.getString(cursor.getColumnIndex("taskName"));
-//        String taskFor = cursor.getString(cursor.getColumnIndex(AppConstants.Column.Task.FOR));
+//        String taskName = cursor.getString(cursor.getColumnIndex("taskName"));
+        String taskGroupId = cursor.getString(cursor.getColumnIndex(AppConstants.Column.Task.GROUP_ID));
+
+        String taskFor = cursor.getString(cursor.getColumnIndex(AppConstants.Column.Task.FOR));
         String taskBusinessStatus = cursor.getString(cursor.getColumnIndex(AppConstants.Column.Task.BUSINESS_STATUS));
         String taskStatus = cursor.getString(cursor.getColumnIndex(AppConstants.Column.Task.STATUS));
         String taskId = cursor.getString(cursor.getColumnIndex("taskId"));
@@ -86,12 +89,20 @@ public class AppTaskRepository extends TaskRepository {
         String availability = cursor.getString(cursor.getColumnIndex(StockTypeRepository.AVAILABILITY));
         String stockId = cursor.getString(cursor.getColumnIndex(StockRepository.STOCK_ID));
         String taskCode = cursor.getString(cursor.getColumnIndex(AppConstants.Column.Task.CODE));
+        String planId = cursor.getString(cursor.getColumnIndex(AppConstants.Column.Task.PLAN_ID));
 
         TaskDetail taskDetail = new TaskDetail(taskId);
         if (productName != null)
             taskDetail.setEntityName(productName);
-        else
-            taskDetail.setEntityName(taskName);
+        else {
+            String name = taskCode;
+            if (AppConstants.EncounterType.RECORD_GPS.equals(taskCode)) {
+                name = AppConstants.TaskCode.RECORD_GPS;
+            } else if (AppConstants.EncounterType.SERVICE_POINT_CHECK.equals(taskCode)) {
+                name = AppConstants.TaskCode.SERVICE_POINT_CHECK;
+            }
+            taskDetail.setEntityName(name);
+        }
         taskDetail.setQuantity(quantity);
         taskDetail.setTaskId(taskId);
         taskDetail.setProductId(productId);
@@ -106,6 +117,9 @@ public class AppTaskRepository extends TaskRepository {
         taskDetail.setTaskCode(taskCode);
         taskDetail.setHasProblem(AppConstants.BusinessStatus.HAS_PROBLEM.equals(taskBusinessStatus));
         taskDetail.setBusinessStatus(taskBusinessStatus);
+        taskDetail.setPlanId(planId);
+        taskDetail.setForEntity(taskFor);
+        taskDetail.setGroupId(taskGroupId);
         return taskDetail;
     }
 

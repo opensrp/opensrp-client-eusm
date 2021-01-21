@@ -18,6 +18,7 @@ import org.smartregister.eusm.domain.StructureDetail;
 import org.smartregister.eusm.domain.TaskDetail;
 import org.smartregister.eusm.repository.AppRepository;
 import org.smartregister.eusm.repository.AppTaskRepository;
+import org.smartregister.eusm.util.AppConstants;
 import org.smartregister.eusm.util.AppJsonFormUtils;
 import org.smartregister.eusm.util.AppUtils;
 import org.smartregister.util.AppExecutors;
@@ -26,6 +27,7 @@ import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 public class TaskRegisterFragmentInteractor implements TaskRegisterFragmentContract.Interactor {
@@ -101,7 +103,19 @@ public class TaskRegisterFragmentInteractor implements TaskRegisterFragmentContr
                     appRepository.archiveEventsForTask(taskDetail);
 
                     AppTaskRepository taskRepository = EusmApplication.getInstance().getAppTaskRepository();
-                    taskRepository.updateTaskStatus(taskId, Task.TaskStatus.READY, "NOT VISITED");
+                    taskRepository.updateTaskStatus(taskId, Task.TaskStatus.CANCELLED, "NOT VISITED");
+
+                    //fetch fix problem task if present
+                    if (AppConstants.BusinessStatus.HAS_PROBLEM.equals(taskDetail.getBusinessStatus())) {
+                        Set<Task> taskSet = taskRepository.getTasksByEntityAndCode(taskDetail.getPlanId(), "663d7935-35e7-4ccf-aaf5-6e16f2042570",
+                                taskDetail.getForEntity(), AppConstants.EncounterType.FIX_PROBLEM);
+                        for (Task task : taskSet) {
+                            if (task.getStatus() == Task.TaskStatus.READY) {
+                                taskRepository.updateTaskStatus(task.getIdentifier(), Task.TaskStatus.CANCELLED, "NOT VISITED");
+                                break;
+                            }
+                        }
+                    }
                     returnResponse(callBack, taskDetail, true);
                 } else {
                     returnResponse(callBack, taskDetail, false);

@@ -25,6 +25,7 @@ import org.smartregister.domain.Location;
 import org.smartregister.domain.PlanDefinition;
 import org.smartregister.domain.PlanDefinitionSearch;
 import org.smartregister.domain.Task;
+import org.smartregister.eusm.BuildConfig;
 import org.smartregister.eusm.activity.EusmOfflineMapsActivity;
 import org.smartregister.eusm.activity.EusmTaskingMapActivity;
 import org.smartregister.eusm.activity.StructureRegisterActivity;
@@ -37,6 +38,7 @@ import org.smartregister.eusm.util.DefaultLocationUtils;
 import org.smartregister.eusm.view.NavigationDrawerView;
 import org.smartregister.job.ImageUploadServiceJob;
 import org.smartregister.job.SyncServiceJob;
+import org.smartregister.location.helper.LocationHelper;
 import org.smartregister.repository.PlanDefinitionRepository;
 import org.smartregister.repository.PlanDefinitionSearchRepository;
 import org.smartregister.tasking.activity.TaskingMapActivity;
@@ -53,6 +55,7 @@ import org.smartregister.tasking.model.TaskFilterParams;
 import org.smartregister.tasking.repository.TaskingMappingHelper;
 import org.smartregister.tasking.util.ActivityConfiguration;
 import org.smartregister.tasking.util.GeoJsonUtils;
+import org.smartregister.tasking.util.PreferencesUtil;
 import org.smartregister.tasking.util.TaskingConstants;
 import org.smartregister.tasking.util.TaskingJsonFormUtils;
 import org.smartregister.tasking.util.TaskingLibraryConfiguration;
@@ -124,17 +127,17 @@ public class AppTaskingLibraryConfiguration extends TaskingLibraryConfiguration 
 
     @Override
     public String getCurrentLocationId() {
-        return null;
+        return LocationHelper.getInstance().getParentLocationId();
     }
 
     @Override
     public String getCurrentOperationalAreaId() {
-        return null;
+        return PreferencesUtil.getInstance().getCurrentOperationalAreaId();
     }
 
     @Override
     public Integer getDatabaseVersion() {
-        return null;
+        return BuildConfig.DATABASE_VERSION;
     }
 
     @Override
