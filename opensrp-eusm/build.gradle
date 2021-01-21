@@ -158,6 +158,7 @@ android {
 }
 
 tasks.withType(Test) {
+    testLogging.exceptionFormat "full"
     jacoco.includeNoLocationClasses = true
     maxHeapSize = "2g"
 }

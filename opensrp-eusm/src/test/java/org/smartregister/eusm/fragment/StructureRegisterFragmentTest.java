@@ -8,6 +8,7 @@ import androidx.fragment.app.FragmentActivity;
 import androidx.fragment.app.testing.FragmentScenario;
 import androidx.lifecycle.Lifecycle;
 
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.ArgumentCaptor;
@@ -97,6 +98,11 @@ public class StructureRegisterFragmentTest extends BaseUnitTest {
 
             assertEquals(EusmTaskRegisterActivity.class.getCanonicalName(), intent.getComponent().getClassName());
         });
+    }
+
+    @After
+    public void tearDown() {
+        ReflectionHelpers.setStaticField(CoreLibrary.class, "instance", null);
     }
 
     public static class TestStructureRegisterFragment extends StructureRegisterFragment {
