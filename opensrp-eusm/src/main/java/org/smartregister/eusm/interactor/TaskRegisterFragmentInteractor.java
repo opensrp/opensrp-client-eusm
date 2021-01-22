@@ -103,15 +103,15 @@ public class TaskRegisterFragmentInteractor implements TaskRegisterFragmentContr
                     appRepository.archiveEventsForTask(taskDetail);
 
                     AppTaskRepository taskRepository = EusmApplication.getInstance().getAppTaskRepository();
-                    taskRepository.updateTaskStatus(taskId, Task.TaskStatus.CANCELLED, "NOT VISITED");
+                    taskRepository.updateTaskStatus(taskId, Task.TaskStatus.READY, AppConstants.BusinessStatus.NOT_VISITED);
 
                     //fetch fix problem task if present
                     if (AppConstants.BusinessStatus.HAS_PROBLEM.equals(taskDetail.getBusinessStatus())) {
-                        Set<Task> taskSet = taskRepository.getTasksByEntityAndCode(taskDetail.getPlanId(), "663d7935-35e7-4ccf-aaf5-6e16f2042570",
+                        Set<Task> taskSet = taskRepository.getTasksByEntityAndCode(taskDetail.getPlanId(), taskDetail.getGroupId(),
                                 taskDetail.getForEntity(), AppConstants.EncounterType.FIX_PROBLEM);
                         for (Task task : taskSet) {
                             if (task.getStatus() == Task.TaskStatus.READY) {
-                                taskRepository.updateTaskStatus(task.getIdentifier(), Task.TaskStatus.CANCELLED, "NOT VISITED");
+                                taskRepository.updateTaskStatus(task.getIdentifier(), Task.TaskStatus.CANCELLED, AppConstants.BusinessStatus.NOT_VISITED);
                                 break;
                             }
                         }

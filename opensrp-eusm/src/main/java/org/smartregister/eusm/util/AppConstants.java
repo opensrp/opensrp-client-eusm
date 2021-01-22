@@ -127,6 +127,7 @@ public interface AppConstants extends TaskingConstants {
 
     interface BusinessStatus {
         String HAS_PROBLEM = "has_problem";
+        String NOT_VISITED = "Not Visited";
     }
 
     interface JsonFormKey {
