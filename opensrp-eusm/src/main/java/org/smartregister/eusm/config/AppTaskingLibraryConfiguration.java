@@ -38,7 +38,6 @@ import org.smartregister.eusm.util.DefaultLocationUtils;
 import org.smartregister.eusm.view.NavigationDrawerView;
 import org.smartregister.job.ImageUploadServiceJob;
 import org.smartregister.job.SyncServiceJob;
-import org.smartregister.location.helper.LocationHelper;
 import org.smartregister.repository.PlanDefinitionRepository;
 import org.smartregister.repository.PlanDefinitionSearchRepository;
 import org.smartregister.tasking.activity.TaskingMapActivity;
@@ -127,7 +126,7 @@ public class AppTaskingLibraryConfiguration extends TaskingLibraryConfiguration 
 
     @Override
     public String getCurrentLocationId() {
-        return LocationHelper.getInstance().getParentLocationId();
+        return null;
     }
 
     @Override
