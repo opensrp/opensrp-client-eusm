@@ -16,6 +16,7 @@ public class StructureDetail implements Serializable {
     private String commune;
     private String numOfTasks;
     private Location geojson;
+    private String parentId;
 
     public String getDistanceMeta() {
         return distanceMeta;
@@ -103,6 +104,14 @@ public class StructureDetail implements Serializable {
 
     public void setGeojson(Location geojson) {
         this.geojson = geojson;
+    }
+
+    public String getParentId() {
+        return parentId;
+    }
+
+    public void setParentId(String parentId) {
+        this.parentId = parentId;
     }
 
     @Override

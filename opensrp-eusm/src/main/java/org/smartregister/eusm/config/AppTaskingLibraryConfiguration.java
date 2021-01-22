@@ -60,6 +60,7 @@ import org.smartregister.tasking.util.TaskingConstants;
 import org.smartregister.tasking.util.TaskingJsonFormUtils;
 import org.smartregister.tasking.util.TaskingLibraryConfiguration;
 import org.smartregister.tasking.util.TaskingMapHelper;
+import org.smartregister.tasking.util.Utils;
 import org.smartregister.util.AppExecutors;
 
 import java.util.List;
@@ -127,12 +128,13 @@ public class AppTaskingLibraryConfiguration extends TaskingLibraryConfiguration 
 
     @Override
     public String getCurrentLocationId() {
-        return LocationHelper.getInstance().getParentLocationId();
-    }
+        Location currentOperationalArea = Utils.getOperationalAreaLocation(PreferencesUtil.getInstance().getCurrentOperationalArea());
+        return currentOperationalArea == null ? null : currentOperationalArea.getId();    }
 
     @Override
     public String getCurrentOperationalAreaId() {
-        return PreferencesUtil.getInstance().getCurrentOperationalAreaId();
+        Location currentOperationalArea = Utils.getOperationalAreaLocation(PreferencesUtil.getInstance().getCurrentOperationalArea());
+        return currentOperationalArea == null ? null : currentOperationalArea.getId();
     }
 
     @Override

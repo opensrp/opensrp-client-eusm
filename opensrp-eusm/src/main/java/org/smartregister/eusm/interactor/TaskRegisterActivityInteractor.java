@@ -7,7 +7,6 @@ import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.smartregister.domain.Event;
-import org.smartregister.domain.Task;
 import org.smartregister.eusm.application.EusmApplication;
 import org.smartregister.eusm.contract.TaskRegisterActivityContract;
 import org.smartregister.eusm.domain.StructureDetail;
@@ -81,15 +80,8 @@ public class TaskRegisterActivityInteractor implements TaskRegisterActivityContr
             Event event = AppUtils.createEventFromJsonForm(form, encounterType, bindType, entityType);
             try {
                 IntentFilter filter = new IntentFilter(TASK_GENERATED_EVENT);
-                TaskGenerationReceiver taskGenerationReceiver = new TaskGenerationReceiver(new TaskGenerationReceiver.TaskGenerationCallBack() {
-                    @Override
-                    public void onTaskCreatedOrUpdated(Task task) {
-                        appExecutors.mainThread().execute(() -> TaskRegisterActivityInteractor.this.returnResponse(encounterType, interactorCallBack, null, true));
-                    }
-                });
-
+                TaskGenerationReceiver taskGenerationReceiver = new TaskGenerationReceiver(task -> appExecutors.mainThread().execute(() -> returnResponse(encounterType, interactorCallBack, event, true)));
                 LocalBroadcastManager.getInstance(EusmApplication.getInstance().getApplicationContext()).registerReceiver(taskGenerationReceiver, filter);
-
                 AppUtils.initiateEventProcessing(Collections.singletonList(event.getFormSubmissionId()));
             } catch (Exception e) {
                 Timber.e(e);

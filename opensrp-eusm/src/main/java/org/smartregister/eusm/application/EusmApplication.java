@@ -9,8 +9,6 @@ import androidx.annotation.Nullable;
 import com.crashlytics.android.Crashlytics;
 import com.crashlytics.android.core.CrashlyticsCore;
 import com.evernote.android.job.JobManager;
-import com.mapbox.geojson.Feature;
-import com.mapbox.geojson.FeatureCollection;
 import com.mapbox.mapboxsdk.Mapbox;
 import com.vijay.jsonwizard.NativeFormLibrary;
 
@@ -80,17 +78,7 @@ public class EusmApplication extends DrishtiApplication implements TimeChangedBr
     private Map<String, Object> serverConfigs;
     private AppExecutors appExecutors;
 
-    private boolean refreshMapOnEventSaved;
-
-    private boolean myLocationComponentEnabled;
-
-    private FeatureCollection featureCollection;
-
     private RealmDatabase realmDatabase;
-
-    private Feature operationalArea;
-
-    private boolean synced;
 
     private AppRepository appRepository;
 
@@ -186,12 +174,6 @@ public class EusmApplication extends DrishtiApplication implements TimeChangedBr
         ValidateAssignmentReceiver.init(this);
 
         ValidateAssignmentReceiver.getInstance().addListener(this);
-
-        Location location = new Location("dest");
-        location.setLongitude(46.3777);
-        location.setLatitude(-15.654);
-
-        setUserLocation(location);
     }
 
     /**
@@ -352,46 +334,6 @@ public class EusmApplication extends DrishtiApplication implements TimeChangedBr
     @Override
     public ClientProcessorForJava getClientProcessor() {
         return AppClientProcessor.getInstance(this);
-    }
-
-    public boolean isRefreshMapOnEventSaved() {
-        return refreshMapOnEventSaved;
-    }
-
-    public void setRefreshMapOnEventSaved(boolean refreshMapOnEventSaved) {
-        this.refreshMapOnEventSaved = refreshMapOnEventSaved;
-    }
-
-    public boolean isMyLocationComponentEnabled() {
-        return myLocationComponentEnabled;
-    }
-
-    public void setMyLocationComponentEnabled(boolean myLocationComponentEnabled) {
-        this.myLocationComponentEnabled = myLocationComponentEnabled;
-    }
-
-    public FeatureCollection getFeatureCollection() {
-        return featureCollection;
-    }
-
-    public void setFeatureCollection(FeatureCollection featureCollection) {
-        this.featureCollection = featureCollection;
-    }
-
-    public Feature getOperationalArea() {
-        return operationalArea;
-    }
-
-    public void setOperationalArea(Feature operationalArea) {
-        this.operationalArea = operationalArea;
-    }
-
-    public boolean getSynced() {
-        return synced;
-    }
-
-    public void setSynced(boolean synced) {
-        this.synced = synced;
     }
 
     public Location getUserLocation() {

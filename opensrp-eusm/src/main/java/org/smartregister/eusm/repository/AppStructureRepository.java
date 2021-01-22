@@ -135,6 +135,7 @@ public class AppStructureRepository extends StructureRepository {
                 STRUCTURE_TABLE + "." + "type",
                 STRUCTURE_TABLE + "." + "latitude",
                 STRUCTURE_TABLE + "." + "longitude",
+                STRUCTURE_TABLE + "." + "parent_id as structureParentId",
                 STRUCTURE_TABLE + "." + "geojson as structureGeoJson",
                 LOCATION_TABLE + "." + "name as locationName",
                 LOCATION_TABLE + "." + "parent_id as locationParentId",
@@ -201,6 +202,7 @@ public class AppStructureRepository extends StructureRepository {
         String taskStatus = cursor.getString(cursor.getColumnIndex("taskStatus"));
         String commune = cursor.getString(cursor.getColumnIndex("locationName"));
         String geojson = cursor.getString(cursor.getColumnIndex("structureGeoJson"));
+        String structureParentId = cursor.getString(cursor.getColumnIndex("structureParentId"));
 
         StructureDetail structureDetail = new StructureDetail();
         structureDetail.setStructureId(id);
@@ -209,6 +211,7 @@ public class AppStructureRepository extends StructureRepository {
         structureDetail.setTaskStatus(taskStatus);
         structureDetail.setNumOfTasks(cursor.getString(cursor.getColumnIndex("numOfTasks")));
         structureDetail.setCommune(commune);
+        structureDetail.setParentId(structureParentId);
 
         if (StringUtils.isNotBlank(latitude) && StringUtils.isNotBlank(longitude)) {
             Location location = new Location("b");

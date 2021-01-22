@@ -31,15 +31,13 @@ import java.util.UUID;
 import timber.log.Timber;
 
 import static org.smartregister.client.utils.constants.JsonFormConstants.Properties.DETAILS;
-import static org.smartregister.tasking.util.Constants.METADATA;
-import static org.smartregister.util.JsonFormUtils.ENCOUNTER_LOCATION;
 import static org.smartregister.util.JsonFormUtils.ENTITY_ID;
 import static org.smartregister.util.JsonFormUtils.getString;
 
 
 public class AppJsonFormUtils {
 
-    public JSONObject getFormObject(@NonNull Context context,@NonNull String formName) {
+    public JSONObject getFormObject(@NonNull Context context, @NonNull String formName) {
         try {
             FormUtils formUtils = new FormUtils();
             return formUtils.getFormJsonFromRepositoryOrAssets(context, formName);
@@ -53,15 +51,13 @@ public class AppJsonFormUtils {
         try {
             JSONObject jsonObject = getFormObject(context, formName);
 
-            updateFormEncounterLocation(jsonObject, structureDetail.getStructureId());
-
             Map<String, String> map = new HashMap<>();
             map.put(AppConstants.EventDetailKey.LOCATION_NAME, structureDetail.getEntityName());
             map.put(AppConstants.EventDetailKey.LOCATION_ID, structureDetail.getStructureId());
             map.put(AppConstants.LOCATION_ID, structureDetail.getStructureId());
             map.put(AppConstants.Properties.TASK_IDENTIFIER, taskDetail.getTaskId());
-            map.put(AppConstants.EventDetailKey.PLAN_IDENTIFIER, AppConstants.PLAN_IDENTIFIER);
-            map.put(AppConstants.EventDetailKey.MISSION, AppConstants.PLAN_NAME);
+            map.put(AppConstants.EventDetailKey.PLAN_IDENTIFIER, PreferencesUtil.getInstance().getCurrentPlanId());
+            map.put(AppConstants.EventDetailKey.MISSION, PreferencesUtil.getInstance().getCurrentPlan());
             String entityId;
             if (AppConstants.JsonForm.RECORD_GPS_FORM.equals(formName) || AppConstants.JsonForm.SERVICE_POINT_CHECK_FORM.equals(formName)) {
                 entityId = structureDetail.getStructureId();
@@ -76,15 +72,6 @@ public class AppJsonFormUtils {
             Timber.e(e);
         }
         return null;
-    }
-
-    public void updateFormEncounterLocation(JSONObject jsonForm, String locationId) {
-        JSONObject metadata = JsonFormUtils.getJSONObject(jsonForm, METADATA);
-        try {
-            metadata.put(ENCOUNTER_LOCATION, locationId);
-        } catch (JSONException e) {
-            Timber.e(e);
-        }
     }
 
     public void populateFormDetails(JSONObject formJson, String entityId, Map<String, String> detailsMap) throws JSONException {

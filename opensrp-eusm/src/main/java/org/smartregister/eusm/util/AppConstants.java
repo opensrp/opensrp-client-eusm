@@ -6,18 +6,15 @@ public interface AppConstants extends TaskingConstants {
 
     int STRUCTURE_REGISTER_PAGE_SIZE = 10;
 
-    Integer NEARBY_DISTANCE_IN_METRES = 382992;
-
-    String PLAN_IDENTIFIER = "335ef7a3-7f35-58aa-8263-4419464946d8";
-
-    String PLAN_NAME = "SS";
+    Integer NEARBY_DISTANCE_IN_METRES = 500;
 
     String LOCATION_ID = "location_id";
 
     String STRUCTURE_IDS = "STRUCTURE_IDS";
 
-    interface Table {
-        String STRUCTURE_TABLE = "structure";
+    interface PreferenceKey {
+        String LOADED_DISTRICTS_FROM_HIERARCHY = "LOADED_DISTRICTS_FROM_HIERARCHY";
+        String COMMUNE_ID = "COMMUNE_ID";
     }
 
     interface Column {
@@ -127,6 +124,7 @@ public interface AppConstants extends TaskingConstants {
 
     interface BusinessStatus {
         String HAS_PROBLEM = "has_problem";
+        String NOT_VISITED = "Not Visited";
     }
 
     interface JsonFormKey {
@@ -146,5 +144,6 @@ public interface AppConstants extends TaskingConstants {
     interface LocationLevels {
         String DISTRICT = "district";
         String COMMUNE = "commune";
+        String DISTRICT_TAG = "District";
     }
 }

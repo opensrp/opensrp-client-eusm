@@ -16,7 +16,6 @@ import org.robolectric.android.controller.ActivityController;
 import org.robolectric.annotation.LooperMode;
 import org.robolectric.util.ReflectionHelpers;
 import org.smartregister.Context;
-import org.smartregister.domain.Event;
 import org.smartregister.eusm.BaseActivityUnitTest;
 import org.smartregister.eusm.contract.TaskRegisterActivityContract;
 import org.smartregister.eusm.domain.StructureDetail;
@@ -55,7 +54,7 @@ public class EusmTaskRegisterActivityTest extends BaseActivityUnitTest {
     }
 
     @Test
-    public void testSaveRecordGpsFormShouldInvokeOnFormSaved() throws JSONException, InterruptedException {
+    public void testSaveRecordGpsFormShouldInvokeOnSaveForm() throws JSONException, InterruptedException {
         JSONObject jsonForm = new JSONObject(recordGpsString);
         TaskRegisterActivityPresenter taskRegisterActivityPresenter = spy(new TaskRegisterActivityPresenter(eusmTaskRegisterActivity));
         TaskRegisterActivityContract.View view1 = eusmTaskRegisterActivity;
@@ -67,8 +66,8 @@ public class EusmTaskRegisterActivityTest extends BaseActivityUnitTest {
         shadowOf(getMainLooper()).idle();
         Thread.sleep(ASYNC_TIMEOUT);
         verify(taskRegisterActivityPresenter)
-                .onFormSaved(eq(jsonForm.optString(JsonFormConstants.ENCOUNTER_TYPE))
-                        , eq(true), any(Event.class));
+                .saveForm(eq(jsonForm.optString(JsonFormConstants.ENCOUNTER_TYPE))
+                        , any(JSONObject.class), any(StructureDetail.class));
     }
 
     @Override

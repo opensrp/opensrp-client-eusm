@@ -11,14 +11,11 @@ import org.joda.time.DateTime;
 import org.smartregister.domain.LocationProperty;
 import org.smartregister.domain.Task;
 import org.smartregister.eusm.application.EusmApplication;
-import org.smartregister.repository.LocationRepository;
 import org.smartregister.repository.TaskRepository;
-import org.smartregister.service.UserService;
 import org.smartregister.util.DateTimeTypeConverter;
 import org.smartregister.util.PropertiesConverter;
 
 import java.util.List;
-import java.util.Set;
 
 /**
  * Created by samuelgithengi on 12/3/18.
@@ -29,14 +26,12 @@ public class TestDataUtils {
             .registerTypeAdapter(DateTime.class, new DateTimeTypeConverter())
             .registerTypeAdapter(LocationProperty.class, new PropertiesConverter()).create();
     private final TaskRepository taskRepository;
-    private final LocationRepository locationRepository;
     //    private final StructureRepository structureRepository;
     private final String TEST_DATA_POPULATED = "test.data.populated";
 
 
     public TestDataUtils() {
         taskRepository = EusmApplication.getInstance().getTaskRepository();
-        locationRepository = EusmApplication.getInstance().getLocationRepository();
 //        structureRepository = EusmApplication.getInstance().getStructureRepository();
     }
 
@@ -50,11 +45,7 @@ public class TestDataUtils {
     public void populateTestData() {
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(EusmApplication.getInstance().getApplicationContext());
         if (!sharedPreferences.getBoolean(TEST_DATA_POPULATED, false)) {
-            UserService userService = EusmApplication.getInstance().context().userService();
-            Set<String> strings = userService.fetchJurisdictionIds();
-            strings.add("ad56bb3b-66c5-4a29-8003-0a60582540a6");
-            strings.add("a7433a02-42be-4d19-8cbd-084dd5e0bbae");
-            userService.saveJurisdictionIds(strings);
+
 //            createLocations();
 //            createPlanDefinition();
             createTasks();
@@ -68,7 +59,7 @@ public class TestDataUtils {
         try {
             Gson gson = new GsonBuilder().registerTypeAdapter(DateTime.class, new DateTimeTypeConverter("yyyy-MM-dd'T'HHmm"))
                     .serializeNulls().create();
-            String tasksJSON = "[{\"identifier\":\"076885f8-582e-4dc6-8a1a-510e1c8ed5d9\",\"campaignIdentifier\":\"IRS_2019_S1\",\"planIdentifier\":\"335ef7a3-7f35-58aa-8263-4419464946d8\",\"groupIdentifier\":\"8e74d042-4a71-4694-a652-bc3ba6369101\",\"status\":\"Ready\",\"businessStatus\":\"Visited\",\"priority\":\"routine\",\"code\":\"Record GPS\",\"description\":\"Record GPS\",\"focus\":\"Record GPS\",\"for\":\"a1b6e201-b91c-441a-8368-b75a82e06a42\",\"executionPeriod\":{\"start\":\"2018-11-10T22:00:00.000\"},\"authoredOn\":\"2018-11-29T0342\",\"lastModified\":\"2018-12-03T2212\",\"owner\":\"demoMTI\",\"location\":\"a1b6e201-b91c-441a-8368-b75a82e06a42\",\"note\":null,\"serverVersion\":1543867945202},{\"identifier\":\"634fa9fa-736d-4298-96aa-3de68ac02cae\",\"campaignIdentifier\":\"IRS_2019_S1\",\"planIdentifier\":\"335ef7a3-7f35-58aa-8263-4419464946d8\",\"groupIdentifier\":\"8e74d042-4a71-4694-a652-bc3ba6369101\",\"status\":\"Ready\",\"businessStatus\":\"Not Visited\",\"priority\":\"routine\",\"code\":\"IRS\",\"description\":\"Service Point Check\",\"focus\":\"Service Point Check\",\"for\":\"f3199af5-2eaf-46df-87c9-40d59606a2fb\",\"executionPeriod\":{\"start\":\"2018-11-10T22:00:00.000\"},\"authoredOn\":\"2018-11-29T0342\",\"lastModified\":\"2018-12-03T2212\",\"owner\":\"demoMTI\",\"location\":\"f3199af5-2eaf-46df-87c9-40d59606a2fb\",\"note\":null,\"serverVersion\":1543867945203},{\"identifier\":\"d3b237ff-f9d8-4077-9523-c7bf3552ff87\",\"campaignIdentifier\":\"IRS_2019_S1\",\"groupIdentifier\":\"8e74d042-4a71-4694-a652-bc3ba6369101\",\"planIdentifier\":\"335ef7a3-7f35-58aa-8263-4419464946d8\",\"status\":\"Ready\",\"businessStatus\":\"Not Visited\",\"priority\":\"routine\",\"code\":\"IRS\",\"description\":\"Spray House\",\"focus\":\"IRS Visit\",\"for\":\"c2635a23-a604-48fb-9e1c-8bf1e75e6759\",\"executionPeriod\":{\"start\":\"2018-11-10T22:00:00.000\"},\"authoredOn\":\"2018-11-29T0342\",\"lastModified\":\"2018-12-03T2212\",\"location\":\"f3199af5-2eaf-46df-87c9-40d59606a2fb\",\"structureId\":\"f3199af5-2eaf-46df-87c9-40d59606a2fb\",\"owner\":\"demoMTI\",\"note\":null,\"serverVersion\":1543867945204},{\"identifier\":\"c6dd4abc-fb3e-4f72-afb8-923fc43f44d7\",\"campaignIdentifier\":\"IRS_2019_S1\",\"groupIdentifier\":\"8e74d042-4a71-4694-a652-bc3ba6369101\",\"status\":\"Ready\",\"planIdentifier\":\"335ef7a3-7f35-58aa-8263-4419464946d8\",\"businessStatus\":\"Not Visited\",\"priority\":\"routine\",\"code\":\"IRS\",\"description\":\"product\",\"focus\":\"product\",\"for\":\"ddcaf383-882e-448b-b701-8b72cb0d4d7a\",\"executionPeriod\":{\"start\":\"2018-11-10T22:00:00.000\"},\"authoredOn\":\"2018-12-03T2212\",\"lastModified\":\"2018-12-03T2212\",\"owner\":\"demoMTI\",\"location\":\"f3199af5-2eaf-46df-87c9-40d59606a2fb\",\"note\":null,\"serverVersion\":1543867945195},{\"identifier\":\"2caa810d-d4da-4e67-838b-badb9bd86e06\",\"campaignIdentifier\":\"IRS_2019_S1\",\"groupIdentifier\":\"8e74d042-4a71-4694-a652-bc3ba6369101\",\"status\":\"Ready\",\"planIdentifier\":\"335ef7a3-7f35-58aa-8263-4419464946d8\",\"businessStatus\":\"Not Visited\",\"priority\":\"routine\",\"code\":\"IRS\",\"description\":\"Service Point Check\",\"focus\":\"Service Point Check\",\"for\":\"b8a7998c-5df6-49eb-98e6-f0675db71848\",\"executionPeriod\":{\"start\":\"2018-11-10T22:00:00.000\"},\"authoredOn\":\"2018-12-03T2212\",\"lastModified\":\"2018-12-03T2212\",\"owner\":\"demoMTI\",\"location\":\"b8a7998c-5df6-49eb-98e6-f0675db71848\",\"note\":null,\"serverVersion\":1543867945196},{\"identifier\":\"bbf32ca5-9b83-444d-882f-2085974e90b5\",\"campaignIdentifier\":\"IRS_2019_S1\",\"groupIdentifier\":\"8e74d042-4a71-4694-a652-bc3ba6369101\",\"status\":\"Ready\",\"planIdentifier\":\"335ef7a3-7f35-58aa-8263-4419464946d8\",\"businessStatus\":\"Not Visited\",\"priority\":\"routine\",\"code\":\"Record GPS\",\"description\":\"Record GPS\",\"focus\":\"Record GPS\",\"for\":\"bb0b393c-2fd6-4d99-a5b1-f32ef498a76d\",\"executionPeriod\":{\"start\":\"2018-11-10T22:00:00.000\"},\"authoredOn\":\"2018-12-03T2212\",\"lastModified\":\"2018-12-03T2212\",\"owner\":\"demoMTI\",\"location\":\"bb0b393c-2fd6-4d99-a5b1-f32ef498a76d\",\"note\":null,\"serverVersion\":1543867945196},{\"identifier\":\"6c303b8b-e47c-45e9-8ab5-3374c8f539a3\",\"campaignIdentifier\":\"IRS_2019_S1\",\"groupIdentifier\":\"8e74d042-4a71-4694-a652-bc3ba6369101\",\"status\":\"Ready\",\"planIdentifier\":\"335ef7a3-7f35-58aa-8263-4419464946d8\",\"businessStatus\":\"Not Visited\",\"priority\":\"routine\",\"code\":\"IRS\",\"description\":\"product\",\"focus\":\"product\",\"for\":\"69227a92-7979-490c-b149-f28669c6b760\",\"executionPeriod\":{\"start\":\"2018-11-10T22:00:00.000\"},\"authoredOn\":\"2018-12-03T2212\",\"lastModified\":\"2018-12-03T2212\",\"owner\":\"demoMTI\",\"structureId\":\"b8a7998c-5df6-49eb-98e6-f0675db71848\",\"location\":\"b8a7998c-5df6-49eb-98e6-f0675db71848\",\"note\":null,\"serverVersion\":1543867945196}]";
+            String tasksJSON = "[{\"identifier\":\"d3b237ff-f9d8-4077-9523-c7bf3552ff87\",\"campaignIdentifier\":\"IRS_2019_S1\",\"groupIdentifier\":\"8e74d042-4a71-4694-a652-bc3ba6369101\",\"planIdentifier\":\"335ef7a3-7f35-58aa-8263-4419464946d8\",\"status\":\"Ready\",\"businessStatus\":\"Not Visited\",\"priority\":\"routine\",\"code\":\"IRS\",\"description\":\"Spray House\",\"focus\":\"IRS Visit\",\"for\":\"c2635a23-a604-48fb-9e1c-8bf1e75e6759\",\"executionPeriod\":{\"start\":\"2018-11-10T22:00:00.000\"},\"authoredOn\":\"2018-11-29T0342\",\"lastModified\":\"2018-12-03T2212\",\"location\":\"f3199af5-2eaf-46df-87c9-40d59606a2fb\",\"structureId\":\"f3199af5-2eaf-46df-87c9-40d59606a2fb\",\"owner\":\"demoMTI\",\"note\":null,\"serverVersion\":1543867945204},{\"identifier\":\"c6dd4abc-fb3e-4f72-afb8-923fc43f44d7\",\"campaignIdentifier\":\"IRS_2019_S1\",\"groupIdentifier\":\"8e74d042-4a71-4694-a652-bc3ba6369101\",\"status\":\"Ready\",\"planIdentifier\":\"335ef7a3-7f35-58aa-8263-4419464946d8\",\"businessStatus\":\"Not Visited\",\"priority\":\"routine\",\"code\":\"IRS\",\"description\":\"product\",\"focus\":\"product\",\"for\":\"ddcaf383-882e-448b-b701-8b72cb0d4d7a\",\"executionPeriod\":{\"start\":\"2018-11-10T22:00:00.000\"},\"authoredOn\":\"2018-12-03T2212\",\"lastModified\":\"2018-12-03T2212\",\"owner\":\"demoMTI\",\"location\":\"f3199af5-2eaf-46df-87c9-40d59606a2fb\",\"structureId\":\"f3199af5-2eaf-46df-87c9-40d59606a2fb\",\"note\":null,\"serverVersion\":1543867945195},{\"identifier\":\"6c303b8b-e47c-45e9-8ab5-3374c8f539a3\",\"campaignIdentifier\":\"IRS_2019_S1\",\"groupIdentifier\":\"663d7935-35e7-4ccf-aaf5-6e16f2042570\",\"status\":\"Ready\",\"planIdentifier\":\"335ef7a3-7f35-58aa-8263-4419464946d8\",\"businessStatus\":\"Not Visited\",\"priority\":\"routine\",\"code\":\"IRS\",\"description\":\"product\",\"focus\":\"product\",\"for\":\"69227a92-7979-490c-b149-f28669c6b760\",\"executionPeriod\":{\"start\":\"2018-11-10T22:00:00.000\"},\"authoredOn\":\"2018-12-03T2212\",\"lastModified\":\"2018-12-03T2212\",\"owner\":\"demoMTI\",\"structureId\":\"b8a7998c-5df6-49eb-98e6-f0675db71848\",\"location\":\"b8a7998c-5df6-49eb-98e6-f0675db71848\",\"note\":null,\"serverVersion\":1543867945196}]";
             List<Task> tasks = gson.fromJson(tasksJSON, new TypeToken<List<Task>>() {
             }.getType());
             for (Task task : tasks) {
