@@ -1,0 +1,7 @@
+<resources>
+    <string name="show_password_text">Afficher mot de passe</string>
+
+    <string name="sync">Synchro.</string>
+    <string name="str_page_info">Page {0} de {1}</string>
+    <string name="next_page"><![CDATA[PROCHAIN >>]]></string>
+    </resources>
