@@ -58,7 +58,6 @@ public class LoginActivity extends BaseLoginActivity implements BaseLoginContrac
         finish();
 
         EusmApplication.getInstance().processServerConfigs();
-
     }
 
     @Override

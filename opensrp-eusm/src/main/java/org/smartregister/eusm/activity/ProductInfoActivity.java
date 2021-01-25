@@ -268,6 +268,7 @@ public class ProductInfoActivity extends MultiLanguageActivity implements Produc
         Intent intent = new Intent(getActivity(), JsonWizardFormActivity.class);
         intent.putExtra(JsonFormConstants.JSON_FORM_KEY.JSON, jsonForm.toString());
         intent.putExtra(JsonFormConstants.JSON_FORM_KEY.FORM, form);
+        intent.putExtra(JsonFormConstants.PERFORM_FORM_TRANSLATION, true);
         startActivityForResult(intent, AppConstants.RequestCode.REQUEST_CODE_GET_JSON);
     }
 

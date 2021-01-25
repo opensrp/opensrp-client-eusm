@@ -48,7 +48,7 @@
     "encounter_location": ""
   },
   "step1": {
-    "title": "Flag Problem",
+    "title": "{{flag_problem.step1.title}}",
     "next": "step2",
     "fields": [
       {
@@ -57,7 +57,7 @@
         "openmrs_entity": "",
         "openmrs_entity_id": "",
         "type": "check_box",
-        "label": "Flag problem(s)",
+        "label": "{{flag_problem.step1.flag_problem.label}}",
         "label_text_style": "bold",
         "exclusive": [
           "not_there"
@@ -65,21 +65,21 @@
         "options": [
           {
             "key": "not_there",
-            "text": "Product is not there",
+            "text": "{{flag_problem.step1.flag_problem.options.not_there.text}}",
             "openmrs_entity_parent": "",
             "openmrs_entity": "",
             "openmrs_entity_id": ""
           },
           {
             "key": "not_good",
-            "text": "Product is not in good condition",
+            "text": "{{flag_problem.step1.flag_problem.options.not_good.text}}",
             "openmrs_entity_parent": "",
             "openmrs_entity": "",
             "openmrs_entity_id": ""
           },
           {
             "key": "misuse",
-            "text": "Product is not being used appropriately",
+            "text": "{{flag_problem.step1.flag_problem.options.misuse.text}}",
             "openmrs_entity_parent": "",
             "openmrs_entity": "",
             "openmrs_entity_id": ""
@@ -87,13 +87,13 @@
         ],
         "v_required": {
           "value": true,
-          "err": "Field required"
+          "err": "{{flag_problem.step1.flag_problem.v_required.err}}"
         }
       }
     ]
   },
   "step2": {
-    "title": "Reason",
+    "title": "{{flag_problem.step2.title}}",
     "fields": [
       {
         "key": "product_picture",
@@ -101,7 +101,7 @@
         "openmrs_entity": "",
         "openmrs_entity_id": "",
         "type": "choose_image",
-        "uploadButtonText": "Take a photo of the product",
+        "uploadButtonText": "{{flag_problem.step2.product_picture.uploadButtonText}}",
         "relevance": {
           "step1:flag_problem": {
             "ex-checkbox": [
@@ -121,33 +121,33 @@
         "openmrs_entity": "",
         "openmrs_entity_id": "",
         "type": "native_radio",
-        "label": "What is wrong with the product?",
+        "label": "{{flag_problem.step2.not_good.label}}",
         "label_text_style": "bold",
         "options": [
           {
             "key": "worn_broken",
-            "text": "Worn, damaged, or broken",
+            "text": "{{flag_problem.step2.not_good.options.worn_broken.text}}",
             "openmrs_entity_parent": "",
             "openmrs_entity": "",
             "openmrs_entity_id": ""
           },
           {
             "key": "expired",
-            "text": "Expired",
+            "text": "{{flag_problem.step2.not_good.options.expired.text}}",
             "openmrs_entity_parent": "",
             "openmrs_entity": "",
             "openmrs_entity_id": ""
           },
           {
             "key": "parts_missing",
-            "text": "Parts missing",
+            "text": "{{flag_problem.step2.not_good.options.parts_missing.text}}",
             "openmrs_entity_parent": "",
             "openmrs_entity": "",
             "openmrs_entity_id": ""
           },
           {
             "key": "other",
-            "text": "Other (specify)",
+            "text": "{{flag_problem.step2.not_good.options.other.text}}",
             "openmrs_entity_parent": "",
             "openmrs_entity": "",
             "openmrs_entity_id": ""
@@ -155,7 +155,7 @@
         ],
         "v_required": {
           "value": true,
-          "err": "Field required"
+          "err": "{{flag_problem.step2.not_good.v_required.err}}"
         },
         "relevance": {
           "step1:flag_problem": {
@@ -175,7 +175,7 @@
         "openmrs_entity": "",
         "openmrs_entity_id": "",
         "type": "edit_text",
-        "hint": "Specify other:",
+        "hint": "{{flag_problem.step2.not_good_specify_other.hint}}",
         "relevance": {
           "step2:not_good": {
             "type": "string",
@@ -189,40 +189,40 @@
         "openmrs_entity": "",
         "openmrs_entity_id": "",
         "type": "native_radio",
-        "label": "What happened to the product?",
+        "label": "{{flag_problem.step2.not_there.label}}",
         "label_text_style": "bold",
         "options": [
           {
             "key": "lost_stolen",
-            "text": "Lost / Stolen",
+            "text": "{{flag_problem.step2.not_there.options.lost_stolen.text}}",
             "openmrs_entity_parent": "",
             "openmrs_entity": "",
             "openmrs_entity_id": ""
           },
           {
             "key": "never_received",
-            "text": "Never received",
+            "text": "{{flag_problem.step2.not_there.options.never_received.text}}",
             "openmrs_entity_parent": "",
             "openmrs_entity": "",
             "openmrs_entity_id": ""
           },
           {
             "key": "discarded",
-            "text": "Discarded (e.g. damaged on delivery, expired)",
+            "text": "{{flag_problem.step2.not_there.options.discarded.text}}",
             "openmrs_entity_parent": "",
             "openmrs_entity": "",
             "openmrs_entity_id": ""
           },
           {
             "key": "stock_out",
-            "text": "Stock out",
+            "text": "{{flag_problem.step2.not_there.options.stock_out.text}}",
             "openmrs_entity_parent": "",
             "openmrs_entity": "",
             "openmrs_entity_id": ""
           },
           {
             "key": "other",
-            "text": "Other (specify)",
+            "text": "{{flag_problem.step2.not_there.options.other.text}}",
             "openmrs_entity_parent": "",
             "openmrs_entity": "",
             "openmrs_entity_id": ""
@@ -230,7 +230,7 @@
         ],
         "v_required": {
           "value": true,
-          "err": "Field required"
+          "err": "{{flag_problem.step2.not_there.v_required.err}}"
         },
         "relevance": {
           "step1:flag_problem": {
@@ -250,7 +250,7 @@
         "openmrs_entity": "",
         "openmrs_entity_id": "",
         "type": "edit_text",
-        "hint": "Specify other:",
+        "hint": "{{flag_problem.step2.not_there_specify_other.hint}}",
         "relevance": {
           "step2:not_there": {
             "type": "string",
@@ -264,19 +264,19 @@
         "openmrs_entity": "",
         "openmrs_entity_id": "",
         "type": "native_radio",
-        "label": "How is the product not being used appropriately?",
+        "label": "{{flag_problem.step2.misuse.label}}",
         "label_text_style": "bold",
         "options": [
           {
             "key": "lacks_skills",
-            "text": "End user lacks necessary skills or knowledge",
+            "text": "{{flag_problem.step2.misuse.options.lacks_skills.text}}",
             "openmrs_entity_parent": "",
             "openmrs_entity": "",
             "openmrs_entity_id": ""
           },
           {
             "key": "fraud_use",
-            "text": "End user is using the product for unauthorised / fraudulent purposes",
+            "text": "{{flag_problem.step2.misuse.options.fraud_use.text}}",
             "openmrs_entity_parent": "",
             "openmrs_entity": "",
             "openmrs_entity_id": ""
@@ -284,7 +284,7 @@
         ],
         "v_required": {
           "value": true,
-          "err": "Field required"
+          "err": "{{flag_problem.step2.misuse.v_required.err}}"
         },
         "relevance": {
           "step1:flag_problem": {
@@ -304,8 +304,9 @@
         "openmrs_entity": "",
         "openmrs_entity_id": "",
         "type": "edit_text",
-        "hint": "Provide some details on the specific issue, including any advice you were able to give."
+        "hint": "{{flag_problem.step2.issue_details.hint}}"
       }
     ]
-  }
+  },
+  "properties_file_name": "flag_problem"
 }
