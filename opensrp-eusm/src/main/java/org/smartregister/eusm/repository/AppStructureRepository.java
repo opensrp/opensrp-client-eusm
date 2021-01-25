@@ -157,6 +157,11 @@ public class AppStructureRepository extends StructureRepository {
 
 
         Location location = EusmApplication.getInstance().getUserLocation();
+        if (location == null) {
+            location = new Location("temp");
+            location.setLongitude(0.000);
+            location.setLatitude(0.000);
+        }
 
         String[] args = StringUtils.stripAll(
                 String.valueOf(location.getLongitude()),

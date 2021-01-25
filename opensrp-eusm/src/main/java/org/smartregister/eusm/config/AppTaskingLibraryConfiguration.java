@@ -37,8 +37,6 @@ import org.smartregister.eusm.util.AppConstants;
 import org.smartregister.eusm.util.DefaultLocationUtils;
 import org.smartregister.eusm.view.NavigationDrawerView;
 import org.smartregister.job.ImageUploadServiceJob;
-import org.smartregister.job.SyncServiceJob;
-import org.smartregister.location.helper.LocationHelper;
 import org.smartregister.repository.PlanDefinitionRepository;
 import org.smartregister.repository.PlanDefinitionSearchRepository;
 import org.smartregister.tasking.activity.TaskingMapActivity;
@@ -96,7 +94,7 @@ public class AppTaskingLibraryConfiguration extends TaskingLibraryConfiguration 
     @Override
     public void startImmediateSync() {
         LocationTaskServiceJob.scheduleJobImmediately(LocationTaskServiceJob.TAG);
-        SyncServiceJob.scheduleJobImmediately(SyncServiceJob.TAG);
+//        SyncServiceJob.scheduleJobImmediately(SyncServiceJob.TAG);
         ImageUploadServiceJob.scheduleJobImmediately(ImageUploadServiceJob.TAG);
         //SyncStockServiceJob.scheduleJobImmediately(SyncStockServiceJob.TAG);
     }
@@ -129,12 +127,12 @@ public class AppTaskingLibraryConfiguration extends TaskingLibraryConfiguration 
     @Override
     public String getCurrentLocationId() {
         Location currentOperationalArea = Utils.getOperationalAreaLocation(PreferencesUtil.getInstance().getCurrentOperationalArea());
-        return currentOperationalArea == null ? null : currentOperationalArea.getId();    }
+        return currentOperationalArea == null ? null : currentOperationalArea.getId();
+    }
 
     @Override
     public String getCurrentOperationalAreaId() {
-        Location currentOperationalArea = Utils.getOperationalAreaLocation(PreferencesUtil.getInstance().getCurrentOperationalArea());
-        return currentOperationalArea == null ? null : currentOperationalArea.getId();
+        return PreferencesUtil.getInstance().getCurrentOperationalAreaId();
     }
 
     @Override
