@@ -24,7 +24,7 @@ public interface ProductInfoActivityContract {
 
         ProductInfoActivityContract.Presenter presenter();
 
-        void showProgressDialog(@StringRes int message);
+        void showProgressDialog(@StringRes int dialogTitle, int dialogMessage);
 
         void hideDialog();
 

@@ -2,35 +2,45 @@ package org.smartregister.eusm.model;
 
 import android.content.Context;
 
+import org.apache.commons.lang3.StringUtils;
 import org.smartregister.eusm.R;
 import org.smartregister.eusm.application.EusmApplication;
 import org.smartregister.eusm.domain.ProductInfoQuestion;
 import org.smartregister.eusm.domain.TaskDetail;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 public class ProductInfoFragmentModel {
     private Context context;
 
     public List<ProductInfoQuestion> getProductInfoQuestions(TaskDetail taskDetail) {
+        List<ProductInfoQuestion> productInfoQuestions = new ArrayList<>();
+
         ProductInfoQuestion p1 = new ProductInfoQuestion();
         p1.setAnswer(taskDetail.getAvailability());
         p1.setQuestion(getContext().getString(R.string.is_it_there));
         p1.setImageId(R.drawable.ic_icon_there);
 
-        ProductInfoQuestion p2 = new ProductInfoQuestion();
-        p2.setAnswer(taskDetail.getCondition());
-        p2.setQuestion(getContext().getString(R.string.is_it_good_condition));
-        p2.setImageId(R.drawable.ic_icon_condition);
+        productInfoQuestions.add(p1);
 
-        ProductInfoQuestion p3 = new ProductInfoQuestion();
-        p3.setAnswer(taskDetail.getAppropriateUsage());
-        p3.setQuestion(getContext().getString(R.string.is_it_being_used_appropriately));
-        p3.setImageId(R.drawable.ic_icon_used);
+        if (StringUtils.isNotBlank(taskDetail.getCondition())) {
+            ProductInfoQuestion p2 = new ProductInfoQuestion();
+            p2.setAnswer(taskDetail.getCondition());
+            p2.setQuestion(getContext().getString(R.string.is_it_good_condition));
+            p2.setImageId(R.drawable.ic_icon_condition);
+            productInfoQuestions.add(p2);
+        }
 
-        return new ArrayList<>(Arrays.asList(p1, p2, p3));
+        if (StringUtils.isNotBlank(taskDetail.getAppropriateUsage())) {
+            ProductInfoQuestion p3 = new ProductInfoQuestion();
+            p3.setAnswer(taskDetail.getAppropriateUsage());
+            p3.setQuestion(getContext().getString(R.string.is_it_being_used_appropriately));
+            p3.setImageId(R.drawable.ic_icon_used);
+            productInfoQuestions.add(p3);
+        }
+
+        return productInfoQuestions;
     }
 
     public Context getContext() {

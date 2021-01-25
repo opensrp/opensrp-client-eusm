@@ -38,6 +38,12 @@ public class TaskDetail extends TaskDetails {
 
     private String stockId;
 
+    private String planId;
+
+    private String forEntity;
+
+    private String groupId;
+
     public TaskDetail(@NonNull String taskId) {
         super(taskId);
     }
@@ -166,4 +172,27 @@ public class TaskDetail extends TaskDetails {
         this.stockId = stockId;
     }
 
+    public String getPlanId() {
+        return planId;
+    }
+
+    public void setPlanId(String planId) {
+        this.planId = planId;
+    }
+
+    public String getForEntity() {
+        return forEntity;
+    }
+
+    public void setForEntity(String forEntity) {
+        this.forEntity = forEntity;
+    }
+
+    public String getGroupId() {
+        return groupId;
+    }
+
+    public void setGroupId(String groupId) {
+        this.groupId = groupId;
+    }
 }

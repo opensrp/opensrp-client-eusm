@@ -16,6 +16,7 @@ import org.smartregister.eusm.domain.StructureDetail;
 import org.smartregister.eusm.domain.TaskDetail;
 import org.smartregister.repository.ImageRepository;
 import org.smartregister.stock.util.Constants;
+import org.smartregister.tasking.util.PreferencesUtil;
 import org.smartregister.util.JsonFormUtils;
 import org.smartregister.view.activity.DrishtiApplication;
 
@@ -57,6 +58,7 @@ public class AppJsonFormUtils {
             Map<String, String> map = new HashMap<>();
             map.put(AppConstants.EventDetailKey.LOCATION_NAME, structureDetail.getEntityName());
             map.put(AppConstants.EventDetailKey.LOCATION_ID, structureDetail.getStructureId());
+            map.put(AppConstants.LOCATION_ID, structureDetail.getStructureId());
             map.put(AppConstants.Properties.TASK_IDENTIFIER, taskDetail.getTaskId());
             map.put(AppConstants.EventDetailKey.PLAN_IDENTIFIER, AppConstants.PLAN_IDENTIFIER);
             map.put(AppConstants.EventDetailKey.MISSION, AppConstants.PLAN_NAME);
@@ -91,7 +93,7 @@ public class AppJsonFormUtils {
         for (Map.Entry<String, String> entry : detailsMap.entrySet()) {
             formData.put(entry.getKey(), entry.getValue());
         }
-        String planIdentifier = AppConstants.PLAN_IDENTIFIER;//PreferencesUtil.getInstance().getCurrentPlanId();
+        String planIdentifier = PreferencesUtil.getInstance().getCurrentPlanId();
         formData.put(AppConstants.Properties.PLAN_IDENTIFIER, planIdentifier);
         formJson.put(AppConstants.DETAILS, formData);
     }

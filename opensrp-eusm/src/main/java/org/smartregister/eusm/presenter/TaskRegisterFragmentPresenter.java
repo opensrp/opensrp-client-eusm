@@ -83,4 +83,5 @@ public class TaskRegisterFragmentPresenter implements TaskRegisterFragmentContra
             getView().onResumption();
         }
     }
+
 }

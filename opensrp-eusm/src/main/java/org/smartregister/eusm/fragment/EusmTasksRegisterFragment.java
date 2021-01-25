@@ -155,6 +155,7 @@ public class EusmTasksRegisterFragment extends BaseRegisterFragment implements T
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
         String alertMessage;
         alertMessage = taskDetail.isNonProductTask() ? String.format(getString(R.string.undo_task_title), taskDetail.getEntityName())
+                : AppConstants.BusinessStatus.HAS_PROBLEM.equals(taskDetail.getBusinessStatus()) ? String.format(getString(R.string.undo_flag_problem_title), taskDetail.getEntityName())
                 : String.format(getString(R.string.undo_looks_good_title), taskDetail.getEntityName());
         builder.setTitle(alertMessage);
         builder.setMessage(R.string.undo_dialog_message);
@@ -175,7 +176,9 @@ public class EusmTasksRegisterFragment extends BaseRegisterFragment implements T
 
     @Override
     public void onResumption() {
-        presenter().fetchData();
+        if (presenter() != null) {
+            presenter().fetchData();
+        }
     }
 
     @Override

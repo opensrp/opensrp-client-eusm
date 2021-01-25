@@ -1,6 +1,7 @@
 package org.smartregister.eusm.activity;
 
 import android.content.Intent;
+import android.location.Location;
 import android.os.Bundle;
 import android.view.Gravity;
 import android.view.View;
@@ -20,6 +21,7 @@ import androidx.core.content.res.ResourcesCompat;
 import com.mapbox.geojson.Feature;
 import com.mapbox.geojson.FeatureCollection;
 import com.mapbox.mapboxsdk.geometry.LatLng;
+import com.mapbox.mapboxsdk.maps.MapboxMap;
 
 import org.smartregister.eusm.R;
 import org.smartregister.eusm.application.EusmApplication;
@@ -32,6 +34,9 @@ import org.smartregister.eusm.util.AppUtils;
 import org.smartregister.tasking.activity.TaskingMapActivity;
 import org.smartregister.tasking.contract.TaskingMapActivityContract;
 import org.smartregister.tasking.model.CardDetails;
+import org.smartregister.tasking.model.TaskFilterParams;
+import org.smartregister.tasking.presenter.ValidateUserLocationPresenter;
+import org.smartregister.util.Utils;
 
 public class EusmTaskingMapActivity extends TaskingMapActivity {
 
@@ -52,11 +57,34 @@ public class EusmTaskingMapActivity extends TaskingMapActivity {
     }
 
     @Override
+    public void onMapReady(@NonNull MapboxMap mapboxMap) {
+        super.onMapReady(mapboxMap);
+        if (taskingMapPresenter != null) {
+            ValidateUserLocationPresenter userLocationPresenter = taskingMapPresenter.getLocationPresenter();
+            if (userLocationPresenter != null) {
+                userLocationPresenter.requestUserLocation();
+            }
+        }
+    }
+
+    @Override
     public TaskingMapActivityContract.Presenter getPresenter() {
         if (taskingMapPresenter == null) {
             taskingMapPresenter = new EusmTaskingMapPresenter(this, drawerView.getPresenter());
         }
         return taskingMapPresenter;
+    }
+
+    @Override
+    public void openTaskRegister(TaskFilterParams filterParams) {
+        //check if the location if fetched
+        Location location = getUserCurrentLocation();
+        if (location != null) {
+            EusmApplication.getInstance().setUserLocation(location);
+        } else {
+            Utils.showToast(getApplicationContext(), getString(R.string.user_location_not_received));
+        }
+        super.openTaskRegister(filterParams);
     }
 
     @Override
@@ -148,5 +176,10 @@ public class EusmTaskingMapActivity extends TaskingMapActivity {
         if (selectedGeoJsonSource != null) {
             selectedGeoJsonSource.setGeoJson(FeatureCollection.fromFeature(feature));
         }
+    }
+
+    @Override
+    public Location getUserCurrentLocation() {
+        return super.getUserCurrentLocation();
     }
 }

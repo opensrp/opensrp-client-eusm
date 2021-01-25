@@ -32,9 +32,11 @@ public interface AppConstants extends TaskingConstants {
             String STATUS = "status";
             String ID = "_ID";
             String LOCATION = "location";
-            String STRUCTURE_ID = "business_status";
+            String STRUCTURE_ID = "structure_id";
             String FOCUS = "focus";
             String CODE = "code";
+            String PLAN_ID = "plan_id";
+            String GROUP_ID = "group_id";
         }
     }
 
@@ -52,6 +54,7 @@ public interface AppConstants extends TaskingConstants {
         String SERVICE_POINT_CHECK_FORM = "service_point_check";
 
         String RECORD_GPS_FORM = "record_gps";
+
         String LOOKS_GOOD = "looks_good";
     }
 
@@ -62,7 +65,6 @@ public interface AppConstants extends TaskingConstants {
         String PRODUCT_ID = "productId";
         String MISSION = "mission";
         String LOCATION_ID = "locationId";
-        String STOCK_ID = "stockId";
     }
 
     interface EncounterType {
@@ -110,6 +112,12 @@ public interface AppConstants extends TaskingConstants {
         String RECORD_GPS = "Record Gps";
     }
 
+    interface TaskCode {
+        String RECORD_GPS = "Record GPS";
+
+        String SERVICE_POINT_CHECK = "Service Point Check";
+    }
+
     interface TaskStatus {
         String COMPLETED = "completed";
         String IN_PROGRESS = "in_progress";
@@ -119,6 +127,7 @@ public interface AppConstants extends TaskingConstants {
 
     interface BusinessStatus {
         String HAS_PROBLEM = "has_problem";
+        String NOT_VISITED = "Not Visited";
     }
 
     interface JsonFormKey {

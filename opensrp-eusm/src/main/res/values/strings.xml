@@ -14,14 +14,12 @@
     <string name="no_internet_connectivity">No internet connection. Please ensure data connectivity</string>
     <string name="login_text">Log In</string>
     <string name="show_password_text">Show password</string>
-    <string name="url_separator">/</string>
 
     <string name="device_timezone_changed">"The device's timezone changed. Please login again."</string>
     <string name="device_time_changed">"The device's time has changed. Please login again."</string>
 
     <string name="prompt_password">Enter Password </string>
     <string name="prompt_username">Enter Username</string>
-    <string name="reveal">Reveal</string>
     <string name="sync">Sync</string>
     <string name="campaign">Mission</string>
     <string name="operational_area">District</string>
@@ -32,7 +30,6 @@
     <string name="app_updated">Updated %1$s</string>
     <string name="district">District:</string>
     <string name="facility">Location:</string>
-    <string name="canton">Canton:</string>
     <string name="operator">User:</string>
     <string name="operator_with_middle_dot">User : %s &#183;</string>
 
@@ -62,14 +59,14 @@
 
     <string name="events">Events</string>
     <string name="locations">Locations</string>
-    <string name="plans">Plans</string>
-    <string name="structures">Structures</string>
+    <string name="plans">Missions</string>
+    <string name="structures">Service Points</string>
     <string name="tasks_text">Tasks</string>
-    <string name="fetching_structures_title">Fetching Structures</string>
-    <string name="fetching_structures_message">Fetching Structures for Selected District and Mission</string>
+    <string name="fetching_structures_title">Fetching Service Points</string>
+    <string name="fetching_structures_message">Fetching Service Points for Selected District and Mission</string>
 
     <string name="plans_download_on_progress_title">Download in Progress</string>
-    <string name="plans_download_on_progress">Downloading of Plans In Progress. Please wait</string>
+    <string name="plans_download_on_progress">Downloading of Missions In Progress. Please wait</string>
 
     <string name="error_fetching_location_hierarchy_title">Error Processing Locations Hierarchy</string>
     <string name="error_fetching_location_hierarchy">Error Processing Location Hierarchy. Log off to download location hierarchy again</string>
@@ -85,8 +82,6 @@
     <string name="reveal_layer_polygons" translatable="false">reveal-data-polygons</string>
     <string name="reveal_layer_points" translatable="false">reveal-data-points</string>
     <string name="base_map_feature_json" translatable="false">base_map_feature.json</string>
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="nearby_within_n_m">NEARBY (WITHIN %s M)</string>
     <string name="other_service_points_a_to_z">OTHER SERVICE POINTS (A TO Z)</string>
     <string name="language_s">Language: %s</string>
@@ -131,5 +126,11 @@
     <string name="flag_problem_button_text">Flag problem</string>
     <string name="looks_good_button_text">Looks good!</string>
     <string name="download_starting">Download starting</string>
+    <string name="user_location_not_received">User location has not been received</string>
+    <string name="flag_problem_form_name">Flag Problem</string>
+    <string name="gps_unknown">GPS unknown</string>
 
+    <string name="select_campaign_operational_area_title">Mission and District not set</string>
+    <string name="select_campaign_operational_area">Mission and District not set. Select from the hamburger menu</string>
+    <string name="revoked_plan_operational_area">Previously selected Mission and/or District revoked. Select from the hamburger menu</string>
 </resources>

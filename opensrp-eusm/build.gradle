@@ -19,7 +19,7 @@ allprojects {
         maven { url 'https://oss.sonatype.org/content/repositories/snapshots/' }
         maven { url "http://dl.bintray.com/ona/kujaku" }
         maven { url 'https://maven.fabric.io/public' }
-        maven { url 'https://dl.bintray.com/ibm-watson-health/ibm-fhir-server-releases'}
+        maven { url 'https://dl.bintray.com/ibm-watson-health/ibm-fhir-server-releases' }
         mavenLocal()
     }
 }
@@ -178,7 +178,7 @@ dependencies {
 
     jarJar 'com.ibm.fhir:fhir-model:4.2.3'
 
-    implementation('org.smartregister:opensrp-client-core:4.1.6-SNAPSHOT@aar') {
+    implementation('org.smartregister:opensrp-client-core:4.1.9-SNAPSHOT@aar') {
         transitive = true
         exclude group: 'com.android.support', module: 'appcompat-v7'
         exclude group: 'com.github.ybq', module: 'Android-SpinKit'
@@ -195,7 +195,7 @@ dependencies {
         exclude group: 'com.android.support', module: 'appcompat-v7'
     }
 
-    implementation('org.smartregister:opensrp-client-native-form:2.0.1-EUSM-SNAPSHOT@aar') {
+    implementation('org.smartregister:opensrp-client-native-form:2.0.2-SNAPSHOT@aar') {
         transitive = true
         exclude group: 'com.android.support', module: 'appcompat-v7'
         exclude group: 'com.android.support', module: 'cardview-v7'
@@ -215,7 +215,7 @@ dependencies {
     }
 
 //    implementation(project(':opensrp-tasking')) {
-    implementation('org.smartregister:opensrp-client-tasking:0.0.3-EUSM-SNAPSHOT') {
+    implementation('org.smartregister:opensrp-client-tasking:0.0.3-v5-EUSM-SNAPSHOT') {
         transitive = true
         exclude group: 'org.smartregister', module: 'opensrp-client-core'
         exclude group: 'com.ibm.fhir', module: 'fhir-model'
@@ -223,7 +223,7 @@ dependencies {
         exclude group: 'org.smartregister', module: 'opensrp-client-native-form'
     }
 
-    api('org.smartregister:opensrp-client-stock:1.2.2-PREVIEW-SNAPSHOT') {
+    api('org.smartregister:opensrp-client-stock:1.2.2-SNAPSHOT') {
         transitive = true
         exclude group: 'org.smartregister', module: 'opensrp-client-core'
         exclude group: 'org.smartregister', module: 'opensrp-client-native-form'

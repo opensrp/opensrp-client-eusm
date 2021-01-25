@@ -142,10 +142,10 @@ public class StructureRegisterFragmentPresenter extends BaseRegisterFragmentPres
     public void onFetchedStructures(List<StructureDetail> structureDetails) {
         if (getView() != null) {
             getView().hideProgressView();
-        }
 
-        getFragment().updatePageInfo();
-        getView().setStructureDetails(structureDetails);
+            getFragment().updatePageInfo();
+            getView().setStructureDetails(structureDetails);
+        }
     }
 
     @Override

@@ -1,6 +1,9 @@
 package org.smartregister.eusm.interactor;
 
-import org.apache.commons.lang3.StringUtils;
+import android.content.IntentFilter;
+
+import androidx.localbroadcastmanager.content.LocalBroadcastManager;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.smartregister.domain.Event;
@@ -8,14 +11,16 @@ import org.smartregister.domain.Task;
 import org.smartregister.eusm.application.EusmApplication;
 import org.smartregister.eusm.contract.TaskRegisterActivityContract;
 import org.smartregister.eusm.domain.StructureDetail;
-import org.smartregister.eusm.repository.AppTaskRepository;
 import org.smartregister.eusm.util.AppConstants;
 import org.smartregister.eusm.util.AppUtils;
+import org.smartregister.tasking.receiver.TaskGenerationReceiver;
 import org.smartregister.util.AppExecutors;
 
 import java.util.Collections;
 
 import timber.log.Timber;
+
+import static org.smartregister.AllConstants.INTENT_KEY.TASK_GENERATED_EVENT;
 
 public class TaskRegisterActivityInteractor implements TaskRegisterActivityContract.Interactor {
 
@@ -38,6 +43,7 @@ public class TaskRegisterActivityInteractor implements TaskRegisterActivityContr
                 } else if (AppConstants.EncounterType.SERVICE_POINT_CHECK.equals(encounterType)) {
                     saveServicePointCheck(form, interactorCallBack, structureDetail);
                 }
+
             }
         });
     }
@@ -74,8 +80,17 @@ public class TaskRegisterActivityInteractor implements TaskRegisterActivityContr
         try {
             Event event = AppUtils.createEventFromJsonForm(form, encounterType, bindType, entityType);
             try {
+                IntentFilter filter = new IntentFilter(TASK_GENERATED_EVENT);
+                TaskGenerationReceiver taskGenerationReceiver = new TaskGenerationReceiver(new TaskGenerationReceiver.TaskGenerationCallBack() {
+                    @Override
+                    public void onTaskCreatedOrUpdated(Task task) {
+                        appExecutors.mainThread().execute(() -> TaskRegisterActivityInteractor.this.returnResponse(encounterType, interactorCallBack, null, true));
+                    }
+                });
+
+                LocalBroadcastManager.getInstance(EusmApplication.getInstance().getApplicationContext()).registerReceiver(taskGenerationReceiver, filter);
+
                 AppUtils.initiateEventProcessing(Collections.singletonList(event.getFormSubmissionId()));
-                returnResponse(encounterType, interactorCallBack, event, true);
             } catch (Exception e) {
                 Timber.e(e);
                 returnResponse(encounterType, interactorCallBack, event, false);
@@ -88,16 +103,6 @@ public class TaskRegisterActivityInteractor implements TaskRegisterActivityContr
 
     private void returnResponse(String encounterType, TaskRegisterActivityContract.InteractorCallBack interactorCallBack,
                                 Event event, boolean status) {
-        if (event != null && event.getDetails() != null) {
-            String taskId = event.getDetails().get(AppConstants.Properties.TASK_IDENTIFIER);
-            if (StringUtils.isNotBlank(taskId)) {
-                //TODO to be replaced by event submission
-                AppTaskRepository taskRepository = EusmApplication.getInstance().getAppTaskRepository();
-                if (taskRepository != null) {
-                    taskRepository.updateTaskStatus(taskId, Task.TaskStatus.COMPLETED, "VISITED");
-                }
-            }
-        }
         appExecutors.mainThread().execute(new Runnable() {
             @Override
             public void run() {

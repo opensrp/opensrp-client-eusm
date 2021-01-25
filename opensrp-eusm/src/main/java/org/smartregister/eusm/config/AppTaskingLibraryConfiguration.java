@@ -25,6 +25,7 @@ import org.smartregister.domain.Location;
 import org.smartregister.domain.PlanDefinition;
 import org.smartregister.domain.PlanDefinitionSearch;
 import org.smartregister.domain.Task;
+import org.smartregister.eusm.BuildConfig;
 import org.smartregister.eusm.activity.EusmOfflineMapsActivity;
 import org.smartregister.eusm.activity.EusmTaskingMapActivity;
 import org.smartregister.eusm.activity.StructureRegisterActivity;
@@ -39,8 +40,6 @@ import org.smartregister.job.ImageUploadServiceJob;
 import org.smartregister.job.SyncServiceJob;
 import org.smartregister.repository.PlanDefinitionRepository;
 import org.smartregister.repository.PlanDefinitionSearchRepository;
-import org.smartregister.stock.job.SyncStockServiceJob;
-import org.smartregister.stock.job.SyncStockTypeServiceJob;
 import org.smartregister.tasking.activity.TaskingMapActivity;
 import org.smartregister.tasking.adapter.TaskRegisterAdapter;
 import org.smartregister.tasking.contract.BaseContract;
@@ -55,6 +54,7 @@ import org.smartregister.tasking.model.TaskFilterParams;
 import org.smartregister.tasking.repository.TaskingMappingHelper;
 import org.smartregister.tasking.util.ActivityConfiguration;
 import org.smartregister.tasking.util.GeoJsonUtils;
+import org.smartregister.tasking.util.PreferencesUtil;
 import org.smartregister.tasking.util.TaskingConstants;
 import org.smartregister.tasking.util.TaskingJsonFormUtils;
 import org.smartregister.tasking.util.TaskingLibraryConfiguration;
@@ -95,9 +95,8 @@ public class AppTaskingLibraryConfiguration extends TaskingLibraryConfiguration 
     public void startImmediateSync() {
         LocationTaskServiceJob.scheduleJobImmediately(LocationTaskServiceJob.TAG);
         SyncServiceJob.scheduleJobImmediately(SyncServiceJob.TAG);
-        SyncStockTypeServiceJob.scheduleJobImmediately(SyncStockTypeServiceJob.TAG);
         ImageUploadServiceJob.scheduleJobImmediately(ImageUploadServiceJob.TAG);
-        SyncStockServiceJob.scheduleJobImmediately(SyncStockServiceJob.TAG);
+        //SyncStockServiceJob.scheduleJobImmediately(SyncStockServiceJob.TAG);
     }
 
     @Override
@@ -132,12 +131,12 @@ public class AppTaskingLibraryConfiguration extends TaskingLibraryConfiguration 
 
     @Override
     public String getCurrentOperationalAreaId() {
-        return null;
+        return PreferencesUtil.getInstance().getCurrentOperationalAreaId();
     }
 
     @Override
     public Integer getDatabaseVersion() {
-        return null;
+        return BuildConfig.DATABASE_VERSION;
     }
 
     @Override

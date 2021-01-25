@@ -92,18 +92,28 @@ public class AppStructureRepository extends StructureRepository {
         getWritableDatabase().replace(getLocationTableName(), null, contentValues);
     }
 
-    public int countOfStructures(String nameFilter) {
+    public int countOfStructures(String nameFilter, String locationParentId) {
         SQLiteDatabase sqLiteDatabase = getReadableDatabase();
-        String query = "SELECT count(" + STRUCTURE_TABLE + "._id" + ") from " + STRUCTURE_TABLE;
-        if (StringUtils.isNotBlank(nameFilter)) {
-            query += " where " + STRUCTURE_TABLE + "." + NAME + " like '%" + nameFilter + "%'";
-        }
+        String query = "SELECT count(1) from " + STRUCTURE_TABLE;
+
+        String[] args = StringUtils.stripAll(locationParentId);
+
         query += " join task on task.for = " + StructureRepository.STRUCTURE_TABLE + "._id ";
 
+        query += " join location on location._id = " + StructureRepository.STRUCTURE_TABLE + ".parent_id ";
+
+        query += " where location.parent_id = ? ";
+
+        if (StringUtils.isNotBlank(nameFilter)) {
+            args = StringUtils.stripAll(locationParentId, nameFilter);
+
+            query += " and " + STRUCTURE_TABLE + "." + NAME + " like '%?%'";
+        }
+
         int count = 0;
-        try (Cursor cursor = sqLiteDatabase.rawQuery(query, null)) {
-            if (cursor != null && cursor.moveToNext()) {
-                count = cursor.getInt(0);
+        try (Cursor cursor = sqLiteDatabase.rawQuery(query, args)) {
+            if (cursor != null) {
+                count = cursor.getCount();
             }
         } catch (SQLException w) {
             Timber.e(w);
@@ -113,10 +123,6 @@ public class AppStructureRepository extends StructureRepository {
 
     public List<StructureDetail> fetchStructureDetails(int pageNo, String locationParentId, String nameFilter) {
         return fetchStructureDetails(pageNo, locationParentId, nameFilter, false);
-    }
-
-    public List<StructureDetail> fetchStructureDetails(String locationParentId, String nameFilter) {
-        return fetchStructureDetails(null, locationParentId, nameFilter, false);
     }
 
     public List<StructureDetail> fetchStructureDetails(Integer pageNo, String locationParentId,
@@ -145,21 +151,30 @@ public class AppStructureRepository extends StructureRepository {
         };
 
         String query = "SELECT " + StringUtils.join(columns, ",") + " from " + StructureRepository.STRUCTURE_TABLE
-                + " join task on task.location = " + StructureRepository.STRUCTURE_TABLE + "._id "
+                + " join task on task.structure_id = " + StructureRepository.STRUCTURE_TABLE + "._id "
                 + " join location on location._id = " + StructureRepository.STRUCTURE_TABLE + ".parent_id ";
 
 
         Location location = EusmApplication.getInstance().getUserLocation();
-        String[] args = new String[]{
+
+        String[] args = StringUtils.stripAll(
                 String.valueOf(location.getLongitude()),
                 String.valueOf(location.getLongitude()),
                 String.valueOf(location.getLatitude()),
                 String.valueOf(location.getLatitude()),
-                locationParentId};
+                locationParentId);
+
         query += " where locationParentId = ? ";
 
         if (StringUtils.isNotBlank(nameFilter)) {
-            query += " and structureName like '%" + nameFilter + "%'";
+            args = StringUtils.stripAll(
+                    String.valueOf(location.getLongitude()),
+                    String.valueOf(location.getLongitude()),
+                    String.valueOf(location.getLatitude()),
+                    String.valueOf(location.getLatitude()),
+                    locationParentId,
+                    nameFilter);
+            query += " and structureName like '%?%'";
         }
 
         query += " group by " + STRUCTURE_TABLE + "." + "_id" + " order by case when dist is null then 1 else 0 end, dist"

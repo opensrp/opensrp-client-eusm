@@ -22,6 +22,7 @@ import java.util.UUID;
 import io.ona.kujaku.data.realm.RealmDatabase;
 
 import static org.junit.Assert.assertNotNull;
+import static org.mockito.Mockito.spy;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyZeroInteractions;
 import static org.mockito.Mockito.when;
@@ -44,9 +45,9 @@ public class EusmApplicationTest extends BaseUnitTest {
 
         MockitoAnnotations.initMocks(this);
 
-        eusmApplication = Mockito.spy(EusmApplication.getInstance());
+        eusmApplication = spy(EusmApplication.getInstance());
         context = RuntimeEnvironment.application;
-        userService = Mockito.spy(eusmApplication.getContext().userService());
+        userService = spy(eusmApplication.getContext().userService());
         ReflectionHelpers.setField(eusmApplication.getContext(), "userService", userService);
     }
 
