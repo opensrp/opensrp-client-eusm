@@ -40,7 +40,7 @@ public class EusmTaskingMapInteractor extends TaskingMapInteractor {
                     featureCollection = createFeatureCollection();
                     if (operationalAreaLocation != null) {
                         List<StructureDetail> structureDetails = appStructureRepository
-                                .fetchStructureDetails(null, operationalAreaLocation.getId(), null, true);
+                                .fetchStructureDetails(null, operationalAreaLocation.getId(), null, true, plan);
 
                         if (structureDetails != null && !structureDetails.isEmpty()) {
                             String features = geoJsonUtils.getGeoJsonFromStructureDetail(structureDetails);

@@ -100,12 +100,6 @@ public class EusmTasksRegisterFragment extends BaseRegisterFragment implements T
     }
 
     @Override
-    public void onResume() {
-        super.onResume();
-        onResumption();
-    }
-
-    @Override
     protected void renderView() {
         //do nothing
     }

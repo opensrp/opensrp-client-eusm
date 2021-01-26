@@ -29,7 +29,7 @@ public class AppTaskRepository extends TaskRepository {
         super(taskNotesRepository);
     }
 
-    public List<TaskDetail> getTasksByStructureId(String structureId) {
+    public List<TaskDetail> getTasksByStructureId(String structureId, String planId, String groupId) {
         List<TaskDetail> taskDetails = new ArrayList<>();
         SQLiteDatabase sqLiteDatabase = getReadableDatabase();
         String[] columns = new String[]{
@@ -59,8 +59,8 @@ public class AppTaskRepository extends TaskRepository {
                 + " FROM " + TASK_TABLE +
                 " LEFT JOIN " + StockRepository.STOCK_TABLE_NAME + " ON " + StockRepository.STOCK_TABLE_NAME + "." + StockRepository.STOCK_ID + " = " + TASK_TABLE + "." + AppConstants.Column.Task.FOR +
                 " LEFT JOIN " + StockTypeRepository.STOCK_TYPE_TABLE_NAME + " ON " + StockTypeRepository.STOCK_TYPE_TABLE_NAME + "." + StockTypeRepository.UNIQUE_ID + " = " + StockRepository.STOCK_TABLE_NAME + "." + StockRepository.IDENTIFIER +
-                " WHERE task.structure_id = ? AND task.status NOT IN  (" + StringUtils.repeat("?",",", INACTIVE_TASK_STATUS.length) + ") group by taskId";
-        try (Cursor cursor = sqLiteDatabase.rawQuery(query, ArrayUtils.addAll(new String[]{structureId}, INACTIVE_TASK_STATUS))) {
+                " WHERE task.structure_id = ? AND task.plan_id = ? AND task.group_id = ? AND task.status NOT IN  (" + StringUtils.repeat("?", ",", INACTIVE_TASK_STATUS.length) + ") group by taskId";
+        try (Cursor cursor = sqLiteDatabase.rawQuery(query, ArrayUtils.addAll(new String[]{structureId, planId, groupId}, INACTIVE_TASK_STATUS))) {
             if (cursor != null) {
                 while (cursor.moveToNext()) {
                     taskDetails.add(readStructureTaskDetailCursor(cursor));

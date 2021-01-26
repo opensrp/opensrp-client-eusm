@@ -139,6 +139,7 @@ public interface AppConstants extends TaskingConstants {
         String STATUS = "status";
         String NAME = "name";
         String TYPE = "type";
+        String COMMUNE_ID = "communeId";
     }
 
     interface LocationLevels {

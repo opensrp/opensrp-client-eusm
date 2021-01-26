@@ -11,6 +11,7 @@ public class EusmCardDetail extends CardDetails {
     private String structureType;
     private String commune;
     private String numOfTasks;
+    private String communeId;
 
     public EusmCardDetail(String status) {
         super(status);
@@ -78,5 +79,13 @@ public class EusmCardDetail extends CardDetails {
 
     public void setNumOfTasks(String numOfTasks) {
         this.numOfTasks = numOfTasks;
+    }
+
+    public String getCommuneId() {
+        return communeId;
+    }
+
+    public void setCommuneId(String communeId) {
+        this.communeId = communeId;
     }
 }

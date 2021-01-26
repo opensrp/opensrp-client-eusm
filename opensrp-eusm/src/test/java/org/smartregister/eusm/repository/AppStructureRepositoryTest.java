@@ -107,7 +107,7 @@ public class AppStructureRepositoryTest extends BaseUnitTest {
             }
         }).when(cursor).moveToNext();
 
-        int result = appStructureRepository.countOfStructures("tes", UUID.randomUUID().toString());
+        int result = appStructureRepository.countOfStructures("tes", UUID.randomUUID().toString(), UUID.randomUUID().toString());
 
         assertEquals(0, result);
     }
@@ -169,7 +169,7 @@ public class AppStructureRepositoryTest extends BaseUnitTest {
             }
         }).when(cursor).moveToNext();
 
-        List<StructureDetail> structureDetails = appStructureRepository.fetchStructureDetails(0, "23-2", "tes", false);
+        List<StructureDetail> structureDetails = appStructureRepository.fetchStructureDetails(0, "23-2", "tes", false, UUID.randomUUID().toString());
 
         assertEquals(1, structureDetails.size());
     }

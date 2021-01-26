@@ -34,6 +34,7 @@ import org.smartregister.eusm.domain.EusmCardDetail;
 import org.smartregister.eusm.helper.EusmTaskingMapHelper;
 import org.smartregister.eusm.job.LocationTaskServiceJob;
 import org.smartregister.eusm.util.AppConstants;
+import org.smartregister.eusm.util.AppUtils;
 import org.smartregister.eusm.util.DefaultLocationUtils;
 import org.smartregister.eusm.view.NavigationDrawerView;
 import org.smartregister.job.ImageUploadServiceJob;
@@ -445,13 +446,14 @@ public class AppTaskingLibraryConfiguration extends TaskingLibraryConfiguration 
             public void run() {
                 JsonObject jsonObject = feature.properties();
                 if (jsonObject != null) {
-                    EusmCardDetail eusmCardDetail = new EusmCardDetail(jsonObject.get(AppConstants.CardDetailKeys.STATUS).getAsString());
-                    eusmCardDetail.setCommune(jsonObject.get(AppConstants.CardDetailKeys.COMMUNE).getAsString());
-                    eusmCardDetail.setDistanceMeta(jsonObject.get(AppConstants.CardDetailKeys.DISTANCE_META).getAsString());
-                    eusmCardDetail.setStructureId(jsonObject.get(AppConstants.CardDetailKeys.STRUCTURE_ID).getAsString());
-                    eusmCardDetail.setTaskStatus(jsonObject.get(AppConstants.CardDetailKeys.TASK_STATUS).getAsString());
-                    eusmCardDetail.setStructureName(jsonObject.get(AppConstants.CardDetailKeys.NAME).getAsString());
-                    eusmCardDetail.setStructureType(jsonObject.get(AppConstants.CardDetailKeys.TYPE).getAsString());
+                    EusmCardDetail eusmCardDetail = new EusmCardDetail(AppUtils.getStringFromJsonElement(jsonObject, AppConstants.CardDetailKeys.STATUS));
+                    eusmCardDetail.setCommune(AppUtils.getStringFromJsonElement(jsonObject, AppConstants.CardDetailKeys.COMMUNE));
+                    eusmCardDetail.setDistanceMeta(AppUtils.getStringFromJsonElement(jsonObject, AppConstants.CardDetailKeys.DISTANCE_META));
+                    eusmCardDetail.setStructureId(AppUtils.getStringFromJsonElement(jsonObject, AppConstants.CardDetailKeys.STRUCTURE_ID));
+                    eusmCardDetail.setTaskStatus(AppUtils.getStringFromJsonElement(jsonObject, AppConstants.CardDetailKeys.TASK_STATUS));
+                    eusmCardDetail.setStructureName(AppUtils.getStringFromJsonElement(jsonObject, AppConstants.CardDetailKeys.NAME));
+                    eusmCardDetail.setStructureType(AppUtils.getStringFromJsonElement(jsonObject, AppConstants.CardDetailKeys.TYPE));
+                    eusmCardDetail.setCommuneId(AppUtils.getStringFromJsonElement(jsonObject, AppConstants.CardDetailKeys.COMMUNE_ID));
                     getAppExecutors().mainThread().execute(new Runnable() {
                         @Override
                         public void run() {

@@ -149,6 +149,7 @@ public class EusmTaskingMapActivity extends TaskingMapActivity {
                 structureDetail.setStructureType(eusmCardDetail.getStructureType());
                 structureDetail.setTaskStatus(eusmCardDetail.getTaskStatus());
                 structureDetail.setEntityName(eusmCardDetail.getStructureName());
+                structureDetail.setParentId(eusmCardDetail.getCommuneId());
 
                 Intent intent = new Intent(getActivity(), EusmTaskRegisterActivity.class);
                 intent.putExtra(AppConstants.IntentData.STRUCTURE_DETAIL, structureDetail);

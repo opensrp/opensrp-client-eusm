@@ -21,6 +21,7 @@ import org.smartregister.eusm.repository.AppTaskRepository;
 import org.smartregister.eusm.util.AppConstants;
 import org.smartregister.eusm.util.AppJsonFormUtils;
 import org.smartregister.eusm.util.AppUtils;
+import org.smartregister.tasking.util.PreferencesUtil;
 import org.smartregister.util.AppExecutors;
 
 import java.util.Comparator;
@@ -44,21 +45,13 @@ public class TaskRegisterFragmentInteractor implements TaskRegisterFragmentContr
 
     @Override
     public void fetchData(@NonNull StructureDetail structureDetail, @NonNull TaskRegisterFragmentContract.InteractorCallBack callBack) {
-        appExecutors.diskIO().execute(new Runnable() {
-            @Override
-            public void run() {
-                List<TaskDetail> taskDetails = EusmApplication.getInstance().getAppTaskRepository()
-                        .getTasksByStructureId(structureDetail.getStructureId());
+        appExecutors.diskIO().execute(() -> {
+            List<TaskDetail> taskDetails = EusmApplication.getInstance().getAppTaskRepository()
+                    .getTasksByStructureId(structureDetail.getStructureId(), PreferencesUtil.getInstance().getCurrentPlanId(), structureDetail.getParentId());
 
-                List<TaskDetail> sortTaskDetails = sortTaskDetails(taskDetails);
+            List<TaskDetail> sortTaskDetails = sortTaskDetails(taskDetails);
 
-                appExecutors.mainThread().execute(new Runnable() {
-                    @Override
-                    public void run() {
-                        callBack.onFetchedData(sortTaskDetails);
-                    }
-                });
-            }
+            appExecutors.mainThread().execute(() -> callBack.onFetchedData(sortTaskDetails));
         });
     }
 
@@ -92,45 +85,37 @@ public class TaskRegisterFragmentInteractor implements TaskRegisterFragmentContr
 
     @Override
     public void undoTask(TaskDetail taskDetail, TaskRegisterFragmentContract.InteractorCallBack callBack) {
-        appExecutors.diskIO().execute(new Runnable() {
-            @Override
-            public void run() {
-                if (taskDetail != null && StringUtils.isNotBlank(taskDetail.getTaskId())) {
+        appExecutors.diskIO().execute(() -> {
+            if (taskDetail != null && StringUtils.isNotBlank(taskDetail.getTaskId())) {
 
-                    String taskId = taskDetail.getTaskId();
+                String taskId = taskDetail.getTaskId();
 
-                    AppRepository appRepository = EusmApplication.getInstance().getAppRepository();
-                    appRepository.archiveEventsForTask(taskDetail);
+                AppRepository appRepository = EusmApplication.getInstance().getAppRepository();
+                appRepository.archiveEventsForTask(taskDetail);
 
-                    AppTaskRepository taskRepository = EusmApplication.getInstance().getAppTaskRepository();
-                    taskRepository.updateTaskStatus(taskId, Task.TaskStatus.READY, AppConstants.BusinessStatus.NOT_VISITED);
+                AppTaskRepository taskRepository = EusmApplication.getInstance().getAppTaskRepository();
+                taskRepository.updateTaskStatus(taskId, Task.TaskStatus.READY, AppConstants.BusinessStatus.NOT_VISITED);
 
-                    //fetch fix problem task if present
-                    if (AppConstants.BusinessStatus.HAS_PROBLEM.equals(taskDetail.getBusinessStatus())) {
-                        Set<Task> taskSet = taskRepository.getTasksByEntityAndCode(taskDetail.getPlanId(), taskDetail.getGroupId(),
-                                taskDetail.getForEntity(), AppConstants.EncounterType.FIX_PROBLEM);
-                        for (Task task : taskSet) {
-                            if (task.getStatus() == Task.TaskStatus.READY) {
-                                taskRepository.updateTaskStatus(task.getIdentifier(), Task.TaskStatus.CANCELLED, AppConstants.BusinessStatus.NOT_VISITED);
-                                break;
-                            }
+                //fetch fix problem task if present
+                if (AppConstants.BusinessStatus.HAS_PROBLEM.equals(taskDetail.getBusinessStatus())) {
+                    Set<Task> taskSet = taskRepository.getTasksByEntityAndCode(taskDetail.getPlanId(), taskDetail.getGroupId(),
+                            taskDetail.getForEntity(), AppConstants.EncounterType.FIX_PROBLEM);
+                    for (Task task : taskSet) {
+                        if (task.getStatus() == Task.TaskStatus.READY) {
+                            taskRepository.updateTaskStatus(task.getIdentifier(), Task.TaskStatus.CANCELLED, AppConstants.BusinessStatus.NOT_VISITED);
+                            break;
                         }
                     }
-                    returnResponse(callBack, taskDetail, true);
-                } else {
-                    returnResponse(callBack, taskDetail, false);
                 }
+                returnResponse(callBack, taskDetail, true);
+            } else {
+                returnResponse(callBack, taskDetail, false);
             }
         });
     }
 
     private void returnResponse(TaskRegisterFragmentContract.InteractorCallBack callBack, TaskDetail taskDetail, boolean status) {
-        appExecutors.mainThread().execute(new Runnable() {
-            @Override
-            public void run() {
-                callBack.onTaskUndone(status, taskDetail);
-            }
-        });
+        appExecutors.mainThread().execute(() -> callBack.onTaskUndone(status, taskDetail));
     }
 
     private List<TaskDetail> sortTaskDetails(List<TaskDetail> taskDetails_) {

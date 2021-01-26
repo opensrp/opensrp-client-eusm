@@ -92,20 +92,20 @@ public class AppStructureRepository extends StructureRepository {
         getWritableDatabase().replace(getLocationTableName(), null, contentValues);
     }
 
-    public int countOfStructures(String nameFilter, String locationParentId) {
+    public int countOfStructures(String nameFilter, String locationParentId, String planId) {
         SQLiteDatabase sqLiteDatabase = getReadableDatabase();
         String query = "SELECT count(1) from " + STRUCTURE_TABLE;
 
-        String[] args = StringUtils.stripAll(locationParentId);
+        String[] args = StringUtils.stripAll(locationParentId, planId);
 
         query += " join task on task.for = " + StructureRepository.STRUCTURE_TABLE + "._id ";
 
         query += " join location on location._id = " + StructureRepository.STRUCTURE_TABLE + ".parent_id ";
 
-        query += " where location.parent_id = ? ";
+        query += " where location.parent_id = ? AND task.plan_id = ?";
 
         if (StringUtils.isNotBlank(nameFilter)) {
-            args = StringUtils.stripAll(locationParentId, nameFilter);
+            args = StringUtils.stripAll(locationParentId, planId, nameFilter);
 
             query += " and " + STRUCTURE_TABLE + "." + NAME + " like '%?%'";
         }
@@ -121,12 +121,12 @@ public class AppStructureRepository extends StructureRepository {
         return count;
     }
 
-    public List<StructureDetail> fetchStructureDetails(int pageNo, String locationParentId, String nameFilter) {
-        return fetchStructureDetails(pageNo, locationParentId, nameFilter, false);
+    public List<StructureDetail> fetchStructureDetails(int pageNo, String locationParentId, String nameFilter, String planId) {
+        return fetchStructureDetails(pageNo, locationParentId, nameFilter, false, planId);
     }
 
     public List<StructureDetail> fetchStructureDetails(Integer pageNo, String locationParentId,
-                                                       String nameFilter, boolean isForMapping) {
+                                                       String nameFilter, boolean isForMapping, String planId) {
         List<StructureDetail> structureDetails = new ArrayList<>();
         SQLiteDatabase sqLiteDatabase = getReadableDatabase();
         String[] columns = new String[]{
@@ -168,9 +168,10 @@ public class AppStructureRepository extends StructureRepository {
                 String.valueOf(location.getLongitude()),
                 String.valueOf(location.getLatitude()),
                 String.valueOf(location.getLatitude()),
+                planId,
                 locationParentId);
 
-        query += " where locationParentId = ? ";
+        query += " where task.plan_id = ? AND locationParentId = ? ";
 
         if (StringUtils.isNotBlank(nameFilter)) {
             args = StringUtils.stripAll(
@@ -178,6 +179,7 @@ public class AppStructureRepository extends StructureRepository {
                     String.valueOf(location.getLongitude()),
                     String.valueOf(location.getLatitude()),
                     String.valueOf(location.getLatitude()),
+                    planId,
                     locationParentId,
                     nameFilter);
             query += " and structureName like '%?%'";
@@ -228,6 +230,8 @@ public class AppStructureRepository extends StructureRepository {
                 structureDetail.setDistance(distanceInMetres);
                 structureDetail.setDistanceMeta(formatDistance(distanceInMetres));
                 structureDetail.setNearby(distanceInMetres <= AppConstants.NEARBY_DISTANCE_IN_METRES);
+            } else {
+                structureDetail.setDistanceMeta("-");
             }
 
             if (isForMapping)
