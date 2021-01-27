@@ -23,9 +23,11 @@ import org.smartregister.eusm.domain.StructureDetail;
 import org.smartregister.eusm.fragment.EusmTasksRegisterFragment;
 import org.smartregister.eusm.presenter.TaskRegisterActivityPresenter;
 import org.smartregister.eusm.util.AppConstants;
+import org.smartregister.repository.AllSharedPreferences;
 import org.smartregister.tasking.activity.TaskRegisterActivity;
 import org.smartregister.tasking.adapter.ViewPagerAdapter;
 import org.smartregister.tasking.model.BaseTaskDetails;
+import org.smartregister.tasking.util.Utils;
 import org.smartregister.view.fragment.BaseRegisterFragment;
 
 import java.util.Map;
@@ -52,6 +54,8 @@ public class EusmTaskRegisterActivity extends TaskRegisterActivity implements Ta
 
         retrieveStructureDetail();
 
+        updateCommuneId();
+
         setupViews();
 
         Fragment[] otherFragments = getOtherFragments();
@@ -65,6 +69,13 @@ public class EusmTaskRegisterActivity extends TaskRegisterActivity implements Ta
         mPager.setAdapter(mPagerAdapter);
 
         initializePresenter();
+    }
+
+    private void updateCommuneId() {
+        if (structureDetail != null) {
+            AllSharedPreferences allSharedPreferences = Utils.getAllSharedPreferences();
+            allSharedPreferences.savePreference(AppConstants.PreferenceKey.COMMUNE_ID, structureDetail.getParentId());
+        }
     }
 
     @Override

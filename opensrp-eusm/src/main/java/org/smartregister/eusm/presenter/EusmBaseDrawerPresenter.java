@@ -58,7 +58,6 @@ public class EusmBaseDrawerPresenter extends BaseDrawerPresenter {
     public void onShowOperationalAreaSelector() {
         if (getView() != null) {
             if (!Utils.getBooleanProperty(TaskingConstants.CONFIGURATION.SELECT_PLAN_THEN_AREA) || StringUtils.isNotBlank(prefsUtil.getCurrentPlanId())) {
-                //TODO move this to tasking lib interactor
                 appExecutors.diskIO().execute(new Runnable() {
                     @Override
                     public void run() {

@@ -15,7 +15,10 @@ import org.jetbrains.annotations.NotNull;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.smartregister.CoreLibrary;
 import org.smartregister.clientandeventmodel.Event;
+import org.smartregister.domain.jsonmapping.Location;
+import org.smartregister.domain.tag.FormTag;
 import org.smartregister.eusm.R;
 import org.smartregister.eusm.application.EusmApplication;
 import org.smartregister.tasking.util.Utils;
@@ -27,7 +30,10 @@ import java.io.FileOutputStream;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.HashSet;
+import java.util.LinkedHashMap;
+import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -58,7 +64,9 @@ public class AppUtils extends Utils {
         String entityId = getString(jsonForm, ENTITY_ID);
         JSONArray fields = JsonFormUtils.fields(jsonForm);
         JSONObject metadata = JsonFormUtils.getJSONObject(jsonForm, METADATA);
-        Event event = JsonFormUtils.createEvent(fields, metadata, Utils.getFormTag(), entityId, encounterType, bindType)
+        FormTag formTag = Utils.getFormTag();
+        formTag.locationId = getAllSharedPreferences().getPreference(AppConstants.PreferenceKey.COMMUNE_ID);
+        Event event = JsonFormUtils.createEvent(fields, metadata, formTag, entityId, encounterType, bindType)
                 .withEntityType(entityType);
         JSONObject eventJson = new JSONObject(gson.toJson(event));
         eventJson.put(DETAILS, JsonFormUtils.getJSONObject(jsonForm, DETAILS));
@@ -148,5 +156,27 @@ public class AppUtils extends Utils {
     public static Set<String> fetchStructureIds() {
         String structureIds = Utils.getAllSharedPreferences().getPreference(STRUCTURE_IDS);
         return Arrays.stream(StringUtils.split(structureIds, ",")).collect(Collectors.toSet());
+    }
+
+    public static Set<String> getDistrictsFromLocationHierarchy() {
+        org.smartregister.domain.jsonmapping.util.LocationTree locationTree = gson.fromJson(CoreLibrary.getInstance().context().allSettings().fetchANMLocation(), org.smartregister.domain.jsonmapping.util.LocationTree.class);
+        Set<String> districtIds = new HashSet<>();
+        if (locationTree != null) {
+            Set<String> parentLocations = new HashSet<>();
+            LinkedHashMap<String, LinkedHashSet<String>> hashMap = locationTree.getChildParent();
+            for (Map.Entry<String, LinkedHashSet<String>> entry : hashMap.entrySet()) {
+                String key = entry.getKey();
+                parentLocations.add(key);
+            }
+
+            for (String id : parentLocations) {
+                Location location = locationTree.findLocation(id);
+                if (location != null && StringUtils.isNotBlank(location.getLocationId())
+                        && location.hasTag(AppConstants.LocationLevels.DISTRICT_TAG)) {
+                    districtIds.add(location.getLocationId());
+                }
+            }
+        }
+        return districtIds;
     }
 }

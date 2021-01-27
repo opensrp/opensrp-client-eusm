@@ -4,6 +4,7 @@ import net.sqlcipher.Cursor;
 import net.sqlcipher.database.SQLiteDatabase;
 import net.sqlcipher.database.SQLiteException;
 
+import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.smartregister.domain.Task;
 import org.smartregister.eusm.domain.TaskDetail;
@@ -18,6 +19,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import timber.log.Timber;
+
+import static org.smartregister.domain.Task.INACTIVE_TASK_STATUS;
 
 public class AppTaskRepository extends TaskRepository {
 
@@ -56,8 +59,8 @@ public class AppTaskRepository extends TaskRepository {
                 + " FROM " + TASK_TABLE +
                 " LEFT JOIN " + StockRepository.STOCK_TABLE_NAME + " ON " + StockRepository.STOCK_TABLE_NAME + "." + StockRepository.STOCK_ID + " = " + TASK_TABLE + "." + AppConstants.Column.Task.FOR +
                 " LEFT JOIN " + StockTypeRepository.STOCK_TYPE_TABLE_NAME + " ON " + StockTypeRepository.STOCK_TYPE_TABLE_NAME + "." + StockTypeRepository.UNIQUE_ID + " = " + StockRepository.STOCK_TABLE_NAME + "." + StockRepository.IDENTIFIER +
-                " WHERE task.structure_id = ? group by taskId";
-        try (Cursor cursor = sqLiteDatabase.rawQuery(query, new String[]{structureId})) {
+                " WHERE task.structure_id = ? AND task.status NOT IN  (" + StringUtils.repeat("?",",", INACTIVE_TASK_STATUS.length) + ") group by taskId";
+        try (Cursor cursor = sqLiteDatabase.rawQuery(query, ArrayUtils.addAll(new String[]{structureId}, INACTIVE_TASK_STATUS))) {
             if (cursor != null) {
                 while (cursor.moveToNext()) {
                     taskDetails.add(readStructureTaskDetailCursor(cursor));
