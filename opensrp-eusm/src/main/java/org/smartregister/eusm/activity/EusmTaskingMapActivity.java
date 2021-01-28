@@ -38,6 +38,8 @@ import org.smartregister.tasking.model.TaskFilterParams;
 import org.smartregister.tasking.presenter.ValidateUserLocationPresenter;
 import org.smartregister.util.Utils;
 
+import timber.log.Timber;
+
 public class EusmTaskingMapActivity extends TaskingMapActivity {
 
     private CardView eusmCardView;
@@ -181,6 +183,11 @@ public class EusmTaskingMapActivity extends TaskingMapActivity {
 
     @Override
     public Location getUserCurrentLocation() {
-        return super.getUserCurrentLocation();
+        try {
+            return super.getUserCurrentLocation();
+        } catch (NullPointerException e) {
+            Timber.e(e);
+            return null;
+        }
     }
 }

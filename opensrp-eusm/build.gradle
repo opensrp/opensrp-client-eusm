@@ -122,26 +122,6 @@ android {
 
     buildTypes {
 
-        release {
-            resValue "string", 'opensrp_url', '"https://mg-eusm-staging.smartregister.org/opensrp/"'
-            buildConfigField "int", "DATABASE_VERSION", '1'
-            buildConfigField "int", "OPENMRS_UNIQUE_ID_INITIAL_BATCH_SIZE", '250'
-            buildConfigField "int", "OPENMRS_UNIQUE_ID_BATCH_SIZE", '100'
-            buildConfigField "int", "OPENMRS_UNIQUE_ID_SOURCE", '2'
-            buildConfigField "long", "SYNC_INTERVAL_IN_MINUTES", '15'
-            buildConfigField "long", "PULL_UNIQUE_IDS_MINUTES", '15'
-            buildConfigField "String", "ADMIN_PASSWORD_NOT_NEAR_STRUCTURES", '"AdminPass1"'
-            buildConfigField "float", "MY_LOCATION_BUFFER", '25'
-            buildConfigField "boolean", "VALIDATE_FAR_STRUCTURES", 'false'
-            buildConfigField "int", "RESOLVE_LOCATION_TIMEOUT_IN_SECONDS", '60'
-            buildConfigField "boolean", "DISPLAY_OUTSIDE_OPERATIONAL_AREA_MASK", 'false'
-            buildConfigField "boolean", "DISPLAY_DISTANCE_SCALE", 'true'
-            buildConfigField "String[]", "FACILITY_LEVELS", '{"Country", "Region", "District"}'
-            buildConfigField "String[]", "LOCATION_LEVELS", '{"Country", "Region", "District"}'
-
-            testCoverageEnabled true
-        }
-
         debug {
             resValue "string", 'opensrp_url', '"https://mg-eusm-staging.smartregister.org/opensrp/"'
             buildConfigField "int", "DATABASE_VERSION", '1'
@@ -243,7 +223,7 @@ dependencies {
         exclude group: 'org.smartregister', module: 'opensrp-client-native-form'
     }
 
-    api('org.smartregister:opensrp-client-stock:1.2.2-SNAPSHOT') {
+    api('org.smartregister:opensrp-client-stock:1.2.3-SNAPSHOT') {
         transitive = true
         exclude group: 'org.smartregister', module: 'opensrp-client-core'
         exclude group: 'org.smartregister', module: 'opensrp-client-native-form'

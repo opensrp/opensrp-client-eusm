@@ -8,8 +8,8 @@
 
     <FrameLayout
         android:id="@+id/layout_product_image"
-        android:layout_width="90dp"
-        android:layout_height="90dp"
+        android:layout_width="85dp"
+        android:layout_height="85dp"
         android:paddingTop="1dp"
         android:paddingEnd="2dp"
         android:paddingStart="1dp"
@@ -78,7 +78,8 @@
         android:paddingEnd="5dp"
         android:text="Serial # 3423423"
         android:textColor="@color/text_black"
-        android:textSize="15dp"
+        android:textSize="15sp"
+
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="@+id/txt_product_name"
         app:layout_constraintStart_toEndOf="@+id/layout_product_image"

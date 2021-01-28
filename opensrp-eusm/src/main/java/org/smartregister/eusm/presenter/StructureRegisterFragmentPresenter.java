@@ -92,6 +92,7 @@ public class StructureRegisterFragmentPresenter extends BaseRegisterFragmentPres
         if ((totalCount - ((currentPageNo) * pageSize)) > pageSize) {
             getFragment().clientsView.scrollToPosition(0);
             getFragment().getNextButton().setVisibility(View.VISIBLE);
+            getFragment().getPreviousButton().setVisibility(View.VISIBLE);
         } else {
             getFragment().getNextButton().setVisibility(View.INVISIBLE);
         }
