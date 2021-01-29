@@ -38,9 +38,7 @@ public class EusmTaskingMapHelper extends TaskingMapHelper {
     public void addCustomLayers(@NonNull Style mMapboxMapStyle, @NonNull Context context) {
         if (!isSymbolLayersLoaded) {
             Expression dynamicIconSize = interpolate(linear(), zoom(),
-                    literal(11.98f), literal(1.2f),
-                    literal(17.79f), literal(3f),
-                    literal(18.8f), literal(3f));
+                    literal(0.98f), literal(0.9f));
 
             Map<String, ServicePointType> servicePointTypeMap = EusmApplication.getInstance().getServicePointKeyToType();
             for (Map.Entry<String, ServicePointType> entry : servicePointTypeMap.entrySet()) {
@@ -51,7 +49,7 @@ public class EusmTaskingMapHelper extends TaskingMapHelper {
                 SymbolLayer symbolLayer = new SymbolLayer(String.format("%s.layer", key), context.getString(R.string.reveal_datasource_name));
                 symbolLayer.setProperties(iconImage(key), iconSize(dynamicIconSize),
                         iconIgnorePlacement(true), iconAllowOverlap(true));
-                symbolLayer.setFilter(eq(get(AppConstants.CardDetailKeys.TYPE), servicePointType.text));
+                symbolLayer.setFilter(eq(get(AppConstants.CardDetailKeys.TYPE), servicePointType.name));
                 mMapboxMapStyle.addLayer(symbolLayer);
             }
         }

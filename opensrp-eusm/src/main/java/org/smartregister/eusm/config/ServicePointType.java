@@ -5,8 +5,8 @@ import androidx.annotation.DrawableRes;
 import org.smartregister.eusm.R;
 
 public enum ServicePointType {
-    CSB1("cbs1", R.drawable.ic_health_sp, "cbs1"),
-    CSB2("cbs2", R.drawable.ic_health_sp, "cbs2"),
+    CSB1("csb1", R.drawable.ic_health_sp, "csb1"),
+    CSB2("csb2", R.drawable.ic_health_sp, "csb2"),
     CHRD1("chrd1", R.drawable.ic_hospital_sp, "chrd1"),
     CHRD2("chrd2", R.drawable.ic_hospital_sp, "chrd2"),
     CHRR("chrr", R.drawable.ic_hospital_sp, "chrr"),

@@ -1,6 +1,7 @@
 package org.smartregister.eusm.util;
 
 import org.smartregister.domain.Location;
+import org.smartregister.domain.LocationProperty;
 import org.smartregister.eusm.domain.StructureDetail;
 
 import java.util.ArrayList;
@@ -21,9 +22,14 @@ public class GeoJsonUtils extends org.smartregister.tasking.util.GeoJsonUtils {
             Location location = structureDetail.getGeojson();
             if (location != null) {
                 String taskStatus = structureDetail.getTaskStatus();
-                Map<String, String> map = location.getProperties().getCustomProperties();
+                LocationProperty locationProperty = location.getProperties();
+                if (structureDetail.getStructureType() != null) {
+                    locationProperty.setType(structureDetail.getStructureType().toLowerCase().trim().replace(" ", ""));
+                }
+                Map<String, String> map = locationProperty.getCustomProperties();
                 map.put(AppConstants.CardDetailKeys.TASK_STATUS, taskStatus);
                 map.put(STRUCTURE_NAME, structureDetail.getEntityName());
+                map.put(AppConstants.CardDetailKeys.TYPE_TEXT, structureDetail.getStructureType());
                 map.put(AppConstants.CardDetailKeys.COMMUNE, structureDetail.getCommune());
                 map.put(AppConstants.CardDetailKeys.COMMUNE_ID, structureDetail.getParentId());
                 map.put(AppConstants.CardDetailKeys.DISTANCE_META, structureDetail.getDistanceMeta());
