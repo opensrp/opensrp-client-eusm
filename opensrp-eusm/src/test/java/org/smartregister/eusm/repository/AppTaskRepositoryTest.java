@@ -58,7 +58,7 @@ public class AppTaskRepositoryTest extends BaseUnitTest {
             }
         }).when(cursor).moveToNext();
 
-        List<TaskDetail> taskDetails = appTaskRepository.getTasksByStructureId("23-3");
+        List<TaskDetail> taskDetails = appTaskRepository.getTasksByStructureId("23-3", "32", "23");
         assertEquals(1, taskDetails.size());
     }
 }

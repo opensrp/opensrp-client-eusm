@@ -112,7 +112,7 @@
                         android:paddingEnd="3dp"
                         android:text="@string/back"
                         android:textColor="@color/customAppThemeBlue"
-                        android:textSize="16dp"
+                        android:textSize="16sp"
                         android:textStyle="bold" />
                 </LinearLayout>
             </androidx.appcompat.widget.Toolbar>

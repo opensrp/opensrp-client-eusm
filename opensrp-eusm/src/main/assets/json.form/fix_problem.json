@@ -48,7 +48,7 @@
     "encounter_location": ""
   },
   "step1": {
-    "title": "Fix problem",
+    "title": "{{fix_problem.step1.title}}",
     "display_back_button": true,
     "fields": [
       {
@@ -57,20 +57,20 @@
         "openmrs_entity": "",
         "openmrs_entity_id": "",
         "type": "native_radio",
-        "label": "Was the problem fixed?",
+        "label": "{{fix_problem.step1.problem_fixed.label}}",
         "options": [
           {
             "key": "yes",
-            "text": "Yes"
+            "text": "{{fix_problem.step1.problem_fixed.options.yes.text}}"
           },
           {
             "key": "no",
-            "text": "No"
+            "text": "{{fix_problem.step1.problem_fixed.options.no.text}}"
           }
         ],
         "v_required": {
           "value": true,
-          "err": "Field requred"
+          "err": "{{fix_problem.step1.problem_fixed.v_required.err}}"
         }
       },
       {
@@ -79,7 +79,7 @@
         "openmrs_entity": "",
         "openmrs_entity_id": "",
         "type": "edit_text",
-        "hint": "Why was the problem not able to be fixed?",
+        "hint": "{{fix_problem.step1.not_fixed_reason.hint}}",
         "relevance": {
           "step1:problem_fixed": {
             "type": "string",
@@ -93,7 +93,7 @@
         "openmrs_entity": "",
         "openmrs_entity_id": "",
         "type": "edit_text",
-        "hint": "What actions were taken to fix this problem?",
+        "hint": "{{fix_problem.step1.fix_problem_actions.hint}}",
         "relevance": {
           "step1:problem_fixed": {
             "type": "string",
@@ -102,5 +102,6 @@
         }
       }
     ]
-  }
+  },
+  "properties_file_name": "fix_problem"
 }

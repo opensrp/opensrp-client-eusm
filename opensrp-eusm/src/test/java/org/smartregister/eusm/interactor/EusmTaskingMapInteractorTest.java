@@ -101,7 +101,7 @@ public class EusmTaskingMapInteractorTest extends BaseUnitTest {
         structureDetails.add(structureDetail);
 
         doReturn(structureDetails).when(appStructureRepository)
-                .fetchStructureDetails(isNull(), anyString(), isNull(), eq(true));
+                .fetchStructureDetails(isNull(), anyString(), isNull(), eq(true), isNull());
 
         doReturn(location).when(eusmTaskingMapInteractor).getOperationalAreaLocation(eq(operationalArea));
 

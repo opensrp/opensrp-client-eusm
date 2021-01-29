@@ -76,7 +76,7 @@ public class EusmBaseDrawerPresenter extends BaseDrawerPresenter {
                     }
                 });
             } else {
-                getView().displayNotification(org.smartregister.tasking.R.string.campaign, org.smartregister.tasking.R.string.plan_not_selected);
+                getView().displayNotification(R.string.campaign, R.string.plan_not_selected);
             }
         }
     }

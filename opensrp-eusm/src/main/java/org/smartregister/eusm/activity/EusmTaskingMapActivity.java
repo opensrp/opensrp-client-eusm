@@ -38,6 +38,8 @@ import org.smartregister.tasking.model.TaskFilterParams;
 import org.smartregister.tasking.presenter.ValidateUserLocationPresenter;
 import org.smartregister.util.Utils;
 
+import timber.log.Timber;
+
 public class EusmTaskingMapActivity extends TaskingMapActivity {
 
     private CardView eusmCardView;
@@ -149,6 +151,7 @@ public class EusmTaskingMapActivity extends TaskingMapActivity {
                 structureDetail.setStructureType(eusmCardDetail.getStructureType());
                 structureDetail.setTaskStatus(eusmCardDetail.getTaskStatus());
                 structureDetail.setEntityName(eusmCardDetail.getStructureName());
+                structureDetail.setParentId(eusmCardDetail.getCommuneId());
 
                 Intent intent = new Intent(getActivity(), EusmTaskRegisterActivity.class);
                 intent.putExtra(AppConstants.IntentData.STRUCTURE_DETAIL, structureDetail);
@@ -180,6 +183,11 @@ public class EusmTaskingMapActivity extends TaskingMapActivity {
 
     @Override
     public Location getUserCurrentLocation() {
-        return super.getUserCurrentLocation();
+        try {
+            return super.getUserCurrentLocation();
+        } catch (NullPointerException e) {
+            Timber.e(e);
+            return null;
+        }
     }
 }

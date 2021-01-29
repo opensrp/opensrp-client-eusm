@@ -8,6 +8,8 @@ import android.graphics.drawable.Drawable;
 
 import androidx.annotation.NonNull;
 
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
 import com.vijay.jsonwizard.constants.JsonFormConstants;
 
 import org.apache.commons.lang3.StringUtils;
@@ -178,5 +180,10 @@ public class AppUtils extends Utils {
             }
         }
         return districtIds;
+    }
+
+    public static String getStringFromJsonElement(JsonObject jsonObject, String key) {
+        JsonElement element = jsonObject.get(key);
+        return (element != null) ? element.getAsString() : AppConstants.CardDetailKeys.DISTANCE_META.equals(key) ? "-" : "";
     }
 }

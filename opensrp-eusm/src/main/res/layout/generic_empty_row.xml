@@ -13,5 +13,5 @@
         android:padding="13dp"
         android:text="@string/no_items_checked_yet"
         android:textColor="#747474"
-        android:textSize="17dp" />
+        android:textSize="17sp" />
 </LinearLayout>

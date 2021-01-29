@@ -100,12 +100,6 @@ public class EusmTasksRegisterFragment extends BaseRegisterFragment implements T
     }
 
     @Override
-    public void onResume() {
-        super.onResume();
-        onResumption();
-    }
-
-    @Override
     protected void renderView() {
         //do nothing
     }
@@ -218,6 +212,7 @@ public class EusmTasksRegisterFragment extends BaseRegisterFragment implements T
         Intent intent = new Intent(getActivity(), JsonWizardFormActivity.class);
         intent.putExtra(JsonFormConstants.JSON_FORM_KEY.JSON, jsonForm.toString());
         intent.putExtra(JsonFormConstants.JSON_FORM_KEY.FORM, form);
+        intent.putExtra(JsonFormConstants.PERFORM_FORM_TRANSLATION, true);
         getActivity().startActivityForResult(intent, AppConstants.RequestCode.REQUEST_CODE_GET_JSON);
     }
 

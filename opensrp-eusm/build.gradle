@@ -223,7 +223,7 @@ dependencies {
         exclude group: 'org.smartregister', module: 'opensrp-client-native-form'
     }
 
-    api('org.smartregister:opensrp-client-stock:1.2.2-SNAPSHOT') {
+    api('org.smartregister:opensrp-client-stock:1.2.3-SNAPSHOT') {
         transitive = true
         exclude group: 'org.smartregister', module: 'opensrp-client-core'
         exclude group: 'org.smartregister', module: 'opensrp-client-native-form'

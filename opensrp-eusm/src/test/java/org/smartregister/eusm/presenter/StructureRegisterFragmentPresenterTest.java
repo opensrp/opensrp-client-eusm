@@ -1,8 +1,13 @@
 package org.smartregister.eusm.presenter;
 
+import android.widget.Button;
+
+import androidx.recyclerview.widget.RecyclerView;
+
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
+import org.powermock.reflect.internal.WhiteboxImpl;
 import org.robolectric.annotation.LooperMode;
 import org.robolectric.util.ReflectionHelpers;
 import org.smartregister.eusm.BaseUnitTest;
@@ -62,5 +67,36 @@ public class StructureRegisterFragmentPresenterTest extends BaseUnitTest {
                 eq(nameToFilter));
         verify(structureRegisterFragmentPresenter).onCountOfStructuresFetched(anyInt());
         verify(structureRegisterFragmentPresenter).onFetchedStructures(anyList());
+    }
+
+    @Test
+    public void testOnNextButtonClickShouldInvokeFetch() {
+        Button mockNextButton = mock(Button.class);
+        StructureRegisterFragment mockStructureRegisterFragment = mock(StructureRegisterFragment.class);
+        StructureRegisterAdapter mockStructureRegisterAdapter = mock(StructureRegisterAdapter.class);
+        doReturn(mockStructureRegisterAdapter).when(view).getAdapter();
+        doReturn(mockStructureRegisterFragment).when(structureRegisterFragmentPresenter).getFragment();
+        doReturn(mockNextButton).when(mockStructureRegisterFragment).getNextButton();
+        structureRegisterFragmentPresenter.onNextButtonClick();
+
+        verify(structureRegisterFragmentPresenter).fetchStructures();
+    }
+
+    @Test
+    public void testOnPreviousButtonClickShouldInvokeFetch() {
+        Button mockNextButton = mock(Button.class);
+        StructureRegisterFragment mockStructureRegisterFragment = mock(StructureRegisterFragment.class);
+        StructureRegisterAdapter mockStructureRegisterAdapter = mock(StructureRegisterAdapter.class);
+        RecyclerView mockRecyclerView = mock(RecyclerView.class);
+        doReturn(mockStructureRegisterAdapter).when(view).getAdapter();
+        doReturn(mockStructureRegisterFragment).when(structureRegisterFragmentPresenter).getFragment();
+        doReturn(mockNextButton).when(mockStructureRegisterFragment).getNextButton();
+        doReturn(mockNextButton).when(mockStructureRegisterFragment).getPreviousButton();
+
+        WhiteboxImpl.setInternalState(mockStructureRegisterFragment, "clientsView", mockRecyclerView);
+
+        structureRegisterFragmentPresenter.onPreviousButtonClick();
+
+        verify(structureRegisterFragmentPresenter).fetchStructures();
     }
 }

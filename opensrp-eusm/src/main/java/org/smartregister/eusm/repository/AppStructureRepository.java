@@ -9,6 +9,7 @@ import net.sqlcipher.Cursor;
 import net.sqlcipher.SQLException;
 import net.sqlcipher.database.SQLiteDatabase;
 
+import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.smartregister.domain.Geometry;
 import org.smartregister.eusm.application.EusmApplication;
@@ -92,28 +93,28 @@ public class AppStructureRepository extends StructureRepository {
         getWritableDatabase().replace(getLocationTableName(), null, contentValues);
     }
 
-    public int countOfStructures(String nameFilter, String locationParentId) {
+    public int countOfStructures(String nameFilter, String locationParentId, String planId) {
         SQLiteDatabase sqLiteDatabase = getReadableDatabase();
-        String query = "SELECT count(1) from " + STRUCTURE_TABLE;
+        String query = "SELECT count(DISTINCT structure._id) from " + STRUCTURE_TABLE;
 
-        String[] args = StringUtils.stripAll(locationParentId);
+        String[] args = StringUtils.stripAll(locationParentId, planId);
 
         query += " join task on task.for = " + StructureRepository.STRUCTURE_TABLE + "._id ";
 
         query += " join location on location._id = " + StructureRepository.STRUCTURE_TABLE + ".parent_id ";
 
-        query += " where location.parent_id = ? ";
+        query += " where location.parent_id = ? AND task.plan_id = ?";
 
         if (StringUtils.isNotBlank(nameFilter)) {
-            args = StringUtils.stripAll(locationParentId, nameFilter);
+            args = StringUtils.stripAll(locationParentId, planId, "%" + nameFilter + "%");
 
-            query += " and " + STRUCTURE_TABLE + "." + NAME + " like '%?%'";
+            query += " and " + STRUCTURE_TABLE + "." + NAME + " like ? ";
         }
 
         int count = 0;
         try (Cursor cursor = sqLiteDatabase.rawQuery(query, args)) {
-            if (cursor != null) {
-                count = cursor.getCount();
+            if (cursor != null && cursor.moveToNext()) {
+                count = cursor.getInt(0);
             }
         } catch (SQLException w) {
             Timber.e(w);
@@ -121,12 +122,15 @@ public class AppStructureRepository extends StructureRepository {
         return count;
     }
 
-    public List<StructureDetail> fetchStructureDetails(int pageNo, String locationParentId, String nameFilter) {
-        return fetchStructureDetails(pageNo, locationParentId, nameFilter, false);
+    public List<StructureDetail> fetchStructureDetails(int pageNo, String locationParentId, String nameFilter, String planId) {
+        return fetchStructureDetails(pageNo, locationParentId, nameFilter, false, planId);
     }
 
     public List<StructureDetail> fetchStructureDetails(Integer pageNo, String locationParentId,
-                                                       String nameFilter, boolean isForMapping) {
+                                                       String nameFilter, boolean isForMapping, String planId) {
+
+        Location location = EusmApplication.getInstance().getUserLocation();
+
         List<StructureDetail> structureDetails = new ArrayList<>();
         SQLiteDatabase sqLiteDatabase = getReadableDatabase();
         String[] columns = new String[]{
@@ -139,7 +143,7 @@ public class AppStructureRepository extends StructureRepository {
                 STRUCTURE_TABLE + "." + "geojson as structureGeoJson",
                 LOCATION_TABLE + "." + "name as locationName",
                 LOCATION_TABLE + "." + "parent_id as locationParentId",
-                "(((?  - longitude)*(?  - longitude)) + ((?  - latitude)*(?  - latitude))) as dist",
+                location == null ? "0 as dist " : "(((?  - longitude)*(?  - longitude)) + ((?  - latitude)*(?  - latitude))) as dist",
                 "case \n" +
                         "\twhen (sum(task.status = 'COMPLETED')*1.0/sum(task.status= 'READY')*1.0) = 0.0 \n" +
                         "\t\tthen sum(task.status= 'READY')\n" +
@@ -155,32 +159,28 @@ public class AppStructureRepository extends StructureRepository {
                 + " join task on task.structure_id = " + StructureRepository.STRUCTURE_TABLE + "._id "
                 + " join location on location._id = " + StructureRepository.STRUCTURE_TABLE + ".parent_id ";
 
-
-        Location location = EusmApplication.getInstance().getUserLocation();
-        if (location == null) {
-            location = new Location("temp");
-            location.setLongitude(0.000);
-            location.setLatitude(0.000);
-        }
-
         String[] args = StringUtils.stripAll(
-                String.valueOf(location.getLongitude()),
-                String.valueOf(location.getLongitude()),
-                String.valueOf(location.getLatitude()),
-                String.valueOf(location.getLatitude()),
+                planId,
                 locationParentId);
 
-        query += " where locationParentId = ? ";
+        query += " where task.plan_id = ? AND locationParentId = ? ";
 
         if (StringUtils.isNotBlank(nameFilter)) {
             args = StringUtils.stripAll(
-                    String.valueOf(location.getLongitude()),
-                    String.valueOf(location.getLongitude()),
-                    String.valueOf(location.getLatitude()),
-                    String.valueOf(location.getLatitude()),
+                    planId,
                     locationParentId,
-                    nameFilter);
-            query += " and structureName like '%?%'";
+                    "%" + nameFilter + "%");
+            query += " and structureName like  ? ";
+        }
+
+        if (location != null) {
+            String[] locationArgsArray = new String[]{
+                    String.valueOf(location.getLongitude()),
+                    String.valueOf(location.getLongitude()),
+                    String.valueOf(location.getLatitude()),
+                    String.valueOf(location.getLatitude()),
+            };
+            args = ArrayUtils.addAll(locationArgsArray, args);
         }
 
         query += " group by " + STRUCTURE_TABLE + "." + "_id" + " order by case when dist is null then 1 else 0 end, dist"
@@ -228,6 +228,8 @@ public class AppStructureRepository extends StructureRepository {
                 structureDetail.setDistance(distanceInMetres);
                 structureDetail.setDistanceMeta(formatDistance(distanceInMetres));
                 structureDetail.setNearby(distanceInMetres <= AppConstants.NEARBY_DISTANCE_IN_METRES);
+            } else {
+                structureDetail.setDistanceMeta("-");
             }
 
             if (isForMapping)

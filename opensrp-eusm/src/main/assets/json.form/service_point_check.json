@@ -48,7 +48,7 @@
     "encounter_location": ""
   },
   "step1": {
-    "title": "Service Point Check",
+    "title": "{{service_point_check.step1.title}}",
     "display_back_button": true,
     "fields": [
       {
@@ -57,20 +57,20 @@
         "openmrs_entity": "",
         "openmrs_entity_id": "",
         "type": "native_radio",
-        "label": "Are there other UNICEF-supplied products at the service point which require action (ask the End User)?",
+        "label": "{{service_point_check.step1.other_products_action.label}}",
         "options": [
           {
             "key": "yes",
-            "text": "Yes"
+            "text": "{{service_point_check.step1.other_products_action.options.yes.text}}"
           },
           {
             "key": "no",
-            "text": "No"
+            "text": "{{service_point_check.step1.other_products_action.options.no.text}}"
           }
         ],
         "v_required": {
           "value": true,
-          "err": "Field required"
+          "err": "{{service_point_check.step1.other_products_action.v_required.err}}"
         }
       },
       {
@@ -79,7 +79,7 @@
         "openmrs_entity": "",
         "openmrs_entity_id": "",
         "type": "edit_text",
-        "hint": "Please describe:",
+        "hint": "{{service_point_check.step1.other_products_action_description.hint}}",
         "relevance": {
           "step1:other_products_action": {
             "type": "string",
@@ -93,20 +93,20 @@
         "openmrs_entity": "",
         "openmrs_entity_id": "",
         "type": "native_radio",
-        "label": "Did the End User mention any products that the service point needs (ask the End User)?",
+        "label": "{{service_point_check.step1.other_needed_products.label}}",
         "options": [
           {
             "key": "yes",
-            "text": "Yes"
+            "text": "{{service_point_check.step1.other_needed_products.options.yes.text}}"
           },
           {
             "key": "no",
-            "text": "No"
+            "text": "{{service_point_check.step1.other_needed_products.options.no.text}}"
           }
         ],
         "v_required": {
           "value": true,
-          "err": "Field required"
+          "err": "{{service_point_check.step1.other_needed_products.v_required.err}}"
         }
       },
       {
@@ -115,7 +115,7 @@
         "openmrs_entity": "",
         "openmrs_entity_id": "",
         "type": "edit_text",
-        "hint": "Please describe:",
+        "hint": "{{service_point_check.step1.other_needed_products_description.hint}}",
         "relevance": {
           "step1:other_needed_products": {
             "type": "string",
@@ -129,20 +129,20 @@
         "openmrs_entity": "",
         "openmrs_entity_id": "",
         "type": "native_radio",
-        "label": "Is the service point overall in good working order?",
+        "label": "{{service_point_check.step1.service_point_good_order.label}}",
         "options": [
           {
             "key": "yes",
-            "text": "Yes"
+            "text": "{{service_point_check.step1.service_point_good_order.options.yes.text}}"
           },
           {
             "key": "no",
-            "text": "No"
+            "text": "{{service_point_check.step1.service_point_good_order.options.no.text}}"
           }
         ],
         "v_required": {
           "value": true,
-          "err": "Field required"
+          "err": "{{service_point_check.step1.service_point_good_order.v_required.err}}"
         }
       },
       {
@@ -151,7 +151,7 @@
         "openmrs_entity": "",
         "openmrs_entity_id": "",
         "type": "edit_text",
-        "hint": "Please describe:",
+        "hint": "{{service_point_check.step1.service_point_not_good_order_reason.hint}}",
         "relevance": {
           "step1:service_point_good_order": {
             "type": "string",
@@ -160,5 +160,6 @@
         }
       }
     ]
-  }
+  },
+  "properties_file_name": "service_point_check"
 }

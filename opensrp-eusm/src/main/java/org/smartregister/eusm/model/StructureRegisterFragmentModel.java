@@ -21,7 +21,7 @@ public class StructureRegisterFragmentModel {
     public int countOfStructures(String nameFilter) {
         Location location = Utils.getOperationalAreaLocation(PreferencesUtil.getInstance().getCurrentOperationalArea());
         if (location != null) {
-            return appStructureRepository.countOfStructures(nameFilter, location.getId());
+            return appStructureRepository.countOfStructures(nameFilter, location.getId(), PreferencesUtil.getInstance().getCurrentPlanId());
         } else {
             return 0;
         }
@@ -30,7 +30,7 @@ public class StructureRegisterFragmentModel {
     public List<StructureDetail> fetchStructures(int pageNo, String nameFilter) {
         Location location = Utils.getOperationalAreaLocation(PreferencesUtil.getInstance().getCurrentOperationalArea());
         if (location != null) {
-            return appStructureRepository.fetchStructureDetails(pageNo, location.getId(), nameFilter);
+            return appStructureRepository.fetchStructureDetails(pageNo, location.getId(), nameFilter, PreferencesUtil.getInstance().getCurrentPlanId());
         } else {
             return new ArrayList<>();
         }

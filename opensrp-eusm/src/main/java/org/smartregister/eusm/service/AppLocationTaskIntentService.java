@@ -1,7 +1,10 @@
 package org.smartregister.eusm.service;
 
+import android.Manifest;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 
+import androidx.core.app.ActivityCompat;
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 
 import org.jetbrains.annotations.NotNull;
@@ -18,6 +21,8 @@ import org.smartregister.view.activity.DrishtiApplication;
 
 import java.util.List;
 import java.util.Set;
+
+import timber.log.Timber;
 
 import static org.smartregister.tasking.util.Constants.Action.STRUCTURE_TASK_SYNCED;
 
@@ -46,7 +51,13 @@ public class AppLocationTaskIntentService extends LocationTaskIntentService {
 
             //initiate Stock And StockType sync after structures have been fetched
             SyncStockServiceJob.scheduleJobImmediately(SyncStockServiceJob.TAG);
-            SyncStockTypeServiceJob.scheduleJobImmediately(SyncStockTypeServiceJob.TAG);
+            if ((ActivityCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.WRITE_EXTERNAL_STORAGE) +
+                    ActivityCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.READ_EXTERNAL_STORAGE))
+                    == PackageManager.PERMISSION_GRANTED) {
+                SyncStockTypeServiceJob.scheduleJobImmediately(SyncStockTypeServiceJob.TAG);
+            } else {
+                Timber.e("Read and Write Permission Not Granted");
+            }
         }
         return locationList;
     }
