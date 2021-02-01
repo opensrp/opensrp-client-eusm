@@ -36,6 +36,8 @@ public class ProductInfoFragmentPresenterTest extends BaseUnitTest {
         taskDetail.setChecked(true);
         taskDetail.setEntityName("Freezer");
         taskDetail.setTaskId(UUID.randomUUID().toString());
+        taskDetail.setCondition("Can it preserve items");
+        taskDetail.setAppropriateUsage("Is the lid closed when the connected to the power source");
         productInfoFragmentPresenter.fetchProductQuestions(taskDetail);
         shadowOf(getMainLooper()).idle();
         Thread.sleep(ASYNC_TIMEOUT);

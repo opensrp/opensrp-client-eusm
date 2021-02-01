@@ -215,7 +215,7 @@ dependencies {
     }
 
 //    implementation(project(':opensrp-tasking')) {
-    implementation('org.smartregister:opensrp-client-tasking:0.0.3-v5-EUSM-SNAPSHOT') {
+    implementation('org.smartregister:opensrp-client-tasking:0.0.3-v11-EUSM-SNAPSHOT') {
         transitive = true
         exclude group: 'org.smartregister', module: 'opensrp-client-core'
         exclude group: 'com.ibm.fhir', module: 'fhir-model'
