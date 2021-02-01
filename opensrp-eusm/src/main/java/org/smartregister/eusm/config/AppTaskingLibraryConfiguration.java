@@ -452,7 +452,7 @@ public class AppTaskingLibraryConfiguration extends TaskingLibraryConfiguration 
                     eusmCardDetail.setStructureId(AppUtils.getStringFromJsonElement(jsonObject, AppConstants.CardDetailKeys.STRUCTURE_ID));
                     eusmCardDetail.setTaskStatus(AppUtils.getStringFromJsonElement(jsonObject, AppConstants.CardDetailKeys.TASK_STATUS));
                     eusmCardDetail.setStructureName(AppUtils.getStringFromJsonElement(jsonObject, AppConstants.CardDetailKeys.NAME));
-                    eusmCardDetail.setStructureType(AppUtils.getStringFromJsonElement(jsonObject, AppConstants.CardDetailKeys.TYPE));
+                    eusmCardDetail.setStructureType(AppUtils.getStringFromJsonElement(jsonObject, AppConstants.CardDetailKeys.TYPE_TEXT));
                     eusmCardDetail.setCommuneId(AppUtils.getStringFromJsonElement(jsonObject, AppConstants.CardDetailKeys.COMMUNE_ID));
                     getAppExecutors().mainThread().execute(new Runnable() {
                         @Override

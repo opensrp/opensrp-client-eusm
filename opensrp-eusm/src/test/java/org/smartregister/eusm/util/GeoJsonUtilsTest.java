@@ -39,6 +39,7 @@ public class GeoJsonUtilsTest extends BaseUnitTest {
         structureDetail.setCommune("Amabtorohanana");
         structureDetail.setStructureId(UUID.randomUUID().toString());
         structureDetail.setTaskStatus(Task.TaskStatus.READY.toString());
+        structureDetail.setStructureType("waterpoint");
         String jsonArrayString = geoJsonUtils.getGeoJsonFromStructureDetail(Collections.singletonList(structureDetail));
         List<Location> structures = JsonFormUtils.gson.fromJson(jsonArrayString, new TypeToken<List<Location>>() {
         }.getType());
