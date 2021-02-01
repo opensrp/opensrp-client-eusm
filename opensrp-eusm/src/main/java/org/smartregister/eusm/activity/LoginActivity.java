@@ -8,7 +8,6 @@ import org.smartregister.eusm.application.EusmApplication;
 import org.smartregister.eusm.presenter.LoginPresenter;
 import org.smartregister.eusm.util.AppConstants;
 import org.smartregister.eusm.util.AppUtils;
-import org.smartregister.eusm.util.TestDataUtils;
 import org.smartregister.service.UserService;
 import org.smartregister.task.SaveTeamLocationsTask;
 import org.smartregister.util.Utils;
@@ -35,8 +34,8 @@ public class LoginActivity extends BaseLoginActivity implements BaseLoginContrac
             Utils.startAsyncTask(new SaveTeamLocationsTask(), null);
         }
 
-        TestDataUtils testDataUtils = new TestDataUtils();
-        testDataUtils.populateTestData();
+//        TestDataUtils testDataUtils = new TestDataUtils();
+//        testDataUtils.populateTestData();
 
         SharedPreferences allSharedPreferences = Utils.getAllSharedPreferences().getPreferences();
         if (allSharedPreferences != null) {
