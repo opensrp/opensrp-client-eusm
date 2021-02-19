@@ -134,4 +134,8 @@
     <string name="select_campaign_operational_area">Mission and District not set. Select from the hamburger menu</string>
     <string name="revoked_plan_operational_area">Previously selected Mission and/or District revoked. Select from the hamburger menu</string>
     <string name="read_and_write_permission_not_granted">Read And Write Storage Permission Not Granted</string>
+
+    <string name="service_point_check_task_title">Service Point Check</string>
+    <string name="record_gps_task_title">Record GPS</string>
+    <string name="location_has_no_structures">Error: Location has no service points!!</string>
 </resources>

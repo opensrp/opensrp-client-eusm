@@ -10,6 +10,8 @@ import android.widget.TextView;
 import androidx.annotation.UiThread;
 
 import org.json.JSONObject;
+import org.smartregister.Context;
+import org.smartregister.CoreLibrary;
 import org.smartregister.eusm.R;
 import org.smartregister.eusm.activity.EusmTaskRegisterActivity;
 import org.smartregister.eusm.adapter.StructureRegisterAdapter;
@@ -135,6 +137,11 @@ public class StructureRegisterFragment extends BaseDrawerRegisterFragment implem
     }
 
     @Override
+    protected Context context() {
+        return CoreLibrary.getInstance().context().updateApplicationContext(getActivity());
+    }
+
+    @Override
     public StructureRegisterAdapter getAdapter() {
         return structureRegisterAdapter;
     }
@@ -157,6 +164,9 @@ public class StructureRegisterFragment extends BaseDrawerRegisterFragment implem
 
     @Override
     public void filter(String filterString, String joinTableString, String mainConditionString, boolean qrCode) {
+//        if (searchCancelView != null) {
+//            searchCancelView.setVisibility("".equals(filterString) ? View.GONE : View.VISIBLE);
+//        }
         presenter().filterByName(filterString);
     }
 
@@ -167,6 +177,8 @@ public class StructureRegisterFragment extends BaseDrawerRegisterFragment implem
         TextView servicePointBtnRegisterTextView = view.findViewById(R.id.task_register);
         servicePointBtnRegisterTextView.setText(getString(R.string.map));
         servicePointBtnRegisterTextView.setOnClickListener(this);
+
+        view.findViewById(R.id.btn_search_cancel).setVisibility(View.VISIBLE);
 
         strPageInfoView = view.findViewById(R.id.page_info_textView);
 
@@ -200,5 +212,4 @@ public class StructureRegisterFragment extends BaseDrawerRegisterFragment implem
     public void onClick(View v) {
         onViewClicked(v);
     }
-
 }

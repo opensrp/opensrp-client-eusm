@@ -1,4 +1,4 @@
-package org.smartregister.eusm.configuration;
+package org.smartregister.eusm.config;
 
 import org.json.JSONArray;
 import org.smartregister.eusm.util.AppUtils;

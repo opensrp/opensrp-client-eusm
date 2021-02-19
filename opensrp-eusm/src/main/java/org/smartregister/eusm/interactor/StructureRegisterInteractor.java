@@ -5,7 +5,6 @@ import android.content.Context;
 import androidx.annotation.NonNull;
 
 import org.smartregister.eusm.R;
-import org.smartregister.eusm.application.EusmApplication;
 import org.smartregister.eusm.comparator.StructureDetailNameComparator;
 import org.smartregister.eusm.contract.StructureRegisterFragmentContract;
 import org.smartregister.eusm.domain.StructureDetail;
@@ -25,10 +24,10 @@ public class StructureRegisterInteractor implements StructureRegisterFragmentCon
 
     private final Context context;
 
-    public StructureRegisterInteractor() {
+    public StructureRegisterInteractor(Context context) {
         model = new StructureRegisterFragmentModel();
         appExecutors = TaskingLibrary.getInstance().getAppExecutors();
-        context = EusmApplication.getInstance().getBaseContext();
+        this.context = context;
     }
 
     @Override

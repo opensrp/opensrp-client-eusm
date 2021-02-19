@@ -112,7 +112,7 @@ public class EusmBaseDrawerPresenter extends BaseDrawerPresenter {
                 FormLocation formLocation = locationIterable.next();
                 formLocations = formLocation.nodes;
                 String key = formLocation.key;
-                if (formLocations != null && formLocations.isEmpty()) {
+                if (formLocations != null && formLocations.isEmpty() && StringUtils.isNotBlank(key)) {
                     if (!filteredIn.contains(key)) {
                         locationIterable.remove();
                     }

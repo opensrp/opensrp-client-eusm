@@ -42,6 +42,6 @@ public class EusmRepositoryTest extends BaseUnitTest {
     @Test
     public void testOnCreateShouldExecuteInitializingDbQueries() {
         eusmRepository.onCreate(sqLiteDatabase);
-        verify(sqLiteDatabase, times(83)).execSQL(anyString());
+        verify(sqLiteDatabase, times(85)).execSQL(anyString());
     }
 }

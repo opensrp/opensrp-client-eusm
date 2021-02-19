@@ -20,8 +20,8 @@ import timber.log.Timber;
 
 public class EusmTaskingMapInteractor extends TaskingMapInteractor {
 
-    private AppStructureRepository appStructureRepository;
-    private GeoJsonUtils geoJsonUtils;
+    private final AppStructureRepository appStructureRepository;
+    private final GeoJsonUtils geoJsonUtils;
 
     public EusmTaskingMapInteractor(TaskingMapActivityContract.Presenter presenter) {
         super(presenter);

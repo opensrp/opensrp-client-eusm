@@ -20,7 +20,7 @@
             android:paddingStart="30dp"
             android:paddingTop="20dp"
             android:paddingEnd="30dp"
-            android:paddingBottom="20dp">
+            android:paddingBottom="10dp">
 
             <LinearLayout
                 android:layout_width="wrap_content"
@@ -77,29 +77,28 @@
                     android:textColor="@color/text_black"
                     android:textSize="20sp" />
 
-                <LinearLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="60dp"
-                    android:layout_gravity="center"
-                    android:orientation="horizontal">
 
-                    <Button
-                        android:id="@+id/btn_view_inventory"
-                        android:layout_width="match_parent"
-                        android:layout_height="50dp"
-                        android:layout_marginTop="10dp"
-                        android:layout_marginBottom="@dimen/change_spray_status_btn_bottom_margin"
-                        android:background="@drawable/rounded_blue_outline"
-                        android:text="@string/view_inventory"
-                        android:textAllCaps="false"
-                        android:textColor="#1892D4"
-                        android:textSize="@dimen/activity_title_size" />
-
-
-                </LinearLayout>
             </LinearLayout>
+
         </LinearLayout>
 
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="60dp"
+            android:layout_gravity="center"
+            android:orientation="horizontal">
+            <Button
+                android:id="@+id/btn_view_inventory"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:layout_marginTop="0dp"
+                android:layout_marginBottom="@dimen/change_spray_status_btn_bottom_margin"
+                android:background="@drawable/rounded_blue_outline"
+                android:text="@string/view_inventory"
+                android:textAllCaps="false"
+                android:textColor="#1892D4"
+                android:textSize="@dimen/activity_title_size" />
+        </LinearLayout>
 
     </LinearLayout>
 </androidx.cardview.widget.CardView>

@@ -27,8 +27,8 @@ import org.smartregister.eusm.BuildConfig;
 import org.smartregister.eusm.activity.LoginActivity;
 import org.smartregister.eusm.config.AppSyncConfiguration;
 import org.smartregister.eusm.config.AppTaskingLibraryConfiguration;
+import org.smartregister.eusm.config.EusmStockSyncConfiguration;
 import org.smartregister.eusm.config.ServicePointType;
-import org.smartregister.eusm.configuration.EusmStockSyncConfiguration;
 import org.smartregister.eusm.job.AppJobCreator;
 import org.smartregister.eusm.processor.AppClientProcessor;
 import org.smartregister.eusm.repository.AppRepository;
@@ -136,6 +136,7 @@ public class EusmApplication extends DrishtiApplication implements TimeChangedBr
         context = Context.getInstance();
         context.updateApplicationContext(getApplicationContext());
         context.updateCommonFtsObject(createCommonFtsObject());
+        CoreLibrary.init(context, new AppSyncConfiguration(), BuildConfig.BUILD_TIMESTAMP);
         forceRemoteLoginForInConsistentUsername();
         // Initialize Modules
         Fabric.with(this, new Crashlytics.Builder().core(new CrashlyticsCore.Builder().disabled(BuildConfig.DEBUG).build()).build());
@@ -146,7 +147,6 @@ public class EusmApplication extends DrishtiApplication implements TimeChangedBr
 
         TaskingLibrary.getInstance().setMapboxAccessToken(BuildConfig.MAPBOX_SDK_ACCESS_TOKEN);
 
-        CoreLibrary.init(context, new AppSyncConfiguration(), BuildConfig.BUILD_TIMESTAMP);
 
         PathEvaluatorLibrary.getInstance().setStockDao(new StockDaoImpl());
 
@@ -382,6 +382,8 @@ public class EusmApplication extends DrishtiApplication implements TimeChangedBr
             map.put(AppConstants.ServicePointType.DRJS, ServicePointType.DRJS);
             map.put(AppConstants.ServicePointType.INSTAT, ServicePointType.INSTAT);
             map.put(AppConstants.ServicePointType.BSD, ServicePointType.BSD);
+            map.put(AppConstants.ServicePointType.MEN, ServicePointType.MEN);
+            map.put(AppConstants.ServicePointType.DREN, ServicePointType.DREN);
             servicePointKeyToTypeMap = map;
         }
 

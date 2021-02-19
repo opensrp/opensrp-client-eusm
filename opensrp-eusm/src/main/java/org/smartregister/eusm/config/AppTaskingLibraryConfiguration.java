@@ -517,6 +517,6 @@ public class AppTaskingLibraryConfiguration extends TaskingLibraryConfiguration 
 
     @Override
     public Pair<Double, Double> getMinMaxZoomMapDownloadPair() {
-        return Pair.create(5d, 11d);
+        return Pair.create(5d, 10d);
     }
 }

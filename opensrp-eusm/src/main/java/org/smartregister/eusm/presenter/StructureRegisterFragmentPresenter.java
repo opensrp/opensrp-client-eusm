@@ -24,8 +24,8 @@ public class StructureRegisterFragmentPresenter extends BaseRegisterFragmentPres
     private String nameFilter;
 
     public StructureRegisterFragmentPresenter(StructureRegisterFragmentContract.View view) {
-        this.viewWeakReference = new WeakReference<>(view);
-        structureRegisterInteractor = new StructureRegisterInteractor();
+        viewWeakReference = new WeakReference<>(view);
+        structureRegisterInteractor = new StructureRegisterInteractor(viewWeakReference.get().getContext());
     }
 
     public String getString(@StringRes int resId) {
@@ -84,6 +84,7 @@ public class StructureRegisterFragmentPresenter extends BaseRegisterFragmentPres
     @Override
     public void onNextButtonClick() {
         getView().getAdapter().clearData();
+        getFragment().getPreviousButton().setVisibility(View.VISIBLE);
 
         ++currentPageNo;
 
@@ -92,7 +93,6 @@ public class StructureRegisterFragmentPresenter extends BaseRegisterFragmentPres
         if ((totalCount - ((currentPageNo) * pageSize)) > pageSize) {
             getFragment().clientsView.scrollToPosition(0);
             getFragment().getNextButton().setVisibility(View.VISIBLE);
-            getFragment().getPreviousButton().setVisibility(View.VISIBLE);
         } else {
             getFragment().getNextButton().setVisibility(View.INVISIBLE);
         }

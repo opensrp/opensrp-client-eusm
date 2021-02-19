@@ -92,7 +92,7 @@ public interface AppConstants extends TaskingConstants {
         String MEN = "men";
         String DREN = "dren";
         String MPPSPF = "mppspf";
-        String DRPPSPF = "drpppspf";
+        String DRPPSPF = "drppspf";
         String NGO_PARTNER = "ngo_partner";
         String SITE_COMMUNAUTAIRE = "site_communautaire";
         String DRJS = "drjs";
@@ -136,6 +136,7 @@ public interface AppConstants extends TaskingConstants {
         String STRUCTURE_ID = "structureId";
         String DISTANCE_META = "distanceMeta";
         String TASK_STATUS = "taskStatus";
+        String TASK_STATUS_TYPE = "taskStatusType";
         String STATUS = "status";
         String NAME = "name";
         String TYPE = "type";

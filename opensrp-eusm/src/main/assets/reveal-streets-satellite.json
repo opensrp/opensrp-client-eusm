@@ -23,7 +23,10 @@
       "data": {
         "type": "FeatureCollection",
         "features": []
-      }
+      },
+      "cluster": true,
+      "clusterMaxZoom": 14,
+      "clusterRadius": 50
     },
     "select-data": {
       "type": "geojson",
@@ -62,16 +65,14 @@
           [
             "zoom"
           ],
-          7.0,
-          13,
-          13.0,
-          15
+          7.0, 13,
+          13.0, 15
         ],
         "circle-color": [
           "match",
           [
             "get",
-            "taskStatus"
+            "taskStatusType"
           ],
           [
             "in_progress"
@@ -81,7 +82,11 @@
             "completed"
           ],
           "hsl(101.6,66.8%,44.9%)",
-          "hsl(0, 0%, 64%)"
+          [
+            "not_started"
+          ],
+          "hsl(0, 0%, 64%)",
+          "hsl(100, 100%, 100%)"
         ],
         "circle-stroke-width": 2,
         "circle-opacity": 1

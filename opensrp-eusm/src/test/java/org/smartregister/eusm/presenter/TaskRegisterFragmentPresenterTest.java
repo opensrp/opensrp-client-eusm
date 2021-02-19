@@ -6,7 +6,9 @@ import org.json.JSONObject;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
+import org.mockito.MockitoAnnotations;
 import org.robolectric.Robolectric;
+import org.robolectric.RuntimeEnvironment;
 import org.robolectric.annotation.LooperMode;
 import org.robolectric.util.ReflectionHelpers;
 import org.smartregister.domain.Task;
@@ -43,8 +45,14 @@ public class TaskRegisterFragmentPresenterTest extends BaseUnitTest {
     @Mock
     private TaskRegisterFragmentContract.View view;
 
+    @Mock
+    private Activity activity;
+
     @Before
     public void setUp() {
+        MockitoAnnotations.initMocks(this);
+        doReturn(activity).when(view).getActivity();
+        doReturn(RuntimeEnvironment.application).when(activity).getBaseContext();
         taskRegisterFragmentPresenter = spy(new TaskRegisterFragmentPresenter(view));
     }
 

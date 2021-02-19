@@ -1,61 +1,78 @@
 package org.smartregister.eusm.util;
 
+import android.content.SharedPreferences;
+import android.preference.PreferenceManager;
+
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.reflect.TypeToken;
+
+import org.joda.time.DateTime;
+import org.smartregister.domain.LocationProperty;
+import org.smartregister.domain.Task;
+import org.smartregister.eusm.application.EusmApplication;
+import org.smartregister.repository.TaskRepository;
+import org.smartregister.util.DateTimeTypeConverter;
+import org.smartregister.util.PropertiesConverter;
+
+import java.util.List;
+
 /**
  * Created by samuelgithengi on 12/3/18.
  */
 public class TestDataUtils {
 
-//    public static Gson gson = new GsonBuilder().setDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSZ")
-//            .registerTypeAdapter(DateTime.class, new DateTimeTypeConverter())
-//            .registerTypeAdapter(LocationProperty.class, new PropertiesConverter()).create();
-//    private final TaskRepository taskRepository;
-//    //    private final StructureRepository structureRepository;
-//    private final String TEST_DATA_POPULATED = "test.data.populated";
-//
-//
-//    public TestDataUtils() {
-//        taskRepository = EusmApplication.getInstance().getTaskRepository();
-////        structureRepository = EusmApplication.getInstance().getStructureRepository();
+    public static Gson gson = new GsonBuilder().setDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSZ")
+            .registerTypeAdapter(DateTime.class, new DateTimeTypeConverter())
+            .registerTypeAdapter(LocationProperty.class, new PropertiesConverter()).create();
+    private final TaskRepository taskRepository;
+    //    private final StructureRepository structureRepository;
+    private final String TEST_DATA_POPULATED = "test.data.populated";
+
+
+    public TestDataUtils() {
+        taskRepository = EusmApplication.getInstance().getTaskRepository();
+//        structureRepository = EusmApplication.getInstance().getStructureRepository();
+    }
+
+//    public static void getPopulateInventory() {
+//        String ip = "{\"stocks\":[{\"identifier\":4,\"transaction_type\":\"Inventory\",\"providerid\":\"34615126-f515-4b31-80ee-c42227f6f0c5\",\"value\":10,\"version\":1606728907714,\"deliveryDate\":\"2020-01-02T03:00:00.000+0300\",\"accountabilityEndDate\":\"2021-01-02T03:00:00.000+0300\",\"donor\":\"ADB\",\"serialNumber\":\"123434\",\"locationId\":\"f3199af5-2eaf-46df-87c9-40d59606a2fb\",\"customProperties\":{\"PO Number\":\"111\",\"UNICEF section\":\"Health\"},\"serverVersion\":5,\"type\":\"Stock\",\"id\":\"ddcaf383-882e-448b-b701-8b72cb0d4d7a\",\"revision\":\"v1\"},{\"identifier\":4,\"transaction_type\":\"Inventory\",\"providerid\":\"34615126-f515-4b31-80ee-c42227f6f0c5\",\"value\":10,\"version\":1606728907714,\"deliveryDate\":\"2020-01-02T03:00:00.000+0300\",\"accountabilityEndDate\":\"2021-01-02T03:00:00.000+0300\",\"donor\":\"ADB\",\"serialNumber\":\"123434\",\"locationId\":\"f3199af5-2eaf-46df-87c9-40d59606a2fb\",\"customProperties\":{\"PO Number\":\"111\",\"UNICEF section\":\"Health\"},\"serverVersion\":5,\"type\":\"Stock\",\"id\":\"d65e06d6-2ae8-485f-9d63-0335d0025bde\",\"revision\":\"v1\"},{\"identifier\":3,\"transaction_type\":\"Inventory\",\"providerid\":\"34615126-f515-4b31-80ee-c42227f6f0c5\",\"value\":10,\"version\":1606728907714,\"deliveryDate\":\"2020-01-02T03:00:00.000+0300\",\"accountabilityEndDate\":\"2021-01-02T03:00:00.000+0300\",\"donor\":\"ADB\",\"serialNumber\":\"123434\",\"locationId\":\"b8a7998c-5df6-49eb-98e6-f0675db71848\",\"customProperties\":{\"PO Number\":\"111\",\"UNICEF section\":\"Health\"},\"serverVersion\":5,\"type\":\"Stock\",\"id\":\"69227a92-7979-490c-b149-f28669c6b760\",\"revision\":\"v1\"}]}";
+//        StockResponse stockResponse = GsonUtil.getGson().fromJson(ip, new TypeToken<StockResponse>() {
+//        }.getType());
+//        new EusmStockSyncConfiguration().getStockSyncIntentServiceHelper().batchInsertStocks(stockResponse.getStocks());
 //    }
-//
-////    public static void getPopulateInventory() {
-////        String ip = "{\"stocks\":[{\"identifier\":4,\"transaction_type\":\"Inventory\",\"providerid\":\"34615126-f515-4b31-80ee-c42227f6f0c5\",\"value\":10,\"version\":1606728907714,\"deliveryDate\":\"2020-01-02T03:00:00.000+0300\",\"accountabilityEndDate\":\"2021-01-02T03:00:00.000+0300\",\"donor\":\"ADB\",\"serialNumber\":\"123434\",\"locationId\":\"f3199af5-2eaf-46df-87c9-40d59606a2fb\",\"customProperties\":{\"PO Number\":\"111\",\"UNICEF section\":\"Health\"},\"serverVersion\":5,\"type\":\"Stock\",\"id\":\"ddcaf383-882e-448b-b701-8b72cb0d4d7a\",\"revision\":\"v1\"},{\"identifier\":4,\"transaction_type\":\"Inventory\",\"providerid\":\"34615126-f515-4b31-80ee-c42227f6f0c5\",\"value\":10,\"version\":1606728907714,\"deliveryDate\":\"2020-01-02T03:00:00.000+0300\",\"accountabilityEndDate\":\"2021-01-02T03:00:00.000+0300\",\"donor\":\"ADB\",\"serialNumber\":\"123434\",\"locationId\":\"f3199af5-2eaf-46df-87c9-40d59606a2fb\",\"customProperties\":{\"PO Number\":\"111\",\"UNICEF section\":\"Health\"},\"serverVersion\":5,\"type\":\"Stock\",\"id\":\"d65e06d6-2ae8-485f-9d63-0335d0025bde\",\"revision\":\"v1\"},{\"identifier\":3,\"transaction_type\":\"Inventory\",\"providerid\":\"34615126-f515-4b31-80ee-c42227f6f0c5\",\"value\":10,\"version\":1606728907714,\"deliveryDate\":\"2020-01-02T03:00:00.000+0300\",\"accountabilityEndDate\":\"2021-01-02T03:00:00.000+0300\",\"donor\":\"ADB\",\"serialNumber\":\"123434\",\"locationId\":\"b8a7998c-5df6-49eb-98e6-f0675db71848\",\"customProperties\":{\"PO Number\":\"111\",\"UNICEF section\":\"Health\"},\"serverVersion\":5,\"type\":\"Stock\",\"id\":\"69227a92-7979-490c-b149-f28669c6b760\",\"revision\":\"v1\"}]}";
-////        StockResponse stockResponse = GsonUtil.getGson().fromJson(ip, new TypeToken<StockResponse>() {
-////        }.getType());
-////        new EusmStockSyncConfiguration().getStockSyncIntentServiceHelper().batchInsertStocks(stockResponse.getStocks());
-////    }
-//
-//    public void populateTestData() {
-//        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(EusmApplication.getInstance().getApplicationContext());
-//        if (!sharedPreferences.getBoolean(TEST_DATA_POPULATED, false)) {
-//
-////            createLocations();
-////            createPlanDefinition();
-//            createTasks();
-//            //createStructures();
-////            getPopulateInventory();
-//            sharedPreferences.edit().putBoolean(TEST_DATA_POPULATED, true).apply();
-//        }
-//    }
-//
-//    private void createTasks() {
-//        try {
-//            Gson gson = new GsonBuilder().registerTypeAdapter(DateTime.class, new DateTimeTypeConverter("yyyy-MM-dd'T'HHmm"))
-//                    .serializeNulls().create();
-//            String tasksJSON = "[{\"identifier\":\"d3b237ff-f9d8-4077-9523-c7bf3552ff87\",\"campaignIdentifier\":\"IRS_2019_S1\",\"groupIdentifier\":\"8e74d042-4a71-4694-a652-bc3ba6369101\",\"planIdentifier\":\"335ef7a3-7f35-58aa-8263-4419464946d8\",\"status\":\"Ready\",\"businessStatus\":\"Not Visited\",\"priority\":\"routine\",\"code\":\"IRS\",\"description\":\"Spray House\",\"focus\":\"IRS Visit\",\"for\":\"c2635a23-a604-48fb-9e1c-8bf1e75e6759\",\"executionPeriod\":{\"start\":\"2018-11-10T22:00:00.000\"},\"authoredOn\":\"2018-11-29T0342\",\"lastModified\":\"2018-12-03T2212\",\"location\":\"f3199af5-2eaf-46df-87c9-40d59606a2fb\",\"structureId\":\"f3199af5-2eaf-46df-87c9-40d59606a2fb\",\"owner\":\"demoMTI\",\"note\":null,\"serverVersion\":1543867945204},{\"identifier\":\"c6dd4abc-fb3e-4f72-afb8-923fc43f44d7\",\"campaignIdentifier\":\"IRS_2019_S1\",\"groupIdentifier\":\"8e74d042-4a71-4694-a652-bc3ba6369101\",\"status\":\"Ready\",\"planIdentifier\":\"335ef7a3-7f35-58aa-8263-4419464946d8\",\"businessStatus\":\"Not Visited\",\"priority\":\"routine\",\"code\":\"IRS\",\"description\":\"product\",\"focus\":\"product\",\"for\":\"ddcaf383-882e-448b-b701-8b72cb0d4d7a\",\"executionPeriod\":{\"start\":\"2018-11-10T22:00:00.000\"},\"authoredOn\":\"2018-12-03T2212\",\"lastModified\":\"2018-12-03T2212\",\"owner\":\"demoMTI\",\"location\":\"f3199af5-2eaf-46df-87c9-40d59606a2fb\",\"structureId\":\"f3199af5-2eaf-46df-87c9-40d59606a2fb\",\"note\":null,\"serverVersion\":1543867945195},{\"identifier\":\"6c303b8b-e47c-45e9-8ab5-3374c8f539a3\",\"campaignIdentifier\":\"IRS_2019_S1\",\"groupIdentifier\":\"663d7935-35e7-4ccf-aaf5-6e16f2042570\",\"status\":\"Ready\",\"planIdentifier\":\"335ef7a3-7f35-58aa-8263-4419464946d8\",\"businessStatus\":\"Not Visited\",\"priority\":\"routine\",\"code\":\"IRS\",\"description\":\"product\",\"focus\":\"product\",\"for\":\"69227a92-7979-490c-b149-f28669c6b760\",\"executionPeriod\":{\"start\":\"2018-11-10T22:00:00.000\"},\"authoredOn\":\"2018-12-03T2212\",\"lastModified\":\"2018-12-03T2212\",\"owner\":\"demoMTI\",\"structureId\":\"b8a7998c-5df6-49eb-98e6-f0675db71848\",\"location\":\"b8a7998c-5df6-49eb-98e6-f0675db71848\",\"note\":null,\"serverVersion\":1543867945196}]";
-//            List<Task> tasks = gson.fromJson(tasksJSON, new TypeToken<List<Task>>() {
-//            }.getType());
-//            for (Task task : tasks) {
-//                try {
-//                    taskRepository.addOrUpdate(task);
-//                } catch (Exception e) {
-//                    e.printStackTrace();
-//                }
-//            }
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//        }
-//    }
+
+    public void populateTestData() {
+        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(EusmApplication.getInstance().getApplicationContext());
+        if (!sharedPreferences.getBoolean(TEST_DATA_POPULATED, false)) {
+
+//            createLocations();
+//            createPlanDefinition();
+            createTasks();
+            //createStructures();
+//            getPopulateInventory();
+            sharedPreferences.edit().putBoolean(TEST_DATA_POPULATED, true).apply();
+        }
+    }
+
+    private void createTasks() {
+        try {
+            Gson gson = new GsonBuilder().registerTypeAdapter(DateTime.class, new DateTimeTypeConverter("yyyy-MM-dd'T'HHmm"))
+                    .serializeNulls().create();
+            String tasksJSON = "[{\"identifier\":\"d3b237ff-f9d8-4077-9523-c7bf3552ff87\",\"campaignIdentifier\":\"IRS_2019_S1\",\"groupIdentifier\":\"8e74d042-4a71-4694-a652-bc3ba6369101\",\"planIdentifier\":\"335ef7a3-7f35-58aa-8263-4419464946d8\",\"status\":\"Ready\",\"businessStatus\":\"Not Visited\",\"priority\":\"routine\",\"code\":\"IRS\",\"description\":\"Spray House\",\"focus\":\"IRS Visit\",\"for\":\"c2635a23-a604-48fb-9e1c-8bf1e75e6759\",\"executionPeriod\":{\"start\":\"2018-11-10T22:00:00.000\"},\"authoredOn\":\"2018-11-29T0342\",\"lastModified\":\"2018-12-03T2212\",\"location\":\"f3199af5-2eaf-46df-87c9-40d59606a2fb\",\"structureId\":\"f3199af5-2eaf-46df-87c9-40d59606a2fb\",\"owner\":\"demoMTI\",\"note\":null,\"serverVersion\":1543867945204},{\"identifier\":\"c6dd4abc-fb3e-4f72-afb8-923fc43f44d7\",\"campaignIdentifier\":\"IRS_2019_S1\",\"groupIdentifier\":\"8e74d042-4a71-4694-a652-bc3ba6369101\",\"status\":\"Ready\",\"planIdentifier\":\"335ef7a3-7f35-58aa-8263-4419464946d8\",\"businessStatus\":\"Not Visited\",\"priority\":\"routine\",\"code\":\"IRS\",\"description\":\"product\",\"focus\":\"product\",\"for\":\"ddcaf383-882e-448b-b701-8b72cb0d4d7a\",\"executionPeriod\":{\"start\":\"2018-11-10T22:00:00.000\"},\"authoredOn\":\"2018-12-03T2212\",\"lastModified\":\"2018-12-03T2212\",\"owner\":\"demoMTI\",\"location\":\"f3199af5-2eaf-46df-87c9-40d59606a2fb\",\"structureId\":\"f3199af5-2eaf-46df-87c9-40d59606a2fb\",\"note\":null,\"serverVersion\":1543867945195},{\"identifier\":\"6c303b8b-e47c-45e9-8ab5-3374c8f539a3\",\"campaignIdentifier\":\"IRS_2019_S1\",\"groupIdentifier\":\"663d7935-35e7-4ccf-aaf5-6e16f2042570\",\"status\":\"Ready\",\"planIdentifier\":\"335ef7a3-7f35-58aa-8263-4419464946d8\",\"businessStatus\":\"Not Visited\",\"priority\":\"routine\",\"code\":\"IRS\",\"description\":\"product\",\"focus\":\"product\",\"for\":\"69227a92-7979-490c-b149-f28669c6b760\",\"executionPeriod\":{\"start\":\"2018-11-10T22:00:00.000\"},\"authoredOn\":\"2018-12-03T2212\",\"lastModified\":\"2018-12-03T2212\",\"owner\":\"demoMTI\",\"structureId\":\"b8a7998c-5df6-49eb-98e6-f0675db71848\",\"location\":\"b8a7998c-5df6-49eb-98e6-f0675db71848\",\"note\":null,\"serverVersion\":1543867945196}]";
+            List<Task> tasks = gson.fromJson(tasksJSON, new TypeToken<List<Task>>() {
+            }.getType());
+            for (Task task : tasks) {
+                try {
+                    taskRepository.addOrUpdate(task);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
 
 //    public void createLocations() {
 //        try {

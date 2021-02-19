@@ -16,6 +16,7 @@ public class AppValidateAssignmentHelper extends ValidateAssignmentHelper {
 
     /**
      * Validate communes only
+     *
      * @return
      */
     @Override

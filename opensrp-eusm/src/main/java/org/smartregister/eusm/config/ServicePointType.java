@@ -26,7 +26,9 @@ public enum ServicePointType {
     SITECOMMUNAUTAIRE("sitecommunautaire", R.drawable.ic_distribution_site_sp, "Site Communautaire"),
     DRJS("drjs", R.drawable.ic_gov_sp, "drjs"),
     INSTAT("instat", R.drawable.ic_gov_sp, "instat"),
-    BSD("bsd", R.drawable.ic_gov_sp, "bsd");
+    BSD("bsd", R.drawable.ic_gov_sp, "bsd"),
+    MEN("men", R.drawable.ic_hq_sp, "men"),
+    DREN("dren", R.drawable.ic_school_sp, "dren");
 
     public String name;
 

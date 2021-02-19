@@ -18,8 +18,8 @@ public class TaskRegisterFragmentPresenter implements TaskRegisterFragmentContra
     private final WeakReference<TaskRegisterFragmentContract.View> viewWeakReference;
 
     public TaskRegisterFragmentPresenter(TaskRegisterFragmentContract.View view) {
-        taskRegisterFragmentInteractor = new TaskRegisterFragmentInteractor();
         viewWeakReference = new WeakReference<>(view);
+        taskRegisterFragmentInteractor = new TaskRegisterFragmentInteractor(viewWeakReference.get().getActivity().getBaseContext());
     }
 
     @Override
