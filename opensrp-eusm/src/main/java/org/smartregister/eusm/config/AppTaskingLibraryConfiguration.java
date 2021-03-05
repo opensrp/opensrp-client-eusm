@@ -127,7 +127,7 @@ public class AppTaskingLibraryConfiguration extends TaskingLibraryConfiguration 
 
     @Override
     public String getCurrentLocationId() {
-        Location currentOperationalArea = Utils.getOperationalAreaLocation(PreferencesUtil.getInstance().getCurrentOperationalArea());
+        Location currentOperationalArea = AppUtils.getOperationalAreaLocation(PreferencesUtil.getInstance().getCurrentOperationalArea());
         return currentOperationalArea == null ? null : currentOperationalArea.getId();
     }
 

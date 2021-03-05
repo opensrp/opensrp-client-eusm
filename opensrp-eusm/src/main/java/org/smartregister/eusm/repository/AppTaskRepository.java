@@ -45,8 +45,8 @@ public class AppTaskRepository extends TaskRepository {
 
                 StockTypeRepository.STOCK_TYPE_TABLE_NAME + "." + StockTypeRepository.UNIQUE_ID,
                 StockTypeRepository.STOCK_TYPE_TABLE_NAME + "." + StockTypeRepository.NAME,
-                StockTypeRepository.STOCK_TYPE_TABLE_NAME + "." + StockTypeRepository.QUANTITY,
-                StockTypeRepository.STOCK_TYPE_TABLE_NAME + "." + StockTypeRepository.MATERIAL_NUMBER,
+                StockRepository.STOCK_TABLE_NAME + "." + StockRepository.VALUE + "  as stockQuantity",
+                StockRepository.STOCK_TABLE_NAME + "." + StockRepository.SERIAL_NUMBER + " as stockSerialNumber",
                 StockTypeRepository.STOCK_TYPE_TABLE_NAME + "." + StockTypeRepository.PHOTO_FILE_LOCATION,
                 StockTypeRepository.STOCK_TYPE_TABLE_NAME + "." + StockTypeRepository.CONDITION,
                 StockTypeRepository.STOCK_TYPE_TABLE_NAME + "." + StockTypeRepository.AVAILABILITY,
@@ -82,8 +82,8 @@ public class AppTaskRepository extends TaskRepository {
         String taskId = cursor.getString(cursor.getColumnIndex("taskId"));
 //        String taskLocation = cursor.getString(cursor.getColumnIndex("taskLocation"));
         String productName = cursor.getString(cursor.getColumnIndex(StockTypeRepository.NAME));
-        String quantity = cursor.getString(cursor.getColumnIndex(StockTypeRepository.QUANTITY));
-        String productSerial = cursor.getString(cursor.getColumnIndex(StockTypeRepository.MATERIAL_NUMBER));
+        String stockQuantity = cursor.getString(cursor.getColumnIndex("stockQuantity"));
+        String stockSerialNumber = cursor.getString(cursor.getColumnIndex("stockSerialNumber"));
         String productImage = cursor.getString(cursor.getColumnIndex(StockTypeRepository.PHOTO_FILE_LOCATION));
         String productId = cursor.getString(cursor.getColumnIndex(StockTypeRepository.UNIQUE_ID));
 
@@ -106,11 +106,11 @@ public class AppTaskRepository extends TaskRepository {
             }
             taskDetail.setEntityName(name);
         }
-        taskDetail.setQuantity(quantity);
+        taskDetail.setQuantity(stockQuantity);
         taskDetail.setTaskId(taskId);
         taskDetail.setProductId(productId);
         taskDetail.setProductImage(productImage);
-        taskDetail.setProductSerial(productSerial);
+        taskDetail.setProductSerial(stockSerialNumber);
         taskDetail.setNonProductTask(productName == null);
         taskDetail.setCondition(condition);
         taskDetail.setAppropriateUsage(appropriateUsage);

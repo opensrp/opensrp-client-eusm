@@ -23,6 +23,7 @@ import org.smartregister.tasking.TaskingLibrary;
 import org.smartregister.tasking.contract.BaseDrawerContract;
 import org.smartregister.tasking.util.LocationUtils;
 import org.smartregister.tasking.util.TaskingLibraryConfiguration;
+import org.smartregister.util.DisplayUtils;
 
 import java.text.MessageFormat;
 import java.util.List;
@@ -86,7 +87,7 @@ public class StructureRegisterFragment extends BaseDrawerRegisterFragment implem
 
     @Override
     public void initializeAdapter() {
-        structureRegisterAdapter = new StructureRegisterAdapter(getContext(), registerActionHandler);
+        structureRegisterAdapter = new StructureRegisterAdapter(getActivity(), registerActionHandler);
         clientsView.setAdapter(structureRegisterAdapter);
     }
 

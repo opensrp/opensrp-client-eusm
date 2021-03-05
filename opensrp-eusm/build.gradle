@@ -51,7 +51,7 @@ android {
         minSdkVersion 18
         targetSdkVersion 28
         versionCode 1
-        versionName "0.0.3"
+        versionName "0.0.6"
         multiDexEnabled true
         buildConfigField "long", "MAX_SERVER_TIME_DIFFERENCE", "1800000l"
         buildConfigField "boolean", "TIME_CHECK", "false"
@@ -178,7 +178,7 @@ dependencies {
 
     jarJar 'com.ibm.fhir:fhir-model:4.2.3'
 
-    implementation('org.smartregister:opensrp-client-core:4.2.4-SNAPSHOT@aar') {
+    implementation('org.smartregister:opensrp-client-core:4.2.9-SNAPSHOT@aar') {
         transitive = true
         exclude group: 'com.android.support', module: 'appcompat-v7'
         exclude group: 'com.github.ybq', module: 'Android-SpinKit'
@@ -215,7 +215,7 @@ dependencies {
     }
 
 //    implementation(project(':opensrp-tasking')) {
-    implementation('org.smartregister:opensrp-client-tasking:0.0.3-v11-EUSM-SNAPSHOT') {
+    implementation('org.smartregister:opensrp-client-tasking:0.0.3-v12-EUSM-SNAPSHOT') {
         transitive = true
         exclude group: 'org.smartregister', module: 'opensrp-client-core'
         exclude group: 'com.ibm.fhir', module: 'fhir-model'

@@ -24,6 +24,8 @@ import org.smartregister.domain.tag.FormTag;
 import org.smartregister.eusm.R;
 import org.smartregister.eusm.application.EusmApplication;
 import org.smartregister.tasking.util.Utils;
+import org.smartregister.util.Cache;
+import org.smartregister.util.CacheableData;
 import org.smartregister.util.JsonFormUtils;
 
 import java.io.File;
@@ -49,6 +51,8 @@ import static org.smartregister.util.JsonFormUtils.ENTITY_ID;
 import static org.smartregister.util.JsonFormUtils.getString;
 
 public class AppUtils extends Utils {
+
+    private static Cache<org.smartregister.domain.Location> cache = new Cache<>();
 
     public static Float distanceFromUserLocation(@NonNull android.location.Location location) {
         android.location.Location userLocation = EusmApplication.getInstance().getUserLocation();
@@ -185,5 +189,12 @@ public class AppUtils extends Utils {
     public static String getStringFromJsonElement(JsonObject jsonObject, String key) {
         JsonElement element = jsonObject.get(key);
         return (element != null) ? element.getAsString() : AppConstants.CardDetailKeys.DISTANCE_META.equals(key) ? "-" : "";
+    }
+
+    public static org.smartregister.domain.Location getOperationalAreaLocation(String operationalArea) {
+        return cache.get(operationalArea, () -> {
+            return EusmApplication.getInstance().getAppLocationRepository()
+                    .getLocationByNameAndGeoLevel(operationalArea, "2");//restrict to district geographic level
+        });
     }
 }

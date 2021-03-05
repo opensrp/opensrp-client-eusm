@@ -27,10 +27,12 @@ import org.smartregister.eusm.BuildConfig;
 import org.smartregister.eusm.activity.LoginActivity;
 import org.smartregister.eusm.config.AppSyncConfiguration;
 import org.smartregister.eusm.config.AppTaskingLibraryConfiguration;
+import org.smartregister.eusm.config.EusmContext;
 import org.smartregister.eusm.config.EusmStockSyncConfiguration;
 import org.smartregister.eusm.config.ServicePointType;
 import org.smartregister.eusm.job.AppJobCreator;
 import org.smartregister.eusm.processor.AppClientProcessor;
+import org.smartregister.eusm.repository.AppLocationRepository;
 import org.smartregister.eusm.repository.AppRepository;
 import org.smartregister.eusm.repository.AppStructureRepository;
 import org.smartregister.eusm.repository.AppTaskRepository;
@@ -96,6 +98,8 @@ public class EusmApplication extends DrishtiApplication implements TimeChangedBr
 
     private EventClientRepository eventClientRepository;
 
+    private AppLocationRepository appLocationRepository;
+
     public static synchronized EusmApplication getInstance() {
         return (EusmApplication) mInstance;
     }
@@ -133,7 +137,7 @@ public class EusmApplication extends DrishtiApplication implements TimeChangedBr
     public void onCreate() {
         super.onCreate();
         mInstance = this;
-        context = Context.getInstance();
+        context = EusmContext.getInstance();
         context.updateApplicationContext(getApplicationContext());
         context.updateCommonFtsObject(createCommonFtsObject());
         CoreLibrary.init(context, new AppSyncConfiguration(), BuildConfig.BUILD_TIMESTAMP);
@@ -252,7 +256,7 @@ public class EusmApplication extends DrishtiApplication implements TimeChangedBr
     }
 
     public LocationRepository getLocationRepository() {
-        return CoreLibrary.getInstance().context().getLocationRepository();
+        return context.getLocationRepository();
     }
 
     public AllSettings getSettingsRepository() {
@@ -423,5 +427,12 @@ public class EusmApplication extends DrishtiApplication implements TimeChangedBr
             eventClientRepository = new EventClientRepository();
         }
         return eventClientRepository;
+    }
+
+    public AppLocationRepository getAppLocationRepository() {
+        if (appLocationRepository == null) {
+            appLocationRepository = new AppLocationRepository();
+        }
+        return appLocationRepository;
     }
 }

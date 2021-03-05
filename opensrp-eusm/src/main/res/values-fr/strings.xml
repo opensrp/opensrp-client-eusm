@@ -86,7 +86,9 @@
 
     <string name="next_page"><![CDATA[PROCHAIN >>]]></string>
     <string name="previous_page"><![CDATA[<< Précedent]]></string>
-    <string name="product_serial_n_quantity">Qty: %s  &#183; Serial # %s</string>
+    <string name="product_serial_n_quantity">%s  &#183; %s %s</string>
+    <string name="product_serial_text">Serial # </string>
+    <string name="product_quantity_text">Qty: </string>
     <string name="product_serial">Serial # %s</string>
     <string name="product_serial_n_date_checked">Serial # %s</string>
     <string name="task_item_text">PRODUITS</string>

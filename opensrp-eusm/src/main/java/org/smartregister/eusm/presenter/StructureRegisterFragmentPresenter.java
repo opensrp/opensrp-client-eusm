@@ -151,6 +151,8 @@ public class StructureRegisterFragmentPresenter extends BaseRegisterFragmentPres
 
     @Override
     public void onCountOfStructuresFetched(int count) {
+        getFragment().getPreviousButton().setVisibility(View.INVISIBLE);
+
         totalCount = count;
         totalPageCount = (int) Math.ceil((double) totalCount == 0 ? 1 : totalCount / (double) pageSize);
         if (getFragment().getNextButton() != null) {
