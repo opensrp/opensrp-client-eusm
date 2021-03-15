@@ -1,6 +1,7 @@
 package org.smartregister.eusm.activity;
 
 import android.content.Intent;
+import android.graphics.Color;
 import android.location.Location;
 import android.os.Bundle;
 import android.view.Gravity;
@@ -21,6 +22,8 @@ import androidx.core.content.res.ResourcesCompat;
 import com.mapbox.geojson.Feature;
 import com.mapbox.geojson.FeatureCollection;
 import com.mapbox.mapboxsdk.geometry.LatLng;
+import com.mapbox.mapboxsdk.location.LocationComponent;
+import com.mapbox.mapboxsdk.location.LocationComponentOptions;
 import com.mapbox.mapboxsdk.maps.MapboxMap;
 
 import org.apache.commons.lang3.StringUtils;
@@ -71,6 +74,19 @@ public class EusmTaskingMapActivity extends TaskingMapActivity {
     }
 
     @Override
+    public void positionMyLocationAndLayerSwitcher() {
+//        if (myLocationButton != null) {
+//            FrameLayout.LayoutParams myLocationButtonParams = (FrameLayout.LayoutParams) myLocationButton.getLayoutParams();
+//            myLocationButtonParams.gravity = Gravity.TOP | Gravity.END;
+//            myLocationButtonParams.topMargin = 30;
+//            myLocationButtonParams.rightMargin = 35;
+//            myLocationButtonParams.height = 150;
+//            myLocationButtonParams.width = 150;
+//            myLocationButton.setLayoutParams(myLocationButtonParams);
+//        }
+    }
+
+    @Override
     public TaskingMapActivityContract.Presenter getPresenter() {
         if (taskingMapPresenter == null) {
             taskingMapPresenter = new EusmTaskingMapPresenter(this, drawerView.getPresenter());
@@ -102,7 +118,7 @@ public class EusmTaskingMapActivity extends TaskingMapActivity {
             EusmCardDetail eusmCardDetail = (EusmCardDetail) cardDetails;
             if (StringUtils.isBlank(eusmCardDetail.getCommune())) {
                 clearSelectedFeature();
-                Utils.showToast(getApplicationContext(), "You've selected a cluster point!");
+                Utils.showToast(getApplicationContext(), getString(R.string.text_selected_a_cluster_point));
             } else if (eusmCardView != null) {
                 TextView structureNameView = eusmCardView.findViewById(R.id.txt_structure_name);
                 TextView structureDistanceView = eusmCardView.findViewById(R.id.txt_distance);

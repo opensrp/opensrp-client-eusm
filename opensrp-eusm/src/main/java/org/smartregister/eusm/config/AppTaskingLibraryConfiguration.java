@@ -26,6 +26,7 @@ import org.smartregister.domain.PlanDefinition;
 import org.smartregister.domain.PlanDefinitionSearch;
 import org.smartregister.domain.Task;
 import org.smartregister.eusm.BuildConfig;
+import org.smartregister.eusm.SatelliteStreetsLayer;
 import org.smartregister.eusm.activity.EusmOfflineMapsActivity;
 import org.smartregister.eusm.activity.EusmTaskingMapActivity;
 import org.smartregister.eusm.activity.StructureRegisterActivity;
@@ -47,6 +48,8 @@ import org.smartregister.tasking.contract.BaseDrawerContract;
 import org.smartregister.tasking.contract.BaseFormFragmentContract;
 import org.smartregister.tasking.contract.TaskingMapActivityContract;
 import org.smartregister.tasking.layer.DigitalGlobeLayer;
+import org.smartregister.tasking.layer.MapBoxLayer;
+import org.smartregister.tasking.model.BaseLayerDetail;
 import org.smartregister.tasking.model.BaseTaskDetails;
 import org.smartregister.tasking.model.CardDetails;
 import org.smartregister.tasking.model.TaskDetails;
@@ -62,11 +65,14 @@ import org.smartregister.tasking.util.TaskingMapHelper;
 import org.smartregister.tasking.util.Utils;
 import org.smartregister.util.AppExecutors;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+import io.ona.kujaku.plugin.switcher.layer.BaseLayer;
+import io.ona.kujaku.plugin.switcher.layer.StreetsBaseLayer;
 import timber.log.Timber;
 
 import static org.smartregister.tasking.util.Utils.getGlobalConfig;
@@ -396,7 +402,7 @@ public class AppTaskingLibraryConfiguration extends TaskingLibraryConfiguration 
 
     @Override
     public boolean showCurrentLocationButton() {
-        return false;
+        return true;
     }
 
     @Override
@@ -518,5 +524,20 @@ public class AppTaskingLibraryConfiguration extends TaskingLibraryConfiguration 
     @Override
     public Pair<Double, Double> getMinMaxZoomMapDownloadPair() {
         return Pair.create(5d, 10d);
+    }
+
+    @Override
+    public Map<BaseLayer, BaseLayerDetail> getBaseLayers() {
+        Map<BaseLayer, BaseLayerDetail> layerDetailMap = new HashMap<>();
+        layerDetailMap.put(new DigitalGlobeLayer(), BaseLayerDetail.builder().build());
+        layerDetailMap.put(new MapBoxLayer(), BaseLayerDetail.builder().isDefault(true).build());
+        layerDetailMap.put(new StreetsBaseLayer(EusmApplication.getInstance().getBaseContext()), BaseLayerDetail.builder().build());
+        layerDetailMap.put(new SatelliteStreetsLayer(EusmApplication.getInstance().getBaseContext()), BaseLayerDetail.builder().build());
+        return layerDetailMap;
+    }
+
+    @Override
+    public boolean showBaseLayerSwitcherPlugin() {
+        return true;
     }
 }
