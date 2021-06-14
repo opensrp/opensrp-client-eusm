@@ -49,9 +49,9 @@ import org.smartregister.tasking.contract.BaseFormFragmentContract;
 import org.smartregister.tasking.contract.TaskingMapActivityContract;
 import org.smartregister.tasking.layer.DigitalGlobeLayer;
 import org.smartregister.tasking.layer.MapBoxLayer;
-import org.smartregister.tasking.model.BaseLayerDetail;
 import org.smartregister.tasking.model.BaseTaskDetails;
 import org.smartregister.tasking.model.CardDetails;
+import org.smartregister.tasking.model.MapLayerSwitchModel;
 import org.smartregister.tasking.model.TaskDetails;
 import org.smartregister.tasking.model.TaskFilterParams;
 import org.smartregister.tasking.repository.TaskingMappingHelper;
@@ -62,16 +62,14 @@ import org.smartregister.tasking.util.TaskingConstants;
 import org.smartregister.tasking.util.TaskingJsonFormUtils;
 import org.smartregister.tasking.util.TaskingLibraryConfiguration;
 import org.smartregister.tasking.util.TaskingMapHelper;
-import org.smartregister.tasking.util.Utils;
 import org.smartregister.util.AppExecutors;
 
-import java.util.HashMap;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-import io.ona.kujaku.plugin.switcher.layer.BaseLayer;
 import io.ona.kujaku.plugin.switcher.layer.StreetsBaseLayer;
 import timber.log.Timber;
 
@@ -527,13 +525,13 @@ public class AppTaskingLibraryConfiguration extends TaskingLibraryConfiguration 
     }
 
     @Override
-    public Map<BaseLayer, BaseLayerDetail> getBaseLayers() {
-        Map<BaseLayer, BaseLayerDetail> layerDetailMap = new HashMap<>();
-        layerDetailMap.put(new DigitalGlobeLayer(), BaseLayerDetail.builder().build());
-        layerDetailMap.put(new MapBoxLayer(), BaseLayerDetail.builder().isDefault(true).build());
-        layerDetailMap.put(new StreetsBaseLayer(EusmApplication.getInstance().getBaseContext()), BaseLayerDetail.builder().build());
-        layerDetailMap.put(new SatelliteStreetsLayer(EusmApplication.getInstance().getBaseContext()), BaseLayerDetail.builder().build());
-        return layerDetailMap;
+    public List<MapLayerSwitchModel> getBaseLayers() {
+        return Arrays.asList(
+                MapLayerSwitchModel.builder().baseLayer(new DigitalGlobeLayer()).build(),
+                MapLayerSwitchModel.builder().baseLayer(new MapBoxLayer()).isDefault(true).build(),
+                MapLayerSwitchModel.builder().baseLayer(new StreetsBaseLayer(EusmApplication.getInstance().getBaseContext())).build(),
+                MapLayerSwitchModel.builder().baseLayer(new SatelliteStreetsLayer(EusmApplication.getInstance().getBaseContext())).build()
+        );
     }
 
     @Override
