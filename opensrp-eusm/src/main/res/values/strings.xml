@@ -142,4 +142,7 @@
     <string name="location_has_no_structures">Error: Location has no service points!!</string>
     <string name="date_checked">date checked</string>
     <string name="text_selected_a_cluster_point">You\'ve selected a cluster point!</string>
+
+    <string name="stock_type_id_key">identifier</string>
+
 </resources>

@@ -201,7 +201,7 @@ dependencies {
 
     jarJar 'com.ibm.fhir:fhir-model:4.2.3'
 
-    implementation('org.smartregister:opensrp-client-core:4.2.17-SNAPSHOT@aar') {
+    implementation('org.smartregister:opensrp-client-core:4.3.8-SNAPSHOT@aar') {
         transitive = true
         exclude group: 'com.android.support', module: 'appcompat-v7'
         exclude group: 'com.github.ybq', module: 'Android-SpinKit'
@@ -237,7 +237,7 @@ dependencies {
         exclude group: 'org.smartregister', module: 'opensrp-client-native-form'
     }
 
-    api('org.smartregister:opensrp-client-stock:1.2.4-v303-SNAPSHOT') {
+    api('org.smartregister:opensrp-client-stock:1.2.4-SNAPSHOT') {
         transitive = true
         exclude group: 'org.smartregister', module: 'opensrp-client-core'
         exclude group: 'org.smartregister', module: 'opensrp-client-native-form'
