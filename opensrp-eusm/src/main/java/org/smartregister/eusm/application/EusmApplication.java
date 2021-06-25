@@ -52,6 +52,7 @@ import org.smartregister.repository.PlanDefinitionSearchRepository;
 import org.smartregister.repository.Repository;
 import org.smartregister.repository.TaskNotesRepository;
 import org.smartregister.repository.TaskRepository;
+import org.smartregister.service.UserService;
 import org.smartregister.stock.StockLibrary;
 import org.smartregister.stock.repository.dao.StockDaoImpl;
 import org.smartregister.sync.ClientProcessorForJava;
@@ -65,6 +66,7 @@ import org.smartregister.view.receiver.TimeChangedBroadcastReceiver;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Set;
 
 import id.zelory.compressor.Compressor;
 import io.fabric.sdk.android.Fabric;
@@ -434,5 +436,18 @@ public class EusmApplication extends DrishtiApplication implements TimeChangedBr
             appLocationRepository = new AppLocationRepository();
         }
         return appLocationRepository;
+    }
+
+    /**
+     * Add districts to the list of jurisdictions
+     */
+    public void updateJurisdictions() {
+        getAppExecutors().diskIO().execute(() -> {
+            Set<String> districtsIds = AppUtils.getDistrictsFromLocationHierarchy();
+            UserService userService = EusmApplication.getInstance().context().userService();
+            Set<String> locations = userService.fetchJurisdictionIds();
+            locations.addAll(districtsIds);
+            userService.saveJurisdictionIds(locations);
+        });
     }
 }
