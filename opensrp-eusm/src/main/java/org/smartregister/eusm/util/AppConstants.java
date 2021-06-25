@@ -13,7 +13,6 @@ public interface AppConstants extends TaskingConstants {
     String STRUCTURE_IDS = "STRUCTURE_IDS";
 
     interface PreferenceKey {
-        String LOADED_DISTRICTS_FROM_HIERARCHY = "LOADED_DISTRICTS_FROM_HIERARCHY";
         String COMMUNE_ID = "COMMUNE_ID";
     }
 

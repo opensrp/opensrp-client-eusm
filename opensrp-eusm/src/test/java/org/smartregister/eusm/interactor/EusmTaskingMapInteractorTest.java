@@ -108,7 +108,7 @@ public class EusmTaskingMapInteractorTest extends BaseUnitTest {
         eusmTaskingMapInteractor.fetchLocations(plan, operationalArea, point, locationComponentActive);
 
         shadowOf(getMainLooper()).idle();
-        Thread.sleep(2000);
+        Thread.sleep(ASYNC_TIMEOUT);
 
         TaskingMapActivityContract.Presenter presenter = ReflectionHelpers.getField(eusmTaskingMapInteractor, "presenter");
 

@@ -25,7 +25,7 @@
         "features": []
       },
       "cluster": true,
-      "clusterMaxZoom": 14,
+      "clusterMaxZoom": 13,
       "clusterRadius": 50
     },
     "select-data": {

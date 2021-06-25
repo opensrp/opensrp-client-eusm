@@ -51,7 +51,7 @@ public class EusmAvailableOfflineMapsFragmentTest extends BaseUnitTest {
             fragmentSpy.downloadLocation(location);
             shadowOf(getMainLooper()).idle();
             try {
-                Thread.sleep(2000);
+                Thread.sleep(ASYNC_TIMEOUT);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
