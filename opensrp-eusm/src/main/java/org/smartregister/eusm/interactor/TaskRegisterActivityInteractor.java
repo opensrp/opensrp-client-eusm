@@ -76,7 +76,7 @@ public class TaskRegisterActivityInteractor implements TaskRegisterActivityContr
             Location location = structureRepository.getLocationById(structureDetail.getStructureId());
             location.setSyncStatus(BaseRepository.TYPE_Created);
 
-            JsonArray jsonArray = new JsonArray();
+            JsonArray jsonArray = new JsonArray(2);
             jsonArray.add(latLngPair.second);
             jsonArray.add(latLngPair.first);
 

@@ -49,11 +49,16 @@ import org.smartregister.tasking.contract.BaseFormFragmentContract;
 import org.smartregister.tasking.contract.TaskingMapActivityContract;
 import org.smartregister.tasking.layer.DigitalGlobeLayer;
 import org.smartregister.tasking.layer.MapBoxLayer;
+import org.smartregister.tasking.model.BaseLayerSwitchModel;
 import org.smartregister.tasking.model.BaseTaskDetails;
 import org.smartregister.tasking.model.CardDetails;
-import org.smartregister.tasking.model.MapLayerSwitchModel;
+import org.smartregister.tasking.model.FamilyCardDetails;
+import org.smartregister.tasking.model.IRSVerificationCardDetails;
+import org.smartregister.tasking.model.MosquitoHarvestCardDetails;
+import org.smartregister.tasking.model.SprayCardDetails;
 import org.smartregister.tasking.model.TaskDetails;
 import org.smartregister.tasking.model.TaskFilterParams;
+import org.smartregister.tasking.presenter.TaskingMapPresenter;
 import org.smartregister.tasking.repository.TaskingMappingHelper;
 import org.smartregister.tasking.util.ActivityConfiguration;
 import org.smartregister.tasking.util.GeoJsonUtils;
@@ -525,17 +530,53 @@ public class AppTaskingLibraryConfiguration extends TaskingLibraryConfiguration 
     }
 
     @Override
-    public List<MapLayerSwitchModel> getBaseLayers() {
+    public List<BaseLayerSwitchModel> getBaseLayers() {
         return Arrays.asList(
-                MapLayerSwitchModel.builder().baseLayer(new DigitalGlobeLayer()).build(),
-                MapLayerSwitchModel.builder().baseLayer(new MapBoxLayer()).isDefault(true).build(),
-                MapLayerSwitchModel.builder().baseLayer(new StreetsBaseLayer(EusmApplication.getInstance().getBaseContext())).build(),
-                MapLayerSwitchModel.builder().baseLayer(new SatelliteStreetsLayer(EusmApplication.getInstance().getBaseContext())).build()
+                BaseLayerSwitchModel.builder().baseLayer(new DigitalGlobeLayer()).build(),
+                BaseLayerSwitchModel.builder().baseLayer(new MapBoxLayer()).isDefault(true).build(),
+                BaseLayerSwitchModel.builder().baseLayer(new StreetsBaseLayer(EusmApplication.getInstance().getBaseContext())).build(),
+                BaseLayerSwitchModel.builder().baseLayer(new SatelliteStreetsLayer(EusmApplication.getInstance().getBaseContext())).build()
         );
     }
 
     @Override
     public boolean showBaseLayerSwitcherPlugin() {
         return true;
+    }
+
+    @Override
+    public void openStructureProfile(CommonPersonObjectClient commonPersonObjectClient, TaskingMapActivity taskingMapActivity, TaskingMapPresenter taskingMapPresenter) {
+        // Do nothing
+    }
+
+    @Override
+    public void openCardView(CardDetails cardDetails, TaskingMapActivity taskingMapActivity) {
+        // Do nothing
+    }
+
+    @Override
+    public void populateFamilyCard(FamilyCardDetails familyCardDetails, Activity activity) {
+        // Do nothing
+    }
+
+    @Override
+    public void populateAndOpenIRSVerificationCard(IRSVerificationCardDetails irsVerificationCardDetails, Activity activity) {
+        // Do nothing
+
+    }
+
+    @Override
+    public void populateAndOpenMosquitoHarvestCard(MosquitoHarvestCardDetails mosquitoHarvestCardDetails, Activity activity) {
+        // Do nothing
+    }
+
+    @Override
+    public void populateSprayCardTextViews(SprayCardDetails sprayCardDetails, Activity activity) {
+        // Do nothing
+    }
+
+    @Override
+    public String getStructureNamesSelect(String s) {
+        return null;
     }
 }

@@ -1,7 +1,6 @@
 package org.smartregister.eusm.activity;
 
 import android.content.Intent;
-import android.graphics.Color;
 import android.location.Location;
 import android.os.Bundle;
 import android.view.Gravity;
@@ -22,8 +21,6 @@ import androidx.core.content.res.ResourcesCompat;
 import com.mapbox.geojson.Feature;
 import com.mapbox.geojson.FeatureCollection;
 import com.mapbox.mapboxsdk.geometry.LatLng;
-import com.mapbox.mapboxsdk.location.LocationComponent;
-import com.mapbox.mapboxsdk.location.LocationComponentOptions;
 import com.mapbox.mapboxsdk.maps.MapboxMap;
 
 import org.apache.commons.lang3.StringUtils;
@@ -75,15 +72,7 @@ public class EusmTaskingMapActivity extends TaskingMapActivity {
 
     @Override
     public void positionMyLocationAndLayerSwitcher() {
-//        if (myLocationButton != null) {
-//            FrameLayout.LayoutParams myLocationButtonParams = (FrameLayout.LayoutParams) myLocationButton.getLayoutParams();
-//            myLocationButtonParams.gravity = Gravity.TOP | Gravity.END;
-//            myLocationButtonParams.topMargin = 30;
-//            myLocationButtonParams.rightMargin = 35;
-//            myLocationButtonParams.height = 150;
-//            myLocationButtonParams.width = 150;
-//            myLocationButton.setLayoutParams(myLocationButtonParams);
-//        }
+        // Do nothing
     }
 
     @Override
@@ -134,8 +123,7 @@ public class EusmTaskingMapActivity extends TaskingMapActivity {
                     imgServicePointType.setColorFilter(ContextCompat.getColor(getApplicationContext(), taskStatusColor));
                 }
 
-//            imgServicePointType.setAlpha(0.9F);
-
+//                imgServicePointType.setAlpha(0.9F);
                 Button viewInventoryView = eusmCardView.findViewById(R.id.btn_view_inventory);
                 viewInventoryView.setTag(R.id.card_detail, eusmCardDetail);
                 viewInventoryView.setOnClickListener(this);
@@ -209,5 +197,13 @@ public class EusmTaskingMapActivity extends TaskingMapActivity {
             Timber.e(e);
             return null;
         }
+    }
+
+    @Override
+    public void requestUserLocation() {
+        kujakuMapView.setWarmGps(true, getString(R.string.location_service_disabled), getString(R.string.location_services_disabled_spray), () -> {
+            myLocationButton.performClick();
+        });
+        hasRequestedLocation = true;
     }
 }
