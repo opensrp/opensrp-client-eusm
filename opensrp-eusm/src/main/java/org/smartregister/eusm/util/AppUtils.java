@@ -7,6 +7,7 @@ import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 
 import androidx.annotation.NonNull;
+import androidx.core.util.Pair;
 
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
@@ -25,7 +26,6 @@ import org.smartregister.eusm.R;
 import org.smartregister.eusm.application.EusmApplication;
 import org.smartregister.tasking.util.Utils;
 import org.smartregister.util.Cache;
-import org.smartregister.util.CacheableData;
 import org.smartregister.util.JsonFormUtils;
 
 import java.io.File;
@@ -196,5 +196,25 @@ public class AppUtils extends Utils {
             return EusmApplication.getInstance().getAppLocationRepository()
                     .getLocationByNameAndGeoLevel(operationalArea, "2");//restrict to district geographic level
         });
+    }
+
+    public static Pair<Float, Float> getLatLongFromForm(@NonNull JSONObject form) {
+        JSONArray formFields = JsonFormUtils.getMultiStepFormFields(form);
+        for (int i = 0; i < formFields.length(); i++) {
+            JSONObject fieldObject = formFields.optJSONObject(i);
+            if (fieldObject != null) {
+                String key = fieldObject.optString(JsonFormConstants.KEY);
+                if (AppConstants.JsonFormKey.GPS.equals(key)) {
+                    String value = fieldObject.optString(JsonFormConstants.VALUE);
+                    String[] values = value.split(" ");
+                    if (values.length >= 2) {
+                        float latitude = Float.parseFloat(values[0]);
+                        float longitude = Float.parseFloat(values[1]);
+                        return Pair.create(latitude, longitude);
+                    }
+                }
+            }
+        }
+        return null;
     }
 }

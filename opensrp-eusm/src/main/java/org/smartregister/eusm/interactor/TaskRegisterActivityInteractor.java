@@ -2,16 +2,23 @@ package org.smartregister.eusm.interactor;
 
 import android.content.IntentFilter;
 
+import androidx.core.util.Pair;
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
+
+import com.google.gson.JsonArray;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.smartregister.domain.Event;
+import org.smartregister.domain.Geometry;
+import org.smartregister.domain.Location;
 import org.smartregister.eusm.application.EusmApplication;
 import org.smartregister.eusm.contract.TaskRegisterActivityContract;
 import org.smartregister.eusm.domain.StructureDetail;
+import org.smartregister.eusm.repository.AppStructureRepository;
 import org.smartregister.eusm.util.AppConstants;
 import org.smartregister.eusm.util.AppUtils;
+import org.smartregister.repository.BaseRepository;
 import org.smartregister.tasking.receiver.TaskGenerationReceiver;
 import org.smartregister.util.AppExecutors;
 
@@ -61,7 +68,26 @@ public class TaskRegisterActivityInteractor implements TaskRegisterActivityContr
                               TaskRegisterActivityContract.InteractorCallBack interactorCallBack, StructureDetail structureDetail) {
         saveEventAndInitiateProcessing(AppConstants.EncounterType.RECORD_GPS,
                 form, "", interactorCallBack, AppConstants.EventEntityType.SERVICE_POINT);
-        //updates the task
+
+        //updates the structure with coordinates
+        Pair<Float, Float> latLngPair = AppUtils.getLatLongFromForm(form);
+        if (latLngPair != null) {
+            AppStructureRepository structureRepository = EusmApplication.getInstance().getStructureRepository();
+            Location location = structureRepository.getLocationById(structureDetail.getStructureId());
+            location.setSyncStatus(BaseRepository.TYPE_Created);
+
+            JsonArray jsonArray = new JsonArray();
+            jsonArray.add(latLngPair.second);
+            jsonArray.add(latLngPair.first);
+
+            Geometry geometry = new Geometry();
+            geometry.setCoordinates(jsonArray);
+            geometry.setType(Geometry.GeometryType.POINT);
+
+            location.setGeometry(geometry);
+
+            structureRepository.addOrUpdate(location);
+        }
     }
 
     @Override
