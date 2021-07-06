@@ -23,7 +23,6 @@ import org.smartregister.tasking.TaskingLibrary;
 import org.smartregister.tasking.contract.BaseDrawerContract;
 import org.smartregister.tasking.util.LocationUtils;
 import org.smartregister.tasking.util.TaskingLibraryConfiguration;
-import org.smartregister.util.DisplayUtils;
 
 import java.text.MessageFormat;
 import java.util.List;

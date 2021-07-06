@@ -199,7 +199,7 @@ dependencies {
         exclude group: 'stax', module: 'stax-api'
     }
 
-    jarJar 'com.ibm.fhir:fhir-model:4.2.3'
+    jarJar 'com.ibm.fhir:fhir-model:4.7.0'
 
     implementation('org.smartregister:opensrp-client-core:4.3.10-SNAPSHOT@aar') {
         transitive = true
@@ -259,7 +259,7 @@ dependencies {
     compileOnly 'org.projectlombok:lombok:1.18.12'
     annotationProcessor 'org.projectlombok:lombok:1.18.12'
 
-    testImplementation 'com.ibm.fhir:fhir-model:4.2.3'
+    testImplementation 'com.ibm.fhir:fhir-model:4.7.0'
 
     testImplementation 'junit:junit:4.12'
     testImplementation group: 'org.hamcrest', name: 'hamcrest-core', version: '2.2'
@@ -324,5 +324,5 @@ task javadoc(type: Javadoc) {
 jarJar {
 
     // Dependencies and related JarJar rules
-    remove = ['fhir-model-4.2.3.jar': 'com.ibm.fhir.model.visitor.CopyingVisitor*']
+    remove = ['fhir-model-4.7.0.jar': 'com.ibm.fhir.model.visitor.CopyingVisitor*']
 }
