@@ -15,20 +15,25 @@ import org.powermock.modules.junit4.PowerMockRunnerDelegate;
 import org.robolectric.RobolectricTestRunner;
 import org.robolectric.RuntimeEnvironment;
 import org.robolectric.annotation.Config;
+import org.smartregister.eusm.shadow.BackgroundLayerShadow;
 import org.smartregister.eusm.shadow.CustomFontTextViewShadow;
 import org.smartregister.eusm.shadow.KujakuMapViewShadow;
 import org.smartregister.eusm.shadow.LayerShadow;
+import org.smartregister.eusm.shadow.LineLayerShadow;
 import org.smartregister.eusm.shadow.MapViewShadow;
+import org.smartregister.eusm.shadow.RasterLayerShadow;
 import org.smartregister.eusm.shadow.SQLiteDatabaseShadow;
 import org.smartregister.eusm.shadow.SymbolLayerShadow;
 import org.smartregister.eusm.shadow.TaskingMapViewShadow;
+import org.smartregister.eusm.shadow.VectorSourceShadow;
 import org.smartregister.util.DateTimeTypeConverter;
 
 
 @RunWith(RobolectricTestRunner.class)
 @PowerMockRunnerDelegate(RobolectricTestRunner.class)
 @Config(application = TestEusmApplication.class, shadows = {SymbolLayerShadow.class, LayerShadow.class,
-        TaskingMapViewShadow.class, KujakuMapViewShadow.class, MapViewShadow.class, SQLiteDatabaseShadow.class, CustomFontTextViewShadow.class}, sdk = Build.VERSION_CODES.P)
+        TaskingMapViewShadow.class, KujakuMapViewShadow.class, MapViewShadow.class,
+        SQLiteDatabaseShadow.class, CustomFontTextViewShadow.class, VectorSourceShadow.class, BackgroundLayerShadow.class, RasterLayerShadow.class, LineLayerShadow.class}, sdk = Build.VERSION_CODES.P)
 @PowerMockIgnore({"org.mockito.*", "org.robolectric.*", "android.*"})
 public abstract class BaseUnitTest {
 

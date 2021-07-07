@@ -1,4 +1,4 @@
-package org.smartregister.eusm;
+package org.smartregister.eusm.mapLayer;
 
 import android.content.Context;
 
@@ -52,7 +52,7 @@ public class SatelliteStreetsLayer extends BaseLayer {
 
                 Layer layer = layerUtil.getLayer(jsonObject.toString());
 
-                if (layer != null && layer.getId().equals("hillshade") && layer instanceof FillLayer) {
+                if (layer != null && "hillshade".equals(layer.getId()) && layer instanceof FillLayer) {
                     // Add the correct opacity
                     Expression fillOpacityExpression = Expression.interpolate(Expression.Interpolator.linear()
                             , Expression.zoom()
@@ -109,7 +109,7 @@ public class SatelliteStreetsLayer extends BaseLayer {
         String[] layerIds = new String[layers.size()];
 
         int counter = 0;
-        for (Layer layer: layers) {
+        for (Layer layer : layers) {
             layerIds[counter] = layer.getId();
             counter++;
         }
