@@ -1,4 +1,4 @@
-package org.smartregister.eusm.mapLayer;
+package org.smartregister.eusm.layer;
 
 import android.content.Context;
 

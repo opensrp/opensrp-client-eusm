@@ -26,7 +26,7 @@ import org.smartregister.domain.PlanDefinition;
 import org.smartregister.domain.PlanDefinitionSearch;
 import org.smartregister.domain.Task;
 import org.smartregister.eusm.BuildConfig;
-import org.smartregister.eusm.mapLayer.SatelliteStreetsLayer;
+import org.smartregister.eusm.layer.SatelliteStreetsLayer;
 import org.smartregister.eusm.activity.EusmOfflineMapsActivity;
 import org.smartregister.eusm.activity.EusmTaskingMapActivity;
 import org.smartregister.eusm.activity.StructureRegisterActivity;
