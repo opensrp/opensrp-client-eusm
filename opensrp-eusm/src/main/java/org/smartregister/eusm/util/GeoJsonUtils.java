@@ -29,7 +29,7 @@ public class GeoJsonUtils extends org.smartregister.tasking.util.GeoJsonUtils {
                 }
                 Map<String, String> map = locationProperty.getCustomProperties();
                 map.put(AppConstants.CardDetailKeys.TASK_STATUS, taskStatus);
-                map.put(AppConstants.CardDetailKeys.TASK_STATUS_TYPE, StringUtils.isNumeric(taskStatus) ? "not_started" : taskStatus);
+                map.put(AppConstants.CardDetailKeys.TASK_STATUS_TYPE, StringUtils.isNumeric(taskStatus) ? AppConstants.TaskStatus.NOT_STARTED : taskStatus);
                 map.put(STRUCTURE_NAME, structureDetail.getEntityName());
                 map.put(AppConstants.CardDetailKeys.TYPE_TEXT, structureDetail.getStructureType());
                 map.put(AppConstants.CardDetailKeys.COMMUNE, structureDetail.getCommune());

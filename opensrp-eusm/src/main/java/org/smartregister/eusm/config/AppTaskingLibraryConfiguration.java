@@ -26,7 +26,6 @@ import org.smartregister.domain.PlanDefinition;
 import org.smartregister.domain.PlanDefinitionSearch;
 import org.smartregister.domain.Task;
 import org.smartregister.eusm.BuildConfig;
-import org.smartregister.eusm.layer.SatelliteStreetsLayer;
 import org.smartregister.eusm.activity.EusmOfflineMapsActivity;
 import org.smartregister.eusm.activity.EusmTaskingMapActivity;
 import org.smartregister.eusm.activity.StructureRegisterActivity;
@@ -34,6 +33,7 @@ import org.smartregister.eusm.application.EusmApplication;
 import org.smartregister.eusm.domain.EusmCardDetail;
 import org.smartregister.eusm.helper.EusmTaskingMapHelper;
 import org.smartregister.eusm.job.LocationTaskServiceJob;
+import org.smartregister.eusm.layer.SatelliteStreetsLayer;
 import org.smartregister.eusm.util.AppConstants;
 import org.smartregister.eusm.util.AppUtils;
 import org.smartregister.eusm.util.DefaultLocationUtils;
@@ -526,7 +526,7 @@ public class AppTaskingLibraryConfiguration extends TaskingLibraryConfiguration 
 
     @Override
     public Pair<Double, Double> getMinMaxZoomMapDownloadPair() {
-        return Pair.create(5d, 10d);
+        return Pair.create(AppConstants.OfflineMapDownload.MIN_ZOOM, AppConstants.OfflineMapDownload.MAX_ZOOM);
     }
 
     @Override

@@ -164,9 +164,6 @@ public class StructureRegisterFragment extends BaseDrawerRegisterFragment implem
 
     @Override
     public void filter(String filterString, String joinTableString, String mainConditionString, boolean qrCode) {
-//        if (searchCancelView != null) {
-//            searchCancelView.setVisibility("".equals(filterString) ? View.GONE : View.VISIBLE);
-//        }
         presenter().filterByName(filterString);
     }
 

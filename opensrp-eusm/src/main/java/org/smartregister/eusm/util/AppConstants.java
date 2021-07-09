@@ -21,18 +21,22 @@ public interface AppConstants extends TaskingConstants {
             String TYPE = "type";
         }
 
+        interface Stock {
+            String QUANTITY = "stockQuantity";
+            String SERIAL_NUMBER = "stockSerialNumber";
+        }
+
         interface Task {
             String FOR = "for";
-            String NAME = "name";
             String BUSINESS_STATUS = "business_status";
             String STATUS = "status";
             String ID = "_ID";
             String LOCATION = "location";
             String STRUCTURE_ID = "structure_id";
-            String FOCUS = "focus";
             String CODE = "code";
             String PLAN_ID = "plan_id";
             String GROUP_ID = "group_id";
+            String TASK_ID = "taskId";
         }
     }
 
@@ -119,6 +123,7 @@ public interface AppConstants extends TaskingConstants {
         String IN_PROGRESS = "in_progress";
         String NOT_FINISHED = "not_finished";
         String OTHER = "other";
+        String NOT_STARTED = "not_started";
     }
 
     interface BusinessStatus {
@@ -148,5 +153,10 @@ public interface AppConstants extends TaskingConstants {
         String DISTRICT = "district";
         String COMMUNE = "commune";
         String DISTRICT_TAG = "District";
+    }
+
+    interface OfflineMapDownload {
+        double MAX_ZOOM = 10d;
+        double MIN_ZOOM = 5d;
     }
 }

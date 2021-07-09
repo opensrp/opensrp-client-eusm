@@ -123,7 +123,6 @@ public class EusmTaskingMapActivity extends TaskingMapActivity {
                     imgServicePointType.setColorFilter(ContextCompat.getColor(getApplicationContext(), taskStatusColor));
                 }
 
-//                imgServicePointType.setAlpha(0.9F);
                 Button viewInventoryView = eusmCardView.findViewById(R.id.btn_view_inventory);
                 viewInventoryView.setTag(R.id.card_detail, eusmCardDetail);
                 viewInventoryView.setOnClickListener(this);

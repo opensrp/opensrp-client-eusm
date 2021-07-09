@@ -73,17 +73,14 @@ public class AppTaskRepository extends TaskRepository {
     }
 
     private TaskDetail readStructureTaskDetailCursor(Cursor cursor) {
-//        String taskName = cursor.getString(cursor.getColumnIndex("taskName"));
         String taskGroupId = cursor.getString(cursor.getColumnIndex(AppConstants.Column.Task.GROUP_ID));
-
         String taskFor = cursor.getString(cursor.getColumnIndex(AppConstants.Column.Task.FOR));
         String taskBusinessStatus = cursor.getString(cursor.getColumnIndex(AppConstants.Column.Task.BUSINESS_STATUS));
         String taskStatus = cursor.getString(cursor.getColumnIndex(AppConstants.Column.Task.STATUS));
-        String taskId = cursor.getString(cursor.getColumnIndex("taskId"));
-//        String taskLocation = cursor.getString(cursor.getColumnIndex("taskLocation"));
+        String taskId = cursor.getString(cursor.getColumnIndex(AppConstants.Column.Task.TASK_ID));
         String productName = cursor.getString(cursor.getColumnIndex(StockTypeRepository.NAME));
-        String stockQuantity = cursor.getString(cursor.getColumnIndex("stockQuantity"));
-        String stockSerialNumber = cursor.getString(cursor.getColumnIndex("stockSerialNumber"));
+        String stockQuantity = cursor.getString(cursor.getColumnIndex(AppConstants.Column.Stock.QUANTITY));
+        String stockSerialNumber = cursor.getString(cursor.getColumnIndex(AppConstants.Column.Stock.SERIAL_NUMBER));
         String productImage = cursor.getString(cursor.getColumnIndex(StockTypeRepository.PHOTO_FILE_LOCATION));
         String productId = cursor.getString(cursor.getColumnIndex(StockTypeRepository.UNIQUE_ID));
 
