@@ -1,5 +1,6 @@
 package org.smartregister.eusm.adapter;
 
+import android.app.Activity;
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -18,13 +19,13 @@ import java.util.List;
 
 public class StructureRegisterAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
-    private final Context context;
+    private final Activity context;
 
     private final List<StructureDetail> structureDetailList = new ArrayList<>();
 
     private final View.OnClickListener registerActionHandler;
 
-    public StructureRegisterAdapter(Context context, View.OnClickListener registerActionHandler) {
+    public StructureRegisterAdapter(Activity context, View.OnClickListener registerActionHandler) {
         this.context = context;
         this.registerActionHandler = registerActionHandler;
     }
@@ -52,7 +53,7 @@ public class StructureRegisterAdapter extends RecyclerView.Adapter<RecyclerView.
             StructureRegisterViewHolder viewHolder = (StructureRegisterViewHolder) holder;
             viewHolder.setServicePointName(structureDetail.getEntityName());
             viewHolder.setServicePointIcon(structureDetail.getTaskStatus(), structureDetail.getStructureType());
-            viewHolder.setServicePointType(structureDetail);
+            viewHolder.setServicePointType(structureDetail, context);
             viewHolder.setCommune(structureDetail.getCommune());
             viewHolder.setTaskStatus(structureDetail);
         } else {

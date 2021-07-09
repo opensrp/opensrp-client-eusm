@@ -10,6 +10,8 @@ import android.widget.TextView;
 import androidx.annotation.UiThread;
 
 import org.json.JSONObject;
+import org.smartregister.Context;
+import org.smartregister.CoreLibrary;
 import org.smartregister.eusm.R;
 import org.smartregister.eusm.activity.EusmTaskRegisterActivity;
 import org.smartregister.eusm.adapter.StructureRegisterAdapter;
@@ -84,7 +86,7 @@ public class StructureRegisterFragment extends BaseDrawerRegisterFragment implem
 
     @Override
     public void initializeAdapter() {
-        structureRegisterAdapter = new StructureRegisterAdapter(getContext(), registerActionHandler);
+        structureRegisterAdapter = new StructureRegisterAdapter(getActivity(), registerActionHandler);
         clientsView.setAdapter(structureRegisterAdapter);
     }
 
@@ -135,6 +137,11 @@ public class StructureRegisterFragment extends BaseDrawerRegisterFragment implem
     }
 
     @Override
+    protected Context context() {
+        return CoreLibrary.getInstance().context().updateApplicationContext(getActivity());
+    }
+
+    @Override
     public StructureRegisterAdapter getAdapter() {
         return structureRegisterAdapter;
     }
@@ -168,6 +175,8 @@ public class StructureRegisterFragment extends BaseDrawerRegisterFragment implem
         servicePointBtnRegisterTextView.setText(getString(R.string.map));
         servicePointBtnRegisterTextView.setOnClickListener(this);
 
+        view.findViewById(R.id.btn_search_cancel).setVisibility(View.VISIBLE);
+
         strPageInfoView = view.findViewById(R.id.page_info_textView);
 
         nextButton = view.findViewById(R.id.next_button);
@@ -200,5 +209,4 @@ public class StructureRegisterFragment extends BaseDrawerRegisterFragment implem
     public void onClick(View v) {
         onViewClicked(v);
     }
-
 }

@@ -94,22 +94,14 @@ public class TaskRegisterViewHolder extends RecyclerView.ViewHolder {
      * @param taskDetail
      */
     public void setProductSerial(@NonNull TaskDetail taskDetail) {
-        if (StringUtils.isNotBlank(taskDetail.getProductSerial()) && !taskDetail.isNonProductTask()) {
+        if (!taskDetail.isNonProductTask()) {
             String stringTemplate;
-            String result = "";
-            if (StringUtils.isNotBlank(taskDetail.getQuantity())) {
-                stringTemplate = context.getString(R.string.product_serial_n_quantity);
-                result = String.format(stringTemplate, taskDetail.getQuantity(), taskDetail.getProductSerial());
-            }
+            stringTemplate = context.getString(R.string.product_serial_n_quantity);
+            String result = String.format(stringTemplate,
+                    StringUtils.isNotBlank(taskDetail.getQuantity()) ? context.getString(R.string.product_quantity_text) + taskDetail.getQuantity() : "",
+                    StringUtils.isNotBlank(taskDetail.getProductSerial()) ? context.getString(R.string.product_serial_text) + taskDetail.getProductSerial() : "",
+                    "");
 
-            if (taskDetail.getDateChecked() != null) {
-                stringTemplate = context.getString(R.string.product_serial_n_date_checked);
-                result = String.format(stringTemplate, taskDetail.getProductSerial(), "date checked");
-            }
-            if (StringUtils.isBlank(result)) {
-                stringTemplate = context.getString(R.string.product_serial);
-                result = String.format(stringTemplate, taskDetail.getProductSerial());
-            }
             this.productSerialView.setText(result);
             if (taskDetail.isChecked()) {
                 this.productSerialView.setTextColor(context.getResources().getColor(R.color.text_checked));
@@ -120,6 +112,7 @@ public class TaskRegisterViewHolder extends RecyclerView.ViewHolder {
         } else {
             this.productSerialView.setVisibility(View.GONE);
         }
+
     }
 
     /**

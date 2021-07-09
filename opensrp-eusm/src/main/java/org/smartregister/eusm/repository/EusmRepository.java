@@ -57,7 +57,7 @@ public class EusmRepository extends Repository {
         StockRepository.createTable(database);
         CampaignRepository.createTable(database);
         TaskRepository.createTable(database);
-        LocationRepository.createTable(database);
+        AppLocationRepository.createTable(database);
         AppStructureRepository.createTable(database);
         PlanDefinitionRepository.createTable(database);
         PlanDefinitionSearchRepository.createTable(database);

@@ -35,11 +35,12 @@ public class TaskRegisterFragmentInteractor implements TaskRegisterFragmentContr
 
     private final AppExecutors appExecutors;
 
-    private Context context;
+    private final Context context;
 
     private AppJsonFormUtils jsonFormUtils;
 
-    public TaskRegisterFragmentInteractor() {
+    public TaskRegisterFragmentInteractor(Context baseContext) {
+        context = baseContext;
         appExecutors = EusmApplication.getInstance().getAppExecutors();
     }
 
@@ -126,17 +127,17 @@ public class TaskRegisterFragmentInteractor implements TaskRegisterFragmentContr
                 .collect(Collectors.toList());
 
         TaskDetail sItemHeader = new TaskDetail();
-        sItemHeader.setEntityName(getContext().getString(R.string.task_item_text));
+        sItemHeader.setEntityName(context.getString(R.string.task_item_text));
         sItemHeader.setHeader(true);
 
         taskDetails.add(0, sItemHeader);
 
         TaskDetail sChecked = new TaskDetail();
-        sChecked.setEntityName(getContext().getString(R.string.task_checked_text));
+        sChecked.setEntityName(context.getString(R.string.task_checked_text));
         sChecked.setHeader(true);
 
         TaskDetail sEmpty = new TaskDetail();
-        sEmpty.setEntityName(getContext().getString(R.string.no_items_to_check));
+        sEmpty.setEntityName(context.getString(R.string.no_items_to_check));
         sEmpty.setEmptyView(true);
 
         boolean hasUnCheckedItems = false;
@@ -159,7 +160,7 @@ public class TaskRegisterFragmentInteractor implements TaskRegisterFragmentContr
 
         if (!hasCheckedItems) {
             taskDetails.add(sChecked);
-            sEmpty.setEntityName(getContext().getString(R.string.no_items_checked_yet));
+            sEmpty.setEntityName(context.getString(R.string.no_items_checked_yet));
             taskDetails.add(sEmpty);
         }
 
@@ -173,10 +174,4 @@ public class TaskRegisterFragmentInteractor implements TaskRegisterFragmentContr
         return jsonFormUtils;
     }
 
-    public Context getContext() {
-        if (context == null) {
-            context = EusmApplication.getInstance().getBaseContext();
-        }
-        return context;
-    }
 }

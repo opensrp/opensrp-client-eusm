@@ -61,7 +61,9 @@ public class TaskRegisterActivityInteractor implements TaskRegisterActivityContr
                               TaskRegisterActivityContract.InteractorCallBack interactorCallBack, StructureDetail structureDetail) {
         saveEventAndInitiateProcessing(AppConstants.EncounterType.RECORD_GPS,
                 form, "", interactorCallBack, AppConstants.EventEntityType.SERVICE_POINT);
-        //updates the task
+
+        //updates the structure with coordinates
+        AppUtils.updateLocationCoordinatesFromForm(structureDetail, form);
     }
 
     @Override

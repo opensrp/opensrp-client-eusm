@@ -48,7 +48,7 @@ public class EusmTaskingMapHelper extends TaskingMapHelper {
                 mMapboxMapStyle.addImage(key, icon);
                 SymbolLayer symbolLayer = new SymbolLayer(String.format("%s.layer", key), context.getString(R.string.reveal_datasource_name));
                 symbolLayer.setProperties(iconImage(key), iconSize(dynamicIconSize),
-                        iconIgnorePlacement(true), iconAllowOverlap(true));
+                        iconIgnorePlacement(false), iconAllowOverlap(false));
                 symbolLayer.setFilter(eq(get(AppConstants.CardDetailKeys.TYPE), servicePointType.name));
                 mMapboxMapStyle.addLayer(symbolLayer);
             }

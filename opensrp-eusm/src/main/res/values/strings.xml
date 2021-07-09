@@ -97,7 +97,9 @@
 
     <string name="next_page"><![CDATA[NEXT >>]]></string>
     <string name="previous_page"><![CDATA[<< Previous]]></string>
-    <string name="product_serial_n_quantity">Qty: %s  &#183; Serial # %s</string>
+    <string name="product_serial_n_quantity">%s  &#183; %s %s</string>
+    <string name="product_serial_text">Serial # </string>
+    <string name="product_quantity_text">Qty: </string>
     <string name="product_serial">Serial # %s</string>
     <string name="product_serial_n_date_checked">Serial # %s</string>
     <string name="task_item_text">ITEMS</string>
@@ -134,4 +136,13 @@
     <string name="select_campaign_operational_area">Mission and District not set. Select from the hamburger menu</string>
     <string name="revoked_plan_operational_area">Previously selected Mission and/or District revoked. Select from the hamburger menu</string>
     <string name="read_and_write_permission_not_granted">Read And Write Storage Permission Not Granted</string>
+
+    <string name="service_point_check_task_title">Service Point Check</string>
+    <string name="record_gps_task_title">Record GPS</string>
+    <string name="location_has_no_structures">Error: Location has no service points!!</string>
+    <string name="date_checked">date checked</string>
+    <string name="text_selected_a_cluster_point">You\'ve selected a cluster point!</string>
+
+    <string name="stock_type_id_key">identifier</string>
+
 </resources>

@@ -52,7 +52,6 @@ public interface StructureRegisterFragmentContract {
 
         StructureRegisterAdapter getAdapter();
 
-
         void setSearchPhrase(String searchPhrase);
 
         void startMapActivity();

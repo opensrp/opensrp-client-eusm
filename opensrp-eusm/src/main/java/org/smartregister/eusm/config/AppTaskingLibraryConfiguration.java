@@ -33,6 +33,7 @@ import org.smartregister.eusm.application.EusmApplication;
 import org.smartregister.eusm.domain.EusmCardDetail;
 import org.smartregister.eusm.helper.EusmTaskingMapHelper;
 import org.smartregister.eusm.job.LocationTaskServiceJob;
+import org.smartregister.eusm.layer.SatelliteStreetsLayer;
 import org.smartregister.eusm.util.AppConstants;
 import org.smartregister.eusm.util.AppUtils;
 import org.smartregister.eusm.util.DefaultLocationUtils;
@@ -47,10 +48,17 @@ import org.smartregister.tasking.contract.BaseDrawerContract;
 import org.smartregister.tasking.contract.BaseFormFragmentContract;
 import org.smartregister.tasking.contract.TaskingMapActivityContract;
 import org.smartregister.tasking.layer.DigitalGlobeLayer;
+import org.smartregister.tasking.layer.MapBoxLayer;
+import org.smartregister.tasking.model.BaseLayerSwitchModel;
 import org.smartregister.tasking.model.BaseTaskDetails;
 import org.smartregister.tasking.model.CardDetails;
+import org.smartregister.tasking.model.FamilyCardDetails;
+import org.smartregister.tasking.model.IRSVerificationCardDetails;
+import org.smartregister.tasking.model.MosquitoHarvestCardDetails;
+import org.smartregister.tasking.model.SprayCardDetails;
 import org.smartregister.tasking.model.TaskDetails;
 import org.smartregister.tasking.model.TaskFilterParams;
+import org.smartregister.tasking.presenter.TaskingMapPresenter;
 import org.smartregister.tasking.repository.TaskingMappingHelper;
 import org.smartregister.tasking.util.ActivityConfiguration;
 import org.smartregister.tasking.util.GeoJsonUtils;
@@ -59,14 +67,15 @@ import org.smartregister.tasking.util.TaskingConstants;
 import org.smartregister.tasking.util.TaskingJsonFormUtils;
 import org.smartregister.tasking.util.TaskingLibraryConfiguration;
 import org.smartregister.tasking.util.TaskingMapHelper;
-import org.smartregister.tasking.util.Utils;
 import org.smartregister.util.AppExecutors;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+import io.ona.kujaku.plugin.switcher.layer.StreetsBaseLayer;
 import timber.log.Timber;
 
 import static org.smartregister.tasking.util.Utils.getGlobalConfig;
@@ -127,7 +136,7 @@ public class AppTaskingLibraryConfiguration extends TaskingLibraryConfiguration 
 
     @Override
     public String getCurrentLocationId() {
-        Location currentOperationalArea = Utils.getOperationalAreaLocation(PreferencesUtil.getInstance().getCurrentOperationalArea());
+        Location currentOperationalArea = AppUtils.getOperationalAreaLocation(PreferencesUtil.getInstance().getCurrentOperationalArea());
         return currentOperationalArea == null ? null : currentOperationalArea.getId();
     }
 
@@ -396,7 +405,7 @@ public class AppTaskingLibraryConfiguration extends TaskingLibraryConfiguration 
 
     @Override
     public boolean showCurrentLocationButton() {
-        return false;
+        return true;
     }
 
     @Override
@@ -517,6 +526,57 @@ public class AppTaskingLibraryConfiguration extends TaskingLibraryConfiguration 
 
     @Override
     public Pair<Double, Double> getMinMaxZoomMapDownloadPair() {
-        return Pair.create(5d, 11d);
+        return Pair.create(AppConstants.OfflineMapDownload.MIN_ZOOM, AppConstants.OfflineMapDownload.MAX_ZOOM);
+    }
+
+    @Override
+    public List<BaseLayerSwitchModel> getBaseLayers() {
+        return Arrays.asList(
+                BaseLayerSwitchModel.builder().baseLayer(new DigitalGlobeLayer()).build(),
+                BaseLayerSwitchModel.builder().baseLayer(new MapBoxLayer()).isDefault(true).build(),
+                BaseLayerSwitchModel.builder().baseLayer(new StreetsBaseLayer(EusmApplication.getInstance().getBaseContext())).build(),
+                BaseLayerSwitchModel.builder().baseLayer(new SatelliteStreetsLayer(EusmApplication.getInstance().getBaseContext())).build()
+        );
+    }
+
+    @Override
+    public boolean showBaseLayerSwitcherPlugin() {
+        return true;
+    }
+
+    @Override
+    public void openStructureProfile(CommonPersonObjectClient commonPersonObjectClient, TaskingMapActivity taskingMapActivity, TaskingMapPresenter taskingMapPresenter) {
+        // Do nothing
+    }
+
+    @Override
+    public void openCardView(CardDetails cardDetails, TaskingMapActivity taskingMapActivity) {
+        // Do nothing
+    }
+
+    @Override
+    public void populateFamilyCard(FamilyCardDetails familyCardDetails, Activity activity) {
+        // Do nothing
+    }
+
+    @Override
+    public void populateAndOpenIRSVerificationCard(IRSVerificationCardDetails irsVerificationCardDetails, Activity activity) {
+        // Do nothing
+
+    }
+
+    @Override
+    public void populateAndOpenMosquitoHarvestCard(MosquitoHarvestCardDetails mosquitoHarvestCardDetails, Activity activity) {
+        // Do nothing
+    }
+
+    @Override
+    public void populateSprayCardTextViews(SprayCardDetails sprayCardDetails, Activity activity) {
+        // Do nothing
+    }
+
+    @Override
+    public String getStructureNamesSelect(String s) {
+        return null;
     }
 }

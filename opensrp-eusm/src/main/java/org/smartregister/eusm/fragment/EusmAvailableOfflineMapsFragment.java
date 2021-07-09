@@ -3,6 +3,7 @@ package org.smartregister.eusm.fragment;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.StringRes;
 
 import com.mapbox.geojson.FeatureCollection;
 
@@ -42,27 +43,40 @@ public class EusmAvailableOfflineMapsFragment extends AvailableOfflineMapsFragme
 
     @Override
     protected void downloadLocation(@NonNull Location location) {
-        Utils.showToast(getContext(), getString(R.string.download_starting));
         getAppExecutors().diskIO().execute(new Runnable() {
             @Override
             public void run() {
                 String name = location.getId();
                 List<Location> locationList = getAppStructureRepository().getStructuresByDistrictId(name);
-                JSONObject featureCollection = new JSONObject();
-                try {
-                    featureCollection.put(TaskingConstants.GeoJSON.TYPE, TaskingConstants.GeoJSON.FEATURE_COLLECTION);
-                    featureCollection.put(TaskingConstants.GeoJSON.FEATURES, new JSONArray(gson.toJson(locationList)));
+                if (locationList == null || locationList.isEmpty()) {
                     getAppExecutors().mainThread().execute(new Runnable() {
                         @Override
                         public void run() {
-                            downloadMap(FeatureCollection.fromJson(featureCollection.toString()), name);
+                            showToast(R.string.location_has_no_structures);
                         }
                     });
-                } catch (JSONException e) {
-                    Timber.e(e);
+                } else {
+                    JSONObject featureCollection = new JSONObject();
+                    try {
+                        featureCollection.put(TaskingConstants.GeoJSON.TYPE, TaskingConstants.GeoJSON.FEATURE_COLLECTION);
+                        featureCollection.put(TaskingConstants.GeoJSON.FEATURES, new JSONArray(gson.toJson(locationList)));
+                        getAppExecutors().mainThread().execute(new Runnable() {
+                            @Override
+                            public void run() {
+                                showToast(R.string.download_starting);
+                                downloadMap(FeatureCollection.fromJson(featureCollection.toString()), name);
+                            }
+                        });
+                    } catch (JSONException e) {
+                        Timber.e(e);
+                    }
                 }
             }
         });
+    }
+
+    protected void showToast(@StringRes int stringRes) {
+        Utils.showToast(getContext(), getString(stringRes));
     }
 
     protected void downloadMap(FeatureCollection operationalAreaFeature, String mapName) {

@@ -1,7 +1,127 @@
 <resources>
-    <string name="show_password_text">Afficher mot de passe</string>
+    <!-- Actions -->
+    <string name="action_logout">Déconnexion</string>
+    <string name="app_version">Version du : %1$s (créé le %2$s)</string>
+    <string name="app_version_without_build_number">Version %1$s</string>
 
-    <string name="sync">Synchro.</string>
+    <!--Temp -->
+    <string name="unauthorized">Veuillez vérifier les informations d\'accès</string>
+    <string name="unauthorized_group">Votre groupe d\'utilisateurs n\'est pas autorisé à accéder à ce terminal</string>
+    <string name="unknown_response">échec de la connexion, essayez plus tard</string>
+    <string name="no_internet_connectivity">Pas de connexion internet. Veuillez vous assurer de disposer d’une connexion Internet active</string>
+    <string name="login_text">Se connecter</string>
+    <string name="show_password_text">Afficher le mot de passe</string>
+
+    <string name="device_timezone_changed">Le fuseau horaire de l\'appareil a changé. Veuillez vous connecter à nouveau.</string>
+    <string name="device_time_changed">L\'heure de l\'appareil a changé. Veuillez vous connecter à nouveau.</string>
+
+    <string name="prompt_password">Saisir le mot de passe</string>
+    <string name="prompt_username">Saisir l\'identifiant</string>
+    <string name="sync">Synchro</string>
+    <string name="campaign">Mission</string>
+    <string name="operational_area">District</string>
+    <string name="plan">Mission</string>
+
+
+    <string name="offline_maps">Cartes hors-ligne</string>
+    <string name="app_updated">Mise à jour %1$s</string>
+    <string name="district">District :</string>
+    <string name="facility">Lieu:</string>
+    <string name="operator">Utilisateur :</string>
+    <string name="operator_with_middle_dot">Utilisateur : %s &#183;</string>
+
+
+    <string name="no_matching_record_found_on_this_device">aucun enregistrement correspondant n\'a été trouvé</string>
+    <string name="powered_by">Développé par</string>
+    <string name="download">Télécharger</string>
+    <string name="hamburger_menu">menu</string>
+    <string name="menu">menu</string>
+    <string name="map">carte</string>
+    <string name="downloading">En cours de téléchargement</string>
+    <string name="list">Liste</string>
+    <string name="download_finished_successfuly">Téléchargement terminé avec succès</string>
+    <string name="select_offline_map_to_delete">Sélectionnez la carte hors-ligne à supprimer</string>
+    <string name="delete">Effacer</string>
+    <string name="select_offline_map_to_download">Sélectionnez la carte hors-ligne à télécharger</string>
+
+    <string name="operational_area_not_selected">District non sélectionné</string>
+    <string name="plan_not_selected">Mission non sélectionnée</string>
+
+
+    <string name="device_data_synced">Les données de l\'appareil ont été synchronisées</string>
+    <string name="device_data_not_synced">Les données de l\'appareil ne sont synchronisées</string>
+
+    <string name="progressBarLabel">En cours de synchro %s : %d%%</string>
+    <string name="search_hint">Recherche</string>
+
+    <string name="events">Evénements</string>
+    <string name="locations">Localisations</string>
+    <string name="plans">Missions</string>
+    <string name="structures">Points de service</string>
+    <string name="tasks_text">Tâches</string>
+    <string name="fetching_structures_title">Récupération des points de service</string>
+    <string name="fetching_structures_message">Recherche de points de service pour le district et la mission sélectionnés</string>
+
+    <string name="plans_download_on_progress_title">Téléchargement en cours</string>
+    <string name="plans_download_on_progress">Téléchargement des missions en cours. Veuillez patienter</string>
+
+    <string name="error_fetching_location_hierarchy_title">Erreur pendant le traitement de la hiérarchie des lieux</string>
+    <string name="error_fetching_location_hierarchy">Erreur pendant le traitement de la hiérarchie des lieux. Déconnectez-vous pour télécharger à nouveau la hiérarchie des lieux</string>
+
+    <string name="available">disponible</string>
+    <string name="downloaded">Téléchargé</string>
+
+    <string name="nearby_within_n_m">PROCHE (A %s M)</string>
+    <string name="other_service_points_a_to_z">AUTRES POINTS DE SERVICE (A à Z)</string>
+    <string name="language_s">Langue : %s</string>
+    <string name="english_lang">Anglais</string>
+    <string name="french_lang">Français</string>
+
+    <string name="saving_title">Enregistrement</string>
+    <string name="saving_message">Enregistrement du formulaire en cours. Veuillez patienter</string>
+
     <string name="str_page_info">Page {0} de {1}</string>
+    <string name="distance_from_structure">%s &#183; %s distance</string>
+    <string name="unlisted_distance_from_structure">%s &#183; </string>
+
     <string name="next_page"><![CDATA[PROCHAIN >>]]></string>
-    </resources>
+    <string name="previous_page"><![CDATA[<< Précedent]]></string>
+    <string name="product_serial_n_quantity">%s  &#183; %s %s</string>
+    <string name="product_serial_text">Serial # </string>
+    <string name="product_quantity_text">Qty: </string>
+    <string name="product_serial">Serial # %s</string>
+    <string name="product_serial_n_date_checked">Serial # %s</string>
+    <string name="task_item_text">PRODUITS</string>
+    <string name="task_checked_text">VERIFIÉ</string>
+    <string name="no_items_to_check">Aucun article à vérifier</string>
+    <string name="no_items_checked_yet">Aucun article n\'a encore été vérifié</string>
+    <string name="back">Retour</string>
+    <string name="mark_as_looks_good_title">Marquer comme \" semble en bon état \" ?</string>
+    <string name="looks_good_dialog_message">Le matériel existe, il est en bon état et il est utilisé de manière appropriée.</string>
+    <string name="undo_task_title">Annuler évaluation pour %s</string>
+    <string name="undo_looks_good_title">Annuler \"C\'est OK !\" pour %s</string>
+    <string name="undo_flag_problem_title">Annuler \"Signaler Problème\" pour %s</string>
+
+    <string name="undo_dialog_message">Ceci annulera votre évaluation sur cet article</string>
+    <string name="undo">Annuler</string>
+    <string name="cancel">Annuler</string>
+    <string name="no_of_items">%s produits</string>
+    <string name="is_it_there">Existe-t-il ?</string>
+    <string name="is_it_good_condition">Est-il en bon état ?</string>
+    <string name="is_it_being_used_appropriately">Est-il utilisé de manière appropriée?</string>
+    <string name="looks_good_save_dialog">Enregistrement</string>
+    <string name="fix_problem_prefix">Résoudre problème : %s</string>
+    <string name="view_inventory">Voir l\'inventaire</string>
+    <string name="tasks_in_progress">En cours</string>
+    <string name="tasks_completed">Terminé</string>
+    <string name="flag_problem_button_text">Signaler un problème</string>
+    <string name="looks_good_button_text">C\'est OK !</string>
+    <string name="download_starting">Début du téléchargement</string>
+    <string name="user_location_not_received">La localisation de l\'utilisateur n\'a pas été reçue</string>
+    <string name="flag_problem_form_name">Signaler un problème</string>
+    <string name="gps_unknown">Localisation GPS inconnue</string>
+
+    <string name="select_campaign_operational_area_title">Mission et District non définis</string>
+    <string name="service_point_check_task_title">Check point de service</string>
+    <string name="record_gps_task_title">Enregistrer GPS</string>
+</resources>

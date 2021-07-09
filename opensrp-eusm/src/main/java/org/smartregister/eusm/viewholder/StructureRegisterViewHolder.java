@@ -1,9 +1,11 @@
 package org.smartregister.eusm.viewholder;
 
+import android.app.Activity;
 import android.content.Context;
 import android.graphics.Color;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -18,6 +20,7 @@ import org.smartregister.eusm.application.EusmApplication;
 import org.smartregister.eusm.config.ServicePointType;
 import org.smartregister.eusm.domain.StructureDetail;
 import org.smartregister.eusm.util.AppUtils;
+import org.smartregister.util.DisplayUtils;
 
 public class StructureRegisterViewHolder extends RecyclerView.ViewHolder {
 
@@ -54,11 +57,8 @@ public class StructureRegisterViewHolder extends RecyclerView.ViewHolder {
 
     private Integer getDrawableByTaskType(@NonNull String serviceType) {
         ServicePointType servicePointType = EusmApplication.getInstance().getServicePointKeyToType().get(serviceType.toLowerCase().replaceAll(" ", ""));
-        if (servicePointType == null) {
-            return R.drawable.ic_health_sp;
-        } else {
-            return servicePointType.drawableId;
-        }
+        return servicePointType == null ? R.drawable.ic_health_sp : servicePointType.drawableId;
+
     }
 
     public void setTaskStatus(StructureDetail structureDetail) {
@@ -72,7 +72,7 @@ public class StructureRegisterViewHolder extends RecyclerView.ViewHolder {
         this.communeView.setText(commune);
     }
 
-    public void setServicePointType(StructureDetail structureTasksBody) {
+    public void setServicePointType(StructureDetail structureTasksBody, Activity activity) {
         if (StringUtils.isNotBlank(structureTasksBody.getDistanceMeta())) {
             gpsUnknownView.setVisibility(View.GONE);
             this.servicePointTypeView.setText(String.format(context.getString(R.string.distance_from_structure), structureTasksBody.getStructureType(), structureTasksBody.getDistanceMeta()));
@@ -83,6 +83,8 @@ public class StructureRegisterViewHolder extends RecyclerView.ViewHolder {
             TextView txtUnlistedLocation = gpsUnknownView.findViewById(R.id.txt_service_point_gps_unknown);
             txtUnlistedLocation.setTextColor(Color.BLACK);
             this.servicePointTypeView.setText(String.format(context.getString(R.string.unlisted_distance_from_structure), structureTasksBody.getStructureType()));
+            LinearLayout linearLayout = (LinearLayout) imageViewUnlistedLocation.getParent().getParent();
+            linearLayout.setOrientation(((DisplayUtils.getScreenSize(activity) < 5.0) && structureTasksBody.getStructureType().length() > 10) ? LinearLayout.VERTICAL : LinearLayout.HORIZONTAL);
         }
     }
 }

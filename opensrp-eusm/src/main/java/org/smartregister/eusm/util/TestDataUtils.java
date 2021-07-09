@@ -48,31 +48,31 @@ public class TestDataUtils {
 
 //            createLocations();
 //            createPlanDefinition();
-            createTasks();
+//            createTasks();
             //createStructures();
 //            getPopulateInventory();
             sharedPreferences.edit().putBoolean(TEST_DATA_POPULATED, true).apply();
         }
     }
 
-    private void createTasks() {
-        try {
-            Gson gson = new GsonBuilder().registerTypeAdapter(DateTime.class, new DateTimeTypeConverter("yyyy-MM-dd'T'HHmm"))
-                    .serializeNulls().create();
-            String tasksJSON = "[{\"identifier\":\"d3b237ff-f9d8-4077-9523-c7bf3552ff87\",\"campaignIdentifier\":\"IRS_2019_S1\",\"groupIdentifier\":\"8e74d042-4a71-4694-a652-bc3ba6369101\",\"planIdentifier\":\"335ef7a3-7f35-58aa-8263-4419464946d8\",\"status\":\"Ready\",\"businessStatus\":\"Not Visited\",\"priority\":\"routine\",\"code\":\"IRS\",\"description\":\"Spray House\",\"focus\":\"IRS Visit\",\"for\":\"c2635a23-a604-48fb-9e1c-8bf1e75e6759\",\"executionPeriod\":{\"start\":\"2018-11-10T22:00:00.000\"},\"authoredOn\":\"2018-11-29T0342\",\"lastModified\":\"2018-12-03T2212\",\"location\":\"f3199af5-2eaf-46df-87c9-40d59606a2fb\",\"structureId\":\"f3199af5-2eaf-46df-87c9-40d59606a2fb\",\"owner\":\"demoMTI\",\"note\":null,\"serverVersion\":1543867945204},{\"identifier\":\"c6dd4abc-fb3e-4f72-afb8-923fc43f44d7\",\"campaignIdentifier\":\"IRS_2019_S1\",\"groupIdentifier\":\"8e74d042-4a71-4694-a652-bc3ba6369101\",\"status\":\"Ready\",\"planIdentifier\":\"335ef7a3-7f35-58aa-8263-4419464946d8\",\"businessStatus\":\"Not Visited\",\"priority\":\"routine\",\"code\":\"IRS\",\"description\":\"product\",\"focus\":\"product\",\"for\":\"ddcaf383-882e-448b-b701-8b72cb0d4d7a\",\"executionPeriod\":{\"start\":\"2018-11-10T22:00:00.000\"},\"authoredOn\":\"2018-12-03T2212\",\"lastModified\":\"2018-12-03T2212\",\"owner\":\"demoMTI\",\"location\":\"f3199af5-2eaf-46df-87c9-40d59606a2fb\",\"structureId\":\"f3199af5-2eaf-46df-87c9-40d59606a2fb\",\"note\":null,\"serverVersion\":1543867945195},{\"identifier\":\"6c303b8b-e47c-45e9-8ab5-3374c8f539a3\",\"campaignIdentifier\":\"IRS_2019_S1\",\"groupIdentifier\":\"663d7935-35e7-4ccf-aaf5-6e16f2042570\",\"status\":\"Ready\",\"planIdentifier\":\"335ef7a3-7f35-58aa-8263-4419464946d8\",\"businessStatus\":\"Not Visited\",\"priority\":\"routine\",\"code\":\"IRS\",\"description\":\"product\",\"focus\":\"product\",\"for\":\"69227a92-7979-490c-b149-f28669c6b760\",\"executionPeriod\":{\"start\":\"2018-11-10T22:00:00.000\"},\"authoredOn\":\"2018-12-03T2212\",\"lastModified\":\"2018-12-03T2212\",\"owner\":\"demoMTI\",\"structureId\":\"b8a7998c-5df6-49eb-98e6-f0675db71848\",\"location\":\"b8a7998c-5df6-49eb-98e6-f0675db71848\",\"note\":null,\"serverVersion\":1543867945196}]";
-            List<Task> tasks = gson.fromJson(tasksJSON, new TypeToken<List<Task>>() {
-            }.getType());
-            for (Task task : tasks) {
-                try {
-                    taskRepository.addOrUpdate(task);
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
+//    private void createTasks() {
+//        try {
+//            Gson gson = new GsonBuilder().registerTypeAdapter(DateTime.class, new DateTimeTypeConverter("yyyy-MM-dd'T'HHmm"))
+//                    .serializeNulls().create();
+//            String tasksJSON = "[{\"identifier\":\"d3b237ff-f9d8-4077-9523-c7bf3552ff87\",\"campaignIdentifier\":\"IRS_2019_S1\",\"groupIdentifier\":\"8e74d042-4a71-4694-a652-bc3ba6369101\",\"planIdentifier\":\"335ef7a3-7f35-58aa-8263-4419464946d8\",\"status\":\"Ready\",\"businessStatus\":\"Not Visited\",\"priority\":\"routine\",\"code\":\"IRS\",\"description\":\"Spray House\",\"focus\":\"IRS Visit\",\"for\":\"c2635a23-a604-48fb-9e1c-8bf1e75e6759\",\"executionPeriod\":{\"start\":\"2018-11-10T22:00:00.000\"},\"authoredOn\":\"2018-11-29T0342\",\"lastModified\":\"2018-12-03T2212\",\"location\":\"f3199af5-2eaf-46df-87c9-40d59606a2fb\",\"structureId\":\"f3199af5-2eaf-46df-87c9-40d59606a2fb\",\"owner\":\"demoMTI\",\"note\":null,\"serverVersion\":1543867945204},{\"identifier\":\"c6dd4abc-fb3e-4f72-afb8-923fc43f44d7\",\"campaignIdentifier\":\"IRS_2019_S1\",\"groupIdentifier\":\"8e74d042-4a71-4694-a652-bc3ba6369101\",\"status\":\"Ready\",\"planIdentifier\":\"335ef7a3-7f35-58aa-8263-4419464946d8\",\"businessStatus\":\"Not Visited\",\"priority\":\"routine\",\"code\":\"IRS\",\"description\":\"product\",\"focus\":\"product\",\"for\":\"ddcaf383-882e-448b-b701-8b72cb0d4d7a\",\"executionPeriod\":{\"start\":\"2018-11-10T22:00:00.000\"},\"authoredOn\":\"2018-12-03T2212\",\"lastModified\":\"2018-12-03T2212\",\"owner\":\"demoMTI\",\"location\":\"f3199af5-2eaf-46df-87c9-40d59606a2fb\",\"structureId\":\"f3199af5-2eaf-46df-87c9-40d59606a2fb\",\"note\":null,\"serverVersion\":1543867945195},{\"identifier\":\"6c303b8b-e47c-45e9-8ab5-3374c8f539a3\",\"campaignIdentifier\":\"IRS_2019_S1\",\"groupIdentifier\":\"663d7935-35e7-4ccf-aaf5-6e16f2042570\",\"status\":\"Ready\",\"planIdentifier\":\"335ef7a3-7f35-58aa-8263-4419464946d8\",\"businessStatus\":\"Not Visited\",\"priority\":\"routine\",\"code\":\"IRS\",\"description\":\"product\",\"focus\":\"product\",\"for\":\"69227a92-7979-490c-b149-f28669c6b760\",\"executionPeriod\":{\"start\":\"2018-11-10T22:00:00.000\"},\"authoredOn\":\"2018-12-03T2212\",\"lastModified\":\"2018-12-03T2212\",\"owner\":\"demoMTI\",\"structureId\":\"b8a7998c-5df6-49eb-98e6-f0675db71848\",\"location\":\"b8a7998c-5df6-49eb-98e6-f0675db71848\",\"note\":null,\"serverVersion\":1543867945196}]";
+//            List<Task> tasks = gson.fromJson(tasksJSON, new TypeToken<List<Task>>() {
+//            }.getType());
+//            for (Task task : tasks) {
+//                try {
+//                    taskRepository.addOrUpdate(task);
+//                } catch (Exception e) {
+//                    e.printStackTrace();
+//                }
+//            }
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        }
+//    }
 
 //    public void createLocations() {
 //        try {

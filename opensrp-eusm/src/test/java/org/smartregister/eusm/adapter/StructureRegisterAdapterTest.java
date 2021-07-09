@@ -1,5 +1,6 @@
 package org.smartregister.eusm.adapter;
 
+import android.app.Activity;
 import android.view.View;
 import android.widget.LinearLayout;
 
@@ -9,6 +10,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
+import org.robolectric.Robolectric;
 import org.robolectric.RuntimeEnvironment;
 import org.smartregister.eusm.BaseUnitTest;
 import org.smartregister.eusm.domain.StructureDetail;
@@ -30,10 +32,13 @@ public class StructureRegisterAdapterTest extends BaseUnitTest {
     @Mock
     private View.OnClickListener onClickListener;
 
+    private Activity activity;
+
     @Before
     public void setUp() {
         MockitoAnnotations.initMocks(this);
-        structureRegisterAdapter = spy(new StructureRegisterAdapter(RuntimeEnvironment.application, onClickListener));
+        activity = Robolectric.buildActivity(Activity.class).get();
+        structureRegisterAdapter = spy(new StructureRegisterAdapter(activity, onClickListener));
     }
 
     @Test
@@ -81,7 +86,7 @@ public class StructureRegisterAdapterTest extends BaseUnitTest {
         verify(viewHolder).setCommune(eq(structureDetail.getCommune()));
         verify(viewHolder).setTaskStatus(eq(structureDetail));
         verify(viewHolder).setServicePointName(eq(structureDetail.getEntityName()));
-        verify(viewHolder).setServicePointType(eq(structureDetail));
+        verify(viewHolder).setServicePointType(eq(structureDetail), eq(activity));
         verify(viewHolder).setServicePointIcon(eq(structureDetail.getTaskStatus()), eq(structureDetail.getStructureType()));
     }
 }

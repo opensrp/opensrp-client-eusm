@@ -87,7 +87,6 @@
                 android:textColorHint="#bfbfbf"
                 android:textCursorDrawable="@null"
                 android:textSize="@dimen/login_edit_text_textSize"
-                android:text="demo"
                 android:typeface="sans" />
 
             <EditText
@@ -108,7 +107,6 @@
                 android:textColorHint="#bfbfbf"
                 android:textCursorDrawable="@null"
                 android:textSize="@dimen/login_edit_text_textSize"
-                android:text="Amani123"
                 android:typeface="sans" />
 
             <RelativeLayout

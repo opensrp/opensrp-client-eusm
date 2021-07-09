@@ -8,6 +8,7 @@ import org.smartregister.domain.Location;
 import org.smartregister.eusm.application.EusmApplication;
 import org.smartregister.eusm.domain.StructureDetail;
 import org.smartregister.eusm.repository.AppStructureRepository;
+import org.smartregister.eusm.util.AppUtils;
 import org.smartregister.eusm.util.GeoJsonUtils;
 import org.smartregister.tasking.contract.TaskingMapActivityContract;
 import org.smartregister.tasking.interactor.TaskingMapInteractor;
@@ -20,8 +21,8 @@ import timber.log.Timber;
 
 public class EusmTaskingMapInteractor extends TaskingMapInteractor {
 
-    private AppStructureRepository appStructureRepository;
-    private GeoJsonUtils geoJsonUtils;
+    private final AppStructureRepository appStructureRepository;
+    private final GeoJsonUtils geoJsonUtils;
 
     public EusmTaskingMapInteractor(TaskingMapActivityContract.Presenter presenter) {
         super(presenter);
@@ -72,6 +73,6 @@ public class EusmTaskingMapInteractor extends TaskingMapInteractor {
     }
 
     protected Location getOperationalAreaLocation(String operationalArea) {
-        return Utils.getOperationalAreaLocation(operationalArea);
+        return AppUtils.getOperationalAreaLocation(operationalArea);
     }
 }

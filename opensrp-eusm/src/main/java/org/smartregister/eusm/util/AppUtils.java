@@ -7,7 +7,9 @@ import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 
 import androidx.annotation.NonNull;
+import androidx.core.util.Pair;
 
+import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.vijay.jsonwizard.constants.JsonFormConstants;
@@ -19,11 +21,16 @@ import org.json.JSONException;
 import org.json.JSONObject;
 import org.smartregister.CoreLibrary;
 import org.smartregister.clientandeventmodel.Event;
+import org.smartregister.domain.Geometry;
 import org.smartregister.domain.jsonmapping.Location;
 import org.smartregister.domain.tag.FormTag;
 import org.smartregister.eusm.R;
 import org.smartregister.eusm.application.EusmApplication;
+import org.smartregister.eusm.domain.StructureDetail;
+import org.smartregister.eusm.repository.AppStructureRepository;
+import org.smartregister.repository.BaseRepository;
 import org.smartregister.tasking.util.Utils;
+import org.smartregister.util.Cache;
 import org.smartregister.util.JsonFormUtils;
 
 import java.io.File;
@@ -49,6 +56,8 @@ import static org.smartregister.util.JsonFormUtils.ENTITY_ID;
 import static org.smartregister.util.JsonFormUtils.getString;
 
 public class AppUtils extends Utils {
+
+    private static Cache<org.smartregister.domain.Location> cache = new Cache<>();
 
     public static Float distanceFromUserLocation(@NonNull android.location.Location location) {
         android.location.Location userLocation = EusmApplication.getInstance().getUserLocation();
@@ -151,12 +160,12 @@ public class AppUtils extends Utils {
                 savedStructureIds = new HashSet<>();
             }
             savedStructureIds.addAll(structureIds);
-            Utils.getAllSharedPreferences().savePreference(STRUCTURE_IDS, android.text.TextUtils.join(",", savedStructureIds));
+            getAllSharedPreferences().savePreference(STRUCTURE_IDS, android.text.TextUtils.join(",", savedStructureIds));
         }
     }
 
     public static Set<String> fetchStructureIds() {
-        String structureIds = Utils.getAllSharedPreferences().getPreference(STRUCTURE_IDS);
+        String structureIds = getAllSharedPreferences().getPreference(STRUCTURE_IDS);
         return Arrays.stream(StringUtils.split(structureIds, ",")).collect(Collectors.toSet());
     }
 
@@ -185,5 +194,53 @@ public class AppUtils extends Utils {
     public static String getStringFromJsonElement(JsonObject jsonObject, String key) {
         JsonElement element = jsonObject.get(key);
         return (element != null) ? element.getAsString() : AppConstants.CardDetailKeys.DISTANCE_META.equals(key) ? "-" : "";
+    }
+
+    public static org.smartregister.domain.Location getOperationalAreaLocation(String operationalArea) {
+        return cache.get(operationalArea, () -> {
+            return EusmApplication.getInstance().getAppLocationRepository()
+                    .getLocationByNameAndGeoLevel(operationalArea, "2");//restrict to district geographic level
+        });
+    }
+
+    public static Pair<Float, Float> getLatLongFromForm(@NonNull JSONObject form) {
+        JSONArray formFields = JsonFormUtils.getMultiStepFormFields(form);
+        for (int i = 0; i < formFields.length(); i++) {
+            JSONObject fieldObject = formFields.optJSONObject(i);
+            if (fieldObject != null) {
+                String key = fieldObject.optString(JsonFormConstants.KEY);
+                if (AppConstants.JsonFormKey.GPS.equals(key)) {
+                    String value = fieldObject.optString(JsonFormConstants.VALUE);
+                    String[] values = value.split(" ");
+                    if (values.length >= 2) {
+                        float latitude = Float.parseFloat(values[0]);
+                        float longitude = Float.parseFloat(values[1]);
+                        return Pair.create(latitude, longitude);
+                    }
+                }
+            }
+        }
+        return null;
+    }
+
+    public static void updateLocationCoordinatesFromForm(StructureDetail structureDetail, JSONObject form) {
+        Pair<Float, Float> latLngPair = AppUtils.getLatLongFromForm(form);
+        if (latLngPair != null) {
+            AppStructureRepository structureRepository = EusmApplication.getInstance().getStructureRepository();
+            org.smartregister.domain.Location location = structureRepository.getLocationById(structureDetail.getStructureId());
+            location.setSyncStatus(BaseRepository.TYPE_Created);
+
+            JsonArray jsonArray = new JsonArray(2);
+            jsonArray.add(latLngPair.second);
+            jsonArray.add(latLngPair.first);
+
+            Geometry geometry = new Geometry();
+            geometry.setCoordinates(jsonArray);
+            geometry.setType(Geometry.GeometryType.POINT);
+
+            location.setGeometry(geometry);
+
+            structureRepository.addOrUpdate(location);
+        }
     }
 }

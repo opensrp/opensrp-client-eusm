@@ -4,6 +4,7 @@ import org.json.JSONArray;
 import org.junit.Before;
 import org.junit.Test;
 import org.smartregister.eusm.BaseUnitTest;
+import org.smartregister.eusm.config.EusmStockSyncConfiguration;
 import org.smartregister.stock.util.Constants;
 
 import java.util.HashMap;

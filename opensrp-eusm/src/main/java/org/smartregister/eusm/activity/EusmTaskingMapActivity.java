@@ -23,6 +23,7 @@ import com.mapbox.geojson.FeatureCollection;
 import com.mapbox.mapboxsdk.geometry.LatLng;
 import com.mapbox.mapboxsdk.maps.MapboxMap;
 
+import org.apache.commons.lang3.StringUtils;
 import org.smartregister.eusm.R;
 import org.smartregister.eusm.application.EusmApplication;
 import org.smartregister.eusm.config.ServicePointType;
@@ -70,6 +71,11 @@ public class EusmTaskingMapActivity extends TaskingMapActivity {
     }
 
     @Override
+    public void positionMyLocationAndLayerSwitcher() {
+        // Do nothing
+    }
+
+    @Override
     public TaskingMapActivityContract.Presenter getPresenter() {
         if (taskingMapPresenter == null) {
             taskingMapPresenter = new EusmTaskingMapPresenter(this, drawerView.getPresenter());
@@ -99,7 +105,10 @@ public class EusmTaskingMapActivity extends TaskingMapActivity {
     public void openCardView(CardDetails cardDetails) {
         if (cardDetails != null) {
             EusmCardDetail eusmCardDetail = (EusmCardDetail) cardDetails;
-            if (eusmCardView != null) {
+            if (StringUtils.isBlank(eusmCardDetail.getCommune())) {
+                clearSelectedFeature();
+                Utils.showToast(getApplicationContext(), getString(R.string.text_selected_a_cluster_point));
+            } else if (eusmCardView != null) {
                 TextView structureNameView = eusmCardView.findViewById(R.id.txt_structure_name);
                 TextView structureDistanceView = eusmCardView.findViewById(R.id.txt_distance);
                 TextView structureCommuneView = eusmCardView.findViewById(R.id.txt_commune);
@@ -114,15 +123,13 @@ public class EusmTaskingMapActivity extends TaskingMapActivity {
                     imgServicePointType.setColorFilter(ContextCompat.getColor(getApplicationContext(), taskStatusColor));
                 }
 
-//            imgServicePointType.setAlpha(0.9F);
-
                 Button viewInventoryView = eusmCardView.findViewById(R.id.btn_view_inventory);
                 viewInventoryView.setTag(R.id.card_detail, eusmCardDetail);
                 viewInventoryView.setOnClickListener(this);
                 structureNameView.setText(eusmCardDetail.getStructureName());
                 structureDistanceView.setText(String.format(getString(R.string.distance_from_structure), eusmCardDetail.getStructureType(), eusmCardDetail.getDistanceMeta()));
                 structureCommuneView.setText(eusmCardDetail.getCommune());
-                structureTaskStatusView.setText(AppUtils.formatTaskStatus(eusmCardDetail.getTaskStatus(), getApplicationContext()));
+                structureTaskStatusView.setText(AppUtils.formatTaskStatus(eusmCardDetail.getTaskStatus(), this));
                 structureTaskStatusView.setTextColor(ContextCompat.getColor(getApplicationContext(), taskStatusColor));
 
                 View view = (View) eusmCardView.getParent();
@@ -189,5 +196,13 @@ public class EusmTaskingMapActivity extends TaskingMapActivity {
             Timber.e(e);
             return null;
         }
+    }
+
+    @Override
+    public void requestUserLocation() {
+        kujakuMapView.setWarmGps(true, getString(R.string.location_service_disabled), getString(R.string.location_services_disabled_spray), () -> {
+            myLocationButton.performClick();
+        });
+        hasRequestedLocation = true;
     }
 }

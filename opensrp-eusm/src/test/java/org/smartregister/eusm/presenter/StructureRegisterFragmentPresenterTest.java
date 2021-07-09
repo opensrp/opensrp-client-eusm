@@ -8,6 +8,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
 import org.powermock.reflect.internal.WhiteboxImpl;
+import org.robolectric.RuntimeEnvironment;
 import org.robolectric.annotation.LooperMode;
 import org.robolectric.util.ReflectionHelpers;
 import org.smartregister.eusm.BaseUnitTest;
@@ -36,6 +37,7 @@ public class StructureRegisterFragmentPresenterTest extends BaseUnitTest {
 
     @Before
     public void setUp() {
+        doReturn(RuntimeEnvironment.application).when(view).getContext();
         structureRegisterFragmentPresenter = spy(new StructureRegisterFragmentPresenter(view));
     }
 
@@ -52,7 +54,7 @@ public class StructureRegisterFragmentPresenterTest extends BaseUnitTest {
 
     @Test
     public void testFilterByNameShouldAddNameToSearch() throws InterruptedException {
-        StructureRegisterInteractor structureRegisterInteractorSpy = spy(new StructureRegisterInteractor());
+        StructureRegisterInteractor structureRegisterInteractorSpy = spy(new StructureRegisterInteractor(RuntimeEnvironment.application));
         ReflectionHelpers.setField(structureRegisterFragmentPresenter, "structureRegisterInteractor", structureRegisterInteractorSpy);
         String nameToFilter = "test";
         doReturn(mock(StructureRegisterAdapter.class)).when(view).getAdapter();
@@ -77,6 +79,8 @@ public class StructureRegisterFragmentPresenterTest extends BaseUnitTest {
         doReturn(mockStructureRegisterAdapter).when(view).getAdapter();
         doReturn(mockStructureRegisterFragment).when(structureRegisterFragmentPresenter).getFragment();
         doReturn(mockNextButton).when(mockStructureRegisterFragment).getNextButton();
+        doReturn(mockNextButton).when(mockStructureRegisterFragment).getPreviousButton();
+
         structureRegisterFragmentPresenter.onNextButtonClick();
 
         verify(structureRegisterFragmentPresenter).fetchStructures();
