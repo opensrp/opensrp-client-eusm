@@ -22,7 +22,11 @@ import org.smartregister.eusm.application.EusmApplication;
 import org.smartregister.eusm.domain.StructureDetail;
 import org.smartregister.view.activity.DrishtiApplication;
 
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.UUID;
 
 import static org.junit.Assert.assertEquals;
@@ -107,7 +111,9 @@ public class AppStructureRepositoryTest extends BaseUnitTest {
             }
         }).when(cursor).moveToNext();
 
-        int result = appStructureRepository.countOfStructures("tes", UUID.randomUUID().toString(), UUID.randomUUID().toString());
+        Set<String> parentIds = new HashSet<>();
+        parentIds.add(UUID.randomUUID().toString());
+        int result = appStructureRepository.countOfStructures("tes", parentIds, UUID.randomUUID().toString());
 
         assertEquals(0, result);
     }
@@ -169,7 +175,9 @@ public class AppStructureRepositoryTest extends BaseUnitTest {
             }
         }).when(cursor).moveToNext();
 
-        List<StructureDetail> structureDetails = appStructureRepository.fetchStructureDetails(0, "23-2", "tes", false, UUID.randomUUID().toString());
+        Set<String> parentIds = new HashSet<>();
+        parentIds.add(UUID.randomUUID().toString());
+        List<StructureDetail> structureDetails = appStructureRepository.fetchStructureDetails(0, parentIds, "tes", false, UUID.randomUUID().toString());
 
         assertEquals(1, structureDetails.size());
     }

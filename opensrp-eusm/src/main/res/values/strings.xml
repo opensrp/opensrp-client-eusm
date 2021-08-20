@@ -144,5 +144,6 @@
     <string name="text_selected_a_cluster_point">You\'ve selected a cluster point!</string>
 
     <string name="stock_type_id_key">identifier</string>
+    <string name="ok_text">OK</string>
 
 </resources>

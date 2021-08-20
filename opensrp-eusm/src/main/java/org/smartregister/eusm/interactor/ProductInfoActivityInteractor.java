@@ -19,7 +19,6 @@ import org.smartregister.tasking.receiver.TaskGenerationReceiver;
 import org.smartregister.util.AppExecutors;
 
 import java.util.Collections;
-import java.util.concurrent.atomic.AtomicInteger;
 
 import timber.log.Timber;
 
@@ -39,13 +38,10 @@ public class ProductInfoActivityInteractor implements ProductInfoActivityContrac
                                     String encounterType, JSONObject jsonForm,
                                     StructureDetail structureDetail, ProductInfoActivityContract.InteractorCallback interactorCallback) {
 
-        appExecutors.diskIO().execute(new Runnable() {
-            @Override
-            public void run() {
-                getJsonFormUtils().saveImage(jsonForm, AppConstants.EventEntityType.PRODUCT);
-                saveEventAndInitiateProcessing(encounterType, jsonForm, "", interactorCallback,
-                        AppConstants.EventEntityType.PRODUCT);
-            }
+        appExecutors.diskIO().execute(() -> {
+            getJsonFormUtils().saveImage(jsonForm, AppConstants.EventEntityType.PRODUCT);
+            saveEventAndInitiateProcessing(encounterType, jsonForm, "", interactorCallback,
+                    AppConstants.EventEntityType.PRODUCT);
         });
     }
 
@@ -56,63 +52,46 @@ public class ProductInfoActivityInteractor implements ProductInfoActivityContrac
         try {
             Event event = AppUtils.createEventFromJsonForm(form, encounterType, bindType, entityId);
             try {
-                AtomicInteger count = new AtomicInteger(1);
                 IntentFilter filter = new IntentFilter(TASK_GENERATED_EVENT);
                 TaskGenerationReceiver taskGenerationReceiver = new TaskGenerationReceiver(task ->
-                        appExecutors.mainThread().execute(() -> returnResponse(interactorCallback, event, true, count.getAndIncrement())),
-                        AppConstants.EncounterType.FLAG_PROBLEM.equals(encounterType) ? 2 : 1);
+                        appExecutors.mainThread().execute(() -> returnResponse(interactorCallback, event, true)));
                 LocalBroadcastManager.getInstance(EusmApplication.getInstance().getApplicationContext()).registerReceiver(taskGenerationReceiver, filter);
-
                 AppUtils.initiateEventProcessing(Collections.singletonList(event.getFormSubmissionId()));
             } catch (Exception e) {
                 Timber.e(e);
-                returnResponse(interactorCallback, event, false, 0);
+                returnResponse(interactorCallback, event, false);
             }
         } catch (JSONException e) {
             Timber.e(e);
-            returnResponse(interactorCallback, null, false, 0);
+            returnResponse(interactorCallback, null, false);
         }
     }
 
     @Override
     public void markProductAsGood(StructureDetail structureDetail, TaskDetail taskDetail, ProductInfoActivityContract.InteractorCallback callBack,
                                   Activity activity) {
-        appExecutors.diskIO().execute(new Runnable() {
-            @Override
-            public void run() {
-                JSONObject jsonObject = getJsonFormUtils()
-                        .getFormObjectWithDetails(activity, AppConstants.JsonForm.LOOKS_GOOD, structureDetail, taskDetail);
-                saveEventAndInitiateProcessing(AppConstants.EncounterType.LOOKS_GOOD, jsonObject,
-                        "", callBack, AppConstants.EventEntityType.PRODUCT);
-            }
+        appExecutors.diskIO().execute(() -> {
+            JSONObject jsonObject = getJsonFormUtils()
+                    .getFormObjectWithDetails(activity, AppConstants.JsonForm.LOOKS_GOOD, structureDetail, taskDetail);
+            saveEventAndInitiateProcessing(AppConstants.EncounterType.LOOKS_GOOD, jsonObject,
+                    "", callBack, AppConstants.EventEntityType.PRODUCT);
         });
     }
 
     @Override
     public void startFlagProblemForm(StructureDetail structureDetail, TaskDetail taskDetail, String formName, Activity activity,
                                      ProductInfoActivityContract.InteractorCallback interactorCallBack) {
-        appExecutors.diskIO().execute(new Runnable() {
-            @Override
-            public void run() {
-                JSONObject form = getJsonFormUtils().getFormObjectWithDetails(activity, formName, structureDetail, taskDetail);
-                appExecutors.mainThread().execute(new Runnable() {
-                    @Override
-                    public void run() {
-                        interactorCallBack.onFlagProblemFormFetched(form);
-                    }
-                });
-            }
+        appExecutors.diskIO().execute(() -> {
+            JSONObject form = getJsonFormUtils().getFormObjectWithDetails(activity, formName, structureDetail, taskDetail);
+            appExecutors.mainThread().execute(() -> interactorCallBack.onFlagProblemFormFetched(form));
         });
     }
 
     private void returnResponse(ProductInfoActivityContract.InteractorCallback interactorCallback,
-                                Event event, boolean status, int callCount) {
+                                Event event, boolean status) {
         if (event != null && event.getDetails() != null) {
             String encounterType = event.getEventType();
             if (AppConstants.EncounterType.FLAG_PROBLEM.equals(encounterType)) {
-                if (status && callCount < 2) {
-                    return;
-                }
                 interactorCallback.onSavedFlagProblemTask(status, event);
             } else if (AppConstants.EncounterType.LOOKS_GOOD.equals(encounterType)) {
                 interactorCallback.onProductMarkedAsGood(status, event);

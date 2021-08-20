@@ -24,6 +24,7 @@ import org.smartregister.util.P2PUtil;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
+import java.util.Set;
 
 import timber.log.Timber;
 
@@ -93,25 +94,28 @@ public class AppStructureRepository extends StructureRepository {
         getWritableDatabase().replace(getLocationTableName(), null, contentValues);
     }
 
-    public int countOfStructures(String nameFilter, String locationParentId, String planId) {
+    public int countOfStructures(String nameFilter, Set<String> locationParentIds, String planId) {
+        int count = 0;
+
+        if (locationParentIds == null || locationParentIds.isEmpty())
+            return count;
         SQLiteDatabase sqLiteDatabase = getReadableDatabase();
         String query = "SELECT count(DISTINCT structure._id) from " + STRUCTURE_TABLE;
 
-        String[] args = StringUtils.stripAll(locationParentId, planId);
+        String[] args = ArrayUtils.addAll(locationParentIds.toArray(new String[0]), planId);
 
         query += " join task on task.for = " + StructureRepository.STRUCTURE_TABLE + "._id ";
 
         query += " join location on location._id = " + StructureRepository.STRUCTURE_TABLE + ".parent_id ";
 
-        query += " where location.parent_id = ? AND task.plan_id = ?";
+        query += " where " + "(" + StringUtils.repeat("location.parent_id = ? ", " OR ", locationParentIds.size()) + ")" + " AND task.plan_id = ?";
 
         if (StringUtils.isNotBlank(nameFilter)) {
-            args = StringUtils.stripAll(locationParentId, planId, "%" + nameFilter + "%");
+            args = ArrayUtils.addAll(args, "%" + nameFilter + "%");
 
             query += " and " + STRUCTURE_TABLE + "." + NAME + " like ? ";
         }
 
-        int count = 0;
         try (Cursor cursor = sqLiteDatabase.rawQuery(query, args)) {
             if (cursor != null && cursor.moveToNext()) {
                 count = cursor.getInt(0);
@@ -122,13 +126,14 @@ public class AppStructureRepository extends StructureRepository {
         return count;
     }
 
-    public List<StructureDetail> fetchStructureDetails(int pageNo, String locationParentId, String nameFilter, String planId) {
-        return fetchStructureDetails(pageNo, locationParentId, nameFilter, false, planId);
+    public List<StructureDetail> fetchStructureDetails(int pageNo, Set<String> locationParentIds, String nameFilter, String planId) {
+        return fetchStructureDetails(pageNo, locationParentIds, nameFilter, false, planId);
     }
 
-    public List<StructureDetail> fetchStructureDetails(Integer pageNo, String locationParentId,
+    public List<StructureDetail> fetchStructureDetails(Integer pageNo, Set<String> locationParentIds,
                                                        String nameFilter, boolean isForMapping, String planId) {
-
+        if (locationParentIds == null || locationParentIds.isEmpty())
+            return new ArrayList<>();
         Location location = EusmApplication.getInstance().getUserLocation();
 
         List<StructureDetail> structureDetails = new ArrayList<>();
@@ -159,17 +164,12 @@ public class AppStructureRepository extends StructureRepository {
                 + " join task on task.structure_id = " + StructureRepository.STRUCTURE_TABLE + "._id "
                 + " join location on location._id = " + StructureRepository.STRUCTURE_TABLE + ".parent_id ";
 
-        String[] args = StringUtils.stripAll(
-                planId,
-                locationParentId);
+        String[] args = ArrayUtils.addAll(new String[]{planId}, locationParentIds.toArray(new String[0]));
 
-        query += " where task.plan_id = ? AND locationParentId = ? ";
+        query += " where task.plan_id = ? AND (" + StringUtils.repeat("locationParentId = ? ", " OR ", locationParentIds.size()) + ")";
 
         if (StringUtils.isNotBlank(nameFilter)) {
-            args = StringUtils.stripAll(
-                    planId,
-                    locationParentId,
-                    "%" + nameFilter + "%");
+            args = ArrayUtils.addAll(args, "%" + nameFilter + "%");
             query += " and structureName like  ? ";
         }
 

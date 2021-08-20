@@ -88,14 +88,32 @@ public class EusmBaseDrawerPresenter extends BaseDrawerPresenter {
         List<String> jurisdictionList = planDefinitionSearches.stream().map(PlanDefinitionSearch::getJurisdictionId).collect(Collectors.toList());
         LocationRepository locationRepository = drishtiApplication.getContext().getLocationRepository();
         List<Location> locationList = locationRepository.getLocationsByIds(jurisdictionList);
+
         List<FormLocation> formLocations = filterLocations(locationList.stream().map(location ->
                 location.getProperties().getName()
         ).collect(Collectors.toList()), entireTree);
-
+        cleanUpFormLocations(formLocations);
         return AssetHandler.javaToJsonString(formLocations,
                 new TypeToken<List<FormLocation>>() {
                 }.getType());
     }
+
+
+    private void cleanUpFormLocations(List<FormLocation> formLocations) {
+        if (!formLocations.isEmpty()) {
+            FormLocation root = formLocations.get(0);
+            if (root.nodes != null && !root.nodes.isEmpty()) {
+                Iterator<FormLocation> locationIterable = root.nodes.iterator();
+                while (locationIterable.hasNext()) {
+                    FormLocation formLocation = locationIterable.next();
+                    if (formLocation.nodes.isEmpty()) {
+                        locationIterable.remove();
+                    }
+                }
+            }
+        }
+    }
+
 
     /**
      * Filter out district not in the plan
@@ -123,4 +141,6 @@ public class EusmBaseDrawerPresenter extends BaseDrawerPresenter {
         }
         return entireTree;
     }
+
 }
+

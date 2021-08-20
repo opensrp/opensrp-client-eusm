@@ -203,6 +203,12 @@ public class AppUtils extends Utils {
         });
     }
 
+    public static Set<org.smartregister.domain.Location> getOperationalAreaLocations(Set<String> operationalAreas) {
+        return EusmApplication.getInstance().getAppLocationRepository()
+                .getLocationByNameAndGeoLevel(operationalAreas, "2");//restrict to district geographic level
+    }
+
+
     public static Pair<Float, Float> getLatLongFromForm(@NonNull JSONObject form) {
         JSONArray formFields = JsonFormUtils.getMultiStepFormFields(form);
         for (int i = 0; i < formFields.length(); i++) {

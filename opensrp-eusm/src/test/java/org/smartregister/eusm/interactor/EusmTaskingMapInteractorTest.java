@@ -19,6 +19,7 @@ import org.smartregister.eusm.repository.AppStructureRepository;
 import org.smartregister.tasking.contract.TaskingMapActivityContract;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import static android.os.Looper.getMainLooper;
@@ -90,6 +91,7 @@ public class EusmTaskingMapInteractorTest extends BaseUnitTest {
 
         LocationProperty locationProperty = new LocationProperty();
         Location location1 = new Location();
+        location1.setType("Feature");
         location1.setGeometry(geometry);
         location1.setProperties(locationProperty);
         StructureDetail structureDetail = new StructureDetail();
@@ -101,9 +103,9 @@ public class EusmTaskingMapInteractorTest extends BaseUnitTest {
         structureDetails.add(structureDetail);
 
         doReturn(structureDetails).when(appStructureRepository)
-                .fetchStructureDetails(isNull(), anyString(), isNull(), eq(true), isNull());
+                .fetchStructureDetails(isNull(), Collections.singleton(anyString()), isNull(), eq(true), isNull());
 
-        doReturn(location).when(eusmTaskingMapInteractor).getOperationalAreaLocation(eq(operationalArea));
+        doReturn(Collections.singleton(location1)).when(eusmTaskingMapInteractor).getOperationalAreaLocations(eq(Collections.singleton(operationalArea)));
 
         eusmTaskingMapInteractor.fetchLocations(plan, operationalArea, point, locationComponentActive);
 

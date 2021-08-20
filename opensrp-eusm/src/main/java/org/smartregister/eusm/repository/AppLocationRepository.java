@@ -3,12 +3,17 @@ package org.smartregister.eusm.repository;
 import android.content.ContentValues;
 
 import net.sqlcipher.Cursor;
+import net.sqlcipher.SQLException;
 import net.sqlcipher.database.SQLiteDatabase;
 
+import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.smartregister.domain.Location;
 import org.smartregister.repository.BaseRepository;
 import org.smartregister.repository.LocationRepository;
+
+import java.util.HashSet;
+import java.util.Set;
 
 import timber.log.Timber;
 
@@ -54,9 +59,27 @@ public class AppLocationRepository extends LocationRepository {
             if (cursor.moveToFirst()) {
                 return readCursor(cursor);
             }
-        } catch (Exception e) {
+        } catch (SQLException e) {
             Timber.e(e);
         }
         return null;
+    }
+
+    public Set<Location> getLocationByNameAndGeoLevel(Set<String> names, String level) {
+        Set<Location> locations = new HashSet<>();
+
+        if (names == null || names.isEmpty())
+            return locations;
+        try (Cursor cursor = getReadableDatabase().rawQuery("SELECT * FROM " + getLocationTableName() +
+                " WHERE " + StringUtils.repeat(NAME + " =?", " OR ", names.size()) + " AND " + GEOGRAPHICAL_LEVEL + "=?", ArrayUtils.add(names.toArray(new String[0]), level))) {
+            if (cursor != null) {
+                while (cursor.moveToNext()) {
+                    locations.add(readCursor(cursor));
+                }
+            }
+        } catch (SQLException e) {
+            Timber.e(e);
+        }
+        return locations;
     }
 }

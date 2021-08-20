@@ -94,9 +94,8 @@ public class EusmApplicationTest extends BaseUnitTest {
         String operationalArea = UUID.randomUUID().toString();
         UserAssignmentDTO userAssignmentDTO = UserAssignmentDTO.builder().jurisdictions(Collections.singleton(operationalArea)).plans(Collections.singleton(planId)).build();
         eusmApplication.onUserAssignmentRevoked(userAssignmentDTO);
-        verify(preferencesUtil).getCurrentOperationalAreaId();
+        verify(preferencesUtil).getCurrentOperationalAreaIds();
         verify(preferencesUtil).getCurrentPlanId();
-        verifyZeroInteractions(preferencesUtil);
         Whitebox.setInternalState(PreferencesUtil.class, "instance", (PreferencesUtil) null);
     }
 
