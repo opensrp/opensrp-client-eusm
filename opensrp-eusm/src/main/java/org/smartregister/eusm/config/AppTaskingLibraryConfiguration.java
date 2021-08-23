@@ -18,7 +18,6 @@ import com.mapbox.geojson.FeatureCollection;
 
 import net.sqlcipher.database.SQLiteDatabase;
 
-import org.apache.commons.lang3.StringUtils;
 import org.json.JSONObject;
 import org.smartregister.clientandeventmodel.Event;
 import org.smartregister.commonregistry.CommonPersonObjectClient;
@@ -138,7 +137,7 @@ public class AppTaskingLibraryConfiguration extends TaskingLibraryConfiguration 
     @Override
     public String getCurrentLocationId() {
         Set<Location> currentOperationalAreas = AppUtils.getOperationalAreaLocations(PreferencesUtil.getInstance().getCurrentOperationalAreas());
-        return !currentOperationalAreas.isEmpty() ? currentOperationalAreas.stream().filter(location -> location.getId() != null).map(location -> location.getId()).collect(Collectors.joining( PreferencesUtil.OPERATIONAL_AREA_SEPARATOR)) : null;
+        return !currentOperationalAreas.isEmpty() ? currentOperationalAreas.stream().filter(location -> location.getId() != null).map(location -> location.getId()).collect(Collectors.joining(PreferencesUtil.OPERATIONAL_AREA_SEPARATOR)) : null;
     }
 
     @Override
