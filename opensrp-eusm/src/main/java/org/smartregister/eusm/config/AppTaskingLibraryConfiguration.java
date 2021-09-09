@@ -534,9 +534,9 @@ public class AppTaskingLibraryConfiguration extends TaskingLibraryConfiguration 
     public List<BaseLayerSwitchModel> getBaseLayers() {
         return Arrays.asList(
                 BaseLayerSwitchModel.builder().baseLayer(new DigitalGlobeLayer()).build(),
-                BaseLayerSwitchModel.builder().baseLayer(new MapBoxLayer()).isDefault(true).build(),
+                BaseLayerSwitchModel.builder().baseLayer(new MapBoxLayer()).build(),
                 BaseLayerSwitchModel.builder().baseLayer(new StreetsBaseLayer(EusmApplication.getInstance().getBaseContext())).build(),
-                BaseLayerSwitchModel.builder().baseLayer(new SatelliteStreetsLayer(EusmApplication.getInstance().getBaseContext())).build()
+                BaseLayerSwitchModel.builder().baseLayer(new SatelliteStreetsLayer(EusmApplication.getInstance().getBaseContext())).isDefault(true).build()
         );
     }
 

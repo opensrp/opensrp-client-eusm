@@ -141,30 +141,33 @@
             android:id="@+id/layout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:minHeight="70dp"
+            android:layout_gravity="center"
             android:layout_marginStart="10dp"
             android:layout_marginEnd="10dp"
-            android:orientation="horizontal"
-            android:layout_gravity="center"
             android:gravity="center"
+            android:orientation="horizontal"
             android:paddingTop="10dp"
             android:paddingBottom="5dp"
             android:weightSum="1">
 
             <LinearLayout
-                android:layout_width="wrap_content"
+                android:id="@+id/layout_product_looks_good"
+                android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_marginEnd="5dp"
                 android:layout_weight="0.5"
                 android:background="@drawable/login_button_bg"
                 android:gravity="center"
                 android:paddingStart="11dp"
-                android:id="@+id/layout_product_looks_good"
                 android:paddingEnd="11dp">
 
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:gravity="center"
+                    android:paddingTop="3dp"
+                    android:paddingBottom="3dp"
                     android:text="@string/looks_good_button_text"
                     android:textAllCaps="false"
                     android:textColor="@color/white"
@@ -174,29 +177,40 @@
 
             <LinearLayout
                 android:id="@+id/layout_flag_problem"
-                android:layout_width="wrap_content"
-                android:layout_height="47dp"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
                 android:layout_marginStart="5dp"
-                android:layout_weight="0.44"
+                android:layout_weight="0.5"
                 android:background="@drawable/structure_task_action_bg"
                 android:gravity="center"
                 android:orientation="horizontal">
 
-                <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:src="@drawable/ic_baseline_warning"
-                    android:textAllCaps="false" />
+                <com.google.android.flexbox.FlexboxLayout
+                    android:id="@+id/flex_box"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:alignContent="stretch"
+                    app:alignItems="stretch"
+                    app:flexWrap="wrap"
+                    app:justifyContent="center">
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:layout_marginLeft="10dp"
-                    android:gravity="center"
-                    android:text="@string/flag_problem_button_text"
-                    android:textColor="#FFB000"
-                    android:textSize="@dimen/activity_title_size"
-                    android:textStyle="bold" />
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:padding="3dp"
+                        android:src="@drawable/ic_baseline_warning" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:layout_marginStart="10dp"
+                        android:gravity="center"
+                        android:paddingBottom="3dp"
+                        android:text="@string/flag_problem_button_text"
+                        android:textColor="#FFB000"
+                        android:textSize="@dimen/activity_title_size"
+                        android:textStyle="bold" />
+                </com.google.android.flexbox.FlexboxLayout>
             </LinearLayout>
         </LinearLayout>
     </LinearLayout>

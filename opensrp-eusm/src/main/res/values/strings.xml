@@ -143,7 +143,13 @@
     <string name="date_checked">date checked</string>
     <string name="text_selected_a_cluster_point">You\'ve selected a cluster point!</string>
 
-    <string name="stock_type_id_key">identifier</string>
+    <string name="stock_type_id_key" translatable="false">identifier</string>
     <string name="ok_text">OK</string>
-
+    <string name="new_assignment_dialog_title">New Mission Assigned</string>
+    <string name="no_structures_found">There are no structures mapped to this operational area. Please add a point to begin</string>
+    <string name="fetch_location_and_structures_failed">This operational area has not been defined in the system. Please try to sync your device. Please contact the system administrator if that doesn\'t solve the issue noting the operational area number %1$s.</string>
+    <string name="account_disabled">Account Disabled</string>
+    <string name="fetching_structure_title">Fetching Structure Details</string>
+    <string name="fetching_structure_message">Fetching Structure Details. Please wait</string>
+    <string name="map_download_progress">Downloading: %,.2f %%</string>
 </resources>

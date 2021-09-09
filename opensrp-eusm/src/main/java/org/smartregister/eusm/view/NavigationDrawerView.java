@@ -5,8 +5,10 @@ import android.graphics.Typeface;
 import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.LinearLayout;
+import android.widget.ScrollView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -25,6 +27,7 @@ import org.smartregister.tasking.contract.BaseDrawerContract;
 import org.smartregister.tasking.util.PreferencesUtil;
 import org.smartregister.tasking.view.DrawerMenuView;
 import org.smartregister.util.LangUtils;
+import org.smartregister.util.NetworkUtils;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -162,7 +165,16 @@ public class NavigationDrawerView extends DrawerMenuView {
             LinearLayout buttonLayout = new LinearLayout(getContext());
             buttonLayout.setGravity(Gravity.CENTER);
 
+            LinearLayout.LayoutParams treeViewLayoutParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
+            LinearLayout treeViewLayout = new LinearLayout(getContext());
+            treeViewLayout.setOrientation(LinearLayout.VERTICAL);
+            treeViewLayout.setGravity(Gravity.CENTER);
+            treeViewLayout.setLayoutParams(treeViewLayoutParams);
+
+
+            LinearLayout.LayoutParams buttonLayoutParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
             Button okButton = new Button(getContext());
+            okButton.setLayoutParams(buttonLayoutParams);
             okButton.setText(R.string.ok_text);
             okButton.setTypeface(Typeface.DEFAULT_BOLD);
             okButton.setTextColor(getContext().getResources().getColor(R.color.white));
@@ -170,9 +182,18 @@ public class NavigationDrawerView extends DrawerMenuView {
             okButton.setTextSize(TypedValue.COMPLEX_UNIT_PX, getContext().getResources()
                     .getDimension(com.vijay.jsonwizard.R.dimen.button_text_size));
             okButton.setHeight(getContext().getResources().getDimensionPixelSize(com.vijay.jsonwizard.R.dimen.button_height));
-
             buttonLayout.addView(okButton);
-            linearLayout.addView(buttonLayout);
+
+            ScrollView scrollView = (ScrollView) linearLayout.getChildAt(0);
+            View androidTreeView = scrollView.getChildAt(0);
+            scrollView.removeView(androidTreeView);
+            treeViewLayout.addView(androidTreeView);
+            treeViewLayout.addView(buttonLayout);
+            scrollView.addView(treeViewLayout);
+            linearLayout.removeView(scrollView);
+            linearLayout.setOrientation(LinearLayout.VERTICAL);
+            linearLayout.addView(scrollView);
+
             okButton.setOnClickListener(v -> {
                 List<String> selectedValues = treeViewDialog.getTreeView().getSelectedValues(String.class);
                 getPresenter().onOperationalAreaSelectorClicked(new ArrayList<>(selectedValues));
@@ -194,5 +215,12 @@ public class NavigationDrawerView extends DrawerMenuView {
                 getPresenter().onOperationalAreaSelectorClicked(new ArrayList<>(Arrays.asList(setOpAres.split(PreferencesUtil.OPERATIONAL_AREA_SEPARATOR))));
             }
         }
+    }
+
+    @Override
+    public void toggleProgressBarView(boolean syncing) {
+        super.toggleProgressBarView(syncing);
+        View flexBox = this.activity.getActivity().findViewById(R.id.flex_box);
+        flexBox.setVisibility((syncing && NetworkUtils.isNetworkAvailable()) ? View.GONE : View.VISIBLE);
     }
 }

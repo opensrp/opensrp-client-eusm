@@ -20,6 +20,7 @@ import androidx.fragment.app.FragmentTransaction;
 
 import com.google.android.material.appbar.AppBarLayout;
 import com.google.android.material.appbar.CollapsingToolbarLayout;
+import com.vijay.jsonwizard.activities.JsonFormActivity;
 import com.vijay.jsonwizard.activities.JsonWizardFormActivity;
 import com.vijay.jsonwizard.constants.JsonFormConstants;
 import com.vijay.jsonwizard.domain.Form;
@@ -206,14 +207,14 @@ public class ProductInfoActivity extends MultiLanguageActivity implements Produc
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
         builder.setTitle(R.string.mark_as_looks_good_title);
         builder.setMessage(R.string.looks_good_dialog_message);
-        builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+        builder.setNegativeButton(getString(R.string.cancel), new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 //Do nothing
             }
         });
 
-        builder.setPositiveButton("Looks Good!", new DialogInterface.OnClickListener() {
+        builder.setPositiveButton(getString(R.string.looks_good_button_text), new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 //TODO add logic to update
@@ -257,7 +258,7 @@ public class ProductInfoActivity extends MultiLanguageActivity implements Produc
     @Override
     public void startForm(JSONObject jsonForm) {
         Form form = new Form();
-        form.setWizard(true);
+        form.setWizard(false);
         form.setName(getString(R.string.flag_problem_form_name));
         form.setBackIcon(R.drawable.ic_action_close);
         form.setSaveLabel(getString(R.string.save));
@@ -265,7 +266,7 @@ public class ProductInfoActivity extends MultiLanguageActivity implements Produc
         form.setNavigationBackground(R.color.primaryDark);
         form.setHideSaveLabel(true);
 
-        Intent intent = new Intent(getActivity(), JsonWizardFormActivity.class);
+        Intent intent = new Intent(getActivity(), JsonFormActivity.class);
         intent.putExtra(JsonFormConstants.JSON_FORM_KEY.JSON, jsonForm.toString());
         intent.putExtra(JsonFormConstants.JSON_FORM_KEY.FORM, form);
         intent.putExtra(JsonFormConstants.PERFORM_FORM_TRANSLATION, true);

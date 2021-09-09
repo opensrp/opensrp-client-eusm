@@ -38,7 +38,7 @@ public class EusmTreeViewDialog extends TreeViewDialog {
 
     @Override
     public void updateTreeNode(int level, TreeNode curNode, TreeNode parentNode) {
-        curNode.setSelectable(level > 2);
+        curNode.setSelectable(level == 3);
         boolean isSelected = operationalAreas.contains(curNode.getValue().toString());
         curNode.setSelected(isSelected);
     }
