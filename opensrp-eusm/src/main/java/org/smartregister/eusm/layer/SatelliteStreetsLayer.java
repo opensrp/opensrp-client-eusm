@@ -40,7 +40,7 @@ public class SatelliteStreetsLayer extends BaseLayer {
 
     protected void createLayersAndSources(@NonNull Context context) {
         RasterSource rasterSource = new RasterSource(satelliteSourceId, satelliteSourceId, 256);
-        VectorSource streetSource = new VectorSource(streetSourceId, "mapbox://mapbox.mapbox-streets-v8,mapbox.mapbox-terrain-v2");
+        VectorSource streetSource = new VectorSource(streetSourceId, "mapbox://mapbox.mapbox-streets-v8");
         sourcesList.add(streetSource);
         sourcesList.add(rasterSource);
 

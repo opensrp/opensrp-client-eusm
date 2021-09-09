@@ -23,14 +23,18 @@
       "data": {
         "type": "FeatureCollection",
         "features": []
-      }
+      },
+      "cluster": true,
+      "clusterMaxZoom": 13,
+      "clusterRadius": 50
     },
-    "diimagery": {
+    "mapbox-streets": {
+      "url": "mapbox://mapbox.mapbox-streets-v8",
+      "type": "vector"
+    },
+    "mapbox-satellite": {
+      "url": "mapbox://mapbox.satellite",
       "type": "raster",
-      "scheme": "tms",
-      "tiles": [
-        "https://access.maxar.com/earthservice/tmsaccess/tms/1.0.0/DigitalGlobe:ImageryTileService@EPSG:3857@png/{z}/{x}/{y}.png?connectId=DIGITAL_GLOBE_ID"
-      ],
       "tileSize": 256
     },
     "select-data": {
@@ -71,19 +75,15 @@
             "zoom"
           ],
           7.0,
-          17,
+          13,
           13.0,
-          30,
-          15.0,
-          35,
-          17.79,
-          45
+          15
         ],
         "circle-color": [
           "match",
           [
             "get",
-            "taskStatus"
+            "taskStatusType"
           ],
           [
             "in_progress"
@@ -93,7 +93,11 @@
             "completed"
           ],
           "hsl(101.6,66.8%,44.9%)",
-          "hsl(0, 0%, 64%)"
+          [
+            "not_started"
+          ],
+          "hsl(0, 0%, 64%)",
+          "hsl(100, 100%, 100%)"
         ],
         "circle-stroke-width": 2,
         "circle-opacity": 1
@@ -119,13 +123,9 @@
             "zoom"
           ],
           7.0,
-          17,
+          13,
           13.0,
-          30,
-          15.0,
-          35,
-          17.79,
-          45
+          15
         ],
         "circle-stroke-width": 2,
         "circle-stroke-color": "hsl(0, 0%, 0%)"
