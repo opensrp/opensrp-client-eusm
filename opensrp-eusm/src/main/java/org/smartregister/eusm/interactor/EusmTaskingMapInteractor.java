@@ -36,43 +36,37 @@ public class EusmTaskingMapInteractor extends TaskingMapInteractor {
 
     @Override
     public void fetchLocations(String plan, String operationalArea, String point, Boolean locationComponentActive) {
-        appExecutors.diskIO().execute(new Runnable() {
-            @Override
-            public void run() {
-                Set<Location> operationalAreaLocations = getOperationalAreaLocations(new HashSet<>(Arrays.asList(operationalArea.split(PreferencesUtil.OPERATIONAL_AREA_SEPARATOR))));
+        appExecutors.diskIO().execute(() -> {
+            Set<Location> operationalAreaLocations = getOperationalAreaLocations(new HashSet<>(Arrays.asList(operationalArea.split(PreferencesUtil.OPERATIONAL_AREA_SEPARATOR))));
 
-                JSONObject featureCollection = null;
-                try {
-                    featureCollection = createFeatureCollection();
-                    if (!operationalAreaLocations.isEmpty()) {
-                        List<StructureDetail> structureDetails = appStructureRepository
-                                .fetchStructureDetails(null, operationalAreaLocations.stream().filter(location -> location.getId() != null).map(location -> location.getId()).collect(Collectors.toSet()), null, true, plan);
+            JSONObject featureCollection = null;
+            try {
+                featureCollection = createFeatureCollection();
+                if (!operationalAreaLocations.isEmpty()) {
+                    List<StructureDetail> structureDetails = appStructureRepository
+                            .fetchStructureDetails(null, operationalAreaLocations.stream().filter(location -> location.getId() != null).map(location -> location.getId()).collect(Collectors.toSet()), null, true, plan);
 
-                        if (structureDetails != null && !structureDetails.isEmpty()) {
-                            String features = geoJsonUtils.getGeoJsonFromStructureDetail(structureDetails);
-                            featureCollection.put(TaskingConstants.GeoJSON.FEATURES, new JSONArray(features));
-                        }
+                    if (structureDetails != null && !structureDetails.isEmpty()) {
+                        String features = geoJsonUtils.getGeoJsonFromStructureDetail(structureDetails);
+                        featureCollection.put(TaskingConstants.GeoJSON.FEATURES, new JSONArray(features));
                     }
-                } catch (Exception e) {
-                    Timber.e(e);
                 }
-                JSONObject finalFeatureCollection = featureCollection;
-                appExecutors.mainThread().execute(new Runnable() {
-                    @Override
-                    public void run() {
-                        if (!operationalAreaLocations.isEmpty()) {
-                            Feature operationalAreaFeature = Feature.fromJson(gson.toJson(operationalAreaLocations.stream().findFirst().orElse(null)));
-                            if (locationComponentActive != null) {
-                                getPresenter().onStructuresFetched(finalFeatureCollection, operationalAreaFeature, null, point, locationComponentActive);
-                            } else {
-                                getPresenter().onStructuresFetched(finalFeatureCollection, operationalAreaFeature, null);
-                            }
-                        } else {
-                            getPresenter().onStructuresFetched(finalFeatureCollection, null, null);
-                        }
-                    }
-                });
+            } catch (Exception e) {
+                Timber.e(e);
             }
+            JSONObject finalFeatureCollection = featureCollection;
+            appExecutors.mainThread().execute(() -> {
+                if (!operationalAreaLocations.isEmpty()) {
+                    Feature operationalAreaFeature = Feature.fromJson(gson.toJson(operationalAreaLocations.stream().findFirst().orElse(null)));
+                    if (locationComponentActive != null) {
+                        getPresenter().onStructuresFetched(finalFeatureCollection, operationalAreaFeature, null, point, locationComponentActive);
+                    } else {
+                        getPresenter().onStructuresFetched(finalFeatureCollection, operationalAreaFeature, null);
+                    }
+                } else {
+                    getPresenter().onStructuresFetched(finalFeatureCollection, null, null);
+                }
+            });
         });
     }
 
