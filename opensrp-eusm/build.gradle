@@ -125,7 +125,7 @@ android {
         release {
             minifyEnabled false
             zipAlignEnabled true
-
+            versionNameSuffix "-release"
             resValue "string", 'opensrp_url', '"https://unicef-mg-eusm.smartregister.org/opensrp/"'
             buildConfigField "int", "DATABASE_VERSION", '1'
             buildConfigField "int", "OPENMRS_UNIQUE_ID_INITIAL_BATCH_SIZE", '250'
@@ -146,6 +146,8 @@ android {
         }
 
         debug {
+            versionNameSuffix "-debug"
+            applicationIdSuffix ".debug"
             resValue "string", 'opensrp_url', '"https://mg-eusm-staging.smartregister.org/opensrp/"'
             buildConfigField "int", "DATABASE_VERSION", '1'
             buildConfigField "int", "OPENMRS_UNIQUE_ID_INITIAL_BATCH_SIZE", '250'
