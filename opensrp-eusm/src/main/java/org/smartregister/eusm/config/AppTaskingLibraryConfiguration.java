@@ -136,8 +136,8 @@ public class AppTaskingLibraryConfiguration extends TaskingLibraryConfiguration 
 
     @Override
     public String getCurrentLocationId() {
-        Location currentOperationalArea = AppUtils.getOperationalAreaLocation(PreferencesUtil.getInstance().getCurrentOperationalArea());
-        return currentOperationalArea == null ? null : currentOperationalArea.getId();
+        Set<Location> currentOperationalAreas = AppUtils.getOperationalAreaLocations(PreferencesUtil.getInstance().getCurrentOperationalAreas());
+        return !currentOperationalAreas.isEmpty() ? currentOperationalAreas.stream().filter(location -> location.getId() != null).map(location -> location.getId()).collect(Collectors.joining(PreferencesUtil.OPERATIONAL_AREA_SEPARATOR)) : null;
     }
 
     @Override
@@ -481,6 +481,7 @@ public class AppTaskingLibraryConfiguration extends TaskingLibraryConfiguration 
 
     @Override
     public void fetchPlans(String jurisdictionName, BaseDrawerContract.Presenter presenter) {
+        // TODO: jurisdictionName comma separated
         PlanDefinitionRepository planDefinitionRepository = EusmApplication.getInstance().getPlanDefinitionRepository();
         Set<PlanDefinition> planDefinitionSet = planDefinitionRepository.findAllPlanDefinitions();
         getAppExecutors().mainThread().execute(new Runnable() {
@@ -532,10 +533,9 @@ public class AppTaskingLibraryConfiguration extends TaskingLibraryConfiguration 
     @Override
     public List<BaseLayerSwitchModel> getBaseLayers() {
         return Arrays.asList(
-                BaseLayerSwitchModel.builder().baseLayer(new DigitalGlobeLayer()).build(),
-                BaseLayerSwitchModel.builder().baseLayer(new MapBoxLayer()).isDefault(true).build(),
+                BaseLayerSwitchModel.builder().baseLayer(new MapBoxLayer()).build(),
                 BaseLayerSwitchModel.builder().baseLayer(new StreetsBaseLayer(EusmApplication.getInstance().getBaseContext())).build(),
-                BaseLayerSwitchModel.builder().baseLayer(new SatelliteStreetsLayer(EusmApplication.getInstance().getBaseContext())).build()
+                BaseLayerSwitchModel.builder().baseLayer(new SatelliteStreetsLayer(EusmApplication.getInstance().getBaseContext())).isDefault(true).build()
         );
     }
 

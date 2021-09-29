@@ -50,6 +50,7 @@
   "step1": {
     "title": "{{flag_problem.step1.title}}",
     "next": "step2",
+    "bottom_navigation": true,
     "fields": [
       {
         "key": "flag_problem",
@@ -94,6 +95,8 @@
   },
   "step2": {
     "title": "{{flag_problem.step2.title}}",
+    "bottom_navigation": true,
+    "previous": "step1",
     "fields": [
       {
         "key": "product_picture",

@@ -12,10 +12,14 @@ import org.smartregister.eusm.util.AppUtils;
 import org.smartregister.eusm.util.GeoJsonUtils;
 import org.smartregister.tasking.contract.TaskingMapActivityContract;
 import org.smartregister.tasking.interactor.TaskingMapInteractor;
+import org.smartregister.tasking.util.PreferencesUtil;
 import org.smartregister.tasking.util.TaskingConstants;
-import org.smartregister.tasking.util.Utils;
 
+import java.util.Arrays;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 import timber.log.Timber;
 
@@ -32,47 +36,41 @@ public class EusmTaskingMapInteractor extends TaskingMapInteractor {
 
     @Override
     public void fetchLocations(String plan, String operationalArea, String point, Boolean locationComponentActive) {
-        appExecutors.diskIO().execute(new Runnable() {
-            @Override
-            public void run() {
-                Location operationalAreaLocation = getOperationalAreaLocation(operationalArea);
-                JSONObject featureCollection = null;
-                try {
-                    featureCollection = createFeatureCollection();
-                    if (operationalAreaLocation != null) {
-                        List<StructureDetail> structureDetails = appStructureRepository
-                                .fetchStructureDetails(null, operationalAreaLocation.getId(), null, true, plan);
+        appExecutors.diskIO().execute(() -> {
+            Set<Location> operationalAreaLocations = getOperationalAreaLocations(new HashSet<>(Arrays.asList(operationalArea.split(PreferencesUtil.OPERATIONAL_AREA_SEPARATOR))));
 
-                        if (structureDetails != null && !structureDetails.isEmpty()) {
-                            String features = geoJsonUtils.getGeoJsonFromStructureDetail(structureDetails);
-                            featureCollection.put(TaskingConstants.GeoJSON.FEATURES, new JSONArray(features));
-                        }
+            JSONObject featureCollection = null;
+            try {
+                featureCollection = createFeatureCollection();
+                if (!operationalAreaLocations.isEmpty()) {
+                    List<StructureDetail> structureDetails = appStructureRepository
+                            .fetchStructureDetails(null, operationalAreaLocations.stream().filter(location -> location.getId() != null).map(location -> location.getId()).collect(Collectors.toSet()), null, true, plan);
+
+                    if (structureDetails != null && !structureDetails.isEmpty()) {
+                        String features = geoJsonUtils.getGeoJsonFromStructureDetail(structureDetails);
+                        featureCollection.put(TaskingConstants.GeoJSON.FEATURES, new JSONArray(features));
                     }
-                } catch (Exception e) {
-                    Timber.e(e);
                 }
-                JSONObject finalFeatureCollection = featureCollection;
-                appExecutors.mainThread().execute(new Runnable() {
-                    @Override
-                    public void run() {
-                        if (operationalAreaLocation != null) {
-                            operationalAreaId = operationalAreaLocation.getId();
-                            Feature operationalAreaFeature = Feature.fromJson(gson.toJson(operationalAreaLocation));
-                            if (locationComponentActive != null) {
-                                getPresenter().onStructuresFetched(finalFeatureCollection, operationalAreaFeature, null, point, locationComponentActive);
-                            } else {
-                                getPresenter().onStructuresFetched(finalFeatureCollection, operationalAreaFeature, null);
-                            }
-                        } else {
-                            getPresenter().onStructuresFetched(finalFeatureCollection, null, null);
-                        }
-                    }
-                });
+            } catch (Exception e) {
+                Timber.e(e);
             }
+            JSONObject finalFeatureCollection = featureCollection;
+            appExecutors.mainThread().execute(() -> {
+                if (!operationalAreaLocations.isEmpty()) {
+                    Feature operationalAreaFeature = Feature.fromJson(gson.toJson(operationalAreaLocations.stream().findFirst().orElse(null)));
+                    if (locationComponentActive != null) {
+                        getPresenter().onStructuresFetched(finalFeatureCollection, operationalAreaFeature, null, point, locationComponentActive);
+                    } else {
+                        getPresenter().onStructuresFetched(finalFeatureCollection, operationalAreaFeature, null);
+                    }
+                } else {
+                    getPresenter().onStructuresFetched(finalFeatureCollection, null, null);
+                }
+            });
         });
     }
 
-    protected Location getOperationalAreaLocation(String operationalArea) {
-        return AppUtils.getOperationalAreaLocation(operationalArea);
+    protected Set<Location> getOperationalAreaLocations(Set<String> operationalAreas) {
+        return AppUtils.getOperationalAreaLocations(operationalAreas);
     }
 }

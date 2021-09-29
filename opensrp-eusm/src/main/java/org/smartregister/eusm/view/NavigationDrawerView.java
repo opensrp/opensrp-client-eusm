@@ -1,15 +1,19 @@
 package org.smartregister.eusm.view;
 
-import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Typeface;
+import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.View;
+import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.LinearLayout;
+import android.widget.ScrollView;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.widget.PopupMenu;
 import androidx.core.util.Pair;
-
-import com.vijay.jsonwizard.customviews.TreeViewDialog;
 
 import org.apache.commons.lang3.StringUtils;
 import org.json.JSONArray;
@@ -20,15 +24,20 @@ import org.smartregister.eusm.application.EusmApplication;
 import org.smartregister.eusm.presenter.EusmBaseDrawerPresenter;
 import org.smartregister.eusm.util.AppUtils;
 import org.smartregister.tasking.contract.BaseDrawerContract;
+import org.smartregister.tasking.util.PreferencesUtil;
 import org.smartregister.tasking.view.DrawerMenuView;
 import org.smartregister.util.LangUtils;
+import org.smartregister.util.NetworkUtils;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Optional;
 
 import timber.log.Timber;
 
@@ -142,20 +151,76 @@ public class NavigationDrawerView extends DrawerMenuView {
     @Override
     public void showOperationalAreaSelector(Pair<String, ArrayList<String>> locationHierarchy) {
         try {
-            TreeViewDialog treeViewDialog = new TreeViewDialog(getContext(),
+
+            EusmTreeViewDialog treeViewDialog = new EusmTreeViewDialog(getContext(),
                     R.style.AppTheme_WideDialog,
-                    new JSONArray(locationHierarchy.first), locationHierarchy.second, new ArrayList<>());
+                    new JSONArray(locationHierarchy.first), locationHierarchy.second, new ArrayList<>(), true);
             treeViewDialog.setCancelable(true);
             treeViewDialog.setCanceledOnTouchOutside(true);
-            treeViewDialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
-                @Override
-                public void onDismiss(DialogInterface dialog) {
-                    getPresenter().onOperationalAreaSelectorClicked(treeViewDialog.getName());
-                }
+            treeViewDialog.setShouldDisableOnClickListener(true);
+
+
+            LinearLayout linearLayout = treeViewDialog.getCanvas();
+
+            LinearLayout buttonLayout = new LinearLayout(getContext());
+            buttonLayout.setGravity(Gravity.CENTER);
+
+            LinearLayout.LayoutParams treeViewLayoutParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
+            LinearLayout treeViewLayout = new LinearLayout(getContext());
+            treeViewLayout.setOrientation(LinearLayout.VERTICAL);
+            treeViewLayout.setGravity(Gravity.CENTER);
+            treeViewLayout.setLayoutParams(treeViewLayoutParams);
+
+
+            LinearLayout.LayoutParams buttonLayoutParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+            Button okButton = new Button(getContext());
+            okButton.setLayoutParams(buttonLayoutParams);
+            okButton.setText(R.string.ok_text);
+            okButton.setTypeface(Typeface.DEFAULT_BOLD);
+            okButton.setTextColor(getContext().getResources().getColor(R.color.white));
+            okButton.setBackgroundResource(com.vijay.jsonwizard.R.drawable.btn_bg);
+            okButton.setTextSize(TypedValue.COMPLEX_UNIT_PX, getContext().getResources()
+                    .getDimension(com.vijay.jsonwizard.R.dimen.button_text_size));
+            okButton.setHeight(getContext().getResources().getDimensionPixelSize(com.vijay.jsonwizard.R.dimen.button_height));
+            buttonLayout.addView(okButton);
+
+            ScrollView scrollView = (ScrollView) linearLayout.getChildAt(0);
+            View androidTreeView = scrollView.getChildAt(0);
+            scrollView.removeView(androidTreeView);
+            treeViewLayout.addView(androidTreeView);
+            treeViewLayout.addView(buttonLayout);
+            scrollView.addView(treeViewLayout);
+            linearLayout.removeView(scrollView);
+            linearLayout.setOrientation(LinearLayout.VERTICAL);
+            linearLayout.addView(scrollView);
+
+            okButton.setOnClickListener(v -> {
+                List<String> selectedValues = treeViewDialog.getTreeView().getSelectedValues(String.class);
+                getPresenter().onOperationalAreaSelectorClicked(new ArrayList<>(selectedValues));
+                treeViewDialog.cancel();
             });
             treeViewDialog.show();
         } catch (JSONException e) {
             Timber.e(e);
         }
+    }
+
+    @Override
+    public void onDrawerOpened(@NonNull View drawerView) {
+        super.onDrawerOpened(drawerView);
+        if (operationalAreaTextView != null) {
+            String opAreas = Optional.of(operationalAreaTextView.getText().toString()).orElse("");
+            String setOpAres = PreferencesUtil.getInstance().getCurrentOperationalArea();
+            if (!StringUtils.isBlank(setOpAres) && !opAreas.equals(setOpAres)) {
+                getPresenter().onOperationalAreaSelectorClicked(new ArrayList<>(Arrays.asList(setOpAres.split(PreferencesUtil.OPERATIONAL_AREA_SEPARATOR))));
+            }
+        }
+    }
+
+    @Override
+    public void toggleProgressBarView(boolean syncing) {
+        super.toggleProgressBarView(syncing);
+        View flexBox = this.activity.getActivity().findViewById(R.id.flex_box);
+        flexBox.setVisibility((syncing && NetworkUtils.isNetworkAvailable()) ? View.GONE : View.VISIBLE);
     }
 }

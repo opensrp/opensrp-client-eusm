@@ -37,8 +37,8 @@ jacoco {
 
 
 android {
-    compileSdkVersion 28
-    buildToolsVersion "29.0.3"
+    compileSdkVersion androidCompileSdkVersion
+    buildToolsVersion androidToolsBuildGradle
 
     compileOptions {
         coreLibraryDesugaringEnabled true
@@ -48,10 +48,10 @@ android {
 
     defaultConfig {
         applicationId "org.smartregister.eusm"
-        minSdkVersion 18
-        targetSdkVersion 28
-        versionCode 1
-        versionName "0.0.9"
+        minSdkVersion androidMinSdkVersion
+        targetSdkVersion androidTargetSdkVersion
+        versionCode 2
+        versionName "0.1.4"
         multiDexEnabled true
         buildConfigField "long", "MAX_SERVER_TIME_DIFFERENCE", "1800000l"
         buildConfigField "boolean", "TIME_CHECK", "false"
@@ -125,7 +125,7 @@ android {
         release {
             minifyEnabled false
             zipAlignEnabled true
-
+            versionNameSuffix "-release"
             resValue "string", 'opensrp_url', '"https://unicef-mg-eusm.smartregister.org/opensrp/"'
             buildConfigField "int", "DATABASE_VERSION", '1'
             buildConfigField "int", "OPENMRS_UNIQUE_ID_INITIAL_BATCH_SIZE", '250'
@@ -146,6 +146,8 @@ android {
         }
 
         debug {
+            versionNameSuffix "-debug"
+            applicationIdSuffix ".debug"
             resValue "string", 'opensrp_url', '"https://mg-eusm-staging.smartregister.org/opensrp/"'
             buildConfigField "int", "DATABASE_VERSION", '1'
             buildConfigField "int", "OPENMRS_UNIQUE_ID_INITIAL_BATCH_SIZE", '250'
@@ -201,7 +203,7 @@ dependencies {
 
     jarJar 'com.ibm.fhir:fhir-model:4.7.0'
 
-    implementation('org.smartregister:opensrp-client-core:4.3.10-SNAPSHOT@aar') {
+    implementation('org.smartregister:opensrp-client-core:4.3.16-SNAPSHOT@aar') {
         transitive = true
         exclude group: 'com.android.support', module: 'appcompat-v7'
         exclude group: 'com.github.ybq', module: 'Android-SpinKit'
@@ -218,7 +220,7 @@ dependencies {
         exclude group: 'com.android.support', module: 'appcompat-v7'
     }
 
-    implementation('org.smartregister:opensrp-client-native-form:2.0.6-SNAPSHOT@aar') {
+    implementation('org.smartregister:opensrp-client-native-form:2.1.8-SNAPSHOT@aar') {
         transitive = true
         exclude group: 'com.android.support', module: 'appcompat-v7'
         exclude group: 'com.android.support', module: 'cardview-v7'
@@ -229,7 +231,7 @@ dependencies {
     }
 
 //    implementation(project(':opensrp-tasking')) {
-    implementation('org.smartregister:opensrp-client-tasking:0.0.3-v17-EUSM-SNAPSHOT') {
+    implementation('org.smartregister:opensrp-client-tasking:0.0.3-v18-r8-EUSM-SNAPSHOT') {
         transitive = true
         exclude group: 'org.smartregister', module: 'opensrp-client-core'
         exclude group: 'com.ibm.fhir', module: 'fhir-model'

@@ -22,6 +22,7 @@ import org.smartregister.eusm.shadow.LayerShadow;
 import org.smartregister.eusm.shadow.LineLayerShadow;
 import org.smartregister.eusm.shadow.MapViewShadow;
 import org.smartregister.eusm.shadow.RasterLayerShadow;
+import org.smartregister.eusm.shadow.RasterSourceShadow;
 import org.smartregister.eusm.shadow.SQLiteDatabaseShadow;
 import org.smartregister.eusm.shadow.SymbolLayerShadow;
 import org.smartregister.eusm.shadow.TaskingMapViewShadow;
@@ -33,7 +34,8 @@ import org.smartregister.util.DateTimeTypeConverter;
 @PowerMockRunnerDelegate(RobolectricTestRunner.class)
 @Config(application = TestEusmApplication.class, shadows = {SymbolLayerShadow.class, LayerShadow.class,
         TaskingMapViewShadow.class, KujakuMapViewShadow.class, MapViewShadow.class,
-        SQLiteDatabaseShadow.class, CustomFontTextViewShadow.class, VectorSourceShadow.class, BackgroundLayerShadow.class, RasterLayerShadow.class, LineLayerShadow.class}, sdk = Build.VERSION_CODES.P)
+        SQLiteDatabaseShadow.class, CustomFontTextViewShadow.class, VectorSourceShadow.class, BackgroundLayerShadow.class,
+        RasterLayerShadow.class, LineLayerShadow.class, RasterSourceShadow.class}, sdk = Build.VERSION_CODES.P)
 @PowerMockIgnore({"org.mockito.*", "org.robolectric.*", "android.*"})
 public abstract class BaseUnitTest {
 

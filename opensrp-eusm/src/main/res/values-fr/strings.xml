@@ -15,9 +15,9 @@
     <string name="device_timezone_changed">Le fuseau horaire de l\'appareil a changé. Veuillez vous connecter à nouveau.</string>
     <string name="device_time_changed">L\'heure de l\'appareil a changé. Veuillez vous connecter à nouveau.</string>
 
-    <string name="prompt_password">Saisir le mot de passe</string>
-    <string name="prompt_username">Saisir l\'identifiant</string>
-    <string name="sync">Synchro</string>
+    <string name="prompt_password">Saisir mot de passe</string>
+    <string name="prompt_username">Saisir identifiant</string>
+    <string name="sync">Sync</string>
     <string name="campaign">Mission</string>
     <string name="operational_area">District</string>
     <string name="plan">Mission</string>
@@ -86,23 +86,22 @@
 
     <string name="next_page"><![CDATA[PROCHAIN >>]]></string>
     <string name="previous_page"><![CDATA[<< Précedent]]></string>
-    <string name="product_serial_n_quantity">%s  &#183; %s %s</string>
-    <string name="product_serial_text">Serial # </string>
-    <string name="product_quantity_text">Qty: </string>
-    <string name="product_serial">Serial # %s</string>
-    <string name="product_serial_n_date_checked">Serial # %s</string>
+    <string name="product_serial_text">Numéro de Série</string>
+    <string name="product_quantity_text">Quantité</string>
+    <string name="product_serial">Numéro de Série %s</string>
+    <string name="product_serial_n_date_checked">Numéro de Série %s</string>
     <string name="task_item_text">PRODUITS</string>
     <string name="task_checked_text">VERIFIÉ</string>
-    <string name="no_items_to_check">Aucun article à vérifier</string>
-    <string name="no_items_checked_yet">Aucun article n\'a encore été vérifié</string>
+    <string name="no_items_to_check">Aucun produit à vérifier</string>
+    <string name="no_items_checked_yet">Aucun produit n\'a encore été vérifié</string>
     <string name="back">Retour</string>
-    <string name="mark_as_looks_good_title">Marquer comme \" semble en bon état \" ?</string>
-    <string name="looks_good_dialog_message">Le matériel existe, il est en bon état et il est utilisé de manière appropriée.</string>
+    <string name="mark_as_looks_good_title">Confirmer « C\'est OK »\" ?</string>
+    <string name="looks_good_dialog_message">Le produit existe, il est en bon état et il est utilisé de manière appropriée.</string>
     <string name="undo_task_title">Annuler évaluation pour %s</string>
     <string name="undo_looks_good_title">Annuler \"C\'est OK !\" pour %s</string>
     <string name="undo_flag_problem_title">Annuler \"Signaler Problème\" pour %s</string>
 
-    <string name="undo_dialog_message">Ceci annulera votre évaluation sur cet article</string>
+    <string name="undo_dialog_message">Ceci annulera votre évaluation sur ce produit</string>
     <string name="undo">Annuler</string>
     <string name="cancel">Annuler</string>
     <string name="no_of_items">%s produits</string>
@@ -111,7 +110,7 @@
     <string name="is_it_being_used_appropriately">Est-il utilisé de manière appropriée?</string>
     <string name="looks_good_save_dialog">Enregistrement</string>
     <string name="fix_problem_prefix">Résoudre problème : %s</string>
-    <string name="view_inventory">Voir l\'inventaire</string>
+    <string name="view_inventory">Voir les produits</string>
     <string name="tasks_in_progress">En cours</string>
     <string name="tasks_completed">Terminé</string>
     <string name="flag_problem_button_text">Signaler un problème</string>
@@ -122,6 +121,22 @@
     <string name="gps_unknown">Localisation GPS inconnue</string>
 
     <string name="select_campaign_operational_area_title">Mission et District non définis</string>
-    <string name="service_point_check_task_title">Check point de service</string>
+    <string name="select_campaign_operational_area">Mission et district non fixé. Sélectionner dans le menu</string>
+    <string name="revoked_plan_operational_area">Mission et district ulterieurement selectionnés sont annulé(s). Sélectionner de nouveau dans le menu</string>
+    <string name="read_and_write_permission_not_granted">Permission de stockage en lecture et écriture non accordée</string>
+
+    <string name="service_point_check_task_title">Check Point de Service</string>
     <string name="record_gps_task_title">Enregistrer GPS</string>
+    <string name="location_has_no_structures">Erreur ! Il l n\'y a pa de Point de Service ici !</string>
+    <string name="date_checked">Date OK</string>
+    <string name="text_selected_a_cluster_point">Vous avez selectionné un cluster ! Faire zoom pour voir plus</string>
+
+    <string name="ok_text">OK</string>
+    <string name="new_assignment_dialog_title">Nouvelle mission créé</string>
+    <string name="no_structures_found">Il n\'y a pas de points de service actifs dans ce district</string>
+    <string name="fetch_location_and_structures_failed">Il n\'y a pas de points de service actifs dans ce district</string>
+    <string name="account_disabled">Votre compte est désactivé</string>
+    <string name="fetching_structure_title">Téléchargement des détails en cours</string>
+    <string name="fetching_structure_message">Patientez SVP. Téléchargement des détails en cours</string>
+    <string name="map_download_progress">Téléchargement : %,.2f %%</string>
 </resources>

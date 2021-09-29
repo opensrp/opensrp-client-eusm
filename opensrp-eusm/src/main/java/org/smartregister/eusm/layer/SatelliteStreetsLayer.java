@@ -8,6 +8,7 @@ import com.mapbox.mapboxsdk.style.expressions.Expression;
 import com.mapbox.mapboxsdk.style.layers.FillLayer;
 import com.mapbox.mapboxsdk.style.layers.Layer;
 import com.mapbox.mapboxsdk.style.layers.PropertyFactory;
+import com.mapbox.mapboxsdk.style.sources.RasterSource;
 import com.mapbox.mapboxsdk.style.sources.Source;
 import com.mapbox.mapboxsdk.style.sources.VectorSource;
 
@@ -31,14 +32,20 @@ public class SatelliteStreetsLayer extends BaseLayer {
     private String streetSourceId = "composite";
     private ArrayList<Source> sourcesList = new ArrayList<>();
     private LinkedHashSet<Layer> layers = new LinkedHashSet<>();
+    private String satelliteSourceId = "mapbox://mapbox.satellite";
+    private String vectorSourceId = "mapbox://mapbox.mapbox-streets-v8";
+
+    private final int tileSize = 256;
 
     public SatelliteStreetsLayer(@NonNull Context context) {
         createLayersAndSources(context);
     }
 
     protected void createLayersAndSources(@NonNull Context context) {
-        VectorSource streetSource = new VectorSource(streetSourceId, "mapbox://mapbox.mapbox-streets-v8,mapbox.mapbox-terrain-v2");
+        RasterSource rasterSource = new RasterSource(satelliteSourceId, satelliteSourceId, tileSize);
+        VectorSource streetSource = new VectorSource(streetSourceId, vectorSourceId);
         sourcesList.add(streetSource);
+        sourcesList.add(rasterSource);
 
         LayerUtil layerUtil = new LayerUtil();
 

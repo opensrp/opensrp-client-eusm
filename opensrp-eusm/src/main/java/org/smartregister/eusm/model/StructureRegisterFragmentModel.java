@@ -1,15 +1,13 @@
 package org.smartregister.eusm.model;
 
-import org.smartregister.domain.Location;
 import org.smartregister.eusm.application.EusmApplication;
 import org.smartregister.eusm.domain.StructureDetail;
 import org.smartregister.eusm.repository.AppStructureRepository;
-import org.smartregister.eusm.util.AppUtils;
 import org.smartregister.tasking.util.PreferencesUtil;
-import org.smartregister.tasking.util.Utils;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 public class StructureRegisterFragmentModel {
 
@@ -20,18 +18,18 @@ public class StructureRegisterFragmentModel {
     }
 
     public int countOfStructures(String nameFilter) {
-        Location location = AppUtils.getOperationalAreaLocation(PreferencesUtil.getInstance().getCurrentOperationalArea());
-        if (location != null) {
-            return appStructureRepository.countOfStructures(nameFilter, location.getId(), PreferencesUtil.getInstance().getCurrentPlanId());
+        Set<String> locations = PreferencesUtil.getInstance().getCurrentOperationalAreaIds();
+        if (!locations.isEmpty()) {
+            return appStructureRepository.countOfStructures(nameFilter, locations, PreferencesUtil.getInstance().getCurrentPlanId());
         } else {
             return 0;
         }
     }
 
     public List<StructureDetail> fetchStructures(int pageNo, String nameFilter) {
-        Location location = AppUtils.getOperationalAreaLocation(PreferencesUtil.getInstance().getCurrentOperationalArea());
-        if (location != null) {
-            return appStructureRepository.fetchStructureDetails(pageNo, location.getId(), nameFilter, PreferencesUtil.getInstance().getCurrentPlanId());
+        Set<String> locations = PreferencesUtil.getInstance().getCurrentOperationalAreaIds();
+        if (!locations.isEmpty()) {
+            return appStructureRepository.fetchStructureDetails(pageNo, locations, nameFilter, PreferencesUtil.getInstance().getCurrentPlanId());
         } else {
             return new ArrayList<>();
         }

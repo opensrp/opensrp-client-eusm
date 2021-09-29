@@ -34,7 +34,6 @@ public class ProductInfoFragment extends Fragment implements ProductInfoFragment
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         taskDetail = (TaskDetail) getArguments().getSerializable(AppConstants.IntentData.TASK_DETAIL);
-//        StructureDetail structureDetail = (StructureDetail) getArguments().getSerializable(AppConstants.IntentData.STRUCTURE_DETAIL);
         initializeAdapter();
         initializePresenter();
     }

@@ -353,7 +353,8 @@ public class EusmApplication extends DrishtiApplication implements TimeChangedBr
     @Override
     public void onUserAssignmentRevoked(UserAssignmentDTO userAssignmentDTO) {
         PreferencesUtil preferencesUtil = PreferencesUtil.getInstance();
-        if (userAssignmentDTO.getJurisdictions().contains(preferencesUtil.getCurrentOperationalAreaId())) {
+
+        if (userAssignmentDTO.getJurisdictions().containsAll(preferencesUtil.getCurrentOperationalAreaIds())) {
             preferencesUtil.setCurrentOperationalArea(null);
         }
         if (userAssignmentDTO.getPlans().contains(preferencesUtil.getCurrentPlanId())) {
