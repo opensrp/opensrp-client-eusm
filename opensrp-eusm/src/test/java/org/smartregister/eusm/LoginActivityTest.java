@@ -232,7 +232,7 @@ public class LoginActivityTest extends BaseActivityUnitTest {
 
         verify(loginActivity).startActivity(intentArgumentCaptor.capture());
         assertNotNull(intentArgumentCaptor.getValue());
-        assertEquals(".activity.EusmTaskingMapActivity", intentArgumentCaptor.getValue().getComponent().getShortClassName());
+        assertEquals("org.smartregister.eusm.activity.EusmTaskingMapActivity", intentArgumentCaptor.getValue().getComponent().getShortClassName());
         verify(loginActivity).finish();
     }
 

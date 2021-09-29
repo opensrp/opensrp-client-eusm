@@ -2,6 +2,7 @@ package org.smartregister.eusm.repository;
 
 import android.content.ContentValues;
 import android.location.Location;
+import android.util.Pair;
 
 import androidx.annotation.NonNull;
 
@@ -134,10 +135,28 @@ public class AppStructureRepository extends StructureRepository {
                                                        String nameFilter, boolean isForMapping, String planId) {
         if (locationParentIds == null || locationParentIds.isEmpty())
             return new ArrayList<>();
-        Location location = EusmApplication.getInstance().getUserLocation();
 
         List<StructureDetail> structureDetails = new ArrayList<>();
         SQLiteDatabase sqLiteDatabase = getReadableDatabase();
+
+        Pair<String, String[]> queryArgsPair = createFetchStructureDetailsQuery(pageNo, locationParentIds, nameFilter, planId);
+
+        try (Cursor cursor = sqLiteDatabase.rawQuery(queryArgsPair.first, queryArgsPair.second)) {
+            if (cursor != null) {
+                while (cursor.moveToNext()) {
+                    structureDetails.add(createStructureDetail(cursor, isForMapping));
+                }
+            }
+        } catch (SQLException e) {
+            Timber.e(e);
+        }
+        return structureDetails;
+    }
+
+    private Pair<String, String[]> createFetchStructureDetailsQuery(Integer pageNo, Set<String> locationParentIds,
+                                                                    String nameFilter, String planId) {
+        Location location = EusmApplication.getInstance().getUserLocation();
+
         String[] columns = new String[]{
                 STRUCTURE_TABLE + "." + "_id",
                 STRUCTURE_TABLE + "." + "name as structureName",
@@ -186,16 +205,7 @@ public class AppStructureRepository extends StructureRepository {
         query += " group by " + STRUCTURE_TABLE + "." + "_id" + " order by case when dist is null then 1 else 0 end, dist"
                 + (pageNo == null ? "" : " LIMIT " + CURRENT_LIMIT + " OFFSET " + (pageNo * CURRENT_LIMIT));
 
-        try (Cursor cursor = sqLiteDatabase.rawQuery(query, args)) {
-            if (cursor != null) {
-                while (cursor.moveToNext()) {
-                    structureDetails.add(createStructureDetail(cursor, isForMapping));
-                }
-            }
-        } catch (SQLException e) {
-            Timber.e(e);
-        }
-        return structureDetails;
+        return Pair.create(query, args);
     }
 
     private StructureDetail createStructureDetail(@NonNull Cursor cursor, boolean isForMapping) {
