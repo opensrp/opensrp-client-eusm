@@ -199,13 +199,13 @@ public class AppUtils extends Utils {
     public static org.smartregister.domain.Location getOperationalAreaLocation(String operationalArea) {
         return cache.get(operationalArea, () -> {
             return EusmApplication.getInstance().getAppLocationRepository()
-                    .getLocationByNameAndGeoLevel(operationalArea, "2");//restrict to district geographic level
+                    .getLocationByNameAndGeoLevel(operationalArea, AppConstants.LocationGeographicLevel.DISTRICT);//restrict to district geographic level
         });
     }
 
     public static Set<org.smartregister.domain.Location> getOperationalAreaLocations(Set<String> operationalAreas) {
         return EusmApplication.getInstance().getAppLocationRepository()
-                .getLocationByNameAndGeoLevel(operationalAreas, "2");//restrict to district geographic level
+                .getLocationByNameAndGeoLevel(operationalAreas, AppConstants.LocationGeographicLevel.DISTRICT);//restrict to district geographic level
     }
 
 

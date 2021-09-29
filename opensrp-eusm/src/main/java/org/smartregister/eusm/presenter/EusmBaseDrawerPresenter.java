@@ -100,7 +100,7 @@ public class EusmBaseDrawerPresenter extends BaseDrawerPresenter {
 
 
     private void cleanUpFormLocations(List<FormLocation> formLocations) {
-        if (!formLocations.isEmpty()) {
+        if (formLocations != null && !formLocations.isEmpty()) {
             FormLocation root = formLocations.get(0);
             if (root.nodes != null && !root.nodes.isEmpty()) {
                 Iterator<FormLocation> locationIterable = root.nodes.iterator();

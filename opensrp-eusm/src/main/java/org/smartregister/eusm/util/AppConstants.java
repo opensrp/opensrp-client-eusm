@@ -159,4 +159,8 @@ public interface AppConstants extends TaskingConstants {
         double MAX_ZOOM = 10d;
         double MIN_ZOOM = 5d;
     }
+
+    interface LocationGeographicLevel {
+        String DISTRICT = "2";
+    }
 }

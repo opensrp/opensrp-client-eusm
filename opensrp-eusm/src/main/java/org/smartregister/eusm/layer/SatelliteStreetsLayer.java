@@ -33,14 +33,17 @@ public class SatelliteStreetsLayer extends BaseLayer {
     private ArrayList<Source> sourcesList = new ArrayList<>();
     private LinkedHashSet<Layer> layers = new LinkedHashSet<>();
     private String satelliteSourceId = "mapbox://mapbox.satellite";
+    private String vectorSourceId = "mapbox://mapbox.mapbox-streets-v8";
+
+    private final int tileSize = 256;
 
     public SatelliteStreetsLayer(@NonNull Context context) {
         createLayersAndSources(context);
     }
 
     protected void createLayersAndSources(@NonNull Context context) {
-        RasterSource rasterSource = new RasterSource(satelliteSourceId, satelliteSourceId, 256);
-        VectorSource streetSource = new VectorSource(streetSourceId, "mapbox://mapbox.mapbox-streets-v8");
+        RasterSource rasterSource = new RasterSource(satelliteSourceId, satelliteSourceId, tileSize);
+        VectorSource streetSource = new VectorSource(streetSourceId, vectorSourceId);
         sourcesList.add(streetSource);
         sourcesList.add(rasterSource);
 

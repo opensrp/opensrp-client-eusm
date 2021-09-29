@@ -217,7 +217,6 @@ public class ProductInfoActivity extends MultiLanguageActivity implements Produc
         builder.setPositiveButton(getString(R.string.looks_good_button_text), new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                //TODO add logic to update
                 presenter.markProductAsGood(structureDetail, taskDetail);
             }
         });
