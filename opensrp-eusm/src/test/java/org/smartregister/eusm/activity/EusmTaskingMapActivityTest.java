@@ -15,17 +15,20 @@ import org.robolectric.Robolectric;
 import org.robolectric.RuntimeEnvironment;
 import org.robolectric.android.controller.ActivityController;
 import org.robolectric.util.ReflectionHelpers;
+import org.smartregister.AllConstants;
 import org.smartregister.Context;
 import org.smartregister.CoreLibrary;
 import org.smartregister.eusm.BaseActivityUnitTest;
 import org.smartregister.eusm.R;
 import org.smartregister.eusm.domain.EusmCardDetail;
 import org.smartregister.repository.AllSharedPreferences;
+import org.smartregister.util.AppProperties;
 
 import static org.junit.Assert.assertNotNull;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.doReturn;
+import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.spy;
 import static org.mockito.Mockito.verify;
 
@@ -48,6 +51,9 @@ public class EusmTaskingMapActivityTest extends BaseActivityUnitTest {
     public void setUp() {
         MockitoAnnotations.initMocks(this);
         ReflectionHelpers.setStaticField(CoreLibrary.class, "instance", coreLibrary);
+        AppProperties mockAppProperties = mock(AppProperties.class);
+        doReturn(false).when(mockAppProperties).getPropertyBoolean(eq(AllConstants.PROPERTY.ENCRYPT_SHARED_PREFERENCES));
+        doReturn(mockAppProperties).when(opensrpContext).getAppProperties();
         doReturn(opensrpContext).when(coreLibrary).context();
         doReturn(allSharedPreferences).when(opensrpContext).allSharedPreferences();
         doReturn("23.2").when(allSharedPreferences).fetchManifestVersion();
