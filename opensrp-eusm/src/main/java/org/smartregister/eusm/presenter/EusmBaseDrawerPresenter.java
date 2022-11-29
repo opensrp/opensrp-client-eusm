@@ -8,11 +8,14 @@ import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 import com.google.gson.reflect.TypeToken;
 
 import org.apache.commons.lang3.StringUtils;
+import org.json.JSONArray;
+import org.json.JSONObject;
 import org.smartregister.domain.Location;
 import org.smartregister.domain.PlanDefinitionSearch;
 import org.smartregister.domain.form.FormLocation;
 import org.smartregister.eusm.R;
 import org.smartregister.eusm.application.EusmApplication;
+import org.smartregister.eusm.util.AppConstants;
 import org.smartregister.repository.LocationRepository;
 import org.smartregister.repository.PlanDefinitionSearchRepository;
 import org.smartregister.tasking.contract.BaseDrawerContract;
@@ -29,6 +32,8 @@ import java.util.stream.Collectors;
 
 import static org.smartregister.tasking.util.TaskingConstants.Action.STRUCTURE_TASK_SYNCED;
 import static org.smartregister.tasking.util.TaskingConstants.CONFIGURATION.UPDATE_LOCATION_BUFFER_RADIUS;
+
+import timber.log.Timber;
 
 public class EusmBaseDrawerPresenter extends BaseDrawerPresenter {
 
@@ -142,5 +147,31 @@ public class EusmBaseDrawerPresenter extends BaseDrawerPresenter {
         return entireTree;
     }
 
+    @Override
+    public void onOperationalAreaSelectorClicked(ArrayList<String> names) {
+        // Extract districts from selcted regions
+        ArrayList<String> districts = new ArrayList<>();
+        try {
+            JSONArray locationHierarchy = new JSONArray(extractLocationHierarchy().first);
+            JSONArray regions = locationHierarchy.getJSONObject(0).getJSONArray(AppConstants.JsonForm.NODES);
+            for (int i=0; i<regions.length(); i++) {
+                JSONObject location = regions.getJSONObject(i);
+                String locName = location.getString(TaskingConstants.CONFIGURATION.KEY);
+                if (names.contains(locName)) {
+                    names.remove(locName);
+                    if (location.has(AppConstants.JsonForm.NODES)) {
+                        JSONArray nodes = location.getJSONArray(AppConstants.JsonForm.NODES);
+                        for (int j=0; j <nodes.length(); j++) {
+                            districts.add(nodes.getJSONObject(j).getString(TaskingConstants.CONFIGURATION.KEY));
+                        }
+                    }
+                }
+
+            }
+        } catch (Exception e) {
+            Timber.e(e);
+        }
+        super.onOperationalAreaSelectorClicked(districts);
+    }
 }
 

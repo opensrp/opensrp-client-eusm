@@ -56,6 +56,8 @@ public interface AppConstants extends TaskingConstants {
         String RECORD_GPS_FORM = "record_gps";
 
         String LOOKS_GOOD = "looks_good";
+        String NODES = "nodes";
+
     }
 
     interface EventDetailKey {
