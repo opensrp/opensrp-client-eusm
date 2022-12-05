@@ -179,7 +179,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/drawer_margin"
         android:layout_marginTop="@dimen/drawer_separator_margin"
-        android:text="@string/operational_area"
+        android:text="@string/regions"
         android:textColor="@color/text_black"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/plan_selector" />

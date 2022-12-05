@@ -152,4 +152,5 @@
     <string name="fetching_structure_title">Fetching Structure Details</string>
     <string name="fetching_structure_message">Fetching Structure Details. Please wait</string>
     <string name="map_download_progress">Downloading: %,.2f %%</string>
+    <string name="regions">Regions</string>
 </resources>

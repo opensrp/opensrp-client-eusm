@@ -54,6 +54,8 @@ public class EusmTreeViewDialog extends TreeViewDialog {
                         break;
                     }
                 }
+                // Hide District labels from hierarchy
+                location.put(AppConstants.JsonForm.NODES, new JSONArray());
             }
         }
         return opRegions;
