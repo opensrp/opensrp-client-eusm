@@ -18,16 +18,13 @@ import androidx.core.util.Pair;
 import org.apache.commons.lang3.StringUtils;
 import org.json.JSONArray;
 import org.json.JSONException;
-import org.json.JSONObject;
 import org.smartregister.eusm.BuildConfig;
 import org.smartregister.eusm.R;
 import org.smartregister.eusm.application.EusmApplication;
 import org.smartregister.eusm.presenter.EusmBaseDrawerPresenter;
-import org.smartregister.eusm.util.AppConstants;
 import org.smartregister.eusm.util.AppUtils;
 import org.smartregister.tasking.contract.BaseDrawerContract;
 import org.smartregister.tasking.util.PreferencesUtil;
-import org.smartregister.tasking.util.TaskingConstants;
 import org.smartregister.tasking.view.DrawerMenuView;
 import org.smartregister.util.LangUtils;
 import org.smartregister.util.NetworkUtils;
@@ -37,10 +34,12 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Optional;
+import java.util.Set;
 
 import timber.log.Timber;
 
@@ -236,25 +235,14 @@ public class NavigationDrawerView extends DrawerMenuView {
         }
     }
 
-    private String getRegionsFromDistricta(String districts) throws JSONException{
-        ArrayList<String> opRegions = new ArrayList<>();
-        List<String> operationalAreas  = Arrays.asList(districts.split(","));
+    private String getRegionsFromDistricta(String districts) throws Exception{
         JSONArray locationHierarchy = new JSONArray(((EusmBaseDrawerPresenter) getPresenter()).extractLocationHierarchy().first);
-        JSONArray regions = locationHierarchy.getJSONObject(0).getJSONArray(AppConstants.JsonForm.NODES);
-        for (int i = 0; i < regions.length(); i++) {
-            JSONObject location = regions.getJSONObject(i);
-            String locName = location.getString(TaskingConstants.CONFIGURATION.KEY);
-            if (location.has(AppConstants.JsonForm.NODES)) {
-                JSONArray childNodes = location.getJSONArray(AppConstants.JsonForm.NODES);
-                for (int j = 0; j < childNodes.length(); j++) {
-                    if (operationalAreas.contains(childNodes.getJSONObject(j).getString(TaskingConstants.CONFIGURATION.KEY))) {
-                        opRegions.add(locName);
-                        break;
-                    }
-                }
-                location.put(AppConstants.JsonForm.NODES, new JSONArray());
-            }
-        }
+        Set<String> operationalAreas  = new HashSet<>(Arrays.asList(districts.split(",")));
+        ArrayList<String> opRegions = AppUtils.getRegionsForDistricts(
+                locationHierarchy,
+                operationalAreas,
+                false
+        );
         return opRegions.toString();
     }
 }

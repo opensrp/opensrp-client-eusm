@@ -1,5 +1,12 @@
 package org.smartregister.eusm.util;
 
+import static org.smartregister.client.utils.constants.JsonFormConstants.Properties.DETAILS;
+import static org.smartregister.eusm.util.AppConstants.STRUCTURE_IDS;
+import static org.smartregister.tasking.interactor.BaseInteractor.gson;
+import static org.smartregister.tasking.util.Constants.METADATA;
+import static org.smartregister.util.JsonFormUtils.ENTITY_ID;
+import static org.smartregister.util.JsonFormUtils.getString;
+
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
@@ -29,6 +36,7 @@ import org.smartregister.eusm.application.EusmApplication;
 import org.smartregister.eusm.domain.StructureDetail;
 import org.smartregister.eusm.repository.AppStructureRepository;
 import org.smartregister.repository.BaseRepository;
+import org.smartregister.tasking.util.TaskingConstants;
 import org.smartregister.tasking.util.Utils;
 import org.smartregister.util.Cache;
 import org.smartregister.util.JsonFormUtils;
@@ -36,6 +44,7 @@ import org.smartregister.util.JsonFormUtils;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.HashSet;
@@ -47,13 +56,6 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 import timber.log.Timber;
-
-import static org.smartregister.client.utils.constants.JsonFormConstants.Properties.DETAILS;
-import static org.smartregister.eusm.util.AppConstants.STRUCTURE_IDS;
-import static org.smartregister.tasking.interactor.BaseInteractor.gson;
-import static org.smartregister.tasking.util.Constants.METADATA;
-import static org.smartregister.util.JsonFormUtils.ENTITY_ID;
-import static org.smartregister.util.JsonFormUtils.getString;
 
 public class AppUtils extends Utils {
 
@@ -248,5 +250,28 @@ public class AppUtils extends Utils {
 
             structureRepository.addOrUpdate(location);
         }
+    }
+
+    public static ArrayList<String> getRegionsForDistricts(JSONArray locationHierarchy, Set<String> districts, boolean hideDistricts) throws Exception {
+        ArrayList<String> opRegions = new ArrayList<>();
+        JSONArray regions = locationHierarchy.getJSONObject(0).getJSONArray(AppConstants.JsonForm.NODES);
+        for (int i = 0; i < regions.length(); i++) {
+            JSONObject location = regions.getJSONObject(i);
+            String locName = location.getString(TaskingConstants.CONFIGURATION.KEY);
+            if (location.has(AppConstants.JsonForm.NODES)) {
+                JSONArray childNodes = location.getJSONArray(AppConstants.JsonForm.NODES);
+                for (int j = 0; j < childNodes.length(); j++) {
+                    if (districts.contains(childNodes.getJSONObject(j).getString(TaskingConstants.CONFIGURATION.KEY))) {
+                        opRegions.add(locName);
+                        break;
+                    }
+                }
+                // Hide District labels from hierarchy
+                if (hideDistricts) {
+                    location.put(AppConstants.JsonForm.NODES, new JSONArray());
+                }
+            }
+        }
+        return opRegions;
     }
 }

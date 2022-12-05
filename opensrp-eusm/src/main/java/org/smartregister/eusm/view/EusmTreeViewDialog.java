@@ -8,10 +8,9 @@ import com.vijay.jsonwizard.customviews.TreeViewDialog;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-import org.smartregister.eusm.util.AppConstants;
+import org.smartregister.eusm.util.AppUtils;
 import org.smartregister.eusm.viewholder.TreeSelectionItemViewHolder;
 import org.smartregister.tasking.util.PreferencesUtil;
-import org.smartregister.tasking.util.TaskingConstants;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -33,32 +32,17 @@ public class EusmTreeViewDialog extends TreeViewDialog {
         try {
             // Get selected regions from districts
             this.operationalRegions = populateOperationalRegions(nodes);
-        } catch (JSONException e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
         super.init(nodes, defaultValue, value, isSelectionMode);
     }
 
-    private Set<String> populateOperationalRegions(JSONArray nodes) throws JSONException {
-        Set<String> opRegions = new HashSet<>();
-        Set<String> operationalAreas = PreferencesUtil.getInstance().getCurrentOperationalAreas();
-        JSONArray regions = nodes.getJSONObject(0).getJSONArray(AppConstants.JsonForm.NODES);
-        for (int i = 0; i < regions.length(); i++) {
-            JSONObject location = regions.getJSONObject(i);
-            String locName = location.getString(TaskingConstants.CONFIGURATION.KEY);
-            if (location.has(AppConstants.JsonForm.NODES)) {
-                JSONArray childNodes = location.getJSONArray(AppConstants.JsonForm.NODES);
-                for (int j = 0; j < childNodes.length(); j++) {
-                    if (operationalAreas.contains(childNodes.getJSONObject(j).getString(TaskingConstants.CONFIGURATION.KEY))) {
-                        opRegions.add(locName);
-                        break;
-                    }
-                }
-                // Hide District labels from hierarchy
-                location.put(AppConstants.JsonForm.NODES, new JSONArray());
-            }
-        }
-        return opRegions;
+    private Set<String> populateOperationalRegions(JSONArray nodes) throws Exception {
+        ArrayList<String> regions = AppUtils.getRegionsForDistricts(nodes,
+                PreferencesUtil.getInstance().getCurrentOperationalAreas(),
+                true);
+        return new HashSet<>(regions);
     }
 
     @Override
