@@ -71,7 +71,7 @@ public class AppLocationRepository extends LocationRepository {
         if (names == null || names.isEmpty())
             return locations;
         try (Cursor cursor = getReadableDatabase().rawQuery("SELECT * FROM " + getLocationTableName() +
-                " WHERE " + StringUtils.repeat(NAME + " =?", " OR ", names.size()) + " AND " + GEOGRAPHICAL_LEVEL + "=?", ArrayUtils.add(names.toArray(new String[0]), level))) {
+                " WHERE " + StringUtils.repeat("(" + NAME + " =? AND " + GEOGRAPHICAL_LEVEL + " = " + level + ")", " OR ", names.size()), names.toArray(new String[0]))) {
             if (cursor != null) {
                 while (cursor.moveToNext()) {
                     locations.add(readCursor(cursor));

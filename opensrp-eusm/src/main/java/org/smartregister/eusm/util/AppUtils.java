@@ -171,9 +171,9 @@ public class AppUtils extends Utils {
         return Arrays.stream(StringUtils.split(structureIds, ",")).collect(Collectors.toSet());
     }
 
-    public static Set<String> getDistrictsFromLocationHierarchy() {
+    public static Set<String> getLocationLevelFromLocationHierarchy(String tag) {
         org.smartregister.domain.jsonmapping.util.LocationTree locationTree = gson.fromJson(CoreLibrary.getInstance().context().allSettings().fetchANMLocation(), org.smartregister.domain.jsonmapping.util.LocationTree.class);
-        Set<String> districtIds = new HashSet<>();
+        Set<String> locationIds = new HashSet<>();
         if (locationTree != null) {
             Set<String> parentLocations = new HashSet<>();
             LinkedHashMap<String, LinkedHashSet<String>> hashMap = locationTree.getChildParent();
@@ -185,12 +185,12 @@ public class AppUtils extends Utils {
             for (String id : parentLocations) {
                 Location location = locationTree.findLocation(id);
                 if (location != null && StringUtils.isNotBlank(location.getLocationId())
-                        && location.hasTag(AppConstants.LocationLevels.DISTRICT_TAG)) {
-                    districtIds.add(location.getLocationId());
+                        && location.hasTag(tag)) {
+                    locationIds.add(location.getLocationId());
                 }
             }
         }
-        return districtIds;
+        return locationIds;
     }
 
     public static String getStringFromJsonElement(JsonObject jsonObject, String key) {
@@ -201,7 +201,7 @@ public class AppUtils extends Utils {
     public static org.smartregister.domain.Location getOperationalAreaLocation(String operationalArea) {
         return cache.get(operationalArea, () -> {
             return EusmApplication.getInstance().getAppLocationRepository()
-                    .getLocationByNameAndGeoLevel(operationalArea, AppConstants.LocationGeographicLevel.DISTRICT);//restrict to district geographic level
+                    .getLocationByNameAndGeoLevel(operationalArea, AppConstants.LocationGeographicLevel.REGION);//restrict to region geographic level
         });
     }
 

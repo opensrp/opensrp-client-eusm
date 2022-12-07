@@ -229,13 +229,13 @@ public class NavigationDrawerView extends DrawerMenuView {
     @Override
     public void setOperationalArea(String operationalArea) {
         try {
-            super.setOperationalArea(getRegionsFromDistricta(operationalArea));
+            super.setOperationalArea(getRegionsFromDistricts(operationalArea));
         } catch (Exception e) {
             Timber.e(e);
         }
     }
 
-    private String getRegionsFromDistricta(String districts) throws Exception{
+    private String getRegionsFromDistricts(String districts) throws Exception{
         JSONArray locationHierarchy = new JSONArray(((EusmBaseDrawerPresenter) getPresenter()).extractLocationHierarchy().first);
         Set<String> operationalAreas  = new HashSet<>(Arrays.asList(districts.split(",")));
         ArrayList<String> opRegions = AppUtils.getRegionsForDistricts(

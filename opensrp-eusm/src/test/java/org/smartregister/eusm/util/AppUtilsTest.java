@@ -96,7 +96,7 @@ public class AppUtilsTest extends BaseUnitTest {
         AllSettings allSettings = mock(AllSettings.class);
         doReturn(strLocationHierarchy).when(allSettings).fetchANMLocation();
         ReflectionHelpers.setField(TestEusmApplication.getInstance().context(), "allSettings", allSettings);
-        Set<String> districts = AppUtils.getDistrictsFromLocationHierarchy();
+        Set<String> districts = AppUtils.getLocationLevelFromLocationHierarchy(AppConstants.LocationGeographicLevel.DISTRICT);
         assertFalse(districts.isEmpty());
         assertEquals(2, districts.size());
         assertTrue(districts.contains("a9d70fa1-ec3c-49f1-8e8b-6ae781b395e7"));
