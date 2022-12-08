@@ -140,7 +140,7 @@ public class EusmBaseDrawerPresenterTest extends BaseUnitTest {
     }
 
     @Test
-    public void testGetEntireTreeShouldFilterOutDistrictNotInPlan() {
+    public void testGetEntireTreeShouldNotFIlterANyDistrict() {
         String jurisdictionId = "34324";
         String planId = UUID.randomUUID().toString();
         PreferencesUtil preferencesUtil = mock(PreferencesUtil.class);
@@ -177,8 +177,8 @@ public class EusmBaseDrawerPresenterTest extends BaseUnitTest {
         assertNotNull(result);
         assertNotNull(entireTreeResult);
 
-        assertEquals(2, entireTreeResult.get(0).nodes.get(0).nodes.size());
+        assertEquals(4, entireTreeResult.get(0).nodes.get(0).nodes.size());
         assertEquals("FENERIVE EST", entireTreeResult.get(0).nodes.get(0).nodes.get(0).name);
-        assertEquals("SOANIERANA IVONGO", entireTreeResult.get(0).nodes.get(0).nodes.get(1).name);
+        assertEquals("MANANARA AVARATRA", entireTreeResult.get(0).nodes.get(0).nodes.get(1).name);
     }
 }
