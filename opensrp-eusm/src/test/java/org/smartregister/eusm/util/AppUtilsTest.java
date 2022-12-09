@@ -2,6 +2,7 @@ package org.smartregister.eusm.util;
 
 import com.vijay.jsonwizard.constants.JsonFormConstants;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.junit.Test;
@@ -19,6 +20,8 @@ import org.smartregister.repository.AllSharedPreferences;
 import org.smartregister.repository.BaseRepository;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.UUID;
@@ -102,5 +105,18 @@ public class AppUtilsTest extends BaseUnitTest {
         assertTrue(districts.contains("a9d70fa1-ec3c-49f1-8e8b-6ae781b395e7"));
         assertTrue(districts.contains("36be60f1-dde6-4c5a-80ae-08df201ff1c5"));
         ReflectionHelpers.setField(TestEusmApplication.getInstance().context(), "allSettings", null);
+    }
+
+    @Test
+    public void testGetRegionsForDistrictsShouldReturnRegionsForTheDistrictsList() throws Exception{
+        String locationHierarchy = "[{\"key\":\"Madagascar\",\"level\":\"\",\"name\":\"Madagascar\",\"nodes\":[{\"key\":\"ANDROY\",\"level\":\"\",\"name\":\"ANDROY\",\"nodes\":[{\"key\":\"Ambovombe\",\"level\":\"\",\"name\":\"Ambovombe\",\"nodes\":[]},{\"key\":\"Bekily\",\"level\":\"\",\"name\":\"Bekily\",\"nodes\":[]},{\"key\":\"Beloha\",\"level\":\"\",\"name\":\"Beloha\",\"nodes\":[]},{\"key\":\"Tsihombe\",\"level\":\"\",\"name\":\"Tsihombe\",\"nodes\":[]}]},{\"key\":\"ATSIMO ATSINANANA\",\"level\":\"\",\"name\":\"ATSIMO ATSINANANA\",\"nodes\":[{\"key\":\"Befotaka\",\"level\":\"\",\"name\":\"Befotaka\",\"nodes\":[]},{\"key\":\"Farafangana\",\"level\":\"\",\"name\":\"Farafangana\",\"nodes\":[]},{\"key\":\"Midongy Atsimo\",\"level\":\"\",\"name\":\"Midongy Atsimo\",\"nodes\":[]},{\"key\":\"Vangaindrano\",\"level\":\"\",\"name\":\"Vangaindrano\",\"nodes\":[]},{\"key\":\"Vondrozo\",\"level\":\"\",\"name\":\"Vondrozo\",\"nodes\":[]}]},{\"key\":\"ITASY\",\"level\":\"\",\"name\":\"ITASY\",\"nodes\":[{\"key\":\"Arivonimamo\",\"level\":\"\",\"name\":\"Arivonimamo\",\"nodes\":[]},{\"key\":\"Miarinarivo\",\"level\":\"\",\"name\":\"Miarinarivo\",\"nodes\":[]},{\"key\":\"Soavinandriana\",\"level\":\"\",\"name\":\"Soavinandriana\",\"nodes\":[]}]}]}]";
+        JSONArray arrayLocationHierarchy = new JSONArray(locationHierarchy);
+
+        String districts = "Ambovombe,Midongy Atsimo,Vondrozo,Arivonimamo,Soavinandriana,Vangaindrano,Befotaka,Bekily,Miarinarivo,Tsihombe,Beloha,Farafangana";
+        HashSet<String> operationalAreas = new HashSet<>(Arrays.asList(districts.split(",")));
+
+        ArrayList<String> regions = AppUtils.getRegionsForDistricts(arrayLocationHierarchy, operationalAreas, false);
+        assertEquals(3, regions.size());
+        assertEquals(Arrays.asList("ANDROY,ATSIMO ATSINANANA,ITASY".split(",")), regions);
     }
 }
