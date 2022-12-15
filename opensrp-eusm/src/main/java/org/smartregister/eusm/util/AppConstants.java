@@ -134,6 +134,7 @@ public interface AppConstants extends TaskingConstants {
     interface JsonFormKey {
         String PRODUCT_PICTURE = "product_picture";
         String GPS = "gps";
+        String IS_WAREHOUSE = "is_warehouse";
     }
 
     interface CardDetailKeys {
