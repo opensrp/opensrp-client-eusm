@@ -1,39 +1,40 @@
 [main]
 host = https://www.transifex.com
 
-[opensrp-eusm.strings-xml]
-file_filter = opensrp-eusm/src/main/res/values-<lang>/strings.xml
-minimum_perc = 0
-source_file = opensrp-eusm/src/main/res/values/strings.xml
-source_lang = en
-type = ANDROID
-
-[opensrp-eusm.fix_problem-properties]
+[o:opensrp:p:opensrp-eusm:r:fix_problem-properties]
 file_filter = opensrp-eusm/src/main/resources/fix_problem_<lang>.properties
 source_file = opensrp-eusm/src/main/resources/fix_problem.properties
 source_lang = en
-type = UNICODEPROPERTIES
+type        = UNICODEPROPERTIES
 
-[opensrp-eusm.flag_problem-properties]
+[o:opensrp:p:opensrp-eusm:r:flag_problem-properties]
 file_filter = opensrp-eusm/src/main/resources/flag_problem_<lang>.properties
 source_file = opensrp-eusm/src/main/resources/flag_problem.properties
 source_lang = en
-type = UNICODEPROPERTIES
+type        = UNICODEPROPERTIES
 
-[opensrp-eusm.looks_good-properties]
-file_filter = opensrp-eusm/src/main/resources/looks_good_<lang>.properties
+[o:opensrp:p:opensrp-eusm:r:looks_good-properties]
+file_filter = opensrp-eusm/clearsrc/main/resources/looks_good_<lang>.properties
 source_file = opensrp-eusm/src/main/resources/looks_good.properties
 source_lang = en
-type = UNICODEPROPERTIES
+type        = UNICODEPROPERTIES
 
-[opensrp-eusm.record_gps-properties]
+[o:opensrp:p:opensrp-eusm:r:record_gps-properties]
 file_filter = opensrp-eusm/src/main/resources/record_gps_<lang>.properties
 source_file = opensrp-eusm/src/main/resources/record_gps.properties
 source_lang = en
-type = UNICODEPROPERTIES
+type        = UNICODEPROPERTIES
 
-[opensrp-eusm.service_point_check-properties]
+[o:opensrp:p:opensrp-eusm:r:service_point_check-properties]
 file_filter = opensrp-eusm/src/main/resources/service_point_check_<lang>.properties
 source_file = opensrp-eusm/src/main/resources/service_point_check.properties
 source_lang = en
-type = UNICODEPROPERTIES
+type        = UNICODEPROPERTIES
+
+[o:opensrp:p:opensrp-eusm:r:strings-xml]
+file_filter  = opensrp-eusm/src/main/res/values-<lang>/strings.xml
+source_file  = opensrp-eusm/src/main/res/values/strings.xml
+source_lang  = en
+type         = ANDROID
+minimum_perc = 0
+
