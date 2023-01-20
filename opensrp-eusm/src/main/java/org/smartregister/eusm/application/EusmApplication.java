@@ -31,6 +31,7 @@ import org.smartregister.eusm.config.EusmContext;
 import org.smartregister.eusm.config.EusmStockSyncConfiguration;
 import org.smartregister.eusm.config.ServicePointType;
 import org.smartregister.eusm.job.AppJobCreator;
+import org.smartregister.eusm.job.LocationTaskServiceJob;
 import org.smartregister.eusm.processor.AppClientProcessor;
 import org.smartregister.eusm.repository.AppLocationRepository;
 import org.smartregister.eusm.repository.AppRepository;
@@ -39,6 +40,8 @@ import org.smartregister.eusm.repository.AppTaskRepository;
 import org.smartregister.eusm.repository.EusmRepository;
 import org.smartregister.eusm.util.AppConstants;
 import org.smartregister.eusm.util.AppUtils;
+import org.smartregister.job.DocumentConfigurationServiceJob;
+import org.smartregister.job.ImageUploadServiceJob;
 import org.smartregister.location.helper.LocationHelper;
 import org.smartregister.pathevaluator.PathEvaluatorLibrary;
 import org.smartregister.receiver.SyncStatusBroadcastReceiver;
@@ -180,6 +183,8 @@ public class EusmApplication extends DrishtiApplication implements TimeChangedBr
         ValidateAssignmentReceiver.init(this);
 
         ValidateAssignmentReceiver.getInstance().addListener(this);
+
+        cancelPreviousJobsIfRequired();
     }
 
     /**
@@ -450,5 +455,13 @@ public class EusmApplication extends DrishtiApplication implements TimeChangedBr
             locations.addAll(districtsIds);
             userService.saveJurisdictionIds(locations);
         });
+    }
+
+    private void cancelPreviousJobsIfRequired() {
+        if (BuildConfig.CANCEL_PREVIOUSLY_SCHEDULED_JOBS) {
+            JobManager.instance().cancelAllForTag(LocationTaskServiceJob.TAG);
+            JobManager.instance().cancelAllForTag(ImageUploadServiceJob.TAG);
+            JobManager.instance().cancelAllForTag(DocumentConfigurationServiceJob.TAG);
+        }
     }
 }

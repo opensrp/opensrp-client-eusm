@@ -140,6 +140,7 @@ android {
             buildConfigField "boolean", "DISPLAY_DISTANCE_SCALE", 'true'
             buildConfigField "String[]", "FACILITY_LEVELS", '{"Country", "Region", "District"}'
             buildConfigField "String[]", "LOCATION_LEVELS", '{"Country", "Region", "District"}'
+            buildConfigField "boolean", "CANCEL_PREVIOUSLY_SCHEDULED_JOBS", 'true'
 
             testCoverageEnabled true
         }
@@ -162,6 +163,7 @@ android {
             buildConfigField "boolean", "DISPLAY_DISTANCE_SCALE", 'true'
             buildConfigField "String[]", "FACILITY_LEVELS", '{"Country", "Region", "District"}'
             buildConfigField "String[]", "LOCATION_LEVELS", '{"Country", "Region", "District"}'
+            buildConfigField "boolean", "CANCEL_PREVIOUSLY_SCHEDULED_JOBS", 'true'
 
             testCoverageEnabled true
         }
