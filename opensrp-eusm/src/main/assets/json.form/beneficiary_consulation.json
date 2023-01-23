@@ -48,118 +48,95 @@
     "encounter_location": ""
   },
   "step1": {
-    "title": "{{service_point_check.step1.title}}",
+    "title": "Consult Beneficiaries",
     "display_back_button": true,
     "fields": [
       {
-        "key": "other_products_action",
+        "key": "consult_beneficiaries",
         "openmrs_entity_parent": "",
         "openmrs_entity": "",
         "openmrs_entity_id": "",
         "type": "native_radio",
-        "label": "{{service_point_check.step1.other_products_action.label}}",
+        "label": "Did you consult beneficiaries during your visit?",
         "options": [
           {
             "key": "yes",
-            "text": "{{service_point_check.step1.other_products_action.options.yes.text}}"
+            "text": "Yes"
           },
           {
             "key": "no",
-            "text": "{{service_point_check.step1.other_products_action.options.no.text}}"
+            "text": "No"
           }
         ],
         "v_required": {
           "value": true,
-          "err": "{{service_point_check.step1.other_products_action.v_required.err}}"
+          "err": "Field required"
         }
       },
       {
-        "key": "other_products_action_description",
+        "key": "consult_beneficiaries_consulted_with",
         "openmrs_entity_parent": "",
         "openmrs_entity": "",
         "openmrs_entity_id": "",
         "type": "edit_text",
-        "hint": "{{service_point_check.step1.other_products_action_description.hint}}",
+        "hint": "Describe who you consulted with",
         "relevance": {
-          "step1:other_products_action": {
+          "step1:consult_beneficiaries": {
             "type": "string",
             "ex": "equalTo(., \"yes\")"
           }
-        }
-      },
-      {
-        "key": "other_needed_products",
-        "openmrs_entity_parent": "",
-        "openmrs_entity": "",
-        "openmrs_entity_id": "",
-        "type": "native_radio",
-        "label": "{{service_point_check.step1.other_needed_products.label}}",
-        "options": [
-          {
-            "key": "yes",
-            "text": "{{service_point_check.step1.other_needed_products.options.yes.text}}"
-          },
-          {
-            "key": "no",
-            "text": "{{service_point_check.step1.other_needed_products.options.no.text}}"
-          }
-        ],
+        },
         "v_required": {
           "value": true,
-          "err": "{{service_point_check.step1.other_needed_products.v_required.err}}"
+          "err": "Field required"
         }
       },
       {
-        "key": "other_needed_products_description",
+        "key": "consult_beneficiaries_issues_raised",
         "openmrs_entity_parent": "",
         "openmrs_entity": "",
         "openmrs_entity_id": "",
         "type": "edit_text",
-        "hint": "{{service_point_check.step1.other_needed_products_description.hint}}",
+        "hint": "What issues were raised?",
         "relevance": {
-          "step1:other_needed_products": {
+          "step1:consult_beneficiaries": {
             "type": "string",
             "ex": "equalTo(., \"yes\")"
           }
+        },
+        "v_required": {
+          "value": true,
+          "err": "Field required"
         }
       },
       {
-        "key": "service_point_good_order",
+        "key": "consult_beneficiaries_flag",
         "openmrs_entity_parent": "",
         "openmrs_entity": "",
         "openmrs_entity_id": "",
         "type": "native_radio",
-        "label": "{{service_point_check.step1.service_point_good_order.label}}",
+        "label": "Should you raise a flag for the issues raised?",
         "options": [
           {
             "key": "yes",
-            "text": "{{service_point_check.step1.service_point_good_order.options.yes.text}}"
+            "text": "Yes"
           },
           {
             "key": "no",
-            "text": "{{service_point_check.step1.service_point_good_order.options.no.text}}"
+            "text": "No"
           }
         ],
         "v_required": {
           "value": true,
-          "err": "{{service_point_check.step1.service_point_good_order.v_required.err}}"
-        }
-      },
-      {
-        "key": "service_point_not_good_order_reason",
-        "openmrs_entity_parent": "",
-        "openmrs_entity": "",
-        "openmrs_entity_id": "",
-        "type": "edit_text",
-        "hint": "{{service_point_check.step1.service_point_not_good_order_reason.hint}}",
+          "err": "Field required"
+        },
         "relevance": {
-          "step1:service_point_good_order": {
+          "step1:consult_beneficiaries": {
             "type": "string",
-            "ex": "equalTo(., \"no\")"
+            "ex": "equalTo(., \"yes\")"
           }
         }
       }
     ]
-  },
-  "properties_file_name": "service_point_check"
+  }
 }

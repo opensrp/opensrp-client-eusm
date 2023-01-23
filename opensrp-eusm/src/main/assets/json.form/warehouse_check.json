@@ -1,6 +1,6 @@
 {
   "count": "1",
-  "encounter_type": "service_point_check",
+  "encounter_type": "warehouse_check",
   "form_version": "0.0.1",
   "entity_id": "",
   "metadata": {
@@ -52,114 +52,173 @@
     "display_back_button": true,
     "fields": [
       {
-        "key": "other_products_action",
+        "key": "expired_supplies",
         "openmrs_entity_parent": "",
         "openmrs_entity": "",
         "openmrs_entity_id": "",
         "type": "native_radio",
-        "label": "{{service_point_check.step1.other_products_action.label}}",
+        "label": "Are there any expired supplies?",
         "options": [
           {
             "key": "yes",
-            "text": "{{service_point_check.step1.other_products_action.options.yes.text}}"
+            "text": "Yes"
           },
           {
             "key": "no",
-            "text": "{{service_point_check.step1.other_products_action.options.no.text}}"
+            "text": "No"
           }
         ],
         "v_required": {
           "value": true,
-          "err": "{{service_point_check.step1.other_products_action.v_required.err}}"
+          "err": "Field required"
         }
       },
       {
-        "key": "other_products_action_description",
+        "key": "expired_supplies_three_months",
+        "openmrs_entity_parent": "",
+        "openmrs_entity": "",
+        "openmrs_entity_id": "",
+        "type": "native_radio",
+        "label": "Are there any supplies which will expire in the next 3 months?",
+        "options": [
+          {
+            "key": "yes",
+            "text": "Yes"
+          },
+          {
+            "key": "no",
+            "text": "No"
+          }
+        ],
+        "v_required": {
+          "value": true,
+          "err": "Field required"
+        }
+      },
+      {
+        "key": "expired_supplies_three_months_list",
         "openmrs_entity_parent": "",
         "openmrs_entity": "",
         "openmrs_entity_id": "",
         "type": "edit_text",
-        "hint": "{{service_point_check.step1.other_products_action_description.hint}}",
+        "hint": "Enter supplies that are due for expiry",
         "relevance": {
-          "step1:other_products_action": {
+          "step1:expired_supplies_three_months": {
             "type": "string",
             "ex": "equalTo(., \"yes\")"
           }
+        },
+        "v_required": {
+          "value": true,
+          "err": "Field required"
         }
       },
       {
-        "key": "other_needed_products",
+        "key": "is_storage_space_guarded",
         "openmrs_entity_parent": "",
         "openmrs_entity": "",
         "openmrs_entity_id": "",
         "type": "native_radio",
-        "label": "{{service_point_check.step1.other_needed_products.label}}",
+        "label": "Is the storage space secured and guarded?",
         "options": [
           {
             "key": "yes",
-            "text": "{{service_point_check.step1.other_needed_products.options.yes.text}}"
+            "text": "Yes"
           },
           {
             "key": "no",
-            "text": "{{service_point_check.step1.other_needed_products.options.no.text}}"
+            "text": "No"
           }
         ],
         "v_required": {
           "value": true,
-          "err": "{{service_point_check.step1.other_needed_products.v_required.err}}"
+          "err": "Field required"
         }
       },
       {
-        "key": "other_needed_products_description",
+        "key": "storage_conditions_satisfactory",
+        "openmrs_entity_parent": "",
+        "openmrs_entity": "",
+        "openmrs_entity_id": "",
+        "type": "native_radio",
+        "label": "Are the storage conditions satisfactory (free from rodents, dry, properly stacked)?",
+        "options": [
+          {
+            "key": "yes",
+            "text": "Yes"
+          },
+          {
+            "key": "no",
+            "text": "No"
+          }
+        ],
+        "v_required": {
+          "value": true,
+          "err": "Field required"
+        }
+      },
+      {
+        "key": "storage_space_condition",
+        "openmrs_entity_parent": "",
+        "openmrs_entity": "",
+        "openmrs_entity_id": "",
+        "type": "native_radio",
+        "label": "Is the storage space in good condition?",
+        "options": [
+          {
+            "key": "yes",
+            "text": "Yes"
+          },
+          {
+            "key": "no",
+            "text": "No"
+          }
+        ],
+        "v_required": {
+          "value": true,
+          "err": "Field required"
+        }
+      },
+      {
+        "key": "required_action",
+        "openmrs_entity_parent": "",
+        "openmrs_entity": "",
+        "openmrs_entity_id": "",
+        "type": "native_radio",
+        "label": "Speak with the warehouse manager ? are there any issues which require action?",
+        "options": [
+          {
+            "key": "yes",
+            "text": "Yes"
+          },
+          {
+            "key": "no",
+            "text": "No"
+          }
+        ],
+        "v_required": {
+          "value": true,
+          "err": "Field required"
+        }
+      },
+      {
+        "key": "required_action_yes",
         "openmrs_entity_parent": "",
         "openmrs_entity": "",
         "openmrs_entity_id": "",
         "type": "edit_text",
-        "hint": "{{service_point_check.step1.other_needed_products_description.hint}}",
+        "hint": "Explain actions required",
         "relevance": {
-          "step1:other_needed_products": {
+          "step1:required_action": {
             "type": "string",
             "ex": "equalTo(., \"yes\")"
           }
-        }
-      },
-      {
-        "key": "service_point_good_order",
-        "openmrs_entity_parent": "",
-        "openmrs_entity": "",
-        "openmrs_entity_id": "",
-        "type": "native_radio",
-        "label": "{{service_point_check.step1.service_point_good_order.label}}",
-        "options": [
-          {
-            "key": "yes",
-            "text": "{{service_point_check.step1.service_point_good_order.options.yes.text}}"
-          },
-          {
-            "key": "no",
-            "text": "{{service_point_check.step1.service_point_good_order.options.no.text}}"
-          }
-        ],
+        },
         "v_required": {
           "value": true,
-          "err": "{{service_point_check.step1.service_point_good_order.v_required.err}}"
-        }
-      },
-      {
-        "key": "service_point_not_good_order_reason",
-        "openmrs_entity_parent": "",
-        "openmrs_entity": "",
-        "openmrs_entity_id": "",
-        "type": "edit_text",
-        "hint": "{{service_point_check.step1.service_point_not_good_order_reason.hint}}",
-        "relevance": {
-          "step1:service_point_good_order": {
-            "type": "string",
-            "ex": "equalTo(., \"no\")"
-          }
+          "err": "Field required"
         }
       }
     ]
-  },
-  "properties_file_name": "service_point_check"
+  }
 }
