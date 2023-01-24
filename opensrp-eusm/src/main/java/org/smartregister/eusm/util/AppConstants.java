@@ -52,7 +52,8 @@ public interface AppConstants extends TaskingConstants {
         String FIX_PROBLEM_FORM = "fix_problem";
 
         String SERVICE_POINT_CHECK_FORM = "service_point_check";
-
+        String BENEFICIARY_CONSULTATION_FORM = "beneficiary_consultation";
+        String WAREHOUSE_CHECK_FORM = "warehouse_check";
         String RECORD_GPS_FORM = "record_gps";
 
         String LOOKS_GOOD = "looks_good";
@@ -73,6 +74,8 @@ public interface AppConstants extends TaskingConstants {
         String SERVICE_POINT_CHECK = "service_point_check";
         String RECORD_GPS = "record_gps";
         String LOOKS_GOOD = "looks_good";
+        String CONSULT_BENEFICIARIES = "consult_beneficiaries";
+        String WAREHOUSE_CHECK = "warehouse_check";
     }
 
     interface ServicePointType {
@@ -109,6 +112,8 @@ public interface AppConstants extends TaskingConstants {
 
     interface NonProductTasks {
         String SERVICE_POINT_CHECK = "Service Point Check";
+        String BENEFICIARY_CONSULTATION = "Beneficiary Consultation";
+        String WAREHOUSE_CHECK = "Warehouse Check";
         String RECORD_GPS = "Record Gps";
     }
 
@@ -116,6 +121,10 @@ public interface AppConstants extends TaskingConstants {
         String RECORD_GPS = "Record GPS";
 
         String SERVICE_POINT_CHECK = "Service Point Check";
+
+        String CONSULT_BENEFICIARIES = "Consult Beneficiaries";
+
+        String WAREHOUSE_CHECK = "Warehouse Check";
     }
 
     interface TaskStatus {

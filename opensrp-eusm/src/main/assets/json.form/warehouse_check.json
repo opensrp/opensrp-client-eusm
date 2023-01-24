@@ -48,7 +48,7 @@
     "encounter_location": ""
   },
   "step1": {
-    "title": "{{service_point_check.step1.title}}",
+    "title": "Warehouse Check",
     "display_back_button": true,
     "fields": [
       {
