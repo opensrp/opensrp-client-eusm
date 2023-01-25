@@ -48,7 +48,7 @@
     "encounter_location": ""
   },
   "step1": {
-    "title": "Consult Beneficiaries",
+    "title": "{{beneficiary_consultation.step1.title}}",
     "display_back_button": true,
     "fields": [
       {
@@ -57,20 +57,20 @@
         "openmrs_entity": "",
         "openmrs_entity_id": "",
         "type": "native_radio",
-        "label": "Did you consult beneficiaries during your visit?",
+        "label": "{{beneficiary_consultation.step1.consult_beneficiaries.label}}",
         "options": [
           {
             "key": "yes",
-            "text": "Yes"
+            "text": "{{beneficiary_consultation.step1.consult_beneficiaries.options.yes.text}}"
           },
           {
             "key": "no",
-            "text": "No"
+            "text": "{{beneficiary_consultation.step1.consult_beneficiaries.options.no.text}}"
           }
         ],
         "v_required": {
           "value": true,
-          "err": "Field required"
+          "err": "{{beneficiary_consultation.step1.consult_beneficiaries.v_required.err}}"
         }
       },
       {
@@ -79,7 +79,7 @@
         "openmrs_entity": "",
         "openmrs_entity_id": "",
         "type": "edit_text",
-        "hint": "Describe who you consulted with",
+        "hint": "{{beneficiary_consultation.step1.consult_beneficiaries_consulted_with.hint}}",
         "relevance": {
           "step1:consult_beneficiaries": {
             "type": "string",
@@ -88,7 +88,7 @@
         },
         "v_required": {
           "value": true,
-          "err": "Field required"
+          "err": "{{beneficiary_consultation.step1.consult_beneficiaries_consulted_with.v_required.err}}"
         }
       },
       {
@@ -97,7 +97,7 @@
         "openmrs_entity": "",
         "openmrs_entity_id": "",
         "type": "edit_text",
-        "hint": "What issues were raised?",
+        "hint": "{{beneficiary_consultation.step1.consult_beneficiaries_issues_raised.hint}}",
         "relevance": {
           "step1:consult_beneficiaries": {
             "type": "string",
@@ -106,7 +106,7 @@
         },
         "v_required": {
           "value": true,
-          "err": "Field required"
+          "err": "{{beneficiary_consultation.step1.consult_beneficiaries_issues_raised.v_required.err}}"
         }
       },
       {
@@ -115,20 +115,20 @@
         "openmrs_entity": "",
         "openmrs_entity_id": "",
         "type": "native_radio",
-        "label": "Should you raise a flag for the issues raised?",
+        "label": "{{beneficiary_consultation.step1.consult_beneficiaries_flag.label}}",
         "options": [
           {
             "key": "yes",
-            "text": "Yes"
+            "text": "{{beneficiary_consultation.step1.consult_beneficiaries_flag.options.yes.text}}"
           },
           {
             "key": "no",
-            "text": "No"
+            "text": "{{beneficiary_consultation.step1.consult_beneficiaries_flag.options.no.text}}"
           }
         ],
         "v_required": {
           "value": true,
-          "err": "Field required"
+          "err": "{{beneficiary_consultation.step1.consult_beneficiaries_flag.v_required.err}}"
         },
         "relevance": {
           "step1:consult_beneficiaries": {
@@ -138,5 +138,6 @@
         }
       }
     ]
-  }
+  },
+  "properties_file_name": "beneficiary_consultation"
 }

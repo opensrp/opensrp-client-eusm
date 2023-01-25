@@ -48,7 +48,7 @@
     "encounter_location": ""
   },
   "step1": {
-    "title": "Warehouse Check",
+    "title": "{{warehouse_check.step1.title}}",
     "display_back_button": true,
     "fields": [
       {
@@ -57,20 +57,20 @@
         "openmrs_entity": "",
         "openmrs_entity_id": "",
         "type": "native_radio",
-        "label": "Are there any expired supplies?",
+        "label": "{{warehouse_check.step1.expired_supplies.label}}",
         "options": [
           {
             "key": "yes",
-            "text": "Yes"
+            "text": "{{warehouse_check.step1.expired_supplies.options.yes.text}}"
           },
           {
             "key": "no",
-            "text": "No"
+            "text": "{{warehouse_check.step1.expired_supplies.options.no.text}}"
           }
         ],
         "v_required": {
           "value": true,
-          "err": "Field required"
+          "err": "{{warehouse_check.step1.expired_supplies.v_required.err}}"
         }
       },
       {
@@ -79,20 +79,20 @@
         "openmrs_entity": "",
         "openmrs_entity_id": "",
         "type": "native_radio",
-        "label": "Are there any supplies which will expire in the next 3 months?",
+        "label": "{{warehouse_check.step1.expired_supplies_three_months.label}}",
         "options": [
           {
             "key": "yes",
-            "text": "Yes"
+            "text": "{{warehouse_check.step1.expired_supplies_three_months.options.yes.text}}"
           },
           {
             "key": "no",
-            "text": "No"
+            "text": "{{warehouse_check.step1.expired_supplies_three_months.options.no.text}}"
           }
         ],
         "v_required": {
           "value": true,
-          "err": "Field required"
+          "err": "{{warehouse_check.step1.expired_supplies_three_months.v_required.err}}"
         }
       },
       {
@@ -101,7 +101,7 @@
         "openmrs_entity": "",
         "openmrs_entity_id": "",
         "type": "edit_text",
-        "hint": "Enter supplies that are due for expiry",
+        "hint": "{{warehouse_check.step1.expired_supplies_three_months_list.hint}}",
         "relevance": {
           "step1:expired_supplies_three_months": {
             "type": "string",
@@ -110,7 +110,7 @@
         },
         "v_required": {
           "value": true,
-          "err": "Field required"
+          "err": "{{warehouse_check.step1.expired_supplies_three_months_list.v_required.err}}"
         }
       },
       {
@@ -119,20 +119,20 @@
         "openmrs_entity": "",
         "openmrs_entity_id": "",
         "type": "native_radio",
-        "label": "Is the storage space secured and guarded?",
+        "label": "{{warehouse_check.step1.is_storage_space_guarded.label}}",
         "options": [
           {
             "key": "yes",
-            "text": "Yes"
+            "text": "{{warehouse_check.step1.is_storage_space_guarded.options.yes.text}}"
           },
           {
             "key": "no",
-            "text": "No"
+            "text": "{{warehouse_check.step1.is_storage_space_guarded.options.no.text}}"
           }
         ],
         "v_required": {
           "value": true,
-          "err": "Field required"
+          "err": "{{warehouse_check.step1.is_storage_space_guarded.v_required.err}}"
         }
       },
       {
@@ -141,20 +141,20 @@
         "openmrs_entity": "",
         "openmrs_entity_id": "",
         "type": "native_radio",
-        "label": "Are the storage conditions satisfactory (free from rodents, dry, properly stacked)?",
+        "label": "{{warehouse_check.step1.storage_conditions_satisfactory.label}}",
         "options": [
           {
             "key": "yes",
-            "text": "Yes"
+            "text": "{{warehouse_check.step1.storage_conditions_satisfactory.options.yes.text}}"
           },
           {
             "key": "no",
-            "text": "No"
+            "text": "{{warehouse_check.step1.storage_conditions_satisfactory.options.no.text}}"
           }
         ],
         "v_required": {
           "value": true,
-          "err": "Field required"
+          "err": "{{warehouse_check.step1.storage_conditions_satisfactory.v_required.err}}"
         }
       },
       {
@@ -163,20 +163,20 @@
         "openmrs_entity": "",
         "openmrs_entity_id": "",
         "type": "native_radio",
-        "label": "Is the storage space in good condition?",
+        "label": "{{warehouse_check.step1.storage_space_condition.label}}",
         "options": [
           {
             "key": "yes",
-            "text": "Yes"
+            "text": "{{warehouse_check.step1.storage_space_condition.options.yes.text}}"
           },
           {
             "key": "no",
-            "text": "No"
+            "text": "{{warehouse_check.step1.storage_space_condition.options.no.text}}"
           }
         ],
         "v_required": {
           "value": true,
-          "err": "Field required"
+          "err": "{{warehouse_check.step1.storage_space_condition.v_required.err}}"
         }
       },
       {
@@ -185,20 +185,20 @@
         "openmrs_entity": "",
         "openmrs_entity_id": "",
         "type": "native_radio",
-        "label": "Speak with the warehouse manager ? are there any issues which require action?",
+        "label": "{{warehouse_check.step1.required_action.label}}",
         "options": [
           {
             "key": "yes",
-            "text": "Yes"
+            "text": "{{warehouse_check.step1.required_action.options.yes.text}}"
           },
           {
             "key": "no",
-            "text": "No"
+            "text": "{{warehouse_check.step1.required_action.options.no.text}}"
           }
         ],
         "v_required": {
           "value": true,
-          "err": "Field required"
+          "err": "{{warehouse_check.step1.required_action.v_required.err}}"
         }
       },
       {
@@ -207,7 +207,7 @@
         "openmrs_entity": "",
         "openmrs_entity_id": "",
         "type": "edit_text",
-        "hint": "Explain actions required",
+        "hint": "{{warehouse_check.step1.required_action_yes.hint}}",
         "relevance": {
           "step1:required_action": {
             "type": "string",
@@ -216,9 +216,10 @@
         },
         "v_required": {
           "value": true,
-          "err": "Field required"
+          "err": "{{warehouse_check.step1.required_action_yes.v_required.err}}"
         }
       }
     ]
-  }
+  },
+  "properties_file_name": "warehouse_check"
 }
