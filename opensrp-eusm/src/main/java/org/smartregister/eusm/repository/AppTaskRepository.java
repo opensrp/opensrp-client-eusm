@@ -100,7 +100,7 @@ public class AppTaskRepository extends TaskRepository {
                 name = AppConstants.TaskCode.RECORD_GPS;
             } else if (AppConstants.EncounterType.SERVICE_POINT_CHECK.equals(taskCode)) {
                 name = AppConstants.TaskCode.SERVICE_POINT_CHECK;
-            } else if (AppConstants.EncounterType.CONSULT_BENEFICIARIES.equals(taskCode)) {
+            } else if (AppConstants.EncounterType.BENEFICIARY_CONSULTATION.equals(taskCode)) {
                 name = AppConstants.TaskCode.CONSULT_BENEFICIARIES;
             } else if (AppConstants.EncounterType.WAREHOUSE_CHECK.equals(taskCode)) {
                 name = AppConstants.TaskCode.WAREHOUSE_CHECK;

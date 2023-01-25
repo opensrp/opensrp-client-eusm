@@ -74,7 +74,7 @@ public interface AppConstants extends TaskingConstants {
         String SERVICE_POINT_CHECK = "service_point_check";
         String RECORD_GPS = "record_gps";
         String LOOKS_GOOD = "looks_good";
-        String CONSULT_BENEFICIARIES = "consult_beneficiaries";
+        String BENEFICIARY_CONSULTATION = "beneficiary_consultation";
         String WAREHOUSE_CHECK = "warehouse_check";
     }
 
@@ -112,7 +112,7 @@ public interface AppConstants extends TaskingConstants {
 
     interface NonProductTasks {
         String SERVICE_POINT_CHECK = "Service Point Check";
-        String BENEFICIARY_CONSULTATION = "Beneficiary Consultation";
+        String CONSULT_BENEFICIARIES = "Consult Beneficiaries";
         String WAREHOUSE_CHECK = "Warehouse Check";
         String RECORD_GPS = "Record Gps";
     }

@@ -84,7 +84,7 @@ public class TaskRegisterViewHolder extends RecyclerView.ViewHolder {
                 this.productImageView.setImageDrawable(ResourcesCompat.getDrawable(context.getResources(), R.drawable.service_point_check_thumbnail, context.getTheme()));
             } else if (AppConstants.NonProductTasks.RECORD_GPS.equalsIgnoreCase(taskDetail.getEntityName())) {
                 this.productImageView.setImageDrawable(ResourcesCompat.getDrawable(context.getResources(), R.drawable.record_gps_thumbnail, context.getTheme()));
-            } else if (AppConstants.NonProductTasks.BENEFICIARY_CONSULTATION.equalsIgnoreCase(taskDetail.getEntityName())) {
+            } else if (AppConstants.NonProductTasks.CONSULT_BENEFICIARIES.equalsIgnoreCase(taskDetail.getEntityName())) {
                 this.productImageView.setImageDrawable(ResourcesCompat.getDrawable(context.getResources(), R.drawable.service_point_check_thumbnail, context.getTheme()));
             } else if (AppConstants.NonProductTasks.WAREHOUSE_CHECK.equalsIgnoreCase(taskDetail.getEntityName())) {
                 this.productImageView.setImageDrawable(ResourcesCompat.getDrawable(context.getResources(), R.drawable.service_point_check_thumbnail, context.getTheme()));

@@ -41,7 +41,7 @@ public class TaskRegisterActivityInteractor implements TaskRegisterActivityContr
                     saveRecordGps(form, interactorCallBack, structureDetail);
                 } else if (AppConstants.EncounterType.SERVICE_POINT_CHECK.equals(encounterType)) {
                     saveServicePointCheck(form, interactorCallBack, structureDetail);
-                } else if (AppConstants.EncounterType.CONSULT_BENEFICIARIES.equals(encounterType)) {
+                } else if (AppConstants.EncounterType.BENEFICIARY_CONSULTATION.equals(encounterType)) {
                     saveConsultBeneficiaries(form, interactorCallBack, structureDetail);
                 } else if (AppConstants.EncounterType.WAREHOUSE_CHECK.equals(encounterType)) {
                     saveWarehouseCheck(form, interactorCallBack, structureDetail);
@@ -80,7 +80,7 @@ public class TaskRegisterActivityInteractor implements TaskRegisterActivityContr
 
     @Override
     public void saveConsultBeneficiaries(JSONObject form, TaskRegisterActivityContract.InteractorCallBack interactorCallBack, StructureDetail structureDetail) {
-        saveEventAndInitiateProcessing(AppConstants.EncounterType.CONSULT_BENEFICIARIES,
+        saveEventAndInitiateProcessing(AppConstants.EncounterType.BENEFICIARY_CONSULTATION,
                 form, "", interactorCallBack, AppConstants.EventEntityType.SERVICE_POINT);
     }
 
