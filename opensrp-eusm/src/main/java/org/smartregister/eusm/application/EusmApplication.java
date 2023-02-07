@@ -458,7 +458,8 @@ public class EusmApplication extends DrishtiApplication implements TimeChangedBr
     }
 
     private void cancelPreviousJobsIfRequired() {
-        if (BuildConfig.CANCEL_PREVIOUSLY_SCHEDULED_JOBS) {
+        if (!AppUtils.hasUpgradedToLatest()) {
+            AppUtils.saveHasUpgradedToLatest();
             JobManager.instance().cancelAllForTag(LocationTaskServiceJob.TAG);
             JobManager.instance().cancelAllForTag(ImageUploadServiceJob.TAG);
             JobManager.instance().cancelAllForTag(DocumentConfigurationServiceJob.TAG);
