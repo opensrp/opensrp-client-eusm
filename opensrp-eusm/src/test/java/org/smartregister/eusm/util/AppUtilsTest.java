@@ -4,6 +4,7 @@ import com.vijay.jsonwizard.constants.JsonFormConstants;
 
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.junit.After;
 import org.junit.Test;
 import org.mockito.ArgumentCaptor;
 import org.robolectric.util.ReflectionHelpers;
@@ -139,4 +140,11 @@ public class AppUtilsTest extends BaseUnitTest {
 
         verify(editor, times(1)).apply();
     }
+
+
+    @After
+    public void tearDown() {
+        ReflectionHelpers.setField(TestEusmApplication.getInstance().context(), "allSharedPreferences", null);
+    }
+
 }
