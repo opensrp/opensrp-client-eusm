@@ -66,6 +66,10 @@ public class EusmTaskRegisterAdapter extends TaskRegisterAdapter {
                 productName = context.getString(R.string.record_gps_task_title);
             } else if( AppConstants.TaskCode.SERVICE_POINT_CHECK.equals(productName)){
                 productName = context.getString(R.string.service_point_check_task_title);
+            } else if( AppConstants.TaskCode.CONSULT_BENEFICIARIES.equals(productName)){
+                productName = context.getString(R.string.consult_beneficiaries_task_title);
+            } else if( AppConstants.TaskCode.WAREHOUSE_CHECK.equals(productName)){
+                productName = context.getString(R.string.warehouse_check_task_title);
             }
 
             taskRegisterViewHolder.setProductName(productName, taskDetail.isChecked());

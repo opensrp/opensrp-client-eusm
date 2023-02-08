@@ -43,6 +43,8 @@ public interface TaskRegisterActivityContract {
         void saveRecordGps(JSONObject form, InteractorCallBack interactorCallBack, StructureDetail structureDetail);
 
         void saveServicePointCheck(JSONObject form, InteractorCallBack interactorCallBack, StructureDetail structureDetail);
+        void saveConsultBeneficiaries(JSONObject form, InteractorCallBack interactorCallBack, StructureDetail structureDetail);
+        void saveWarehouseCheck(JSONObject form, InteractorCallBack interactorCallBack, StructureDetail structureDetail);
 
         void saveEventAndInitiateProcessing(String encounterType, JSONObject form, String bindType,
                                             InteractorCallBack interactorCallBack,
