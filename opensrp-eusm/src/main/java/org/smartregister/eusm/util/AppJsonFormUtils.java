@@ -59,7 +59,8 @@ public class AppJsonFormUtils {
             map.put(AppConstants.EventDetailKey.PLAN_IDENTIFIER, PreferencesUtil.getInstance().getCurrentPlanId());
             map.put(AppConstants.EventDetailKey.MISSION, PreferencesUtil.getInstance().getCurrentPlan());
             String entityId;
-            if (AppConstants.JsonForm.RECORD_GPS_FORM.equals(formName) || AppConstants.JsonForm.SERVICE_POINT_CHECK_FORM.equals(formName)) {
+            if (AppConstants.JsonForm.RECORD_GPS_FORM.equals(formName) || AppConstants.JsonForm.SERVICE_POINT_CHECK_FORM.equals(formName)
+                    || AppConstants.JsonForm.BENEFICIARY_CONSULTATION_FORM.equals(formName) || AppConstants.JsonForm.WAREHOUSE_CHECK_FORM.equals(formName)) {
                 entityId = structureDetail.getStructureId();
             } else {
                 map.put(AppConstants.EventDetailKey.PRODUCT_NAME, taskDetail.getEntityName());

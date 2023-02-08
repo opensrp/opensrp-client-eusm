@@ -23,6 +23,7 @@ import org.smartregister.eusm.util.AppJsonFormUtils;
 import org.smartregister.eusm.util.AppUtils;
 import org.smartregister.tasking.util.PreferencesUtil;
 import org.smartregister.util.AppExecutors;
+import org.smartregister.util.JsonFormUtils;
 
 import java.util.Comparator;
 import java.util.HashMap;
@@ -30,6 +31,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
+
+import timber.log.Timber;
 
 public class TaskRegisterFragmentInteractor implements TaskRegisterFragmentContract.Interactor {
 
@@ -81,6 +84,16 @@ public class TaskRegisterFragmentInteractor implements TaskRegisterFragmentContr
         for (Map.Entry<String, String> entry : injectedFields.entrySet()) {
             JSONObject jsonObject1 = AppUtils.getHiddenFieldTemplate(entry.getKey(), entry.getValue());
             jsonArray.put(jsonObject1);
+        }
+        try {
+            if (AppConstants.ServicePointType.WAREHOUSE.equalsIgnoreCase(structureDetail.getStructureType())) {
+                JSONObject isWarehouse = JsonFormUtils.getFieldJSONObject(jsonArray, AppConstants.JsonFormKey.IS_WAREHOUSE);
+                if (isWarehouse != null) {
+                    isWarehouse.put(JsonFormConstants.VALUE, "yes");
+                }
+            }
+        } catch (Exception e) {
+            Timber.e(e);
         }
     }
 
