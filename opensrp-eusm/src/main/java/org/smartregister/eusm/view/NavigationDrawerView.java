@@ -236,7 +236,7 @@ public class NavigationDrawerView extends DrawerMenuView {
     }
 
     private String getRegionsFromDistricts(String districts) throws Exception{
-        if (districts == null) {
+        if (StringUtils.isEmpty(districts)) {
             return "";
         }
         JSONArray locationHierarchy = new JSONArray(((EusmBaseDrawerPresenter) getPresenter()).extractLocationHierarchy().first);

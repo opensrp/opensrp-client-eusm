@@ -8,6 +8,7 @@ import com.vijay.jsonwizard.customviews.TreeViewDialog;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.smartregister.eusm.util.AppConstants;
 import org.smartregister.eusm.util.AppUtils;
 import org.smartregister.eusm.viewholder.TreeSelectionItemViewHolder;
 import org.smartregister.tasking.util.PreferencesUtil;
@@ -15,6 +16,8 @@ import org.smartregister.tasking.util.PreferencesUtil;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Set;
+
+import timber.log.Timber;
 
 public class EusmTreeViewDialog extends TreeViewDialog {
 
@@ -33,7 +36,7 @@ public class EusmTreeViewDialog extends TreeViewDialog {
             // Get selected regions from districts
             this.operationalRegions = populateOperationalRegions(nodes);
         } catch (Exception e) {
-            e.printStackTrace();
+            Timber.e(e);
         }
         super.init(nodes, defaultValue, value, isSelectionMode);
     }
@@ -50,9 +53,12 @@ public class EusmTreeViewDialog extends TreeViewDialog {
         return new TreeSelectionItemViewHolder(context, structure.optString(KEY_LEVEL, ""));
     }
 
+    /*
+     * Update tree node to select the referenced selected regions
+     */
     @Override
     public void updateTreeNode(int level, TreeNode curNode, TreeNode parentNode) {
-        curNode.setSelectable(level == 2);
+        curNode.setSelectable(level == Integer.parseInt(AppConstants.LocationGeographicLevel.DISTRICT));
         boolean isSelected = operationalRegions.contains(curNode.getValue().toString());
         curNode.setSelected(isSelected);
     }

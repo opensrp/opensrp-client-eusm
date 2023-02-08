@@ -92,20 +92,24 @@ public class EusmBaseDrawerPresenter extends BaseDrawerPresenter {
         ArrayList<String> districts = new ArrayList<>();
         try {
             JSONArray locationHierarchy = new JSONArray(extractLocationHierarchy().first);
-            JSONArray regions = locationHierarchy.getJSONObject(0).getJSONArray(AppConstants.JsonForm.NODES);
-            for (int i = 0; i < regions.length(); i++) {
-                JSONObject location = regions.getJSONObject(i);
-                String locName = location.getString(TaskingConstants.CONFIGURATION.KEY);
-                if (names.contains(locName)) {
-                    names.remove(locName);
-                    if (location.has(AppConstants.JsonForm.NODES)) {
-                        JSONArray nodes = location.getJSONArray(AppConstants.JsonForm.NODES);
-                        for (int j = 0; j < nodes.length(); j++) {
-                            districts.add(nodes.getJSONObject(j).getString(TaskingConstants.CONFIGURATION.KEY));
+            JSONObject country = locationHierarchy.optJSONObject(0);
+            if (country != null) {
+                JSONArray regions = country.getJSONArray(AppConstants.JsonForm.NODES);
+                for (int i = 0; i < regions.length(); i++) {
+                    JSONObject location = regions.getJSONObject(i);
+                    if (location != null) {
+                        String locName = location.getString(TaskingConstants.CONFIGURATION.KEY);
+                        if (names.contains(locName)) {
+                            names.remove(locName);
+                            if (location.has(AppConstants.JsonForm.NODES)) {
+                                JSONArray nodes = location.getJSONArray(AppConstants.JsonForm.NODES);
+                                for (int j = 0; j < nodes.length(); j++) {
+                                    districts.add(nodes.getJSONObject(j).getString(TaskingConstants.CONFIGURATION.KEY));
+                                }
+                            }
                         }
                     }
                 }
-
             }
         } catch (Exception e) {
             Timber.e(e);
@@ -130,11 +134,11 @@ public class EusmBaseDrawerPresenter extends BaseDrawerPresenter {
 
 
     /**
-     * Filter out district not in the plan
+     * Filter out regions not in the plan
      *
      * @param jurisdictionList
      * @param entireTree
-     * @return
+     * @return locations assigned to the selected plan
      */
     private List<FormLocation> filterLocations(List<String> jurisdictionList, List<FormLocation> entireTree) {
         if (entireTree != null && !entireTree.isEmpty()) {
