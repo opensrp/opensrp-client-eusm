@@ -1,0 +1,143 @@
+{
+  "count": "1",
+  "encounter_type": "beneficiary_consultation",
+  "form_version": "0.0.1",
+  "entity_id": "",
+  "metadata": {
+    "start": {
+      "openmrs_entity_parent": "",
+      "openmrs_entity": "concept",
+      "openmrs_data_type": "start",
+      "openmrs_entity_id": "163137AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
+    },
+    "end": {
+      "openmrs_entity_parent": "",
+      "openmrs_entity": "concept",
+      "openmrs_data_type": "end",
+      "openmrs_entity_id": "163138AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
+    },
+    "today": {
+      "openmrs_entity_parent": "",
+      "openmrs_entity": "encounter",
+      "openmrs_entity_id": "encounter_date"
+    },
+    "deviceid": {
+      "openmrs_entity_parent": "",
+      "openmrs_entity": "concept",
+      "openmrs_data_type": "deviceid",
+      "openmrs_entity_id": "163149AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
+    },
+    "subscriberid": {
+      "openmrs_entity_parent": "",
+      "openmrs_entity": "concept",
+      "openmrs_data_type": "subscriberid",
+      "openmrs_entity_id": "163150AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
+    },
+    "simserial": {
+      "openmrs_entity_parent": "",
+      "openmrs_entity": "concept",
+      "openmrs_data_type": "simserial",
+      "openmrs_entity_id": "163151AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
+    },
+    "phonenumber": {
+      "openmrs_entity_parent": "",
+      "openmrs_entity": "concept",
+      "openmrs_data_type": "phonenumber",
+      "openmrs_entity_id": "163152AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
+    },
+    "encounter_location": ""
+  },
+  "step1": {
+    "title": "{{beneficiary_consultation.step1.title}}",
+    "display_back_button": true,
+    "fields": [
+      {
+        "key": "consult_beneficiaries",
+        "openmrs_entity_parent": "",
+        "openmrs_entity": "",
+        "openmrs_entity_id": "",
+        "type": "native_radio",
+        "label": "{{beneficiary_consultation.step1.consult_beneficiaries.label}}",
+        "options": [
+          {
+            "key": "yes",
+            "text": "{{beneficiary_consultation.step1.consult_beneficiaries.options.yes.text}}"
+          },
+          {
+            "key": "no",
+            "text": "{{beneficiary_consultation.step1.consult_beneficiaries.options.no.text}}"
+          }
+        ],
+        "v_required": {
+          "value": true,
+          "err": "{{beneficiary_consultation.step1.consult_beneficiaries.v_required.err}}"
+        }
+      },
+      {
+        "key": "consult_beneficiaries_consulted_with",
+        "openmrs_entity_parent": "",
+        "openmrs_entity": "",
+        "openmrs_entity_id": "",
+        "type": "edit_text",
+        "hint": "{{beneficiary_consultation.step1.consult_beneficiaries_consulted_with.hint}}",
+        "relevance": {
+          "step1:consult_beneficiaries": {
+            "type": "string",
+            "ex": "equalTo(., \"yes\")"
+          }
+        },
+        "v_required": {
+          "value": true,
+          "err": "{{beneficiary_consultation.step1.consult_beneficiaries_consulted_with.v_required.err}}"
+        }
+      },
+      {
+        "key": "consult_beneficiaries_issues_raised",
+        "openmrs_entity_parent": "",
+        "openmrs_entity": "",
+        "openmrs_entity_id": "",
+        "type": "edit_text",
+        "hint": "{{beneficiary_consultation.step1.consult_beneficiaries_issues_raised.hint}}",
+        "relevance": {
+          "step1:consult_beneficiaries": {
+            "type": "string",
+            "ex": "equalTo(., \"yes\")"
+          }
+        },
+        "v_required": {
+          "value": true,
+          "err": "{{beneficiary_consultation.step1.consult_beneficiaries_issues_raised.v_required.err}}"
+        }
+      },
+      {
+        "key": "consult_beneficiaries_flag",
+        "openmrs_entity_parent": "",
+        "openmrs_entity": "",
+        "openmrs_entity_id": "",
+        "type": "native_radio",
+        "label": "{{beneficiary_consultation.step1.consult_beneficiaries_flag.label}}",
+        "options": [
+          {
+            "key": "yes",
+            "text": "{{beneficiary_consultation.step1.consult_beneficiaries_flag.options.yes.text}}"
+          },
+          {
+            "key": "no",
+            "text": "{{beneficiary_consultation.step1.consult_beneficiaries_flag.options.no.text}}"
+          }
+        ],
+        "v_required": {
+          "value": true,
+          "err": "{{beneficiary_consultation.step1.consult_beneficiaries_flag.v_required.err}}"
+        },
+        "relevance": {
+          "step1:consult_beneficiaries": {
+            "type": "string",
+            "ex": "equalTo(., \"yes\")"
+          }
+        }
+      }
+    ]
+  },
+  "properties_file_name": "beneficiary_consultation"
+}

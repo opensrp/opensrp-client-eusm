@@ -153,4 +153,8 @@
     <string name="fetching_structure_message">Fetching Structure Details. Please wait</string>
     <string name="map_download_progress">Downloading: %,.2f %%</string>
     <string name="regions">Regions</string>
+
+    <string name="consult_beneficiaries_task_title">Consult Beneficiaries</string>
+    <string name="warehouse_check_task_title">Warehouse Check</string>
+
 </resources>

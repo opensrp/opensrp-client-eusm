@@ -1,0 +1,225 @@
+{
+  "count": "1",
+  "encounter_type": "warehouse_check",
+  "form_version": "0.0.1",
+  "entity_id": "",
+  "metadata": {
+    "start": {
+      "openmrs_entity_parent": "",
+      "openmrs_entity": "concept",
+      "openmrs_data_type": "start",
+      "openmrs_entity_id": "163137AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
+    },
+    "end": {
+      "openmrs_entity_parent": "",
+      "openmrs_entity": "concept",
+      "openmrs_data_type": "end",
+      "openmrs_entity_id": "163138AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
+    },
+    "today": {
+      "openmrs_entity_parent": "",
+      "openmrs_entity": "encounter",
+      "openmrs_entity_id": "encounter_date"
+    },
+    "deviceid": {
+      "openmrs_entity_parent": "",
+      "openmrs_entity": "concept",
+      "openmrs_data_type": "deviceid",
+      "openmrs_entity_id": "163149AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
+    },
+    "subscriberid": {
+      "openmrs_entity_parent": "",
+      "openmrs_entity": "concept",
+      "openmrs_data_type": "subscriberid",
+      "openmrs_entity_id": "163150AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
+    },
+    "simserial": {
+      "openmrs_entity_parent": "",
+      "openmrs_entity": "concept",
+      "openmrs_data_type": "simserial",
+      "openmrs_entity_id": "163151AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
+    },
+    "phonenumber": {
+      "openmrs_entity_parent": "",
+      "openmrs_entity": "concept",
+      "openmrs_data_type": "phonenumber",
+      "openmrs_entity_id": "163152AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
+    },
+    "encounter_location": ""
+  },
+  "step1": {
+    "title": "{{warehouse_check.step1.title}}",
+    "display_back_button": true,
+    "fields": [
+      {
+        "key": "expired_supplies",
+        "openmrs_entity_parent": "",
+        "openmrs_entity": "",
+        "openmrs_entity_id": "",
+        "type": "native_radio",
+        "label": "{{warehouse_check.step1.expired_supplies.label}}",
+        "options": [
+          {
+            "key": "yes",
+            "text": "{{warehouse_check.step1.expired_supplies.options.yes.text}}"
+          },
+          {
+            "key": "no",
+            "text": "{{warehouse_check.step1.expired_supplies.options.no.text}}"
+          }
+        ],
+        "v_required": {
+          "value": true,
+          "err": "{{warehouse_check.step1.expired_supplies.v_required.err}}"
+        }
+      },
+      {
+        "key": "expired_supplies_three_months",
+        "openmrs_entity_parent": "",
+        "openmrs_entity": "",
+        "openmrs_entity_id": "",
+        "type": "native_radio",
+        "label": "{{warehouse_check.step1.expired_supplies_three_months.label}}",
+        "options": [
+          {
+            "key": "yes",
+            "text": "{{warehouse_check.step1.expired_supplies_three_months.options.yes.text}}"
+          },
+          {
+            "key": "no",
+            "text": "{{warehouse_check.step1.expired_supplies_three_months.options.no.text}}"
+          }
+        ],
+        "v_required": {
+          "value": true,
+          "err": "{{warehouse_check.step1.expired_supplies_three_months.v_required.err}}"
+        }
+      },
+      {
+        "key": "expired_supplies_three_months_list",
+        "openmrs_entity_parent": "",
+        "openmrs_entity": "",
+        "openmrs_entity_id": "",
+        "type": "edit_text",
+        "hint": "{{warehouse_check.step1.expired_supplies_three_months_list.hint}}",
+        "relevance": {
+          "step1:expired_supplies_three_months": {
+            "type": "string",
+            "ex": "equalTo(., \"yes\")"
+          }
+        },
+        "v_required": {
+          "value": true,
+          "err": "{{warehouse_check.step1.expired_supplies_three_months_list.v_required.err}}"
+        }
+      },
+      {
+        "key": "is_storage_space_guarded",
+        "openmrs_entity_parent": "",
+        "openmrs_entity": "",
+        "openmrs_entity_id": "",
+        "type": "native_radio",
+        "label": "{{warehouse_check.step1.is_storage_space_guarded.label}}",
+        "options": [
+          {
+            "key": "yes",
+            "text": "{{warehouse_check.step1.is_storage_space_guarded.options.yes.text}}"
+          },
+          {
+            "key": "no",
+            "text": "{{warehouse_check.step1.is_storage_space_guarded.options.no.text}}"
+          }
+        ],
+        "v_required": {
+          "value": true,
+          "err": "{{warehouse_check.step1.is_storage_space_guarded.v_required.err}}"
+        }
+      },
+      {
+        "key": "storage_conditions_satisfactory",
+        "openmrs_entity_parent": "",
+        "openmrs_entity": "",
+        "openmrs_entity_id": "",
+        "type": "native_radio",
+        "label": "{{warehouse_check.step1.storage_conditions_satisfactory.label}}",
+        "options": [
+          {
+            "key": "yes",
+            "text": "{{warehouse_check.step1.storage_conditions_satisfactory.options.yes.text}}"
+          },
+          {
+            "key": "no",
+            "text": "{{warehouse_check.step1.storage_conditions_satisfactory.options.no.text}}"
+          }
+        ],
+        "v_required": {
+          "value": true,
+          "err": "{{warehouse_check.step1.storage_conditions_satisfactory.v_required.err}}"
+        }
+      },
+      {
+        "key": "storage_space_condition",
+        "openmrs_entity_parent": "",
+        "openmrs_entity": "",
+        "openmrs_entity_id": "",
+        "type": "native_radio",
+        "label": "{{warehouse_check.step1.storage_space_condition.label}}",
+        "options": [
+          {
+            "key": "yes",
+            "text": "{{warehouse_check.step1.storage_space_condition.options.yes.text}}"
+          },
+          {
+            "key": "no",
+            "text": "{{warehouse_check.step1.storage_space_condition.options.no.text}}"
+          }
+        ],
+        "v_required": {
+          "value": true,
+          "err": "{{warehouse_check.step1.storage_space_condition.v_required.err}}"
+        }
+      },
+      {
+        "key": "required_action",
+        "openmrs_entity_parent": "",
+        "openmrs_entity": "",
+        "openmrs_entity_id": "",
+        "type": "native_radio",
+        "label": "{{warehouse_check.step1.required_action.label}}",
+        "options": [
+          {
+            "key": "yes",
+            "text": "{{warehouse_check.step1.required_action.options.yes.text}}"
+          },
+          {
+            "key": "no",
+            "text": "{{warehouse_check.step1.required_action.options.no.text}}"
+          }
+        ],
+        "v_required": {
+          "value": true,
+          "err": "{{warehouse_check.step1.required_action.v_required.err}}"
+        }
+      },
+      {
+        "key": "required_action_yes",
+        "openmrs_entity_parent": "",
+        "openmrs_entity": "",
+        "openmrs_entity_id": "",
+        "type": "edit_text",
+        "hint": "{{warehouse_check.step1.required_action_yes.hint}}",
+        "relevance": {
+          "step1:required_action": {
+            "type": "string",
+            "ex": "equalTo(., \"yes\")"
+          }
+        },
+        "v_required": {
+          "value": true,
+          "err": "{{warehouse_check.step1.required_action_yes.v_required.err}}"
+        }
+      }
+    ]
+  },
+  "properties_file_name": "warehouse_check"
+}
