@@ -88,7 +88,14 @@ public class EusmBaseDrawerPresenter extends BaseDrawerPresenter {
 
     @Override
     public void onOperationalAreaSelectorClicked(ArrayList<String> names) {
-        // Extract districts from selected regions
+        super.onOperationalAreaSelectorClicked(getDistrictsForSelectedRegions(names));
+    }
+
+
+    /*
+     * Extract districts from selected regions
+     */
+    private ArrayList<String> getDistrictsForSelectedRegions(ArrayList<String> names) {
         ArrayList<String> districts = new ArrayList<>();
         try {
             JSONArray locationHierarchy = new JSONArray(extractLocationHierarchy().first);
@@ -114,7 +121,7 @@ public class EusmBaseDrawerPresenter extends BaseDrawerPresenter {
         } catch (Exception e) {
             Timber.e(e);
         }
-        super.onOperationalAreaSelectorClicked(districts);
+        return districts;
     }
 
     @Override

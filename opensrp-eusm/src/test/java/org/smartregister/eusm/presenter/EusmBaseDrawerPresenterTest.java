@@ -10,6 +10,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
+import org.powermock.reflect.Whitebox;
 import org.robolectric.Robolectric;
 import org.robolectric.annotation.LooperMode;
 import org.robolectric.util.ReflectionHelpers;
@@ -178,5 +179,25 @@ public class EusmBaseDrawerPresenterTest extends BaseUnitTest {
 
         assertEquals(1, entireTreeResult.get(0).nodes.size());
         assertEquals("ANALANJIROFO", entireTreeResult.get(0).nodes.get(0).name);
+    }
+
+    @Test
+    public void testOnOperationalAreaSelectorClickedShouldExtractDistrictsFromSelectedRegions() throws Exception {
+        String locationHierarchy = "[{\"key\":\"Madagascar\",\"level\":\"\",\"name\":\"Madagascar\",\"nodes\":[{\"key\":\"ANDROY\",\"level\":\"\",\"name\":\"ANDROY\",\"nodes\":[{\"key\":\"Ambovombe\",\"level\":\"\",\"name\":\"Ambovombe\",\"nodes\":[]},{\"key\":\"Bekily\",\"level\":\"\",\"name\":\"Bekily\",\"nodes\":[]},{\"key\":\"Beloha\",\"level\":\"\",\"name\":\"Beloha\",\"nodes\":[]},{\"key\":\"Tsihombe\",\"level\":\"\",\"name\":\"Tsihombe\",\"nodes\":[]}]},{\"key\":\"ATSIMO ATSINANANA\",\"level\":\"\",\"name\":\"ATSIMO ATSINANANA\",\"nodes\":[{\"key\":\"Befotaka\",\"level\":\"\",\"name\":\"Befotaka\",\"nodes\":[]},{\"key\":\"Farafangana\",\"level\":\"\",\"name\":\"Farafangana\",\"nodes\":[]},{\"key\":\"Midongy Atsimo\",\"level\":\"\",\"name\":\"Midongy Atsimo\",\"nodes\":[]},{\"key\":\"Vangaindrano\",\"level\":\"\",\"name\":\"Vangaindrano\",\"nodes\":[]},{\"key\":\"Vondrozo\",\"level\":\"\",\"name\":\"Vondrozo\",\"nodes\":[]}]},{\"key\":\"ITASY\",\"level\":\"\",\"name\":\"ITASY\",\"nodes\":[{\"key\":\"Arivonimamo\",\"level\":\"\",\"name\":\"Arivonimamo\",\"nodes\":[]},{\"key\":\"Miarinarivo\",\"level\":\"\",\"name\":\"Miarinarivo\",\"nodes\":[]},{\"key\":\"Soavinandriana\",\"level\":\"\",\"name\":\"Soavinandriana\",\"nodes\":[]}]}]}]";
+        doReturn(Pair.create(locationHierarchy, new ArrayList<String>())).when(eusmBaseDrawerPresenter).extractLocationHierarchy();
+
+        ArrayList<String> regions = new ArrayList<>();
+        regions.add("ANDROY");
+        regions.add(" ATSIMO ATSINANANA");
+        regions.add(" ITASY");
+        ArrayList<String> result = Whitebox.invokeMethod(eusmBaseDrawerPresenter, "getDistrictsForSelectedRegions", regions);
+
+        ArrayList<String> expectedResult = new ArrayList<>();
+        expectedResult.add("Ambovombe");
+        expectedResult.add("Bekily");
+        expectedResult.add("Beloha");
+        expectedResult.add("Tsihombe");
+
+        assertEquals(expectedResult, result);
     }
 }
