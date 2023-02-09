@@ -14,6 +14,7 @@ public interface AppConstants extends TaskingConstants {
 
     interface PreferenceKey {
         String COMMUNE_ID = "COMMUNE_ID";
+        String DISABLE_SCHEDULED_JOBS = "DISABLE_SCHEDULED_JOBS";
     }
 
     interface Column {
@@ -177,4 +178,5 @@ public interface AppConstants extends TaskingConstants {
         String DISTRICT = "2";
         String REGION = "1";
     }
+
 }

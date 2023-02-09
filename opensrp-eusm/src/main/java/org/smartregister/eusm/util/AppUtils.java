@@ -8,6 +8,7 @@ import static org.smartregister.util.JsonFormUtils.ENTITY_ID;
 import static org.smartregister.util.JsonFormUtils.getString;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.drawable.BitmapDrawable;
@@ -56,6 +57,9 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 import timber.log.Timber;
+
+import static org.smartregister.eusm.util.AppConstants.PreferenceKey.DISABLE_SCHEDULED_JOBS;
+import static org.smartregister.util.JsonFormUtils.getString;
 
 public class AppUtils extends Utils {
 
@@ -279,4 +283,27 @@ public class AppUtils extends Utils {
         }
         return opRegions;
     }
+
+    /*
+     * Return false when the app is launched or upgraded and
+     * previous periodically scheduled jobs are not cancelled
+     */
+    public static boolean hasDisabledScheduledJobs() {
+        SharedPreferences sharedPreferences = EusmApplication.getInstance().context().allSharedPreferences().getPreferences();
+        if (sharedPreferences != null) {
+            return sharedPreferences.getBoolean(DISABLE_SCHEDULED_JOBS, false);
+        }
+        return false;
+    }
+
+    /*
+     * Save preference for cancelling scheduled job
+     */
+    public static void saveHasDisabledScheduledJobs() {
+        SharedPreferences sharedPreferences = EusmApplication.getInstance().context().allSharedPreferences().getPreferences();
+        if (sharedPreferences != null) {
+            sharedPreferences.edit().putBoolean(DISABLE_SCHEDULED_JOBS, true).apply();
+        }
+    }
+
 }
