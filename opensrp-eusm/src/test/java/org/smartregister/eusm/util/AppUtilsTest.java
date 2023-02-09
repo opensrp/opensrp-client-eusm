@@ -4,7 +4,6 @@ import com.vijay.jsonwizard.constants.JsonFormConstants;
 
 import org.json.JSONException;
 import org.json.JSONObject;
-import org.junit.After;
 import org.junit.Test;
 import org.mockito.ArgumentCaptor;
 import org.robolectric.util.ReflectionHelpers;
@@ -29,18 +28,13 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyBoolean;
-import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
-import static org.smartregister.eusm.util.AppConstants.PreferenceKey.HAS_UPGRADED;
 import static org.smartregister.eusm.util.AppConstants.STRUCTURE_IDS;
 
-import android.content.SharedPreferences;
 
 public class AppUtilsTest extends BaseUnitTest {
 
@@ -109,42 +103,6 @@ public class AppUtilsTest extends BaseUnitTest {
         assertTrue(districts.contains("a9d70fa1-ec3c-49f1-8e8b-6ae781b395e7"));
         assertTrue(districts.contains("36be60f1-dde6-4c5a-80ae-08df201ff1c5"));
         ReflectionHelpers.setField(TestEusmApplication.getInstance().context(), "allSettings", null);
-    }
-
-    @Test
-    public void testHasUpgradedToLatest() {
-        AllSharedPreferences allSharedPreferences = mock(AllSharedPreferences.class);
-        SharedPreferences sharedPreferences = mock(SharedPreferences.class);
-        ReflectionHelpers.setField(TestEusmApplication.getInstance().context(), "allSharedPreferences", allSharedPreferences);
-
-        doReturn(sharedPreferences).when(allSharedPreferences).getPreferences();
-        doReturn(true).when(sharedPreferences).getBoolean(eq(HAS_UPGRADED), eq(false));
-        boolean hasUpgraded = AppUtils.hasUpgradedToLatest();
-
-        assertTrue(hasUpgraded);
-    }
-
-    @Test
-    public void testSAveHasUpgradedToLatest() {
-        AllSharedPreferences allSharedPreferences = mock(AllSharedPreferences.class);
-        SharedPreferences sharedPreferences = mock(SharedPreferences.class);
-        SharedPreferences.Editor editor = mock(SharedPreferences.Editor.class);
-        ReflectionHelpers.setField(TestEusmApplication.getInstance().context(), "allSharedPreferences", allSharedPreferences);
-
-        doReturn(sharedPreferences).when(allSharedPreferences).getPreferences();
-        doReturn(editor).when(sharedPreferences).edit();
-        doReturn(editor).when(editor).putBoolean(anyString(), anyBoolean());
-        doNothing().when(editor).apply();
-        doReturn(true).when(sharedPreferences).getBoolean(eq(HAS_UPGRADED), eq(false));
-        AppUtils.saveHasUpgradedToLatest();
-
-        verify(editor, times(1)).apply();
-    }
-
-
-    @After
-    public void tearDown() {
-        ReflectionHelpers.setField(TestEusmApplication.getInstance().context(), "allSharedPreferences", null);
     }
 
 }

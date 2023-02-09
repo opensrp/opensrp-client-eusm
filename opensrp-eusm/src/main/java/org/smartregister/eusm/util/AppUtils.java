@@ -1,7 +1,6 @@
 package org.smartregister.eusm.util;
 
 import android.content.Context;
-import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.drawable.BitmapDrawable;
@@ -50,7 +49,6 @@ import java.util.stream.Collectors;
 import timber.log.Timber;
 
 import static org.smartregister.client.utils.constants.JsonFormConstants.Properties.DETAILS;
-import static org.smartregister.eusm.util.AppConstants.PreferenceKey.HAS_UPGRADED;
 import static org.smartregister.eusm.util.AppConstants.STRUCTURE_IDS;
 import static org.smartregister.tasking.interactor.BaseInteractor.gson;
 import static org.smartregister.tasking.util.Constants.METADATA;
@@ -252,25 +250,4 @@ public class AppUtils extends Utils {
         }
     }
 
-    /*
-     * Return false when the app is launched for the first time
-     * or being upgraded from previous version
-     */
-    public static boolean hasUpgradedToLatest() {
-        SharedPreferences sharedPreferences = EusmApplication.getInstance().context().allSharedPreferences().getPreferences();
-        if (sharedPreferences != null) {
-            return sharedPreferences.getBoolean(HAS_UPGRADED, false);
-        }
-        return false;
-    }
-
-    /*
-     * Save upgrade preference value
-     */
-    public static void saveHasUpgradedToLatest() {
-        SharedPreferences sharedPreferences = EusmApplication.getInstance().context().allSharedPreferences().getPreferences();
-        if (sharedPreferences != null) {
-            sharedPreferences.edit().putBoolean(HAS_UPGRADED, true).apply();
-        }
-    }
 }
