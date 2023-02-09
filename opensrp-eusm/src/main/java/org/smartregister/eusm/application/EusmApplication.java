@@ -449,10 +449,12 @@ public class EusmApplication extends DrishtiApplication implements TimeChangedBr
      */
     public void updateJurisdictions() {
         getAppExecutors().diskIO().execute(() -> {
-            Set<String> districtsIds = AppUtils.getDistrictsFromLocationHierarchy();
+            Set<String> regionIds = AppUtils.getLocationLevelFromLocationHierarchy(AppConstants.LocationLevels.REGION_TAG);
+            Set<String> districtIds = AppUtils.getLocationLevelFromLocationHierarchy(AppConstants.LocationLevels.DISTRICT_TAG);
             UserService userService = context().userService();
             Set<String> locations = userService.fetchJurisdictionIds();
-            locations.addAll(districtsIds);
+            locations.addAll(regionIds);
+            locations.addAll(districtIds);
             userService.saveJurisdictionIds(locations);
         });
     }

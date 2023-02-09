@@ -1,5 +1,14 @@
 package org.smartregister.eusm.fragment;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.CALLS_REAL_METHODS;
+import static org.mockito.Mockito.doReturn;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.spy;
+import static org.mockito.Mockito.verify;
+
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
@@ -25,14 +34,6 @@ import org.smartregister.eusm.presenter.StructureRegisterFragmentPresenter;
 import org.smartregister.eusm.view.NavigationDrawerView;
 import org.smartregister.receiver.SyncStatusBroadcastReceiver;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.doReturn;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.spy;
-import static org.mockito.Mockito.verify;
-
 public class StructureRegisterFragmentTest extends BaseUnitTest {
 
     private FragmentScenario<TestStructureRegisterFragment> fragmentScenario;
@@ -49,6 +50,10 @@ public class StructureRegisterFragmentTest extends BaseUnitTest {
     @Before
     public void setUp() {
         MockitoAnnotations.initMocks(this);
+    }
+
+    @Test
+    public void testOnViewClickShouldOpenMapActivity() {
         ReflectionHelpers.setStaticField(CoreLibrary.class, "instance", coreLibrary);
         doReturn(openspContext).when(coreLibrary).context();
         doReturn(openspContext).when(openspContext).updateApplicationContext(any(android.content.Context.class));
@@ -59,10 +64,7 @@ public class StructureRegisterFragmentTest extends BaseUnitTest {
         fragmentScenario = FragmentScenario
                 .launch(TestStructureRegisterFragment.class)
                 .moveToState(Lifecycle.State.CREATED);
-    }
 
-    @Test
-    public void testOnViewClickShouldOpenMapActivity() {
         fragmentScenario.onFragment(fragment -> {
             View view = new View(RuntimeEnvironment.application);
             view.setId(R.id.task_register);
@@ -77,27 +79,24 @@ public class StructureRegisterFragmentTest extends BaseUnitTest {
 
     @Test
     public void testOnViewClickShouldOpenTaskRegisterActivity() {
-        fragmentScenario.onFragment(fragment -> {
-            View view = new View(RuntimeEnvironment.application);
-            view.setId(R.id.table_layout);
+        View view = new View(RuntimeEnvironment.application);
+        view.setId(R.id.table_layout);
 
-            StructureRegisterFragment fragmentSpy = spy(fragment);
+        StructureRegisterFragment fragment = mock(StructureRegisterFragment.class, CALLS_REAL_METHODS);
 
-            FragmentActivity fragmentActivity = mock(FragmentActivity.class);
+        FragmentActivity fragmentActivity = mock(FragmentActivity.class);
 
-            doReturn(fragmentActivity).when(fragmentSpy).getActivity();
+        doReturn(fragmentActivity).when(fragment).getActivity();
 
-            fragmentSpy.onClick(view);
+        fragment.onClick(view);
+        ArgumentCaptor<Intent> argumentCaptor = ArgumentCaptor.forClass(Intent.class);
+        verify(fragmentActivity).startActivity(argumentCaptor.capture());
 
-            ArgumentCaptor<Intent> argumentCaptor = ArgumentCaptor.forClass(Intent.class);
-            verify(fragmentActivity).startActivity(argumentCaptor.capture());
+        Intent intent = argumentCaptor.getValue();
 
-            Intent intent = argumentCaptor.getValue();
+        assertNotNull(intent);
 
-            assertNotNull(intent);
-
-            assertEquals(EusmTaskRegisterActivity.class.getCanonicalName(), intent.getComponent().getClassName());
-        });
+        assertEquals(EusmTaskRegisterActivity.class.getCanonicalName(), intent.getComponent().getClassName());
     }
 
     @After

@@ -34,10 +34,12 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Optional;
+import java.util.Set;
 
 import timber.log.Timber;
 
@@ -222,5 +224,28 @@ public class NavigationDrawerView extends DrawerMenuView {
         super.toggleProgressBarView(syncing);
         View flexBox = this.activity.getActivity().findViewById(R.id.flex_box);
         flexBox.setVisibility((syncing && NetworkUtils.isNetworkAvailable()) ? View.GONE : View.VISIBLE);
+    }
+
+    @Override
+    public void setOperationalArea(String operationalArea) {
+        try {
+            super.setOperationalArea(getRegionsFromDistricts(operationalArea));
+        } catch (Exception e) {
+            Timber.e(e);
+        }
+    }
+
+    private String getRegionsFromDistricts(String districts) throws Exception{
+        if (StringUtils.isBlank(districts)) {
+            return "";
+        }
+        JSONArray locationHierarchy = new JSONArray(((EusmBaseDrawerPresenter) getPresenter()).extractLocationHierarchy().first);
+        Set<String> operationalAreas  = new HashSet<>(Arrays.asList(districts.split(",")));
+        ArrayList<String> opRegions = AppUtils.getRegionsForDistricts(
+                locationHierarchy,
+                operationalAreas,
+                false
+        );
+        return opRegions.toString();
     }
 }

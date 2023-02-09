@@ -47,7 +47,7 @@
     <string name="delete">delete</string>
     <string name="select_offline_map_to_download">Select Offline map to download</string>
 
-    <string name="operational_area_not_selected">District not selected</string>
+    <string name="operational_area_not_selected">Region not selected</string>
     <string name="plan_not_selected">Mission not selected</string>
 
 
@@ -63,7 +63,7 @@
     <string name="structures">Service Points</string>
     <string name="tasks_text">Tasks</string>
     <string name="fetching_structures_title">Fetching Service Points</string>
-    <string name="fetching_structures_message">Fetching Service Points for Selected District and Mission</string>
+    <string name="fetching_structures_message">Fetching Service Points for Selected Region and Mission</string>
 
     <string name="plans_download_on_progress_title">Download in Progress</string>
     <string name="plans_download_on_progress">Downloading of Missions In Progress. Please wait</string>
@@ -132,9 +132,9 @@
     <string name="flag_problem_form_name">Flag Problem</string>
     <string name="gps_unknown">GPS unknown</string>
 
-    <string name="select_campaign_operational_area_title">Mission and District not set</string>
-    <string name="select_campaign_operational_area">Mission and District not set. Select from the hamburger menu</string>
-    <string name="revoked_plan_operational_area">Previously selected Mission and/or District revoked. Select from the hamburger menu</string>
+    <string name="select_campaign_operational_area_title">Mission and Region not set</string>
+    <string name="select_campaign_operational_area">Mission and Region not set. Select from the hamburger menu</string>
+    <string name="revoked_plan_operational_area">Previously selected Mission and/or Region revoked. Select from the hamburger menu</string>
     <string name="read_and_write_permission_not_granted">Read And Write Storage Permission Not Granted</string>
 
     <string name="service_point_check_task_title">Service Point Check</string>
@@ -146,12 +146,13 @@
     <string name="stock_type_id_key" translatable="false">identifier</string>
     <string name="ok_text">OK</string>
     <string name="new_assignment_dialog_title">New Mission Assigned</string>
-    <string name="no_structures_found">There are no active service points in this district.</string>
-    <string name="fetch_location_and_structures_failed">There are no active service points in this district.</string>
+    <string name="no_structures_found">There are no active service points in this region.</string>
+    <string name="fetch_location_and_structures_failed">There are no active service points in this region.</string>
     <string name="account_disabled">Account Disabled</string>
     <string name="fetching_structure_title">Fetching Structure Details</string>
     <string name="fetching_structure_message">Fetching Structure Details. Please wait</string>
     <string name="map_download_progress">Downloading: %,.2f %%</string>
+    <string name="regions">Regions</string>
 
     <string name="consult_beneficiaries_task_title">Consult Beneficiaries</string>
     <string name="warehouse_check_task_title">Warehouse Check</string>

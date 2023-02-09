@@ -58,6 +58,8 @@ public interface AppConstants extends TaskingConstants {
         String RECORD_GPS_FORM = "record_gps";
 
         String LOOKS_GOOD = "looks_good";
+        String NODES = "nodes";
+
     }
 
     interface EventDetailKey {
@@ -164,6 +166,7 @@ public interface AppConstants extends TaskingConstants {
         String DISTRICT = "district";
         String COMMUNE = "commune";
         String DISTRICT_TAG = "District";
+        String REGION_TAG = "Region";
     }
 
     interface OfflineMapDownload {
@@ -173,6 +176,7 @@ public interface AppConstants extends TaskingConstants {
 
     interface LocationGeographicLevel {
         String DISTRICT = "2";
+        String REGION = "1";
     }
 
 }

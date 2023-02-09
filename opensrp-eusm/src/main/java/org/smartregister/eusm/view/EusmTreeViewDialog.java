@@ -8,15 +8,20 @@ import com.vijay.jsonwizard.customviews.TreeViewDialog;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.smartregister.eusm.util.AppConstants;
+import org.smartregister.eusm.util.AppUtils;
 import org.smartregister.eusm.viewholder.TreeSelectionItemViewHolder;
 import org.smartregister.tasking.util.PreferencesUtil;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.Set;
+
+import timber.log.Timber;
 
 public class EusmTreeViewDialog extends TreeViewDialog {
 
-    private Set<String> operationalAreas;
+    private Set<String> operationalRegions;
 
     public EusmTreeViewDialog(Context context, int theme, JSONArray structure,
                               ArrayList<String> defaultValue, ArrayList<String> value,
@@ -27,8 +32,20 @@ public class EusmTreeViewDialog extends TreeViewDialog {
 
     @Override
     public void init(JSONArray nodes, ArrayList<String> defaultValue, ArrayList<String> value, boolean isSelectionMode) throws JSONException {
-        this.operationalAreas = PreferencesUtil.getInstance().getCurrentOperationalAreas();
+        try {
+            // Get selected regions from districts
+            this.operationalRegions = populateOperationalRegions(nodes);
+        } catch (Exception e) {
+            Timber.e(e);
+        }
         super.init(nodes, defaultValue, value, isSelectionMode);
+    }
+
+    private Set<String> populateOperationalRegions(JSONArray nodes) throws Exception {
+        ArrayList<String> regions = AppUtils.getRegionsForDistricts(nodes,
+                PreferencesUtil.getInstance().getCurrentOperationalAreas(),
+                true);
+        return new HashSet<>(regions);
     }
 
     @Override
@@ -36,10 +53,13 @@ public class EusmTreeViewDialog extends TreeViewDialog {
         return new TreeSelectionItemViewHolder(context, structure.optString(KEY_LEVEL, ""));
     }
 
+    /*
+     * Update tree node to select the referenced selected regions
+     */
     @Override
     public void updateTreeNode(int level, TreeNode curNode, TreeNode parentNode) {
-        curNode.setSelectable(level == 3);
-        boolean isSelected = operationalAreas.contains(curNode.getValue().toString());
+        curNode.setSelectable(level == Integer.parseInt(AppConstants.LocationGeographicLevel.DISTRICT));
+        boolean isSelected = operationalRegions.contains(curNode.getValue().toString());
         curNode.setSelected(isSelected);
     }
 

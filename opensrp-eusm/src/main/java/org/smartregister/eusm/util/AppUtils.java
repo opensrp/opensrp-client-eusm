@@ -1,5 +1,12 @@
 package org.smartregister.eusm.util;
 
+import static org.smartregister.client.utils.constants.JsonFormConstants.Properties.DETAILS;
+import static org.smartregister.eusm.util.AppConstants.STRUCTURE_IDS;
+import static org.smartregister.tasking.interactor.BaseInteractor.gson;
+import static org.smartregister.tasking.util.Constants.METADATA;
+import static org.smartregister.util.JsonFormUtils.ENTITY_ID;
+import static org.smartregister.util.JsonFormUtils.getString;
+
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
@@ -30,6 +37,7 @@ import org.smartregister.eusm.application.EusmApplication;
 import org.smartregister.eusm.domain.StructureDetail;
 import org.smartregister.eusm.repository.AppStructureRepository;
 import org.smartregister.repository.BaseRepository;
+import org.smartregister.tasking.util.TaskingConstants;
 import org.smartregister.tasking.util.Utils;
 import org.smartregister.util.Cache;
 import org.smartregister.util.JsonFormUtils;
@@ -37,6 +45,7 @@ import org.smartregister.util.JsonFormUtils;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.HashSet;
@@ -171,9 +180,9 @@ public class AppUtils extends Utils {
         return Arrays.stream(StringUtils.split(structureIds, ",")).collect(Collectors.toSet());
     }
 
-    public static Set<String> getDistrictsFromLocationHierarchy() {
+    public static Set<String> getLocationLevelFromLocationHierarchy(String tag) {
         org.smartregister.domain.jsonmapping.util.LocationTree locationTree = gson.fromJson(CoreLibrary.getInstance().context().allSettings().fetchANMLocation(), org.smartregister.domain.jsonmapping.util.LocationTree.class);
-        Set<String> districtIds = new HashSet<>();
+        Set<String> locationIds = new HashSet<>();
         if (locationTree != null) {
             Set<String> parentLocations = new HashSet<>();
             LinkedHashMap<String, LinkedHashSet<String>> hashMap = locationTree.getChildParent();
@@ -185,12 +194,12 @@ public class AppUtils extends Utils {
             for (String id : parentLocations) {
                 Location location = locationTree.findLocation(id);
                 if (location != null && StringUtils.isNotBlank(location.getLocationId())
-                        && location.hasTag(AppConstants.LocationLevels.DISTRICT_TAG)) {
-                    districtIds.add(location.getLocationId());
+                        && location.hasTag(tag)) {
+                    locationIds.add(location.getLocationId());
                 }
             }
         }
-        return districtIds;
+        return locationIds;
     }
 
     public static String getStringFromJsonElement(JsonObject jsonObject, String key) {
@@ -201,7 +210,7 @@ public class AppUtils extends Utils {
     public static org.smartregister.domain.Location getOperationalAreaLocation(String operationalArea) {
         return cache.get(operationalArea, () -> {
             return EusmApplication.getInstance().getAppLocationRepository()
-                    .getLocationByNameAndGeoLevel(operationalArea, AppConstants.LocationGeographicLevel.DISTRICT);//restrict to district geographic level
+                    .getLocationByNameAndGeoLevel(operationalArea, AppConstants.LocationGeographicLevel.REGION);//restrict to region geographic level
         });
     }
 
@@ -250,6 +259,34 @@ public class AppUtils extends Utils {
 
             structureRepository.addOrUpdate(location);
         }
+    }
+
+    public static ArrayList<String> getRegionsForDistricts(JSONArray locationHierarchy, Set<String> districts, boolean hideDistricts) throws Exception {
+        ArrayList<String> opRegions = new ArrayList<>();
+        JSONObject country = locationHierarchy.getJSONObject(0);
+        if (country != null && country.has(AppConstants.JsonForm.NODES)) {
+            JSONArray regions = country.getJSONArray(AppConstants.JsonForm.NODES);
+            for (int i = 0; i < regions.length(); i++) {
+                JSONObject location = regions.getJSONObject(i);
+                if (location != null) {
+                    String locName = location.getString(TaskingConstants.CONFIGURATION.KEY);
+                    if (location.has(AppConstants.JsonForm.NODES)) {
+                        JSONArray childNodes = location.getJSONArray(AppConstants.JsonForm.NODES);
+                        for (int j = 0; j < childNodes.length(); j++) {
+                            if (districts.contains(childNodes.getJSONObject(j).getString(TaskingConstants.CONFIGURATION.KEY))) {
+                                opRegions.add(locName);
+                                break;
+                            }
+                        }
+                        // Hide District labels from hierarchy
+                        if (hideDistricts) {
+                            location.put(AppConstants.JsonForm.NODES, new JSONArray());
+                        }
+                    }
+                }
+            }
+        }
+        return opRegions;
     }
 
     /*
