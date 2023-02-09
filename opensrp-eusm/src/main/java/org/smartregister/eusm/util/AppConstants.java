@@ -14,6 +14,7 @@ public interface AppConstants extends TaskingConstants {
 
     interface PreferenceKey {
         String COMMUNE_ID = "COMMUNE_ID";
+        String HAS_UPGRADED = "IS_UPGRADE";
     }
 
     interface Column {
@@ -174,7 +175,4 @@ public interface AppConstants extends TaskingConstants {
         String DISTRICT = "2";
     }
 
-    interface AppRelease {
-        String V0_2_0 = "0.2.0";
-    }
 }

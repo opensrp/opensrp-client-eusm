@@ -461,8 +461,8 @@ public class EusmApplication extends DrishtiApplication implements TimeChangedBr
      * Cancel previously scheduled jobs to disable auto sync
      */
     private void cancelPreviousJobsIfRequired() {
-        //noinspection ConstantConditions
-        if (BuildConfig.VERSION_NAME.contains(AppConstants.AppRelease.V0_2_0)) {
+        if (!AppUtils.hasDisabledScheduledJobs()) {
+            AppUtils.saveHasDisabledScheduledJobs();
             JobManager.instance().cancelAllForTag(LocationTaskServiceJob.TAG);
             JobManager.instance().cancelAllForTag(ImageUploadServiceJob.TAG);
             JobManager.instance().cancelAllForTag(DocumentConfigurationServiceJob.TAG);
