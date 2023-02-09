@@ -254,21 +254,26 @@ public class AppUtils extends Utils {
 
     public static ArrayList<String> getRegionsForDistricts(JSONArray locationHierarchy, Set<String> districts, boolean hideDistricts) throws Exception {
         ArrayList<String> opRegions = new ArrayList<>();
-        JSONArray regions = locationHierarchy.getJSONObject(0).getJSONArray(AppConstants.JsonForm.NODES);
-        for (int i = 0; i < regions.length(); i++) {
-            JSONObject location = regions.getJSONObject(i);
-            String locName = location.getString(TaskingConstants.CONFIGURATION.KEY);
-            if (location.has(AppConstants.JsonForm.NODES)) {
-                JSONArray childNodes = location.getJSONArray(AppConstants.JsonForm.NODES);
-                for (int j = 0; j < childNodes.length(); j++) {
-                    if (districts.contains(childNodes.getJSONObject(j).getString(TaskingConstants.CONFIGURATION.KEY))) {
-                        opRegions.add(locName);
-                        break;
+        JSONObject country = locationHierarchy.getJSONObject(0);
+        if (country != null && country.has(AppConstants.JsonForm.NODES)) {
+            JSONArray regions = country.getJSONArray(AppConstants.JsonForm.NODES);
+            for (int i = 0; i < regions.length(); i++) {
+                JSONObject location = regions.getJSONObject(i);
+                if (location != null) {
+                    String locName = location.getString(TaskingConstants.CONFIGURATION.KEY);
+                    if (location.has(AppConstants.JsonForm.NODES)) {
+                        JSONArray childNodes = location.getJSONArray(AppConstants.JsonForm.NODES);
+                        for (int j = 0; j < childNodes.length(); j++) {
+                            if (districts.contains(childNodes.getJSONObject(j).getString(TaskingConstants.CONFIGURATION.KEY))) {
+                                opRegions.add(locName);
+                                break;
+                            }
+                        }
+                        // Hide District labels from hierarchy
+                        if (hideDistricts) {
+                            location.put(AppConstants.JsonForm.NODES, new JSONArray());
+                        }
                     }
-                }
-                // Hide District labels from hierarchy
-                if (hideDistricts) {
-                    location.put(AppConstants.JsonForm.NODES, new JSONArray());
                 }
             }
         }
