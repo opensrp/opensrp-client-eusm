@@ -40,7 +40,7 @@ import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
-import static org.smartregister.eusm.util.AppConstants.PreferenceKey.HAS_UPGRADED;
+import static org.smartregister.eusm.util.AppConstants.PreferenceKey.DISABLE_SCHEDULED_JOBS;
 import static org.smartregister.eusm.util.AppConstants.STRUCTURE_IDS;
 
 import android.content.SharedPreferences;
@@ -135,7 +135,7 @@ public class AppUtilsTest extends BaseUnitTest {
         ReflectionHelpers.setField(TestEusmApplication.getInstance().context(), "allSharedPreferences", allSharedPreferences);
 
         doReturn(sharedPreferences).when(allSharedPreferences).getPreferences();
-        doReturn(true).when(sharedPreferences).getBoolean(eq(HAS_UPGRADED), eq(false));
+        doReturn(true).when(sharedPreferences).getBoolean(eq(DISABLE_SCHEDULED_JOBS), eq(false));
         boolean hasUpgraded = AppUtils.hasDisabledScheduledJobs();
 
         assertTrue(hasUpgraded);
@@ -152,7 +152,7 @@ public class AppUtilsTest extends BaseUnitTest {
         doReturn(editor).when(sharedPreferences).edit();
         doReturn(editor).when(editor).putBoolean(anyString(), anyBoolean());
         doNothing().when(editor).apply();
-        doReturn(true).when(sharedPreferences).getBoolean(eq(HAS_UPGRADED), eq(false));
+        doReturn(true).when(sharedPreferences).getBoolean(eq(DISABLE_SCHEDULED_JOBS), eq(false));
         AppUtils.saveHasDisabledScheduledJobs();
 
         verify(editor, times(1)).apply();

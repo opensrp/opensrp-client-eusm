@@ -58,12 +58,7 @@ import java.util.stream.Collectors;
 
 import timber.log.Timber;
 
-import static org.smartregister.client.utils.constants.JsonFormConstants.Properties.DETAILS;
-import static org.smartregister.eusm.util.AppConstants.PreferenceKey.HAS_UPGRADED;
-import static org.smartregister.eusm.util.AppConstants.STRUCTURE_IDS;
-import static org.smartregister.tasking.interactor.BaseInteractor.gson;
-import static org.smartregister.tasking.util.Constants.METADATA;
-import static org.smartregister.util.JsonFormUtils.ENTITY_ID;
+import static org.smartregister.eusm.util.AppConstants.PreferenceKey.DISABLE_SCHEDULED_JOBS;
 import static org.smartregister.util.JsonFormUtils.getString;
 
 public class AppUtils extends Utils {
@@ -296,7 +291,7 @@ public class AppUtils extends Utils {
     public static boolean hasDisabledScheduledJobs() {
         SharedPreferences sharedPreferences = EusmApplication.getInstance().context().allSharedPreferences().getPreferences();
         if (sharedPreferences != null) {
-            return sharedPreferences.getBoolean(HAS_UPGRADED, false);
+            return sharedPreferences.getBoolean(DISABLE_SCHEDULED_JOBS, false);
         }
         return false;
     }
@@ -307,7 +302,7 @@ public class AppUtils extends Utils {
     public static void saveHasDisabledScheduledJobs() {
         SharedPreferences sharedPreferences = EusmApplication.getInstance().context().allSharedPreferences().getPreferences();
         if (sharedPreferences != null) {
-            sharedPreferences.edit().putBoolean(HAS_UPGRADED, true).apply();
+            sharedPreferences.edit().putBoolean(DISABLE_SCHEDULED_JOBS, true).apply();
         }
     }
 
