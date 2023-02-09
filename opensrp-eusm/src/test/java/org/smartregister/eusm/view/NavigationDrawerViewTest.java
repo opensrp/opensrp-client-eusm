@@ -12,19 +12,21 @@ import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
+import org.powermock.reflect.Whitebox;
 import org.robolectric.Robolectric;
 import org.robolectric.RuntimeEnvironment;
 import org.robolectric.shadows.ShadowAlertDialog;
 import org.robolectric.util.ReflectionHelpers;
 import org.smartregister.eusm.BaseUnitTest;
 import org.smartregister.eusm.R;
+import org.smartregister.eusm.presenter.EusmBaseDrawerPresenter;
 import org.smartregister.tasking.contract.BaseDrawerContract;
 
 import java.util.ArrayList;
-
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.doReturn;
+import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.spy;
 import static org.mockito.Mockito.verify;
 
@@ -84,5 +86,18 @@ public class NavigationDrawerViewTest extends BaseUnitTest {
         Dialog dialog = ShadowAlertDialog.getLatestDialog();
         Assert.assertNotNull(dialog);
         Assert.assertTrue(dialog instanceof EusmTreeViewDialog);
+    }
+
+    @Test
+    public void testSetOperationalAreaShouldSaveRegionsForDistricts() throws Exception {
+        String locationHierarchy = "[{\"key\":\"Madagascar\",\"level\":\"\",\"name\":\"Madagascar\",\"nodes\":[{\"key\":\"ANDROY\",\"level\":\"\",\"name\":\"ANDROY\",\"nodes\":[{\"key\":\"Ambovombe\",\"level\":\"\",\"name\":\"Ambovombe\",\"nodes\":[]},{\"key\":\"Bekily\",\"level\":\"\",\"name\":\"Bekily\",\"nodes\":[]},{\"key\":\"Beloha\",\"level\":\"\",\"name\":\"Beloha\",\"nodes\":[]},{\"key\":\"Tsihombe\",\"level\":\"\",\"name\":\"Tsihombe\",\"nodes\":[]}]},{\"key\":\"ATSIMO ATSINANANA\",\"level\":\"\",\"name\":\"ATSIMO ATSINANANA\",\"nodes\":[{\"key\":\"Befotaka\",\"level\":\"\",\"name\":\"Befotaka\",\"nodes\":[]},{\"key\":\"Farafangana\",\"level\":\"\",\"name\":\"Farafangana\",\"nodes\":[]},{\"key\":\"Midongy Atsimo\",\"level\":\"\",\"name\":\"Midongy Atsimo\",\"nodes\":[]},{\"key\":\"Vangaindrano\",\"level\":\"\",\"name\":\"Vangaindrano\",\"nodes\":[]},{\"key\":\"Vondrozo\",\"level\":\"\",\"name\":\"Vondrozo\",\"nodes\":[]}]},{\"key\":\"ITASY\",\"level\":\"\",\"name\":\"ITASY\",\"nodes\":[{\"key\":\"Arivonimamo\",\"level\":\"\",\"name\":\"Arivonimamo\",\"nodes\":[]},{\"key\":\"Miarinarivo\",\"level\":\"\",\"name\":\"Miarinarivo\",\"nodes\":[]},{\"key\":\"Soavinandriana\",\"level\":\"\",\"name\":\"Soavinandriana\",\"nodes\":[]}]}]}]";
+        EusmBaseDrawerPresenter presenter = mock(EusmBaseDrawerPresenter.class);
+        doReturn(presenter).when(navigationDrawerView).getPresenter();
+        doReturn(Pair.create(locationHierarchy, new ArrayList<String>())).when(presenter).extractLocationHierarchy();
+        String districts = "Ambovombe,Midongy Atsimo,Vondrozo,Arivonimamo,Soavinandriana,Vangaindrano,Befotaka,Bekily,Miarinarivo,Tsihombe,Beloha,Farafangana";
+        String result = Whitebox.invokeMethod(navigationDrawerView, "getRegionsFromDistricts", districts);
+
+        String expectedRegions = "[ANDROY, ATSIMO ATSINANANA, ITASY]";
+        Assert.assertEquals(expectedRegions, result);
     }
 }
