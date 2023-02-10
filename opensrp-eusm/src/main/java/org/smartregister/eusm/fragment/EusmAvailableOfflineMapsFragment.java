@@ -22,6 +22,7 @@ import org.smartregister.util.AppExecutors;
 import org.smartregister.util.Utils;
 
 import java.util.List;
+import java.util.Set;
 
 import timber.log.Timber;
 
@@ -43,33 +44,32 @@ public class EusmAvailableOfflineMapsFragment extends AvailableOfflineMapsFragme
 
     @Override
     protected void downloadLocation(@NonNull Location location) {
-        getAppExecutors().diskIO().execute(new Runnable() {
-            @Override
-            public void run() {
-                String name = location.getId();
-                List<Location> locationList = getAppStructureRepository().getStructuresByDistrictId(name);
-                if (locationList == null || locationList.isEmpty()) {
+        String locationId =  location.getId();
+        Set<Location> districts = EusmApplication.getInstance().getAppLocationRepository().getDistrictIdsForRegionId(locationId);
+        for (Location district : districts) {
+            downloadDistrictMap(district.getId());
+        }
+    }
+
+    protected void downloadDistrictMap(String districtId) {
+        getAppExecutors().diskIO().execute(() -> {
+            List<Location> locationList = getAppStructureRepository().getStructuresByDistrictId(districtId);
+            if (locationList == null || locationList.isEmpty()) {
+                getAppExecutors().mainThread().execute(() -> showToast(R.string.location_has_no_structures));
+            } else {
+                JSONObject featureCollection = new JSONObject();
+                try {
+                    featureCollection.put(TaskingConstants.GeoJSON.TYPE, TaskingConstants.GeoJSON.FEATURE_COLLECTION);
+                    featureCollection.put(TaskingConstants.GeoJSON.FEATURES, new JSONArray(gson.toJson(locationList)));
                     getAppExecutors().mainThread().execute(new Runnable() {
                         @Override
                         public void run() {
-                            showToast(R.string.location_has_no_structures);
+                            showToast(R.string.download_starting);
+                            downloadMap(FeatureCollection.fromJson(featureCollection.toString()), districtId);
                         }
                     });
-                } else {
-                    JSONObject featureCollection = new JSONObject();
-                    try {
-                        featureCollection.put(TaskingConstants.GeoJSON.TYPE, TaskingConstants.GeoJSON.FEATURE_COLLECTION);
-                        featureCollection.put(TaskingConstants.GeoJSON.FEATURES, new JSONArray(gson.toJson(locationList)));
-                        getAppExecutors().mainThread().execute(new Runnable() {
-                            @Override
-                            public void run() {
-                                showToast(R.string.download_starting);
-                                downloadMap(FeatureCollection.fromJson(featureCollection.toString()), name);
-                            }
-                        });
-                    } catch (JSONException e) {
-                        Timber.e(e);
-                    }
+                } catch (JSONException e) {
+                    Timber.e(e);
                 }
             }
         });
