@@ -11,11 +11,13 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.smartregister.domain.Location;
+import org.smartregister.domain.LocationTag;
 import org.smartregister.eusm.R;
 import org.smartregister.eusm.application.EusmApplication;
+import org.smartregister.eusm.presenter.EUSMAvailableOfflineMapsPresenter;
 import org.smartregister.eusm.repository.AppStructureRepository;
 import org.smartregister.tasking.fragment.AvailableOfflineMapsFragment;
-import org.smartregister.tasking.presenter.AvailableOfflineMapsPresenter;
+import org.smartregister.tasking.model.OfflineMapModel;
 import org.smartregister.tasking.util.OfflineMapHelper;
 import org.smartregister.tasking.util.TaskingConstants;
 import org.smartregister.util.AppExecutors;
@@ -37,14 +39,14 @@ public class EusmAvailableOfflineMapsFragment extends AvailableOfflineMapsFragme
         if (bundle != null) {
             fragment.setArguments(bundle);
         }
-        fragment.setPresenter(new AvailableOfflineMapsPresenter(fragment));
+        fragment.setPresenter(new EUSMAvailableOfflineMapsPresenter(fragment));
         fragment.setMapStyleAssetPath(mapStyleAssetPath);
         return fragment;
     }
 
     @Override
     protected void downloadLocation(@NonNull Location location) {
-        String locationId =  location.getId();
+        String locationId = location.getId();
         Set<Location> districts = EusmApplication.getInstance().getAppLocationRepository().getDistrictIdsForRegionId(locationId);
         for (Location district : districts) {
             downloadDistrictMap(district.getId());
@@ -95,5 +97,23 @@ public class EusmAvailableOfflineMapsFragment extends AvailableOfflineMapsFragme
             appExecutors = EusmApplication.getInstance().getAppExecutors();
         }
         return appExecutors;
+    }
+
+    @Override
+    public void moveDownloadedOAToDownloadedList(String operationalAreaId) {
+        String regionId = EusmApplication.getInstance().getAppLocationRepository().getRegionIdForDistrictId(operationalAreaId).getId();
+        super.moveDownloadedOAToDownloadedList(regionId);
+    }
+
+    @Override
+    public void updateOperationalAreasToDownload(OfflineMapModel offlineMapModel) {
+        Set<LocationTag> tags = offlineMapModel.getLocation().getLocationTags();
+        for (LocationTag tag : tags) {
+            if (tag.getName().equalsIgnoreCase("district")) {
+                Location region = EusmApplication.getInstance().getAppLocationRepository().getRegionIdForDistrictId(offlineMapModel.getLocation().getId());
+                offlineMapModel.setLocation(region);
+            }
+        }
+        super.updateOperationalAreasToDownload(offlineMapModel);
     }
 }

@@ -97,4 +97,17 @@ public class AppLocationRepository extends LocationRepository {
         }
         return districts;
     }
+
+    public Location getRegionIdForDistrictId(String districtId) {
+        try (Cursor cursor = getReadableDatabase().rawQuery("SELECT * FROM " + getLocationTableName() +
+                " WHERE " + ID + " IN (SELECT " + PARENT_ID + " FROM " + getLocationTableName() + " WHERE " +
+                ID + " =? )", new String[]{districtId})) {
+            if (cursor.moveToFirst()) {
+                return readCursor(cursor);
+            }
+        } catch (SQLException e) {
+            Timber.e(e);
+        }
+        return null;
+    }
 }
