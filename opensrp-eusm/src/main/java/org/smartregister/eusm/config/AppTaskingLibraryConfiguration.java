@@ -431,7 +431,7 @@ public class AppTaskingLibraryConfiguration extends TaskingLibraryConfiguration 
     @Override
     public String getDistrictFromTreeDialogValue(List<String> arrayList) {
         try {
-            return arrayList.get(2);
+            return arrayList.get(1);
         } catch (IndexOutOfBoundsException e) {
             Timber.e(e);
         }

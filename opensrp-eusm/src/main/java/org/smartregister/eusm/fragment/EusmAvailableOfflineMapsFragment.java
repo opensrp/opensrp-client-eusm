@@ -1,6 +1,8 @@
 package org.smartregister.eusm.fragment;
 
 import android.os.Bundle;
+import android.view.View;
+import android.widget.CheckBox;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.StringRes;
@@ -23,6 +25,7 @@ import org.smartregister.tasking.util.TaskingConstants;
 import org.smartregister.util.AppExecutors;
 import org.smartregister.util.Utils;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
@@ -33,6 +36,10 @@ public class EusmAvailableOfflineMapsFragment extends AvailableOfflineMapsFragme
     private AppStructureRepository appStructureRepository;
 
     private AppExecutors appExecutors;
+
+    private List<OfflineMapModel> offlineMapModelList = new ArrayList<>();
+
+    private List<Location> operationalAreasToDownload = new ArrayList<>();
 
     public static EusmAvailableOfflineMapsFragment newInstance(Bundle bundle, @NonNull String mapStyleAssetPath) {
         EusmAvailableOfflineMapsFragment fragment = new EusmAvailableOfflineMapsFragment();
@@ -102,7 +109,19 @@ public class EusmAvailableOfflineMapsFragment extends AvailableOfflineMapsFragme
     @Override
     public void moveDownloadedOAToDownloadedList(String operationalAreaId) {
         String regionId = EusmApplication.getInstance().getAppLocationRepository().getRegionIdForDistrictId(operationalAreaId).getId();
-        super.moveDownloadedOAToDownloadedList(regionId);
+        List<OfflineMapModel> toRemoveFromAvailableList = new ArrayList<>();
+        List<Location> toRemoveFromDownloadList = new ArrayList<>();
+        for (OfflineMapModel offlineMapModel : offlineMapModelList) {
+            if (offlineMapModel.getDownloadAreaId().equals(regionId)) {
+                offlineMapModel.setOfflineMapStatus(OfflineMapModel.OfflineMapStatus.DOWNLOADED);
+                callback.onMapDownloaded(offlineMapModel);
+                toRemoveFromAvailableList.add(offlineMapModel);
+                toRemoveFromDownloadList.add(offlineMapModel.getLocation());
+                setOfflineMapModelList(offlineMapModelList);
+                break;
+            }
+        }
+        operationalAreasToDownload.removeAll(toRemoveFromDownloadList);
     }
 
     @Override
@@ -115,5 +134,53 @@ public class EusmAvailableOfflineMapsFragment extends AvailableOfflineMapsFragme
             }
         }
         super.updateOperationalAreasToDownload(offlineMapModel);
+    }
+
+    @Override
+    public void updateOperationalAreasToDownload(View view) {
+        CheckBox checkBox = (CheckBox) view;
+        OfflineMapModel offlineMapModel = (OfflineMapModel) view.getTag(R.id.offline_map_checkbox);
+
+        if (checkBox.isChecked()) {
+            offlineMapModel.setOfflineMapStatus(OfflineMapModel.OfflineMapStatus.SELECTED_FOR_DOWNLOAD);
+            operationalAreasToDownload.clear();
+            operationalAreasToDownload.add(offlineMapModel.getLocation());
+
+            for (OfflineMapModel model : offlineMapModelList) {
+                if (!model.getDownloadAreaId().equals(offlineMapModel.getDownloadAreaId())
+                        && model.getOfflineMapStatus() == OfflineMapModel.OfflineMapStatus.SELECTED_FOR_DOWNLOAD) {
+                    model.setOfflineMapStatus(OfflineMapModel.OfflineMapStatus.READY);
+                }
+            }
+            setOfflineMapModelList(offlineMapModelList);
+        } else {
+            operationalAreasToDownload.remove(offlineMapModel.getLocation());
+        }
+    }
+
+    @Override
+    public void setOfflineMapModelList(List<OfflineMapModel> offlineMapModelList) {
+        this.offlineMapModelList = offlineMapModelList;
+        super.setOfflineMapModelList(offlineMapModelList);
+    }
+
+    @Override
+    public void initiateMapDownload() {
+        if (this.operationalAreasToDownload == null || this.operationalAreasToDownload.isEmpty()) {
+            displayToast(getString(R.string.select_offline_map_to_download));
+            return;
+        }
+
+        for (OfflineMapModel model : offlineMapModelList) {
+            if (model.getOfflineMapStatus() == OfflineMapModel.OfflineMapStatus.DOWNLOAD_STARTED) {
+                Timber.e("Error: A map download is already in progress");
+                return;
+            }
+        }
+
+        for (Location location : this.operationalAreasToDownload) {
+            disableCheckBox(location.getId());
+            downloadLocation(location);
+        }
     }
 }
