@@ -17,6 +17,7 @@ import org.smartregister.domain.LocationTag;
 import org.smartregister.eusm.R;
 import org.smartregister.eusm.application.EusmApplication;
 import org.smartregister.eusm.presenter.EUSMAvailableOfflineMapsPresenter;
+import org.smartregister.eusm.repository.AppLocationRepository;
 import org.smartregister.eusm.repository.AppStructureRepository;
 import org.smartregister.tasking.fragment.AvailableOfflineMapsFragment;
 import org.smartregister.tasking.model.OfflineMapModel;
@@ -34,6 +35,8 @@ import timber.log.Timber;
 public class EusmAvailableOfflineMapsFragment extends AvailableOfflineMapsFragment {
 
     private AppStructureRepository appStructureRepository;
+
+    private AppLocationRepository appLocationRepository;
 
     private AppExecutors appExecutors;
 
@@ -54,7 +57,7 @@ public class EusmAvailableOfflineMapsFragment extends AvailableOfflineMapsFragme
     @Override
     protected void downloadLocation(@NonNull Location location) {
         String locationId = location.getId();
-        Set<Location> districts = EusmApplication.getInstance().getAppLocationRepository().getDistrictIdsForRegionId(locationId);
+        Set<Location> districts = getAppLocationRepository().getDistrictIdsForRegionId(locationId);
         for (Location district : districts) {
             downloadDistrictMap(district.getId());
         }
@@ -97,6 +100,13 @@ public class EusmAvailableOfflineMapsFragment extends AvailableOfflineMapsFragme
             appStructureRepository = EusmApplication.getInstance().getStructureRepository();
         }
         return appStructureRepository;
+    }
+
+    public AppLocationRepository getAppLocationRepository() {
+        if (appLocationRepository == null) {
+            appLocationRepository = EusmApplication.getInstance().getAppLocationRepository();
+        }
+        return appLocationRepository;
     }
 
     public AppExecutors getAppExecutors() {
