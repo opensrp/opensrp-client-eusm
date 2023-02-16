@@ -5,30 +5,26 @@ import android.view.View;
 import android.widget.CheckBox;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.StringRes;
 
+import com.google.android.material.snackbar.Snackbar;
 import com.mapbox.geojson.FeatureCollection;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.smartregister.domain.Location;
-import org.smartregister.domain.LocationTag;
 import org.smartregister.eusm.R;
 import org.smartregister.eusm.application.EusmApplication;
-import org.smartregister.eusm.presenter.EUSMAvailableOfflineMapsPresenter;
-import org.smartregister.eusm.repository.AppLocationRepository;
 import org.smartregister.eusm.repository.AppStructureRepository;
 import org.smartregister.tasking.fragment.AvailableOfflineMapsFragment;
 import org.smartregister.tasking.model.OfflineMapModel;
+import org.smartregister.tasking.presenter.AvailableOfflineMapsPresenter;
 import org.smartregister.tasking.util.OfflineMapHelper;
 import org.smartregister.tasking.util.TaskingConstants;
 import org.smartregister.util.AppExecutors;
-import org.smartregister.util.Utils;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
 
 import timber.log.Timber;
 
@@ -36,38 +32,41 @@ public class EusmAvailableOfflineMapsFragment extends AvailableOfflineMapsFragme
 
     private AppStructureRepository appStructureRepository;
 
-    private AppLocationRepository appLocationRepository;
-
     private AppExecutors appExecutors;
 
     private List<OfflineMapModel> offlineMapModelList = new ArrayList<>();
 
     private List<Location> operationalAreasToDownload = new ArrayList<>();
 
+    private Snackbar displayBar = null;
+
     public static EusmAvailableOfflineMapsFragment newInstance(Bundle bundle, @NonNull String mapStyleAssetPath) {
         EusmAvailableOfflineMapsFragment fragment = new EusmAvailableOfflineMapsFragment();
         if (bundle != null) {
             fragment.setArguments(bundle);
         }
-        fragment.setPresenter(new EUSMAvailableOfflineMapsPresenter(fragment));
+        fragment.setPresenter(new AvailableOfflineMapsPresenter(fragment));
         fragment.setMapStyleAssetPath(mapStyleAssetPath);
         return fragment;
     }
 
     @Override
     protected void downloadLocation(@NonNull Location location) {
-        String locationId = location.getId();
-        Set<Location> districts = getAppLocationRepository().getDistrictIdsForRegionId(locationId);
-        for (Location district : districts) {
-            downloadDistrictMap(district.getId());
-        }
+        downloadDistrictMap(location.getId());
     }
 
     protected void downloadDistrictMap(String districtId) {
         getAppExecutors().diskIO().execute(() -> {
             List<Location> locationList = getAppStructureRepository().getStructuresByDistrictId(districtId);
             if (locationList == null || locationList.isEmpty()) {
-                getAppExecutors().mainThread().execute(() -> showToast(R.string.location_has_no_structures));
+                getAppExecutors().mainThread().execute(() -> displayToast(getString(R.string.location_has_no_structures)));
+                // Revert download map status
+                for (OfflineMapModel model : offlineMapModelList) {
+                    if (model.getOfflineMapStatus() == OfflineMapModel.OfflineMapStatus.DOWNLOAD_STARTED) {
+                        model.setOfflineMapStatus(OfflineMapModel.OfflineMapStatus.READY);
+                        return;
+                    }
+                }
             } else {
                 JSONObject featureCollection = new JSONObject();
                 try {
@@ -76,7 +75,7 @@ public class EusmAvailableOfflineMapsFragment extends AvailableOfflineMapsFragme
                     getAppExecutors().mainThread().execute(new Runnable() {
                         @Override
                         public void run() {
-                            showToast(R.string.download_starting);
+                            displayToast(getString(R.string.download_starting));
                             downloadMap(FeatureCollection.fromJson(featureCollection.toString()), districtId);
                         }
                     });
@@ -85,10 +84,6 @@ public class EusmAvailableOfflineMapsFragment extends AvailableOfflineMapsFragme
                 }
             }
         });
-    }
-
-    protected void showToast(@StringRes int stringRes) {
-        Utils.showToast(getContext(), getString(stringRes));
     }
 
     protected void downloadMap(FeatureCollection operationalAreaFeature, String mapName) {
@@ -102,13 +97,6 @@ public class EusmAvailableOfflineMapsFragment extends AvailableOfflineMapsFragme
         return appStructureRepository;
     }
 
-    public AppLocationRepository getAppLocationRepository() {
-        if (appLocationRepository == null) {
-            appLocationRepository = EusmApplication.getInstance().getAppLocationRepository();
-        }
-        return appLocationRepository;
-    }
-
     public AppExecutors getAppExecutors() {
         if (appExecutors == null) {
             appExecutors = EusmApplication.getInstance().getAppExecutors();
@@ -118,11 +106,10 @@ public class EusmAvailableOfflineMapsFragment extends AvailableOfflineMapsFragme
 
     @Override
     public void moveDownloadedOAToDownloadedList(String operationalAreaId) {
-        String regionId = EusmApplication.getInstance().getAppLocationRepository().getRegionIdForDistrictId(operationalAreaId).getId();
         List<OfflineMapModel> toRemoveFromAvailableList = new ArrayList<>();
         List<Location> toRemoveFromDownloadList = new ArrayList<>();
         for (OfflineMapModel offlineMapModel : offlineMapModelList) {
-            if (offlineMapModel.getDownloadAreaId().equals(regionId)) {
+            if (offlineMapModel.getDownloadAreaId().equals(operationalAreaId)) {
                 offlineMapModel.setOfflineMapStatus(OfflineMapModel.OfflineMapStatus.DOWNLOADED);
                 callback.onMapDownloaded(offlineMapModel);
                 toRemoveFromAvailableList.add(offlineMapModel);
@@ -132,18 +119,6 @@ public class EusmAvailableOfflineMapsFragment extends AvailableOfflineMapsFragme
             }
         }
         operationalAreasToDownload.removeAll(toRemoveFromDownloadList);
-    }
-
-    @Override
-    public void updateOperationalAreasToDownload(OfflineMapModel offlineMapModel) {
-        Set<LocationTag> tags = offlineMapModel.getLocation().getLocationTags();
-        for (LocationTag tag : tags) {
-            if (tag.getName().equalsIgnoreCase("district")) {
-                Location region = EusmApplication.getInstance().getAppLocationRepository().getRegionIdForDistrictId(offlineMapModel.getLocation().getId());
-                offlineMapModel.setLocation(region);
-            }
-        }
-        super.updateOperationalAreasToDownload(offlineMapModel);
     }
 
     @Override
@@ -183,14 +158,38 @@ public class EusmAvailableOfflineMapsFragment extends AvailableOfflineMapsFragme
 
         for (OfflineMapModel model : offlineMapModelList) {
             if (model.getOfflineMapStatus() == OfflineMapModel.OfflineMapStatus.DOWNLOAD_STARTED) {
+                displayToast(getString(R.string.another_map_in_download));
                 Timber.e("Error: A map download is already in progress");
                 return;
             }
         }
 
         for (Location location : this.operationalAreasToDownload) {
-            disableCheckBox(location.getId());
             downloadLocation(location);
         }
+    }
+
+    @Override
+    public void displayToast(String message) {
+        if (displayBar == null) {
+            displayBar = Snackbar.make(requireView(), message, Snackbar.LENGTH_LONG);
+            displayBar.show();
+        } else {
+            displayBar.setText(message);
+            displayBar.setDuration(Snackbar.LENGTH_LONG);
+            if (!displayBar.isShown())
+                displayBar.show();
+        }
+    }
+
+    @Override
+    public void displayError(int title, String message) {
+        displayToast(message);
+    }
+
+    @Override
+    protected void mapDeletedSuccessfully(String mapUniqueName) {
+        super.mapDeletedSuccessfully(mapUniqueName);
+        displayToast(getString(R.string.map_deleted, mapUniqueName));
     }
 }

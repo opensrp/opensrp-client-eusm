@@ -84,30 +84,23 @@ public class AppLocationRepository extends LocationRepository {
     }
 
     public Set<Location> getDistrictIdsForRegionId(String regionId) {
+        Cursor cursor = null;
         Set<Location> districts = new HashSet<>();
         if (StringUtils.isBlank(regionId))
             return districts;
-        try (Cursor cursor = getReadableDatabase().rawQuery("SELECT * FROM " + getLocationTableName() +
-                " WHERE " + PARENT_ID + " =? ", new String[]{regionId})) {
-            if (cursor.moveToFirst()) {
+        try {
+            cursor = getReadableDatabase().rawQuery("SELECT * FROM " + getLocationTableName() +
+                    " WHERE " + PARENT_ID + " =? ", new String[]{regionId});
+            while (cursor.moveToNext()) {
                 districts.add(readCursor(cursor));
             }
+            cursor.close();
         } catch (SQLException e) {
             Timber.e(e);
+        } finally {
+            cursor.close();
         }
         return districts;
     }
 
-    public Location getRegionIdForDistrictId(String districtId) {
-        try (Cursor cursor = getReadableDatabase().rawQuery("SELECT * FROM " + getLocationTableName() +
-                " WHERE " + ID + " IN (SELECT " + PARENT_ID + " FROM " + getLocationTableName() + " WHERE " +
-                ID + " =? )", new String[]{districtId})) {
-            if (cursor.moveToFirst()) {
-                return readCursor(cursor);
-            }
-        } catch (SQLException e) {
-            Timber.e(e);
-        }
-        return null;
-    }
 }

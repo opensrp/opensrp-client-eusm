@@ -4,8 +4,10 @@ import androidx.annotation.NonNull;
 
 import org.smartregister.eusm.R;
 import org.smartregister.eusm.fragment.EusmAvailableOfflineMapsFragment;
+import org.smartregister.eusm.fragment.EusmDownloadedOfflineMapsFragment;
 import org.smartregister.tasking.activity.OfflineMapsActivity;
 import org.smartregister.tasking.fragment.AvailableOfflineMapsFragment;
+import org.smartregister.tasking.fragment.DownloadedOfflineMapsFragment;
 
 public class EusmOfflineMapsActivity extends OfflineMapsActivity {
 
@@ -18,5 +20,10 @@ public class EusmOfflineMapsActivity extends OfflineMapsActivity {
     @Override
     protected AvailableOfflineMapsFragment getAvailableOfflineMapsFragment() {
         return EusmAvailableOfflineMapsFragment.newInstance(this.getIntent().getExtras(), this.getMapStyleAssetPath());
+    }
+
+    @Override
+    protected DownloadedOfflineMapsFragment getDownloadedOfflineMapsFragment() {
+        return EusmDownloadedOfflineMapsFragment.newInstance(this.getIntent().getExtras(), this);
     }
 }
