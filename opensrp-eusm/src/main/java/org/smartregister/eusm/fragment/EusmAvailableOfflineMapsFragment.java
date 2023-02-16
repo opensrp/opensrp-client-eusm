@@ -36,7 +36,7 @@ public class EusmAvailableOfflineMapsFragment extends AvailableOfflineMapsFragme
 
     private List<OfflineMapModel> offlineMapModelList = new ArrayList<>();
 
-    private List<Location> operationalAreasToDownload = new ArrayList<>();
+    private final List<Location> operationalAreasToDownload = new ArrayList<>();
 
     private Snackbar displayBar = null;
 
@@ -110,7 +110,7 @@ public class EusmAvailableOfflineMapsFragment extends AvailableOfflineMapsFragme
         List<Location> toRemoveFromDownloadList = new ArrayList<>();
         for (OfflineMapModel offlineMapModel : offlineMapModelList) {
             if (offlineMapModel.getDownloadAreaId().equals(operationalAreaId)) {
-                offlineMapModel.setOfflineMapStatus(OfflineMapModel.OfflineMapStatus.DOWNLOADED);
+                offlineMapModel.setOfflineMapStatus(OfflineMapModel.OfflineMapStatus.READY);
                 callback.onMapDownloaded(offlineMapModel);
                 toRemoveFromAvailableList.add(offlineMapModel);
                 toRemoveFromDownloadList.add(offlineMapModel.getLocation());
@@ -151,7 +151,7 @@ public class EusmAvailableOfflineMapsFragment extends AvailableOfflineMapsFragme
 
     @Override
     public void initiateMapDownload() {
-        if (this.operationalAreasToDownload == null || this.operationalAreasToDownload.isEmpty()) {
+        if (this.operationalAreasToDownload.isEmpty()) {
             displayToast(getString(R.string.select_offline_map_to_download));
             return;
         }
@@ -177,8 +177,7 @@ public class EusmAvailableOfflineMapsFragment extends AvailableOfflineMapsFragme
         } else {
             displayBar.setText(message);
             displayBar.setDuration(Snackbar.LENGTH_LONG);
-            if (!displayBar.isShown())
-                displayBar.show();
+            displayBar.show();
         }
     }
 
