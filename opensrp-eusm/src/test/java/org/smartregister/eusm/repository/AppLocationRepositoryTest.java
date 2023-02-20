@@ -2,22 +2,30 @@ package org.smartregister.eusm.repository;
 
 import android.content.ContentValues;
 
+import net.sqlcipher.Cursor;
 import net.sqlcipher.database.SQLiteDatabase;
 
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
+import org.mockito.invocation.InvocationOnMock;
+import org.mockito.stubbing.Answer;
 import org.smartregister.domain.Location;
 import org.smartregister.domain.LocationProperty;
 import org.smartregister.eusm.BaseUnitTest;
 import org.smartregister.repository.BaseRepository;
 
+import java.util.Set;
 import java.util.UUID;
 
+import static org.junit.Assert.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.ArgumentMatchers.isNull;
+import static org.mockito.Mockito.doAnswer;
 import static org.mockito.Mockito.doReturn;
+import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.spy;
 import static org.mockito.Mockito.verify;
 
@@ -65,4 +73,26 @@ public class AppLocationRepositoryTest extends BaseUnitTest {
 
         verify(sqLiteDatabase).replace(eq("location"), isNull(), any(ContentValues.class));
     }
+
+    @Test
+    public void testGetDistrictIdsForRegionId() {
+        doReturn(sqLiteDatabase).when(appLocationRepository).getReadableDatabase();
+        Cursor cursor = mock(Cursor.class);
+        doReturn(cursor).when(sqLiteDatabase)
+                .rawQuery(anyString(), any(String[].class));
+
+        doAnswer(new Answer() {
+            int count = -1;
+
+            @Override
+            public Object answer(InvocationOnMock invocation) throws Throwable {
+                count++;
+                return count == 0;
+            }
+        }).when(cursor).moveToNext();
+
+        Set<Location> districts = appLocationRepository.getDistrictIdsForRegionId("23-3");
+        assertEquals(1, districts.size());
+    }
+
 }

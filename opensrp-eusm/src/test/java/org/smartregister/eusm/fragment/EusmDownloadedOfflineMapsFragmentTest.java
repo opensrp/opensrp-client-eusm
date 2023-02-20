@@ -13,6 +13,7 @@ import static org.mockito.Mockito.verifyNoInteractions;
 import static org.robolectric.annotation.LooperMode.Mode.PAUSED;
 
 import android.content.Context;
+import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
@@ -46,6 +47,11 @@ public class EusmDownloadedOfflineMapsFragmentTest extends BaseUnitTest {
     }
 
     @Test
+    public void testGetInstanceMethodNotNull() {
+        Assert.assertNotNull(EusmDownloadedOfflineMapsFragment.newInstance(new Bundle(), mock(Context.class)));
+    }
+
+        @Test
     public void testSetUpViewsShouldInitAdapter() {
         EusmDownloadedOfflineMapsFragment fragmentSpy = spy(fragment);
         doReturn(mock(Context.class)).when(fragmentSpy).requireContext();
