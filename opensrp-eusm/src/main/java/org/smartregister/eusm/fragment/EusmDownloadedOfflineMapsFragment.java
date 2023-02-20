@@ -70,6 +70,10 @@ public class EusmDownloadedOfflineMapsFragment extends DownloadedOfflineMapsFrag
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        setUpViews(view);
+    }
+
+    protected void setUpViews(View view) {
         RecyclerView downloadedMapsRecyclerView = view.findViewById(R.id.offline_map_recyclerView);
         initAdapter(downloadedMapsRecyclerView);
 
@@ -77,20 +81,22 @@ public class EusmDownloadedOfflineMapsFragment extends DownloadedOfflineMapsFrag
         btnDeleteMap.setText(getString(R.string.delete).toUpperCase());
         btnDeleteMap.setBackground(ContextCompat.getDrawable(requireContext(), R.drawable.delete_map_bg));
 
-        btnDeleteMap.setOnClickListener(v -> {
-            List<OfflineMapModel> mapsToDownload = new ArrayList<>();
-            for (OfflineMapModel offlineMapModel : downloadedOfflineMapModelList) {
-                if (offlineMapModel.getOfflineMapStatus().equals(OfflineMapModel.OfflineMapStatus.SELECTED_FOR_DOWNLOAD)) {
-                    mapsToDownload.add(offlineMapModel);
-                }
-            }
+        btnDeleteMap.setOnClickListener(v -> startDeleteProcess());
+    }
 
-            if (mapsToDownload.isEmpty()) {
-                Snackbar.make(requireView(), getString(R.string.select_offline_map_to_delete), Snackbar.LENGTH_LONG).show();
-                return;
+    protected void startDeleteProcess() {
+        List<OfflineMapModel> mapsToDownload = new ArrayList<>();
+        for (OfflineMapModel offlineMapModel : downloadedOfflineMapModelList) {
+            if (offlineMapModel.getOfflineMapStatus().equals(OfflineMapModel.OfflineMapStatus.SELECTED_FOR_DOWNLOAD)) {
+                mapsToDownload.add(offlineMapModel);
             }
-            fragmentPresenter.onDeleteDownloadMap(mapsToDownload);
-        });
+        }
+
+        if (mapsToDownload.isEmpty()) {
+            displaySnackBar(getString(R.string.select_offline_map_to_delete));
+            return;
+        }
+        fragmentPresenter.onDeleteDownloadMap(mapsToDownload);
     }
 
     private void initAdapter(RecyclerView downloadedMapsRecyclerView) {
@@ -106,15 +112,11 @@ public class EusmDownloadedOfflineMapsFragment extends DownloadedOfflineMapsFrag
         CheckBox checkBox = (CheckBox) view;
         OfflineMapModel offlineMapModel = (OfflineMapModel) view.getTag(R.id.offline_map_checkbox);
 
-        if (checkBox.isChecked()) {
-            for (OfflineMapModel model : downloadedOfflineMapModelList) {
-                if (model.getDownloadAreaId().equals(offlineMapModel.getDownloadAreaId())) {
+        for (OfflineMapModel model : downloadedOfflineMapModelList) {
+            if (model.getDownloadAreaId().equals(offlineMapModel.getDownloadAreaId())) {
+                if (checkBox.isChecked()) {
                     model.setOfflineMapStatus(OfflineMapModel.OfflineMapStatus.SELECTED_FOR_DOWNLOAD);
-                }
-            }
-        } else {
-            for (OfflineMapModel model : downloadedOfflineMapModelList) {
-                if (model.getDownloadAreaId().equals(offlineMapModel.getDownloadAreaId())) {
+                } else {
                     model.setOfflineMapStatus(OfflineMapModel.OfflineMapStatus.READY);
                 }
             }
@@ -131,7 +133,7 @@ public class EusmDownloadedOfflineMapsFragment extends DownloadedOfflineMapsFrag
 
     @Override
     public void deleteDownloadedOfflineMaps() {
-        Snackbar.make(requireView(), getString(R.string.deleting_map), Snackbar.LENGTH_LONG).show();
+        displaySnackBar(getString(R.string.deleting_map));
 
         for (OfflineMapModel offlineMapModel : downloadedOfflineMapModelList) {
             if (offlineMapModel.getOfflineMapStatus().equals(OfflineMapModel.OfflineMapStatus.SELECTED_FOR_DOWNLOAD)) {
@@ -162,4 +164,9 @@ public class EusmDownloadedOfflineMapsFragment extends DownloadedOfflineMapsFrag
         downloadedOfflineMapModelList.removeAll(toRemove);
         setDownloadedOfflineMapModelList(downloadedOfflineMapModelList);
     }
+
+    protected void displaySnackBar(String message) {
+        Snackbar.make(requireView(), message, Snackbar.LENGTH_LONG).show();
+    }
+
 }
