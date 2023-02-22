@@ -128,6 +128,8 @@ public interface AppConstants extends TaskingConstants {
         String CONSULT_BENEFICIARIES = "Consult Beneficiaries";
 
         String WAREHOUSE_CHECK = "Warehouse Check";
+
+        String FIX_PROBLEM_CONSULT_BENEFICIARIES = "fix_problem_consult_beneficiaries";
     }
 
     interface TaskStatus {
