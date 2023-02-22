@@ -92,8 +92,10 @@ public class AppJsonFormUtilsTest extends BaseUnitTest {
 
     @Test
     public void testGetFormObjectWithDetailsShouldReturnJsonForm() {
+        TaskDetail taskDetail = new TaskDetail();
+        taskDetail.setTaskCode("fix_problem");
         JSONObject jsonObject = jsonFormUtils.getFormObjectWithDetails(RuntimeEnvironment.application,
-                AppConstants.JsonForm.FIX_PROBLEM_FORM, new StructureDetail(), new TaskDetail());
+                AppConstants.JsonForm.FIX_PROBLEM_FORM, new StructureDetail(), taskDetail);
         assertNotNull(jsonObject);
     }
 }
