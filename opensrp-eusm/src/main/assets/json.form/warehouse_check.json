@@ -74,6 +74,24 @@
         }
       },
       {
+        "key": "expired_supplies_list",
+        "openmrs_entity_parent": "",
+        "openmrs_entity": "",
+        "openmrs_entity_id": "",
+        "type": "edit_text",
+        "hint": "{{warehouse_check.step1.expired_supplies_list.hint}}",
+        "relevance": {
+          "step1:expired_supplies": {
+            "type": "string",
+            "ex": "equalTo(., \"yes\")"
+          }
+        },
+        "v_required": {
+          "value": true,
+          "err": "{{warehouse_check.step1.expired_supplies_list.v_required.err}}"
+        }
+      },
+      {
         "key": "expired_supplies_three_months",
         "openmrs_entity_parent": "",
         "openmrs_entity": "",
