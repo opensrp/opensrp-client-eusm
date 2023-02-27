@@ -26,6 +26,7 @@ import java.util.List;
 import static android.os.Looper.getMainLooper;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anySet;
@@ -51,6 +52,24 @@ public class AppTaskingLibraryConfigurationTest extends BaseUnitTest {
     public void setUp() {
         MockitoAnnotations.initMocks(this);
         appTaskingLibraryConfiguration = spy(new AppTaskingLibraryConfiguration());
+    }
+
+    @Test
+    public void testNonRelevantConfigMethodsShouldReturnNullForApp() {
+        assertNull(appTaskingLibraryConfiguration.getAdminPasswordNotNearStructures());
+        assertNull(appTaskingLibraryConfiguration.getFormName("", ""));
+        assertNull(appTaskingLibraryConfiguration.getTranslatedIRSVerificationStatus(""));
+        assertNull(appTaskingLibraryConfiguration.getTranslatedBusinessStatus(""));
+        assertNull(appTaskingLibraryConfiguration.populateLabels());
+        assertNull(appTaskingLibraryConfiguration.mainSelect("main_condition"));
+        assertNull(appTaskingLibraryConfiguration.nonRegisteredStructureTasksSelect("main_condition"));
+        assertNull(appTaskingLibraryConfiguration.groupedRegisteredStructureTasksSelect("main_condition"));
+        assertNull(appTaskingLibraryConfiguration.familyRegisterTableName());
+    }
+
+    @Test
+    public void testValidateFarStructuresShouldReturnFalse() {
+        assertFalse(appTaskingLibraryConfiguration.validateFarStructures());
     }
 
     @Test
