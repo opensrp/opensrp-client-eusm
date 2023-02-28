@@ -92,6 +92,7 @@ public class AppLocationRepositoryTest extends BaseUnitTest {
         }).when(cursor).moveToNext();
 
         Set<Location> districts = appLocationRepository.getDistrictIdsForRegionId("23-3");
+        verify(appLocationRepository).getDistrictIdsForRegionId("23-3");
         assertEquals(1, districts.size());
     }
 

@@ -52,38 +52,34 @@ public class EusmAvailableOfflineMapsFragment extends AvailableOfflineMapsFragme
 
     @Override
     protected void downloadLocation(@NonNull Location location) {
-        downloadDistrictMap(location.getId());
+        getAppExecutors().diskIO().execute(() -> downloadDistrictMap(location.getId()));
+
     }
 
     protected void downloadDistrictMap(String districtId) {
-        getAppExecutors().diskIO().execute(() -> {
-            List<Location> locationList = getAppStructureRepository().getStructuresByDistrictId(districtId);
-            if (locationList == null || locationList.isEmpty()) {
-                getAppExecutors().mainThread().execute(() -> displayToast(getString(R.string.location_has_no_structures)));
-                // Revert download map status
-                for (OfflineMapModel model : offlineMapModelList) {
-                    if (model.getOfflineMapStatus() == OfflineMapModel.OfflineMapStatus.DOWNLOAD_STARTED) {
-                        model.setOfflineMapStatus(OfflineMapModel.OfflineMapStatus.READY);
-                        return;
-                    }
-                }
-            } else {
-                JSONObject featureCollection = new JSONObject();
-                try {
-                    featureCollection.put(TaskingConstants.GeoJSON.TYPE, TaskingConstants.GeoJSON.FEATURE_COLLECTION);
-                    featureCollection.put(TaskingConstants.GeoJSON.FEATURES, new JSONArray(gson.toJson(locationList)));
-                    getAppExecutors().mainThread().execute(new Runnable() {
-                        @Override
-                        public void run() {
-                            displayToast(getString(R.string.download_starting));
-                            downloadMap(FeatureCollection.fromJson(featureCollection.toString()), districtId);
-                        }
-                    });
-                } catch (JSONException e) {
-                    Timber.e(e);
+        List<Location> locationList = getAppStructureRepository().getStructuresByDistrictId(districtId);
+        if (locationList == null || locationList.isEmpty()) {
+            getAppExecutors().mainThread().execute(() -> displayToast(getString(R.string.location_has_no_structures)));
+            // Revert download map status
+            for (OfflineMapModel model : offlineMapModelList) {
+                if (model.getOfflineMapStatus() == OfflineMapModel.OfflineMapStatus.DOWNLOAD_STARTED) {
+                    model.setOfflineMapStatus(OfflineMapModel.OfflineMapStatus.READY);
+                    return;
                 }
             }
-        });
+        } else {
+            JSONObject featureCollection = new JSONObject();
+            try {
+                featureCollection.put(TaskingConstants.GeoJSON.TYPE, TaskingConstants.GeoJSON.FEATURE_COLLECTION);
+                featureCollection.put(TaskingConstants.GeoJSON.FEATURES, new JSONArray(gson.toJson(locationList)));
+                getAppExecutors().mainThread().execute(() -> {
+                    displayToast(getString(R.string.download_starting));
+                    downloadMap(FeatureCollection.fromJson(featureCollection.toString()), districtId);
+                });
+            } catch (JSONException e) {
+                Timber.e(e);
+            }
+        }
     }
 
     protected void downloadMap(FeatureCollection operationalAreaFeature, String mapName) {
@@ -106,13 +102,11 @@ public class EusmAvailableOfflineMapsFragment extends AvailableOfflineMapsFragme
 
     @Override
     public void moveDownloadedOAToDownloadedList(String operationalAreaId) {
-        List<OfflineMapModel> toRemoveFromAvailableList = new ArrayList<>();
         List<Location> toRemoveFromDownloadList = new ArrayList<>();
         for (OfflineMapModel offlineMapModel : offlineMapModelList) {
-            if (offlineMapModel.getDownloadAreaId().equals(operationalAreaId)) {
+            if (operationalAreaId.equals(offlineMapModel.getDownloadAreaId())) {
                 offlineMapModel.setOfflineMapStatus(OfflineMapModel.OfflineMapStatus.READY);
                 callback.onMapDownloaded(offlineMapModel);
-                toRemoveFromAvailableList.add(offlineMapModel);
                 toRemoveFromDownloadList.add(offlineMapModel.getLocation());
                 setOfflineMapModelList(offlineMapModelList);
                 break;

@@ -59,12 +59,10 @@ public class EusmDownloadedOfflineMapsFragment extends DownloadedOfflineMapsFrag
 
     @Override
     public void setDownloadedOfflineMapModelList(List<OfflineMapModel> downloadedOfflineMapModelList) {
-        if (adapter == null) {
-            this.downloadedOfflineMapModelList = downloadedOfflineMapModelList;
-        } else {
+        if (adapter != null) {
             adapter.setOfflineMapModels(downloadedOfflineMapModelList);
-            this.downloadedOfflineMapModelList = downloadedOfflineMapModelList;
         }
+        this.downloadedOfflineMapModelList = downloadedOfflineMapModelList;
     }
 
     @Override
@@ -87,7 +85,7 @@ public class EusmDownloadedOfflineMapsFragment extends DownloadedOfflineMapsFrag
     protected void startDeleteProcess() {
         List<OfflineMapModel> mapsToDownload = new ArrayList<>();
         for (OfflineMapModel offlineMapModel : downloadedOfflineMapModelList) {
-            if (offlineMapModel.getOfflineMapStatus().equals(OfflineMapModel.OfflineMapStatus.SELECTED_FOR_DOWNLOAD)) {
+            if (OfflineMapModel.OfflineMapStatus.SELECTED_FOR_DOWNLOAD.equals(offlineMapModel.getOfflineMapStatus())) {
                 mapsToDownload.add(offlineMapModel);
             }
         }
@@ -112,12 +110,14 @@ public class EusmDownloadedOfflineMapsFragment extends DownloadedOfflineMapsFrag
         CheckBox checkBox = (CheckBox) view;
         OfflineMapModel offlineMapModel = (OfflineMapModel) view.getTag(R.id.offline_map_checkbox);
 
-        for (OfflineMapModel model : downloadedOfflineMapModelList) {
-            if (model.getDownloadAreaId().equals(offlineMapModel.getDownloadAreaId())) {
-                if (checkBox.isChecked()) {
-                    model.setOfflineMapStatus(OfflineMapModel.OfflineMapStatus.SELECTED_FOR_DOWNLOAD);
-                } else {
-                    model.setOfflineMapStatus(OfflineMapModel.OfflineMapStatus.READY);
+        if (offlineMapModel != null) {
+            for (OfflineMapModel model : downloadedOfflineMapModelList) {
+                if (model != null && model.getDownloadAreaId().equals(offlineMapModel.getDownloadAreaId())) {
+                    if (checkBox.isChecked()) {
+                        model.setOfflineMapStatus(OfflineMapModel.OfflineMapStatus.SELECTED_FOR_DOWNLOAD);
+                    } else {
+                        model.setOfflineMapStatus(OfflineMapModel.OfflineMapStatus.READY);
+                    }
                 }
             }
         }

@@ -433,7 +433,7 @@ public class AppTaskingLibraryConfiguration extends TaskingLibraryConfiguration 
     @Override
     public String getDistrictFromTreeDialogValue(List<String> arrayList) {
         try {
-            return arrayList.get(1);
+            return arrayList.get(Integer.parseInt(AppConstants.LocationGeographicLevel.REGION));
         } catch (IndexOutOfBoundsException e) {
             Timber.e(e);
         }
@@ -529,11 +529,6 @@ public class AppTaskingLibraryConfiguration extends TaskingLibraryConfiguration 
         if (downloadedLocations != null) {
             districtIds.removeAll(downloadedLocations);
         }
-//        List<Location> locationList =  EusmApplication.getInstance().getStructureRepository().getLocationByDistrictIds(jurisdictionIds);
-//
-//        if (downloadedLocations != null) {
-//            locationList = locationList.stream().filter(location -> !downloadedLocations.contains(location.getId())).collect(Collectors.toList());
-//        }
         return EusmApplication.getInstance().getLocationRepository().getLocationsByIds(districtIds);
     }
 
