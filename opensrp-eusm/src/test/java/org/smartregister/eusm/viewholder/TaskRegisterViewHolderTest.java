@@ -80,11 +80,12 @@ public class TaskRegisterViewHolderTest extends BaseUnitTest {
     }
 
     @Test
-    public void testSetProductImageShouldCallSetImageDrawableForFixProblemForCOnsultBeneficiaries() {
+    public void testSetProductImageShouldCallSetImageDrawableForFixProblemForConsultBeneficiaries() {
         TaskDetail taskDetail = new TaskDetail();
         taskDetail.setNonProductTask(true);
         taskDetail.setChecked(false);
         taskDetail.setTaskCode(AppConstants.TaskCode.FIX_PROBLEM_CONSULT_BENEFICIARIES);
+        taskDetail.setEntityName(AppConstants.TaskCode.FIX_PROBLEM_CONSULT_BENEFICIARIES);
 
         ImageView productImageView = mock(ImageView.class);
         ReflectionHelpers.setField(taskRegisterViewHolder, "checkedOverlayImageView", checkedOverlayImageView);
