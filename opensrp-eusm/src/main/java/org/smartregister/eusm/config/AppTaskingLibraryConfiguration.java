@@ -433,7 +433,7 @@ public class AppTaskingLibraryConfiguration extends TaskingLibraryConfiguration 
     @Override
     public String getDistrictFromTreeDialogValue(List<String> arrayList) {
         try {
-            return arrayList.get(Integer.parseInt(AppConstants.LocationGeographicLevel.REGION));
+            return arrayList.get(Integer.parseInt(AppConstants.LocationGeographicLevel.DISTRICT));
         } catch (IndexOutOfBoundsException e) {
             Timber.e(e);
         }
