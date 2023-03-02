@@ -61,7 +61,7 @@ public class AppJsonFormUtils {
             String entityId;
             if (AppConstants.JsonForm.RECORD_GPS_FORM.equals(formName) || AppConstants.JsonForm.SERVICE_POINT_CHECK_FORM.equals(formName)
                     || AppConstants.JsonForm.BENEFICIARY_CONSULTATION_FORM.equals(formName) || AppConstants.JsonForm.WAREHOUSE_CHECK_FORM.equals(formName)
-                    || (AppConstants.JsonForm.FIX_PROBLEM_FORM.equals(formName) && taskDetail.getTaskCode().equals(AppConstants.TaskCode.FIX_PROBLEM_CONSULT_BENEFICIARIES))) {
+                    || (AppConstants.JsonForm.FIX_PROBLEM_FORM.equals(formName) && AppConstants.TaskCode.FIX_PROBLEM_CONSULT_BENEFICIARIES.equals(taskDetail.getTaskCode()))) {
                 entityId = structureDetail.getStructureId();
             } else {
                 map.put(AppConstants.EventDetailKey.PRODUCT_NAME, taskDetail.getEntityName());
