@@ -136,7 +136,7 @@ public class EusmDownloadedOfflineMapsFragment extends DownloadedOfflineMapsFrag
         displaySnackBar(getString(R.string.deleting_map));
 
         for (OfflineMapModel offlineMapModel : downloadedOfflineMapModelList) {
-            if (offlineMapModel.getOfflineMapStatus().equals(OfflineMapModel.OfflineMapStatus.SELECTED_FOR_DOWNLOAD)) {
+            if (OfflineMapModel.OfflineMapStatus.SELECTED_FOR_DOWNLOAD.equals(offlineMapModel.getOfflineMapStatus())) {
                 offlineMapModel.setOfflineMapStatus(OfflineMapModel.OfflineMapStatus.DOWNLOAD_STARTED);
                 OfflineServiceHelper.deleteOfflineMap(requireActivity(),
                         offlineMapModel.getDownloadAreaId(),
@@ -153,16 +153,18 @@ public class EusmDownloadedOfflineMapsFragment extends DownloadedOfflineMapsFrag
 
     @Override
     protected void mapDeletedSuccessfully(String deletedMapName) {
-        List<OfflineMapModel> toRemove = new ArrayList<>();
-        for (OfflineMapModel offlineMapModel : downloadedOfflineMapModelList) {
-            if (offlineMapModel.getDownloadAreaId().equals(deletedMapName)) {
-                toRemove.add(offlineMapModel);
-                offlineMapModel.setOfflineMapStatus(OfflineMapModel.OfflineMapStatus.READY);
-                callback.onOfflineMapDeleted(offlineMapModel);
+        if (deletedMapName != null) {
+            List<OfflineMapModel> toRemove = new ArrayList<>();
+            for (OfflineMapModel offlineMapModel : downloadedOfflineMapModelList) {
+                if (deletedMapName.equals(offlineMapModel.getDownloadAreaId())) {
+                    toRemove.add(offlineMapModel);
+                    offlineMapModel.setOfflineMapStatus(OfflineMapModel.OfflineMapStatus.READY);
+                    callback.onOfflineMapDeleted(offlineMapModel);
+                }
             }
+            downloadedOfflineMapModelList.removeAll(toRemove);
+            setDownloadedOfflineMapModelList(downloadedOfflineMapModelList);
         }
-        downloadedOfflineMapModelList.removeAll(toRemove);
-        setDownloadedOfflineMapModelList(downloadedOfflineMapModelList);
     }
 
     protected void displaySnackBar(String message) {
