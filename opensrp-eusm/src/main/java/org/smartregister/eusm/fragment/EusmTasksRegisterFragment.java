@@ -130,6 +130,8 @@ public class EusmTasksRegisterFragment extends BaseRegisterFragment implements T
                         presenter.startForm(structureDetail, taskDetail, getBeneficiaryConsultationForm());
                     } else if (AppConstants.NonProductTasks.WAREHOUSE_CHECK.equalsIgnoreCase(taskDetail.getEntityName().trim())) {
                         presenter.startForm(structureDetail, taskDetail, getWarehouseCheckForm());
+                    } else if (AppConstants.TaskCode.FIX_PROBLEM_CONSULT_BENEFICIARIES.equalsIgnoreCase(taskDetail.getEntityName())) {
+                        presenter.startForm(structureDetail, taskDetail, getFixProblemForm());
                     }
                 }
             }
