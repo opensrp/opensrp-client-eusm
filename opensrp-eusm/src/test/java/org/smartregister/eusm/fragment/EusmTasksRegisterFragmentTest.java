@@ -8,6 +8,7 @@ import androidx.fragment.app.testing.FragmentScenario;
 
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
@@ -155,6 +156,27 @@ public class EusmTasksRegisterFragmentTest extends BaseUnitTest {
             } catch (JSONException e) {
                 e.printStackTrace();
             }
+        });
+    }
+
+    @Test
+    public void testOnTaskRegisterRowClickShouldStartFixProblemFormForConsultBeneficiaries() {
+        TaskDetail taskDetail = new TaskDetail();
+        taskDetail.setTaskCode(AppConstants.TaskCode.FIX_PROBLEM_CONSULT_BENEFICIARIES);
+        taskDetail.setNonProductTask(true);
+        taskDetail.setEntityName(AppConstants.TaskCode.FIX_PROBLEM_CONSULT_BENEFICIARIES);
+        View view = new View(RuntimeEnvironment.application);
+        view.setId(R.id.task_register_row);
+        view.setTag(R.id.task_detail, taskDetail);
+
+        Assert.assertNotNull(fragmentScenario);
+        fragmentScenario.onFragment(fragment -> {
+            EusmTasksRegisterFragment fragmentSpy = spy(fragment);
+            ReflectionHelpers.setField(fragmentSpy, "presenter", presenter);
+            EusmTaskRegisterActivity activity = Robolectric.buildActivity(EusmTaskRegisterActivity.class).get();
+            doReturn(activity).when(fragmentSpy).getActivity();
+            fragmentSpy.onViewClicked(view);
+            verify(presenter).startForm(any(StructureDetail.class), eq(taskDetail), eq(AppConstants.JsonForm.FIX_PROBLEM_FORM));
         });
     }
 }

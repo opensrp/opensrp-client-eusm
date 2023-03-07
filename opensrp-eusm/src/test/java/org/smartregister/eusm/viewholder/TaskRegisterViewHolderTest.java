@@ -1,5 +1,6 @@
 package org.smartregister.eusm.viewholder;
 
+import android.graphics.drawable.Drawable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ImageView;
@@ -15,8 +16,11 @@ import org.smartregister.eusm.R;
 import org.smartregister.eusm.domain.TaskDetail;
 import org.smartregister.eusm.util.AppConstants;
 
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.spy;
+import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 
 public class TaskRegisterViewHolderTest extends BaseUnitTest {
@@ -73,5 +77,24 @@ public class TaskRegisterViewHolderTest extends BaseUnitTest {
         verify(rectangleOverlayImageView).setVisibility(eq(View.VISIBLE));
         verify(statusOverlayImageView).setVisibility(eq(View.GONE));
         verify(statusOverlayImageView).setVisibility(eq(View.VISIBLE));
+    }
+
+    @Test
+    public void testSetProductImageShouldCallSetImageDrawableForFixProblemForConsultBeneficiaries() {
+        TaskDetail taskDetail = new TaskDetail();
+        taskDetail.setNonProductTask(true);
+        taskDetail.setChecked(false);
+        taskDetail.setTaskCode(AppConstants.TaskCode.FIX_PROBLEM_CONSULT_BENEFICIARIES);
+        taskDetail.setEntityName(AppConstants.TaskCode.FIX_PROBLEM_CONSULT_BENEFICIARIES);
+
+        ImageView productImageView = mock(ImageView.class);
+        ReflectionHelpers.setField(taskRegisterViewHolder, "checkedOverlayImageView", checkedOverlayImageView);
+        ReflectionHelpers.setField(taskRegisterViewHolder, "rectangleOverlayImageView", rectangleOverlayImageView);
+        ReflectionHelpers.setField(taskRegisterViewHolder, "statusOverlayImageView", statusOverlayImageView);
+        ReflectionHelpers.setField(taskRegisterViewHolder, "productImageView", productImageView);
+
+        taskRegisterViewHolder.setProductImage(taskDetail);
+
+        verify(productImageView, times(2)).setImageDrawable(any(Drawable.class));
     }
 }
