@@ -272,7 +272,9 @@ public class AppStructureRepository extends StructureRepository {
         };
 
         String query = "SELECT " + StringUtils.join(columns, ",") + " from " + StructureRepository.STRUCTURE_TABLE
-                + " join location on location._id = " + StructureRepository.STRUCTURE_TABLE + ".parent_id ";
+                + " join location on location._id = " + StructureRepository.STRUCTURE_TABLE + ".parent_id"
+                + " AND " + StructureRepository.STRUCTURE_TABLE + "." + LATITUDE + " IS NOT NULL "
+                + " AND " + StructureRepository.STRUCTURE_TABLE + "." + LONGITUDE + " IS NOT NULL";
 
 
         String[] args = new String[]{districtId};

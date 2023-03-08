@@ -156,5 +156,8 @@
 
     <string name="consult_beneficiaries_task_title">Consult Beneficiaries</string>
     <string name="warehouse_check_task_title">Warehouse Check</string>
+    <string name="map_deleted">Map Deleted:  %1s</string>
+    <string name="another_map_in_download">Another map is currently being downloaded.</string>
+    <string name="deleting_map">Deleting map</string>
 
 </resources>

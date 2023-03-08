@@ -34,6 +34,12 @@ public class EusmOfflineMapsActivityTest extends BaseActivityUnitTest {
         assertNotNull(eusmOfflineMapsActivity.getAvailableOfflineMapsFragment());
     }
 
+    @Test
+    public void testGetDownloadedOfflineMapsFragmentShouldNotBeNull() {
+        assertNotNull(eusmOfflineMapsActivity.getDownloadedOfflineMapsFragment());
+    }
+
+
     @Override
     protected Activity getActivity() {
         return eusmOfflineMapsActivity;

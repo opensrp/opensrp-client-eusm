@@ -34,6 +34,7 @@ import org.smartregister.eusm.domain.EusmCardDetail;
 import org.smartregister.eusm.helper.EusmTaskingMapHelper;
 import org.smartregister.eusm.job.LocationTaskServiceJob;
 import org.smartregister.eusm.layer.SatelliteStreetsLayer;
+import org.smartregister.eusm.repository.AppLocationRepository;
 import org.smartregister.eusm.util.AppConstants;
 import org.smartregister.eusm.util.AppUtils;
 import org.smartregister.eusm.util.DefaultLocationUtils;
@@ -69,6 +70,7 @@ import org.smartregister.tasking.util.TaskingLibraryConfiguration;
 import org.smartregister.tasking.util.TaskingMapHelper;
 import org.smartregister.util.AppExecutors;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
@@ -431,7 +433,7 @@ public class AppTaskingLibraryConfiguration extends TaskingLibraryConfiguration 
     @Override
     public String getDistrictFromTreeDialogValue(List<String> arrayList) {
         try {
-            return arrayList.get(2);
+            return arrayList.get(Integer.parseInt(AppConstants.LocationGeographicLevel.DISTRICT));
         } catch (IndexOutOfBoundsException e) {
             Timber.e(e);
         }
@@ -514,15 +516,20 @@ public class AppTaskingLibraryConfiguration extends TaskingLibraryConfiguration 
                 .findPlanDefinitionSearchByPlanStatus(PlanDefinition.PlanStatus.ACTIVE)
                 .stream().map(PlanDefinitionSearch::getJurisdictionId).collect(Collectors.toList());
 
-        if (downloadedLocations != null) {
-            jurisdictionIds.removeAll(downloadedLocations);
+        // List districts instead of regions
+        List<String> districtIds = new ArrayList<>();
+        AppLocationRepository appLocationRepository = EusmApplication.getInstance().getAppLocationRepository();
+        for (String regionId : jurisdictionIds) {
+            Set<Location> districts = appLocationRepository.getDistrictIdsForRegionId(regionId);
+            for (Location district: districts) {
+                districtIds.add(district.getId());
+            }
         }
-//        List<Location> locationList =  EusmApplication.getInstance().getStructureRepository().getLocationByDistrictIds(jurisdictionIds);
-//
-//        if (downloadedLocations != null) {
-//            locationList = locationList.stream().filter(location -> !downloadedLocations.contains(location.getId())).collect(Collectors.toList());
-//        }
-        return EusmApplication.getInstance().getLocationRepository().getLocationsByIds(jurisdictionIds);
+
+        if (downloadedLocations != null) {
+            districtIds.removeAll(downloadedLocations);
+        }
+        return EusmApplication.getInstance().getLocationRepository().getLocationsByIds(districtIds);
     }
 
     @Override

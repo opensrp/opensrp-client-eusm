@@ -82,4 +82,25 @@ public class AppLocationRepository extends LocationRepository {
         }
         return locations;
     }
+
+    public Set<Location> getDistrictIdsForRegionId(String regionId) {
+        Cursor cursor = null;
+        Set<Location> districts = new HashSet<>();
+        if (StringUtils.isBlank(regionId))
+            return districts;
+        try {
+            cursor = getReadableDatabase().rawQuery("SELECT * FROM " + getLocationTableName() +
+                    " WHERE " + PARENT_ID + " =? ", new String[]{regionId});
+            while (cursor.moveToNext()) {
+                districts.add(readCursor(cursor));
+            }
+            cursor.close();
+        } catch (SQLException e) {
+            Timber.e(e);
+        } finally {
+            cursor.close();
+        }
+        return districts;
+    }
+
 }

@@ -1,10 +1,12 @@
 package org.smartregister.eusm.fragment;
 
 import android.os.Bundle;
+import android.view.View;
+import android.widget.CheckBox;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.StringRes;
 
+import com.google.android.material.snackbar.Snackbar;
 import com.mapbox.geojson.FeatureCollection;
 
 import org.json.JSONArray;
@@ -15,12 +17,13 @@ import org.smartregister.eusm.R;
 import org.smartregister.eusm.application.EusmApplication;
 import org.smartregister.eusm.repository.AppStructureRepository;
 import org.smartregister.tasking.fragment.AvailableOfflineMapsFragment;
+import org.smartregister.tasking.model.OfflineMapModel;
 import org.smartregister.tasking.presenter.AvailableOfflineMapsPresenter;
 import org.smartregister.tasking.util.OfflineMapHelper;
 import org.smartregister.tasking.util.TaskingConstants;
 import org.smartregister.util.AppExecutors;
-import org.smartregister.util.Utils;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import timber.log.Timber;
@@ -30,6 +33,12 @@ public class EusmAvailableOfflineMapsFragment extends AvailableOfflineMapsFragme
     private AppStructureRepository appStructureRepository;
 
     private AppExecutors appExecutors;
+
+    private List<OfflineMapModel> offlineMapModelList = new ArrayList<>();
+
+    private final List<Location> operationalAreasToDownload = new ArrayList<>();
+
+    private Snackbar displayBar = null;
 
     public static EusmAvailableOfflineMapsFragment newInstance(Bundle bundle, @NonNull String mapStyleAssetPath) {
         EusmAvailableOfflineMapsFragment fragment = new EusmAvailableOfflineMapsFragment();
@@ -43,40 +52,34 @@ public class EusmAvailableOfflineMapsFragment extends AvailableOfflineMapsFragme
 
     @Override
     protected void downloadLocation(@NonNull Location location) {
-        getAppExecutors().diskIO().execute(new Runnable() {
-            @Override
-            public void run() {
-                String name = location.getId();
-                List<Location> locationList = getAppStructureRepository().getStructuresByDistrictId(name);
-                if (locationList == null || locationList.isEmpty()) {
-                    getAppExecutors().mainThread().execute(new Runnable() {
-                        @Override
-                        public void run() {
-                            showToast(R.string.location_has_no_structures);
-                        }
-                    });
-                } else {
-                    JSONObject featureCollection = new JSONObject();
-                    try {
-                        featureCollection.put(TaskingConstants.GeoJSON.TYPE, TaskingConstants.GeoJSON.FEATURE_COLLECTION);
-                        featureCollection.put(TaskingConstants.GeoJSON.FEATURES, new JSONArray(gson.toJson(locationList)));
-                        getAppExecutors().mainThread().execute(new Runnable() {
-                            @Override
-                            public void run() {
-                                showToast(R.string.download_starting);
-                                downloadMap(FeatureCollection.fromJson(featureCollection.toString()), name);
-                            }
-                        });
-                    } catch (JSONException e) {
-                        Timber.e(e);
-                    }
-                }
-            }
-        });
+        getAppExecutors().diskIO().execute(() -> downloadDistrictMap(location.getId()));
+
     }
 
-    protected void showToast(@StringRes int stringRes) {
-        Utils.showToast(getContext(), getString(stringRes));
+    protected void downloadDistrictMap(String districtId) {
+        List<Location> locationList = getAppStructureRepository().getStructuresByDistrictId(districtId);
+        if (locationList == null || locationList.isEmpty()) {
+            getAppExecutors().mainThread().execute(() -> displayToast(getString(R.string.location_has_no_structures)));
+            // Revert download map status
+            for (OfflineMapModel model : offlineMapModelList) {
+                if (model.getOfflineMapStatus() == OfflineMapModel.OfflineMapStatus.DOWNLOAD_STARTED) {
+                    model.setOfflineMapStatus(OfflineMapModel.OfflineMapStatus.READY);
+                    return;
+                }
+            }
+        } else {
+            JSONObject featureCollection = new JSONObject();
+            try {
+                featureCollection.put(TaskingConstants.GeoJSON.TYPE, TaskingConstants.GeoJSON.FEATURE_COLLECTION);
+                featureCollection.put(TaskingConstants.GeoJSON.FEATURES, new JSONArray(gson.toJson(locationList)));
+                getAppExecutors().mainThread().execute(() -> {
+                    displayToast(getString(R.string.download_starting));
+                    downloadMap(FeatureCollection.fromJson(featureCollection.toString()), districtId);
+                });
+            } catch (JSONException e) {
+                Timber.e(e);
+            }
+        }
     }
 
     protected void downloadMap(FeatureCollection operationalAreaFeature, String mapName) {
@@ -95,5 +98,91 @@ public class EusmAvailableOfflineMapsFragment extends AvailableOfflineMapsFragme
             appExecutors = EusmApplication.getInstance().getAppExecutors();
         }
         return appExecutors;
+    }
+
+    @Override
+    public void moveDownloadedOAToDownloadedList(String operationalAreaId) {
+        List<Location> toRemoveFromDownloadList = new ArrayList<>();
+        for (OfflineMapModel offlineMapModel : offlineMapModelList) {
+            if (operationalAreaId.equals(offlineMapModel.getDownloadAreaId())) {
+                offlineMapModel.setOfflineMapStatus(OfflineMapModel.OfflineMapStatus.READY);
+                callback.onMapDownloaded(offlineMapModel);
+                toRemoveFromDownloadList.add(offlineMapModel.getLocation());
+                setOfflineMapModelList(offlineMapModelList);
+                break;
+            }
+        }
+        operationalAreasToDownload.removeAll(toRemoveFromDownloadList);
+    }
+
+    @Override
+    public void updateOperationalAreasToDownload(View view) {
+        CheckBox checkBox = (CheckBox) view;
+        OfflineMapModel offlineMapModel = (OfflineMapModel) view.getTag(R.id.offline_map_checkbox);
+
+        if (checkBox.isChecked()) {
+            offlineMapModel.setOfflineMapStatus(OfflineMapModel.OfflineMapStatus.SELECTED_FOR_DOWNLOAD);
+            operationalAreasToDownload.clear();
+            operationalAreasToDownload.add(offlineMapModel.getLocation());
+
+            for (OfflineMapModel model : offlineMapModelList) {
+                if (!model.getDownloadAreaId().equals(offlineMapModel.getDownloadAreaId())
+                        && model.getOfflineMapStatus() == OfflineMapModel.OfflineMapStatus.SELECTED_FOR_DOWNLOAD) {
+                    model.setOfflineMapStatus(OfflineMapModel.OfflineMapStatus.READY);
+                }
+            }
+            setOfflineMapModelList(offlineMapModelList);
+        } else {
+            operationalAreasToDownload.remove(offlineMapModel.getLocation());
+        }
+    }
+
+    @Override
+    public void setOfflineMapModelList(List<OfflineMapModel> offlineMapModelList) {
+        this.offlineMapModelList = offlineMapModelList;
+        super.setOfflineMapModelList(offlineMapModelList);
+    }
+
+    @Override
+    public void initiateMapDownload() {
+        if (this.operationalAreasToDownload.isEmpty()) {
+            displayToast(getString(R.string.select_offline_map_to_download));
+            return;
+        }
+
+        for (OfflineMapModel model : offlineMapModelList) {
+            if (model.getOfflineMapStatus() == OfflineMapModel.OfflineMapStatus.DOWNLOAD_STARTED) {
+                displayToast(getString(R.string.another_map_in_download));
+                Timber.e("Error: A map download is already in progress");
+                return;
+            }
+        }
+
+        for (Location location : this.operationalAreasToDownload) {
+            downloadLocation(location);
+        }
+    }
+
+    @Override
+    public void displayToast(String message) {
+        if (displayBar == null) {
+            displayBar = Snackbar.make(requireView(), message, Snackbar.LENGTH_LONG);
+            displayBar.show();
+        } else {
+            displayBar.setText(message);
+            displayBar.setDuration(Snackbar.LENGTH_LONG);
+            displayBar.show();
+        }
+    }
+
+    @Override
+    public void displayError(int title, String message) {
+        displayToast(message);
+    }
+
+    @Override
+    protected void mapDeletedSuccessfully(String mapUniqueName) {
+        super.mapDeletedSuccessfully(mapUniqueName);
+        displayToast(getString(R.string.map_deleted, mapUniqueName));
     }
 }
