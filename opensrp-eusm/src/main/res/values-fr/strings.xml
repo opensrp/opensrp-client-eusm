@@ -44,7 +44,7 @@
     <string name="delete">Effacer</string>
     <string name="select_offline_map_to_download">Sélectionnez la carte hors-ligne à télécharger</string>
 
-    <string name="operational_area_not_selected">District non sélectionné</string>
+    <string name="operational_area_not_selected">Région non sélectionnée</string>
     <string name="plan_not_selected">Mission non sélectionnée</string>
 
 
@@ -60,7 +60,7 @@
     <string name="structures">Points de service</string>
     <string name="tasks_text">Tâches</string>
     <string name="fetching_structures_title">Récupération des points de service</string>
-    <string name="fetching_structures_message">Recherche de points de service pour le district et la mission sélectionnés</string>
+    <string name="fetching_structures_message">Recherche de points de service pour la région et la mission sélectionnées</string>
 
     <string name="plans_download_on_progress_title">Téléchargement en cours</string>
     <string name="plans_download_on_progress">Téléchargement des missions en cours. Veuillez patienter</string>
@@ -120,9 +120,9 @@
     <string name="flag_problem_form_name">Signaler un problème</string>
     <string name="gps_unknown">Localisation GPS inconnue</string>
 
-    <string name="select_campaign_operational_area_title">Mission et District non définis</string>
-    <string name="select_campaign_operational_area">Mission et district non fixé. Sélectionner dans le menu</string>
-    <string name="revoked_plan_operational_area">Mission et district ulterieurement selectionnés sont annulé(s). Sélectionner de nouveau dans le menu</string>
+    <string name="select_campaign_operational_area_title">Mission et région non définies</string>
+    <string name="select_campaign_operational_area">Mission et région non définies. Sélectionner dans le menu</string>
+    <string name="revoked_plan_operational_area">Mission et/ou région ulterieurement selectionnées sont annulée(s). Sélectionner de nouveau dans le menu</string>
     <string name="read_and_write_permission_not_granted">Permission de stockage en lecture et écriture non accordée</string>
 
     <string name="service_point_check_task_title">Check Point de Service</string>
@@ -133,10 +133,18 @@
 
     <string name="ok_text">OK</string>
     <string name="new_assignment_dialog_title">Nouvelle mission créé</string>
-    <string name="no_structures_found">Il n\'y a pas de points de service actifs dans ce district</string>
-    <string name="fetch_location_and_structures_failed">Il n\'y a pas de points de service actifs dans ce district</string>
+    <string name="no_structures_found">Il n\'y a pas de points de service actifs dans cette région</string>
+    <string name="fetch_location_and_structures_failed">Il n\'y a pas de points de service actifs dans cette région</string>
     <string name="account_disabled">Votre compte est désactivé</string>
     <string name="fetching_structure_title">Téléchargement des détails en cours</string>
     <string name="fetching_structure_message">Patientez SVP. Téléchargement des détails en cours</string>
     <string name="map_download_progress">Téléchargement : %,.2f %%</string>
+    <string name="regions">Régions</string>
+
+    <string name="consult_beneficiaries_task_title">Consulter les bénéficiaires</string>
+    <string name="warehouse_check_task_title">Vérification entrepot</string>
+    <string name="map_deleted">Carte effacée :  %1s</string>
+    <string name="another_map_in_download">Une autre carte est en cours de téléchargement</string>
+    <string name="deleting_map">Carte en cours d\'effacement</string>
+
 </resources>
