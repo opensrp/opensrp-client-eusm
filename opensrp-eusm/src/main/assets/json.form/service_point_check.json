@@ -85,6 +85,10 @@
             "type": "string",
             "ex": "equalTo(., \"yes\")"
           }
+        },
+        "v_required": {
+          "value": true,
+          "err": "{{service_point_check.step1.other_products_action_description.v_required.err}}"
         }
       },
       {
@@ -121,6 +125,10 @@
             "type": "string",
             "ex": "equalTo(., \"yes\")"
           }
+        },
+        "v_required": {
+          "value": true,
+          "err": "{{service_point_check.step1.other_needed_products_description.v_required.err}}"
         }
       },
       {
@@ -157,6 +165,10 @@
             "type": "string",
             "ex": "equalTo(., \"no\")"
           }
+        },
+        "v_required": {
+          "value": true,
+          "err": "{{service_point_check.step1.service_point_not_good_order_reason.v_required.err}}"
         }
       }
     ]
