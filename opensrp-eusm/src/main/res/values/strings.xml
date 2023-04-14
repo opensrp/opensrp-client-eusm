@@ -10,7 +10,7 @@
     <!--Temp -->
     <string name="unauthorized">Please check the credentials</string>
     <string name="unauthorized_group">Your user group is not allowed to access this device</string>
-    <string name="unknown_response">login failed. Try later</string>
+    <string name="unknown_response">Incorrect username or password. Please try again</string>
     <string name="no_internet_connectivity">No internet connection. Please ensure data connectivity</string>
     <string name="login_text">Log In</string>
     <string name="show_password_text">Show password</string>
@@ -159,5 +159,6 @@
     <string name="map_deleted">Map Deleted:  %1s</string>
     <string name="another_map_in_download">Another map is currently being downloaded.</string>
     <string name="deleting_map">Deleting map</string>
+    <string name="remote_login_generic_error">You are not currently assigned to a mission. Please ask the EUSM administrators</string>
 
 </resources>
