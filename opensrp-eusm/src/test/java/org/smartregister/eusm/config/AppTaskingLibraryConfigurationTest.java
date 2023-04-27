@@ -24,12 +24,16 @@ import java.util.HashMap;
 import java.util.List;
 
 import static android.os.Looper.getMainLooper;
+import static org.junit.Assert.assertArrayEquals;
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyBoolean;
 import static org.mockito.ArgumentMatchers.anySet;
+import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.spy;
@@ -151,4 +155,55 @@ public class AppTaskingLibraryConfigurationTest extends BaseUnitTest {
 
         assertFalse(EusmApplication.getInstance().getServerConfigs().isEmpty());
     }
+
+    @Test
+    public void testGetResolveLocationTimeoutInSecondsShouldReturnZero() {
+        assertEquals(0, appTaskingLibraryConfiguration.getResolveLocationTimeoutInSeconds());
+    }
+
+    @Test
+    public void testIsFocusInvestigationShouldReturnFalse() {
+        assertFalse(appTaskingLibraryConfiguration.isFocusInvestigation());
+    }
+
+    @Test
+    public void testIsMDAShouldReturnFalse() {
+        assertFalse(appTaskingLibraryConfiguration.isMDA());
+    }
+
+    @Test
+    public void testDisplayDistanceScaleShouldReturnFalse() {
+        assertFalse(appTaskingLibraryConfiguration.displayDistanceScale());
+    }
+
+    @Test
+    public void testResetTaskInfoShouldReturnFalse() {
+        assertFalse(appTaskingLibraryConfiguration.resetTaskInfo(any(), any()));
+    }
+
+    @Test
+    public void testArchiveClientShouldReturnFalse() {
+        assertFalse(appTaskingLibraryConfiguration.archiveClient(anyString(), anyBoolean()));
+    }
+
+    @Test
+    public void testTaskRegisterMainColumnsSHouldReturnEmptyStringArray() {
+        assertArrayEquals(new String[0], appTaskingLibraryConfiguration.taskRegisterMainColumns(anyString()));
+    }
+
+    @Test
+    public void testCalculateBusinessStatusShouldReturnNull() {
+        assertNull(appTaskingLibraryConfiguration.calculateBusinessStatus(any()));
+    }
+
+    @Test
+    public void testIsMyLocationComponentEnabledShouldReturnTrue() {
+        assertTrue(appTaskingLibraryConfiguration.isMyLocationComponentEnabled());
+    }
+
+    @Test
+    public void testGetCurrentPlanIdShouldReturnNull() {
+        assertNull(appTaskingLibraryConfiguration.getCurrentPlanId());
+    }
+
 }
