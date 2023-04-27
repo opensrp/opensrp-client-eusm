@@ -7,7 +7,7 @@
     <!--Temp -->
     <string name="unauthorized">Veuillez vérifier les informations d\'accès</string>
     <string name="unauthorized_group">Votre groupe d\'utilisateurs n\'est pas autorisé à accéder à ce terminal</string>
-    <string name="unknown_response">échec de la connexion, essayez plus tard</string>
+    <string name="unknown_response">L’identifiant ou le mot de passe n’est pas correct. Merci de réessayer</string>
     <string name="no_internet_connectivity">Pas de connexion internet. Veuillez vous assurer de disposer d’une connexion Internet active</string>
     <string name="login_text">Se connecter</string>
     <string name="show_password_text">Afficher le mot de passe</string>
@@ -146,5 +146,6 @@
     <string name="map_deleted">Carte effacée :  %1s</string>
     <string name="another_map_in_download">Une autre carte est en cours de téléchargement</string>
     <string name="deleting_map">Carte en cours d\'effacement</string>
+    <string name="remote_login_generic_error">Tu n’es pas actuellement inscrit dans une mission EUSM. Renseignes toi auprès de l’administrateur</string>
 
 </resources>
